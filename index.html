@@ -404,7 +404,7 @@
             { id: "duke_lacroix", name: "Duke Lacroix", role: "Défenseurs", club: "Colorado Springs (USL)", birth: "14 octobre 1993 (32 ans)", nat: "Haïtienne & Américaine", strengths: "Défenseur latéral gauche d'expérience.", journey: "Cadre respecté de la ligue USL Championship.", icon: "fa-road" },
             { id: "martin-experience", name: "Martin Yves Expérience", role: "Défenseurs", club: "AS Nancy-Lorraine (Ligue 2)", birth: "9 mars 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Latéral ou piston gauche moderne.", journey: "S'engage avec l'AS Nancy-Lorraine.", icon: "fa-left-long" },
             { id: "wilguens_paugain", name: "Wilguens Raphael Paugain", role: "Défenseurs", club: "SV Zulte Waregem", birth: "24 août 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Arrière droit moderne et physique.", journey: "S'engage sur le long terme avec Zulte Waregem.", icon: "fa-user-shield" },
-            { id: "keeto_thermoncy", name: "Keeto Thermoncy", role: "Défenseurs", club: "Young Boys U21", birth: "29 mars 2006 (20 ans)", nat: "Haïtienne & Suisse", strengths: "Défenseur central moderne et imposant.", journey: "Intégré à l'académie d'élite du BSC Young Boys.", icon: "fa-gem", badge: "Espoir" },
+            { id: "keeto_thermoncy", name: "Keeto Thermoncy", role: "Défenseurs", club: "Young Boys U21", birth: "29 mars 2006 (20 ans)", nat: "Haïtienne & Suisse", strengths: "Défenseur central moderne et imposing.", journey: "Intégré à l'académie d'élite du BSC Young Boys.", icon: "fa-gem", badge: "Espoir" },
             { id: "jean_ricner_bellegarde", name: "Jean-Ricner Bellegarde", role: "Milieux", club: "Wolves (Premier League)", birth: "27 juin 1998 (27 ans)", nat: "Française & Haïtienne", strengths: "Accélération balle au pied dévastatrice.", journey: "Wolverhampton en English Premier League.", icon: "fa-bolt", badge: "Star" },
             { id: "danley_jean_jacques", name: "Danley Jean-Jacques", role: "Milieux", club: "Philadelphia Union (MLS)", birth: "20 mai 2000 (25 ans)", nat: "Haïtienne", strengths: "Milieu récupérateur infatigable.", journey: "FC Metz avant de s'engager en MLS.", icon: "fa-recycle" },
             { id: "carl_fred_sainthe", name: "Carl Fred Sainté", role: "Milieux", club: "FC Dallas (MLS)", birth: "9 août 2002 (23 ans)", nat: "Haïtienne", strengths: "Milieu défensif 'sentinelle' à fort impact.", journey: "Rallie l'équipe première en MLS au FC Dallas.", icon: "fa-tower-cell" },
@@ -435,11 +435,9 @@
                 const card = document.createElement("div");
                 card.className = "group relative rounded-2xl border border-gray-900 bg-[#0e1322] p-4 sm:p-6 hover:border-gray-700 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5 active:scale-[0.98] transition-all duration-300 flex flex-col justify-between cursor-pointer";
                 
-                // Fixed explicit onclick attachment
-                card.setAttribute("onclick", `openPlayerModal('${player.id}')`);
-                
+                // Pote klike sou kat la dirèkteman anndan kòd HTML la pou l pa janm fayi
                 card.innerHTML = `
-                    <div>
+                    <div onclick="openPlayerModal('${player.id}')">
                         <div class="flex items-center justify-between mb-3">
                             <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center border border-gray-800 text-blue-500 group-hover:text-red-500 transition-colors">
                                 <i class="fa-solid ${player.icon || 'fa-user'} text-sm"></i>
@@ -449,7 +447,7 @@
                         <h3 class="font-athletic text-base sm:text-xl font-bold uppercase text-white tracking-wide mb-1 line-clamp-1">${player.name}</h3>
                         <p class="text-[10px] text-gray-400 font-semibold line-clamp-1">${player.club}</p>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-gray-900/60 flex items-center justify-between text-gray-500 group-hover:text-gray-300 transition-colors">
+                    <div onclick="openPlayerModal('${player.id}')" class="mt-4 pt-3 border-t border-gray-900/60 flex items-center justify-between text-gray-500 group-hover:text-gray-300 transition-colors">
                         <span class="text-[9px] font-bold tracking-wider uppercase">Voir Profil</span>
                         <i class="fa-solid fa-chevron-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
                     </div>
@@ -470,13 +468,18 @@
 
         function changeRoleFilter(role) {
             currentRoleFilter = role;
-            document.querySelectorAll(".filter-btn").forEach(btn => btn.className = "filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition");
             
-            // Safe selector for IDs containing accent marks/matching button naming conventions
-            const activeBtn = document.getElementById(`btn-${role}`);
+            // Reset tout klas bouton yo
+            document.querySelectorAll(".filter-btn").forEach(btn => {
+                btn.className = "filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition";
+            });
+            
+            // Jwenn bouton ki aktif la epi chanje koulè l
+            const activeBtn = document.getElementById("btn-" + role);
             if (activeBtn) {
                 activeBtn.className = "filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white transition";
             }
+            
             handleSearchAndFilter();
         }
 
@@ -526,7 +529,9 @@
                 </div>
             `;
             modal.classList.remove("hidden");
-            setTimeout(() => modal.querySelector('.relative').className = "relative bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-2xl overflow-y-auto shadow-2xl transition-all duration-300 transform translate-y-0", 10);
+            setTimeout(() => {
+                modal.querySelector('.relative').className = "relative bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-2xl overflow-y-auto shadow-2xl transition-all duration-300 transform translate-y-0";
+            }, 10);
         }
 
         function closeModal() {
@@ -566,7 +571,7 @@
             const timerInterval = setInterval(updateTimer, 1000);
         }
 
-        // Centralized execution to avoid loading conflict
+        // Kòmanse tout bagay pwòp lè paj la chaje nèt
         window.addEventListener('DOMContentLoaded', () => {
             renderRoster(playersDataset);
             initMatchCountdown();
