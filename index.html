@@ -46,7 +46,7 @@
                     <a href="#accueil" class="text-sm font-semibold tracking-wide text-white hover:text-red-500 transition">ACCUEIL</a>
                     <a href="#effectif" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">LES GUERRIERS</a>
                     <a href="#calendrier" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">CALENDRIER</a>
-                    <a href="#classement" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">CLASSEMENT</a>
+                    <a href="#classement" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">STATS & LIVE</a>
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="https://www.tiktok.com" target="_blank" class="flex items-center space-x-2 rounded-full bg-red-600 px-4 py-2 text-xs font-bold uppercase text-white shadow-lg shadow-red-600/20 hover:bg-red-700 transition">
@@ -62,7 +62,7 @@
             <a href="#accueil" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-white py-2">ACCUEIL</a>
             <a href="#effectif" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">LES GUERRIERS</a>
             <a href="#calendrier" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">CALENDRIER</a>
-            <a href="#classement" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">CLASSEMENT</a>
+            <a href="#classement" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">STATS & LIVE</a>
         </div>
     </nav>
 
@@ -77,6 +77,29 @@
             <p class="mx-auto max-w-2xl text-sm sm:text-xl text-gray-400 font-medium mb-8 sm:mb-10 px-2">
                 26 Guerriers. Une Nation. La Scène Mondiale. Découvrez les profils détaillés d'Haïti prête à conquérir les USA, le Canada et le Mexique.
             </p>
+
+            <div class="max-w-xl mx-auto mb-10 bg-gray-950/80 border border-gray-900 p-4 sm:p-6 rounded-2xl shadow-2xl">
+                <p class="text-xs font-bold uppercase text-gray-500 tracking-wider mb-3"><i class="fa-solid fa-stopwatch text-red-500 mr-1.5"></i> Choc Haïti vs Écosse dans :</p>
+                <div class="grid grid-cols-4 gap-2 font-athletic text-white">
+                    <div class="bg-[#0e1322] p-2.5 sm:p-4 rounded-xl border border-gray-900">
+                        <span id="countdown-days" class="text-2xl sm:text-4xl font-black block text-blue-400">00</span>
+                        <span class="text-[9px] sm:text-xs uppercase font-medium text-gray-500">Jours</span>
+                    </div>
+                    <div class="bg-[#0e1322] p-2.5 sm:p-4 rounded-xl border border-gray-900">
+                        <span id="countdown-hours" class="text-2xl sm:text-4xl font-black block text-white">00</span>
+                        <span class="text-[9px] sm:text-xs uppercase font-medium text-gray-500">Heures</span>
+                    </div>
+                    <div class="bg-[#0e1322] p-2.5 sm:p-4 rounded-xl border border-gray-900">
+                        <span id="countdown-minutes" class="text-2xl sm:text-4xl font-black block text-white">00</span>
+                        <span class="text-[9px] sm:text-xs uppercase font-medium text-gray-500">Minutes</span>
+                    </div>
+                    <div class="bg-[#0e1322] p-2.5 sm:p-4 rounded-xl border border-gray-900">
+                        <span id="countdown-seconds" class="text-2xl sm:text-4xl font-black block text-red-500">00</span>
+                        <span class="text-[9px] sm:text-xs uppercase font-medium text-gray-500">Secondes</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="flex flex-wrap justify-center gap-4">
                 <a href="#effectif" class="w-full sm:w-auto rounded-xl bg-blue-600 px-8 py-4 text-sm font-bold uppercase text-white shadow-xl shadow-blue-600/30 hover:bg-blue-700 transition">Explorer l'Effectif</a>
                 <a href="#calendrier" class="w-full sm:w-auto rounded-xl border border-gray-800 bg-gray-900/40 px-8 py-4 text-sm font-bold uppercase text-white hover:bg-gray-900 transition">Voir les Matchs</a>
@@ -223,68 +246,123 @@
     </section>
 
     <section id="classement" class="border-t border-gray-900 py-16">
-        <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
-                <span class="text-xs font-bold text-amber-500 uppercase tracking-widest block mb-2">Classement Live via Google/API</span>
-                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white">Groupe C</h2>
-            </div>
+        <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="text-center lg:text-left mb-6">
+                        <span class="text-xs font-bold text-amber-500 uppercase tracking-widest block mb-1">Classement Live via Google/API</span>
+                        <h2 class="font-athletic text-2xl sm:text-4xl font-extrabold uppercase text-white">Groupe C</h2>
+                    </div>
 
-            <div class="overflow-hidden border border-gray-900 rounded-2xl bg-[#0e1322] p-2">
-                <div class="overflow-x-auto no-scrollbar">
-                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
-                        <thead>
-                            <tr class="bg-gray-950 border-b border-gray-900 text-gray-500 font-bold uppercase tracking-wider text-[10px]">
-                                <th class="p-4 w-12 text-center">Pos</th>
-                                <th class="p-4">Équipe</th>
-                                <th class="p-4 text-center w-12">MJ</th>
-                                <th class="p-4 text-center w-12">G</th>
-                                <th class="p-4 text-center w-12">N</th>
-                                <th class="p-4 text-center w-12">P</th>
-                                <th class="p-4 text-center w-14 font-black text-white">PTS</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-900/60 font-medium">
-                            <tr class="hover:bg-gray-900/30 transition">
-                                <td class="p-4 text-center font-bold text-gray-400">1</td>
-                                <td class="p-4 flex items-center gap-2 text-white font-bold">
-                                    <img src="https://flagcdn.com/w20/br.png" alt="Brésil" class="w-5 h-auto rounded-xs shadow-xs">
-                                    <span>Brésil</span>
-                                </td>
-                                <td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td>
-                                <td class="p-4 text-center font-black text-white bg-gray-950/20">0</td>
-                            </tr>
-                            <tr class="bg-blue-500/5 hover:bg-blue-500/10 transition border-l-2 border-blue-500">
-                                <td class="p-4 text-center font-bold text-emerald-400">2</td>
-                                <td class="p-4 flex items-center gap-2 text-white font-black">
-                                    <img src="https://flagcdn.com/w20/ht.png" alt="Haïti" class="w-5 h-auto rounded-xs shadow-xs">
-                                    <span>Haïti</span>
-                                </td>
-                                <td class="p-4 text-center text-gray-300">0</td><td class="p-4 text-center text-gray-300">0</td><td class="p-4 text-center text-gray-300">0</td><td class="p-4 text-center text-gray-300">0</td>
-                                <td class="p-4 text-center font-black text-blue-400 bg-blue-500/10">0</td>
-                            </tr>
-                            <tr class="hover:bg-gray-900/30 transition">
-                                <td class="p-4 text-center font-bold text-gray-500">3</td>
-                                <td class="p-4 flex items-center gap-2 text-white font-bold">
-                                    <img src="https://flagcdn.com/w20/ma.png" alt="Maroc" class="w-5 h-auto rounded-xs shadow-xs">
-                                    <span>Maroc</span>
-                                </td>
-                                <td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td>
-                                <td class="p-4 text-center font-black text-white bg-gray-950/20">0</td>
-                            </tr>
-                            <tr class="hover:bg-gray-900/30 transition">
-                                <td class="p-4 text-center font-bold text-gray-500">4</td>
-                                <td class="p-4 flex items-center gap-2 text-white font-bold">
-                                    <img src="https://flagcdn.com/w20/gb-sct.png" alt="Écosse" class="w-5 h-auto rounded-xs shadow-xs">
-                                    <span>Écosse</span>
-                                </td>
-                                <td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td>
-                                <td class="p-4 text-center font-black text-white bg-gray-950/20">0</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="overflow-hidden border border-gray-900 rounded-2xl bg-[#0e1322] p-2">
+                        <div class="overflow-x-auto no-scrollbar">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-gray-950 border-b border-gray-900 text-gray-500 font-bold uppercase tracking-wider text-[10px]">
+                                        <th class="p-4 w-12 text-center">Pos</th>
+                                        <th class="p-4">Équipe</th>
+                                        <th class="p-4 text-center w-12">MJ</th>
+                                        <th class="p-4 text-center w-12">G</th>
+                                        <th class="p-4 text-center w-12">N</th>
+                                        <th class="p-4 text-center w-12">P</th>
+                                        <th class="p-4 text-center w-14 font-black text-white">PTS</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-900/60 font-medium">
+                                    <tr class="hover:bg-gray-900/30 transition">
+                                        <td class="p-4 text-center font-bold text-gray-400">1</td>
+                                        <td class="p-4 flex items-center gap-2 text-white font-bold">
+                                            <img src="https://flagcdn.com/w20/br.png" alt="Brésil" class="w-5 h-auto rounded-xs shadow-xs">
+                                            <span>Brésil</span>
+                                        </td>
+                                        <td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td>
+                                        <td class="p-4 text-center font-black text-white bg-gray-950/20">0</td>
+                                    </tr>
+                                    <tr class="bg-blue-500/5 hover:bg-blue-500/10 transition border-l-2 border-blue-500">
+                                        <td class="p-4 text-center font-bold text-emerald-400">2</td>
+                                        <td class="p-4 flex items-center gap-2 text-white font-black">
+                                            <img src="https://flagcdn.com/w20/ht.png" alt="Haïti" class="w-5 h-auto rounded-xs shadow-xs">
+                                            <span>Haïti</span>
+                                        </td>
+                                        <td class="p-4 text-center text-gray-300">0</td><td class="p-4 text-center text-gray-300">0</td><td class="p-4 text-center text-gray-300">0</td><td class="p-4 text-center text-gray-300">0</td>
+                                        <td class="p-4 text-center font-black text-blue-400 bg-blue-500/10">0</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-900/30 transition">
+                                        <td class="p-4 text-center font-bold text-gray-500">3</td>
+                                        <td class="p-4 flex items-center gap-2 text-white font-bold">
+                                            <img src="https://flagcdn.com/w20/ma.png" alt="Maroc" class="w-5 h-auto rounded-xs shadow-xs">
+                                            <span>Maroc</span>
+                                        </td>
+                                        <td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td>
+                                        <td class="p-4 text-center font-black text-white bg-gray-950/20">0</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-900/30 transition">
+                                        <td class="p-4 text-center font-bold text-gray-500">4</td>
+                                        <td class="p-4 flex items-center gap-2 text-white font-bold">
+                                            <img src="https://flagcdn.com/w20/gb-sct.png" alt="Écosse" class="w-5 h-auto rounded-xs shadow-xs">
+                                            <span>Écosse</span>
+                                        </td>
+                                        <td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td>
+                                        <td class="p-4 text-center font-black text-white bg-gray-950/20">0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="space-y-4">
+                    <div class="text-center lg:text-left mb-6">
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-widest block mb-1">Statistiques Grenadiers</span>
+                        <h2 class="font-athletic text-2xl sm:text-4xl font-extrabold uppercase text-white">Buteurs</h2>
+                    </div>
+
+                    <div class="border border-gray-900 rounded-2xl bg-[#0e1322] p-4 space-y-3">
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-gray-950/40 border border-gray-900">
+                            <div class="flex items-center gap-3">
+                                <span class="font-athletic font-black text-red-500 text-sm w-4">1</span>
+                                <div>
+                                    <span class="text-xs font-bold text-white block">Duckens Nazon</span>
+                                    <span class="text-[10px] text-gray-500">Kayserispor</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 font-athletic text-xs">
+                                <div class="text-center"><span class="block text-white font-black">0</span><span class="text-[8px] text-gray-500 uppercase">Buts</span></div>
+                                <div class="text-center border-l border-gray-900 pl-3"><span class="block text-gray-400 font-bold">0</span><span class="text-[8px] text-gray-500 uppercase">Passes</span></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-gray-950/20 border border-gray-900/60">
+                            <div class="flex items-center gap-3">
+                                <span class="font-athletic font-black text-gray-400 text-sm w-4">2</span>
+                                <div>
+                                    <span class="text-xs font-bold text-white block">Frantzdy Pierrot</span>
+                                    <span class="text-[10px] text-gray-500">Rizespor</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 font-athletic text-xs">
+                                <div class="text-center"><span class="block text-white font-black">0</span><span class="text-[8px] text-gray-500 uppercase">Buts</span></div>
+                                <div class="text-center border-l border-gray-900 pl-3"><span class="block text-gray-400 font-bold">0</span><span class="text-[8px] text-gray-500 uppercase">Passes</span></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-xl bg-gray-950/20 border border-gray-900/60">
+                            <div class="flex items-center gap-3">
+                                <span class="font-athletic font-black text-gray-400 text-sm w-4">3</span>
+                                <div>
+                                    <span class="text-xs font-bold text-white block">Wilson Isidor</span>
+                                    <span class="text-[10px] text-gray-500">Sunderland</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 font-athletic text-xs">
+                                <div class="text-center"><span class="block text-white font-black">0</span><span class="text-[8px] text-gray-500 uppercase">Buts</span></div>
+                                <div class="text-center border-l border-gray-900 pl-3"><span class="block text-gray-400 font-bold">0</span><span class="text-[8px] text-gray-500 uppercase">Passes</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <p class="text-[10px] text-gray-500 mt-3 text-center sm:text-left font-medium"><i class="fa-solid fa-circle-info mr-1"></i> Les scores et les points s'actualiseront automatiquement dès le coup d'envoi.</p>
+            <p class="text-[10px] text-gray-500 mt-4 text-center font-medium"><i class="fa-solid fa-circle-info mr-1"></i> Les données de classement et de statistiques s'actualisent de manière fluide.</p>
         </div>
     </section>
 
@@ -326,7 +404,7 @@
             { id: "duke_lacroix", name: "Duke Lacroix", role: "Défenseurs", club: "Colorado Springs (USL)", birth: "14 octobre 1993 (32 ans)", nat: "Haïtienne & Américaine", strengths: "Défenseur latéral gauche d'expérience.", journey: "Cadre respecté de la ligue USL Championship.", icon: "fa-road" },
             { id: "martin-experience", name: "Martin Yves Expérience", role: "Défenseurs", club: "AS Nancy-Lorraine (Ligue 2)", birth: "9 mars 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Latéral ou piston gauche moderne.", journey: "S'engage avec l'AS Nancy-Lorraine.", icon: "fa-left-long" },
             { id: "wilguens_paugain", name: "Wilguens Raphael Paugain", role: "Défenseurs", club: "SV Zulte Waregem", birth: "24 août 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Arrière droit moderne et physique.", journey: "S'engage sur le long terme avec Zulte Waregem.", icon: "fa-user-shield" },
-            { id: "keeto_thermoncy", name: "Keeto Thermoncy", role: "Défenseurs", club: "Young Boys U21", birth: "29 mars 2006 (20 ans)", nat: "Haïtienne & Suisse", strengths: "Défenseur central moderne et imposant.", journey: "Intégré à l'académie d'élite du BSC Young Boys.", icon: "fa-gem", badge: "Espoir" },
+            { id: "keeto_thermoncy", name: "Keeto Thermoncy", role: "Défenseurs", club: "Young Boys U21", birth: "29 mars 2006 (20 ans)", nat: "Haïtienne & Suisse", strengths: "Défenseur central moderne et imposing.", journey: "Intégré à l'académie d'élite du BSC Young Boys.", icon: "fa-gem", badge: "Espoir" },
             { id: "jean_ricner_bellegarde", name: "Jean-Ricner Bellegarde", role: "Milieux", club: "Wolves (Premier League)", birth: "27 juin 1998 (27 ans)", nat: "Française & Haïtienne", strengths: "Accélération balle au pied dévastatrice.", journey: "Wolverhampton en English Premier League.", icon: "fa-bolt", badge: "Star" },
             { id: "danley_jean_jacques", name: "Danley Jean-Jacques", role: "Milieux", club: "Philadelphia Union (MLS)", birth: "20 mai 2000 (25 ans)", nat: "Haïtienne", strengths: "Milieu récupérateur infatigable.", journey: "FC Metz avant de s'engager en MLS.", icon: "fa-recycle" },
             { id: "carl_fred_sainthe", name: "Carl Fred Sainté", role: "Milieux", club: "FC Dallas (MLS)", birth: "9 août 2002 (23 ans)", nat: "Haïtienne", strengths: "Milieu défensif 'sentinelle' à fort impact.", journey: "Rallie l'équipe première en MLS au FC Dallas.", icon: "fa-tower-cell" },
@@ -449,7 +527,43 @@
             setTimeout(() => modal.classList.add("hidden"), 250);
         }
 
-        window.onload = () => renderRoster(playersDataset);
+        // JS LOGIC FOR THE COUNTDOWN TIMER
+        function initMatchCountdown() {
+            // Match Date: June 13, 2026 at 21:00 UTC-4 (Haïti Time)
+            const targetDate = new Date("June 13, 2026 21:00:00").getTime();
+
+            function updateTimer() {
+                const now = new Date().getTime();
+                const difference = targetDate - now;
+
+                if (difference <= 0) {
+                    document.getElementById("countdown-days").innerText = "00";
+                    document.getElementById("countdown-hours").innerText = "00";
+                    document.getElementById("countdown-minutes").innerText = "00";
+                    document.getElementById("countdown-seconds").innerText = "00";
+                    clearInterval(timerInterval);
+                    return;
+                }
+
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById("countdown-days").innerText = days < 10 ? "0" + days : days;
+                document.getElementById("countdown-hours").innerText = hours < 10 ? "0" + hours : hours;
+                document.getElementById("countdown-minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("countdown-seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+            }
+
+            updateTimer();
+            const timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        window.onload = () => {
+            renderRoster(playersDataset);
+            initMatchCountdown();
+        };
     </script>
 </body>
 </html>
