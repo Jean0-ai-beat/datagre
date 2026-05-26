@@ -31,9 +31,7 @@
         }
         .animate-pulse-fast {
             animation: pulse-bg 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-    </style>
-      <script>
+<script>
         const playersDataset = [
             { id: "jhonny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia (Ligue 2)", birth: "29 janvier 1988 (38 ans)", nat: "Haïtienne & Française", strengths: "Gardien de but charismatique et leader vocal incontournable.", journey: "Formé au Havre AC, il s'illustre en Ligue 1 au Stade de Reims.", icon: "fa-shield-halved", badge: "Capitaine" },
             { id: "alexandre_pierre", name: "Alexandre Pierre", role: "Gardiens", club: "FC Sochaux-Montbéliard", birth: "25 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Grande envergure (1m90), très explosif sur sa ligne.", journey: "Formé au Stade Lavallois, pro au RC Strasbourg.", icon: "fa-hands" },
@@ -52,7 +50,7 @@
             { id: "woodensky_pierre", name: "Olivier Woodensky Pierre", role: "Milieux", club: "Violette AC (Haïti)", birth: "30 décembre 2004 (21 ans)", nat: "Haïtienne", strengths: "Milieu défensif moderne.", journey: "Pur produit du Violette AC.", icon: "fa-crown", badge: "Local Hero" },
             { id: "dominique_simon", name: "Dominique Célidor Simon", role: "Milieux", club: "Tatran Prešov", birth: "29 juillet 2000 (25 ans)", nat: "Haïtienne & Française", strengths: "Milieu défensif de grand volume.", journey: "S'impose en Slovaquie.", icon: "fa-anchor" },
             { id: "leverton_pierre", name: "Leverton Pierre", role: "Milieux", club: "FC Vizela (Portugal)", birth: "9 mars 1998 (28 ans)", nat: "Haïtienne", strengths: "Milieu défensif et relayeur physique.", journey: "S'engage au Portugal à l'été 2025.", icon: "fa-dumbbell" },
-            { id: "frantzdy_pierrot", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor (Turquie)", birth: "29 mars 1995 (31 ans)", nat: "Haïtienne & Américaine", strengths: "Jeu de tête absolument dévastateur.", journey: "Maccabi Haifa, transféré en première division turque.", icon: "fa-jet-fighter", badge: "Tank" },
+            { id: "frantzdy_pierrot", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor (Turquie)", birth: "29 mars 1995 (31 ans)", nat: "Haïtienne & Américaine", strengths: "Jeu de tête absolutely dévastateur.", journey: "Maccabi Haifa, transféré en première division turque.", icon: "fa-jet-fighter", badge: "Tank" },
             { id: "duckens_nazon", name: "Duckens Nazon", role: "Attaquants", club: "Kayserispor (Turquie)", birth: "7 avril 1994 (32 ans)", nat: "Haïtienne & Française", strengths: "Finition clinique devant le but.", journey: "Exporte ses buts en Turquie à Kayserispor.", icon: "fa-crosshairs", badge: "Légende" },
             { id: "wilson_isidor", name: "Wilson Isidor", role: "Attaquants", club: "Sunderland (Angleterre)", birth: "27 août 2000 (25 ans)", nat: "Française & Haïtienne", strengths: "Vitesse de pointe explosive.", journey: "Rejoint l'Angleterre à Sunderland.", icon: "fa-fire" },
             { id: "deedson_louicius", name: "Don Deedson Louicius", role: "Attaquants", club: "FC Dallas (MLS)", birth: "11 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Ailier percutant, vitesse d'exécution.", journey: "S'engage avec le FC Dallas en MLS.", icon: "fa-wand-magic-sparkles" },
@@ -80,12 +78,14 @@
             targetPlayers.forEach(player => {
                 const card = document.createElement("div");
                 card.className = "player-card group relative rounded-2xl border border-gray-900 bg-[#0e1322] p-4 sm:p-6 hover:border-gray-700 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5 active:scale-[0.98] transition-all duration-300 flex flex-col justify-between cursor-pointer";
-                card.dataset.id = player.id;
+                card.setAttribute("data-id", player.id);
                 
-                // Nou itilize metòd ki pi an sekirite pou evite nenpòt konfizyon string
-                const badgeMarkup = player.badge 
-                    ? '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">' + player.badge + '</span>' 
-                    : '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-gray-900 text-gray-400">' + player.role + '</span>';
+                let badgeMarkup = '';
+                if (player.badge) {
+                    badgeMarkup = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">' + player.badge + '</span>';
+                } else {
+                    badgeMarkup = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-gray-900 text-gray-400">' + player.role + '</span>';
+                }
 
                 card.innerHTML = '<div>' +
                                     '<div class="flex items-center justify-between mb-3">' +
@@ -149,7 +149,8 @@
         }
 
         function hideImageSkeleton(imgElement) {
-            imgElement.parentElement.querySelector('.skeleton-loader-bg')?.classList.add('hidden');
+            const skeleton = imgElement.parentElement.querySelector('.skeleton-loader-bg');
+            if (skeleton) skeleton.classList.add('hidden');
             imgElement.classList.remove('opacity-0');
         }
 
@@ -161,14 +162,15 @@
             if(!modal || !modalBody) return;
             
             const playerImageUrl = player.id + ".jpg";
+            const pIcon = player.icon || 'fa-user';
 
+            // 1. Nou bati estrikti de baz la san okenn onerror andedan string la
             modalBody.innerHTML = '<div class="flex flex-col md:flex-row gap-6 items-start">' +
-                                    '<div class="w-full md:w-1/3 flex flex-col items-center gap-3">' +
+                                    '<div id="modal-img-container" class="w-full md:w-1/3 flex flex-col items-center gap-3">' +
                                         '<div class="w-44 h-56 rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden relative flex items-center justify-center">' +
                                             '<div class="skeleton-loader-bg absolute inset-0 animate-pulse-fast flex items-center justify-center">' +
-                                                '<i class="fa-solid ' + (player.icon || 'fa-user') + ' text-3xl text-gray-600 animate-pulse"></i>' +
+                                                '<i class="fa-solid ' + pIcon + ' text-3xl text-gray-600 animate-pulse"></i>' +
                                             '</div>' +
-                                            '<img src="' + playerImageUrl + '" alt="' + player.name + '" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="hideImageSkeleton(this)" onerror="hideImageSkeleton(this); this.parentElement.innerHTML=\'<i class=\\\\'fa-solid ' + (player.icon || 'fa-user') + ' text-5xl text-gray-700\\\\\'></i>\';">' +
                                         '</div>' +
                                     '</div>' +
                                     '<div class="w-full md:w-2/3">' +
@@ -185,6 +187,32 @@
                                         '</div>' +
                                     '</div>' +
                                  '</div>';
+
+            // 2. Kounye a nou kreye eleman IMG a dinamikman ak JavaScript natif natal san okenn konfizyon giyèm
+            const imgContainer = modalBody.querySelector('#modal-img-container .relative');
+            if (imgContainer) {
+                const img = document.createElement('img');
+                img.src = playerImageUrl;
+                img.alt = player.name;
+                img.className = "w-full h-full object-cover opacity-0 transition-opacity duration-300";
+                
+                img.onload = function() {
+                    hideImageSkeleton(img);
+                };
+                
+                img.onerror = function() {
+                    const skeleton = imgContainer.querySelector('.skeleton-loader-bg');
+                    if (skeleton) skeleton.classList.add('hidden');
+                    img.style.display = 'none';
+                    
+                    const backupIcon = document.createElement('i');
+                    backupIcon.className = 'fa-solid ' + pIcon + ' text-5xl text-gray-700';
+                    imgContainer.appendChild(backupIcon);
+                };
+                
+                imgContainer.appendChild(img);
+            }
+
             modal.classList.remove("hidden");
         }
 
@@ -237,13 +265,13 @@
                 grid.addEventListener("click", (e) => {
                     const card = e.target.closest(".player-card");
                     if (card) {
-                        const playerId = card.dataset.id;
+                        const playerId = card.getAttribute("data-id");
                         openPlayerModal(playerId);
                     }
                 });
             }
 
-            // Atache fonksyon yo globalman pou bouton HTML yo ka jwenn yo san mank
+            // Deklarasyon global san mank
             window.changeRoleFilter = changeRoleFilter;
             window.openPlayerModal = openPlayerModal;
             window.closeModal = closeModal;
@@ -251,7 +279,6 @@
             window.handleSearchAndFilter = handleSearchAndFilter;
         });
     </script>
-
 
 
 </head>
