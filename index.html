@@ -1,74 +1,457 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWESPORTS | Les Grenadiers</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>PWESPORTS | Les Grenadiers - Coupe du Monde 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        .player-card:hover { border-color: #ef4444; }
-        .hidden { display: none; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0b0f19;
+        }
+        .font-athletic {
+            font-family: 'Oswald', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        @keyframes pulse-bg {
+            0%, 100% { background-color: #1e293b; }
+            50% { background-color: #334155; }
+        }
+        .animate-pulse-fast {
+            animation: pulse-bg 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
     </style>
 </head>
-<body class="bg-gray-950 text-white font-sans p-6">
+<body class="text-gray-200 antialiased bg-[#0b0f19]">
 
-    <div class="flex gap-4 mb-8 justify-center">
-        <button onclick="changeRoleFilter('all')" class="bg-red-600 px-4 py-2 rounded-lg">TOUS</button>
-        <button onclick="changeRoleFilter('Gardiens')" class="bg-gray-800 px-4 py-2 rounded-lg">GARDIENS</button>
-        <button onclick="changeRoleFilter('Défenseurs')" class="bg-gray-800 px-4 py-2 rounded-lg">DÉFENSEURS</button>
-        <button onclick="changeRoleFilter('Milieux')" class="bg-gray-800 px-4 py-2 rounded-lg">MILIEUX</button>
-        <button onclick="changeRoleFilter('Attaquants')" class="bg-gray-800 px-4 py-2 rounded-lg">ATTAQUANTS</button>
-    </div>
+    <nav class="sticky top-0 z-40 border-b border-gray-800 bg-[#0b0f19]/90 backdrop-blur-md">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-20 items-center justify-between">
+                <div class="flex items-center">
+                    <span class="font-athletic text-3xl font-extrabold tracking-wider text-white">PWE<span class="text-red-500">SPORTS</span></span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#accueil" class="text-sm font-semibold tracking-wide text-white hover:text-red-500 transition">ACCUEIL</a>
+                    <a href="#effectif" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">LES GUERRIERS</a>
+                    <a href="#calendrier" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">CALENDRIER</a>
+                    <a href="#classement" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">CLASSEMENT</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://www.tiktok.com" target="_blank" class="flex items-center space-x-2 rounded-full bg-red-600 px-4 py-2 text-xs font-bold uppercase text-white shadow-lg shadow-red-600/20 hover:bg-red-700 transition">
+                        <i class="fab fa-tiktok"></i> <span class="hidden sm:inline">Suivre</span>
+                    </a>
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-gray-400 hover:text-white p-2">
+                        <i id="menu-icon" class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden border-b border-gray-800 bg-[#0b0f19] px-4 pt-2 pb-6 space-y-3 transition-all">
+            <a href="#accueil" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-white py-2">ACCUEIL</a>
+            <a href="#effectif" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">LES GUERRIERS</a>
+            <a href="#calendrier" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">CALENDRIER</a>
+            <a href="#classement" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">CLASSEMENT</a>
+        </div>
+    </nav>
 
-    <div id="roster-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    <header id="accueil" class="relative overflow-hidden py-16 sm:py-24 text-center border-b border-gray-900">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+            <div class="inline-flex items-center gap-x-2 rounded-full border border-red-500/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase text-red-400 mb-6">
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Route pour le Mondial 2026
+            </div>
+            <h1 class="font-athletic text-4xl sm:text-7xl lg:text-8xl font-black uppercase text-white mb-6 leading-none">
+                MARCHE HISTORIQUE:<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">LES GRENADIERS</span>
+            </h1>
+            <p class="mx-auto max-w-2xl text-sm sm:text-xl text-gray-400 font-medium mb-8 sm:mb-10 px-2">
+                26 Guerriers. Une Nation. La Scène Mondiale. Découvrez les profils détaillés d'Haïti prête à conquérir les USA, le Canada et le Mexique.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#effectif" class="w-full sm:w-auto rounded-xl bg-blue-600 px-8 py-4 text-sm font-bold uppercase text-white shadow-xl shadow-blue-600/30 hover:bg-blue-700 transition">Explorer l'Effectif</a>
+                <a href="#calendrier" class="w-full sm:w-auto rounded-xl border border-gray-800 bg-gray-900/40 px-8 py-4 text-sm font-bold uppercase text-white hover:bg-gray-900 transition">Voir les Matchs</a>
+            </div>
+        </div>
+    </header>
 
-    <div id="player-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center p-4">
-        <div class="bg-[#0e1322] p-8 rounded-2xl max-w-lg w-full border border-gray-800">
-            <div id="modal-body"></div>
-            <button onclick="closeModal()" class="mt-6 bg-red-600 w-full py-2 rounded-lg">Fèmen</button>
+    <main id="effectif" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+            <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-3">L'Armée Rouge et Bleu</h2>
+            <p class="text-xs sm:text-sm text-gray-400 font-medium px-4">Analyse tactique et fiches techniques officielles des 26 Grenadiers.</p>
+        </div>
+
+        <div class="grid grid-cols-5 gap-2 max-w-2xl mx-auto mb-8 bg-gray-950/60 p-3 sm:p-4 rounded-2xl border border-gray-900 text-center">
+            <div>
+                <div class="font-athletic text-lg sm:text-2xl font-black text-white">26</div>
+                <div class="text-[9px] sm:text-xs text-gray-500 uppercase font-semibold">Total</div>
+            </div>
+            <div class="border-l border-gray-900">
+                <div class="font-athletic text-lg sm:text-2xl font-black text-blue-400">3</div>
+                <div class="text-[9px] sm:text-xs text-gray-500 uppercase font-semibold">GB</div>
+            </div>
+            <div class="border-l border-gray-900">
+                <div class="font-athletic text-lg sm:text-2xl font-black text-red-400">8</div>
+                <div class="text-[9px] sm:text-xs text-gray-500 uppercase font-semibold">DEF</div>
+            </div>
+            <div class="border-l border-gray-900">
+                <div class="font-athletic text-lg sm:text-2xl font-black text-amber-500">6</div>
+                <div class="text-[9px] sm:text-xs text-gray-500 uppercase font-semibold">MIL</div>
+            </div>
+            <div class="border-l border-gray-900">
+                <div class="font-athletic text-lg sm:text-2xl font-black text-emerald-400">9</div>
+                <div class="text-[9px] sm:text-xs text-gray-500 uppercase font-semibold">ATT</div>
+            </div>
+        </div>
+
+        <div class="max-w-2xl mx-auto space-y-4 mb-10">
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-500 group-focus-within:text-red-500 transition">
+                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                </div>
+                <input type="text" id="search-player" oninput="handleSearchAndFilter()" placeholder="Rechercher un joueur (ex: Nazon, Placide...)" 
+                    class="w-full pl-11 pr-4 py-3.5 bg-[#0e1322] border border-gray-900 rounded-2xl text-sm font-medium text-white placeholder-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-2 focus:ring-red-500/10 transition-all">
+            </div>
+
+            <div class="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0">
+                <div class="flex sm:wrap justify-start sm:justify-center gap-2 bg-gray-900/40 p-1.5 rounded-2xl border border-gray-900/60 whitespace-nowrap min-w-max sm:min-w-0">
+                    <button onclick="changeRoleFilter('all')" id="btn-all" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white transition">Tous</button>
+                    <button onclick="changeRoleFilter('Gardiens')" id="btn-Gardiens" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Gardiens</button>
+                    <button onclick="changeRoleFilter('Défenseurs')" id="btn-Défenseurs" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Défenseurs</button>
+                    <button onclick="changeRoleFilter('Milieux')" id="btn-Milieux" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Milieux</button>
+                    <button onclick="changeRoleFilter('Attaquants')" id="btn-Attaquants" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Attaquants</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="roster-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            </div>
+        
+        <div id="empty-state" class="hidden text-center py-12">
+            <i class="fa-solid fa-user-slash text-gray-700 text-4xl mb-3"></i>
+            <p class="text-gray-400 font-medium text-sm">Aucun guerrier ne correspond à votre recherche.</p>
+        </div>
+    </main>
+
+    <section id="calendrier" class="border-t border-gray-900 bg-gray-950/30 py-16">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold text-blue-500 uppercase tracking-widest block mb-2">Phase de Groupes - Groupe C</span>
+                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white">Calendrier des Grenadiers</h2>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-gray-800 transition">
+                    <div class="text-center sm:text-left">
+                        <span class="text-xs font-bold text-red-500 block mb-1">MATCH 1</span>
+                        <span class="text-xs text-gray-400 font-medium block"><i class="fa-regular fa-calendar-days mr-1.5"></i>Samedi 13 Juin 2026</span>
+                        <span class="text-xs text-gray-500 block mt-0.5"><i class="fa-regular fa-clock mr-1.5"></i>21:00 (Heure Haïti)</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-4 my-2 sm:my-0">
+                        <div class="flex items-center gap-2 font-athletic text-lg sm:text-xl font-bold text-white uppercase">
+                            <span>HAÏTI</span>
+                            <span class="text-2xl">🇲🇽</span> </div>
+                        <span class="px-3 py-1 bg-gray-900 rounded-xl text-xs font-black text-gray-400">VS</span>
+                        <div class="flex items-center gap-2 font-athletic text-lg sm:text-xl font-bold text-white uppercase">
+                            <span class="text-2xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+                            <span>ÉCOSSE</span>
+                        </div>
+                    </div>
+                    <div class="text-center sm:text-right">
+                        <span class="text-xs text-gray-300 font-semibold block"><i class="fa-solid fa-location-dot mr-1.5 text-gray-500"></i>Boston Stadium</span>
+                        <span class="text-[10px] text-gray-500 block">Boston, USA</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-gray-800 transition">
+                    <div class="text-center sm:text-left">
+                        <span class="text-xs font-bold text-red-500 block mb-1">MATCH 2</span>
+                        <span class="text-xs text-gray-400 font-medium block"><i class="fa-regular fa-calendar-days mr-1.5"></i>Vendredi 19 Juin 2026</span>
+                        <span class="text-xs text-gray-500 block mt-0.5"><i class="fa-regular fa-clock mr-1.5"></i>20:30 (Heure Haïti)</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-4 my-2 sm:my-0">
+                        <div class="flex items-center gap-2 font-athletic text-lg sm:text-xl font-bold text-white uppercase">
+                            <span>BRÉSIL</span>
+                            <span class="text-2xl">🇧🇷</span>
+                        </div>
+                        <span class="px-3 py-1 bg-gray-900 rounded-xl text-xs font-black text-gray-400">VS</span>
+                        <div class="flex items-center gap-2 font-athletic text-lg sm:text-xl font-bold text-white uppercase">
+                            <span class="text-2xl">🇭🇹</span>
+                            <span>HAÏTI</span>
+                        </div>
+                    </div>
+                    <div class="text-center sm:text-right">
+                        <span class="text-xs text-gray-300 font-semibold block"><i class="fa-solid fa-location-dot mr-1.5 text-gray-500"></i>Philadelphia Stadium</span>
+                        <span class="text-[10px] text-gray-500 block">Philadelphia, USA</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-gray-800 transition">
+                    <div class="text-center sm:text-left">
+                        <span class="text-xs font-bold text-red-500 block mb-1">MATCH 3</span>
+                        <span class="text-xs text-gray-400 font-medium block"><i class="fa-regular fa-calendar-days mr-1.5"></i>Mercredi 24 Juin 2026</span>
+                        <span class="text-xs text-gray-500 block mt-0.5"><i class="fa-regular fa-clock mr-1.5"></i>18:00 (Heure Haïti)</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-4 my-2 sm:my-0">
+                        <div class="flex items-center gap-2 font-athletic text-lg sm:text-xl font-bold text-white uppercase">
+                            <span>MAROC</span>
+                            <span class="text-2xl">🇲🇦</span>
+                        </div>
+                        <span class="px-3 py-1 bg-gray-900 rounded-xl text-xs font-black text-gray-400">VS</span>
+                        <div class="flex items-center gap-2 font-athletic text-lg sm:text-xl font-bold text-white uppercase">
+                            <span class="text-2xl">🇭🇹</span>
+                            <span>HAÏTI</span>
+                        </div>
+                    </div>
+                    <div class="text-center sm:text-right">
+                        <span class="text-xs text-gray-300 font-semibold block"><i class="fa-solid fa-location-dot mr-1.5 text-gray-500"></i>Atlanta Stadium</span>
+                        <span class="text-[10px] text-gray-500 block">Atlanta, USA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="classement" class="border-t border-gray-900 py-16">
+        <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold text-amber-500 uppercase tracking-widest block mb-2">Classement Live via Google/API</span>
+                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white">Groupe C</h2>
+            </div>
+
+            <div class="overflow-hidden border border-gray-900 rounded-2xl bg-[#0e1322] p-2">
+                
+                <div class="overflow-x-auto no-scrollbar">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="bg-gray-950 border-b border-gray-900 text-gray-500 font-bold uppercase tracking-wider text-[10px]">
+                                <th class="p-4 w-12 text-center">Pos</th>
+                                <th class="p-4">Équipe</th>
+                                <th class="p-4 text-center w-12">MJ</th>
+                                <th class="p-4 text-center w-12">G</th>
+                                <th class="p-4 text-center w-12">N</th>
+                                <th class="p-4 text-center w-12">P</th>
+                                <th class="p-4 text-center w-14 font-black text-white">PTS</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-900/60 font-medium">
+                            <tr class="hover:bg-gray-900/30 transition">
+                                <td class="p-4 text-center font-bold text-gray-400">1</td>
+                                <td class="p-4 flex items-center gap-2 text-white font-bold">
+                                    <span class="text-lg">🇧🇷</span> <span>Brésil</span>
+                                </td>
+                                <td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td>
+                                <td class="p-4 text-center font-black text-white bg-gray-950/20">0</td>
+                            </tr>
+                            <tr class="bg-blue-500/5 hover:bg-blue-500/10 transition border-l-2 border-blue-500">
+                                <td class="p-4 text-center font-bold text-emerald-400">2</td>
+                                <td class="p-4 flex items-center gap-2 text-white font-black">
+                                    <span class="text-lg">🇭🇹</span> <span>Haïti</span>
+                                </td>
+                                <td class="p-4 text-center text-gray-300">0</td><td class="p-4 text-center text-gray-300">0</td><td class="p-4 text-center text-gray-300">0</td><td class="p-4 text-center text-gray-300">0</td>
+                                <td class="p-4 text-center font-black text-blue-400 bg-blue-500/10">0</td>
+                            </tr>
+                            <tr class="hover:bg-gray-900/30 transition">
+                                <td class="p-4 text-center font-bold text-gray-500">3</td>
+                                <td class="p-4 flex items-center gap-2 text-white font-bold">
+                                    <span class="text-lg">🇲🇦</span> <span>Maroc</span>
+                                </td>
+                                <td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td>
+                                <td class="p-4 text-center font-black text-white bg-gray-950/20">0</td>
+                            </tr>
+                            <tr class="hover:bg-gray-900/30 transition">
+                                <td class="p-4 text-center font-bold text-gray-500">4</td>
+                                <td class="p-4 flex items-center gap-2 text-white font-bold">
+                                    <span class="text-lg">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span> <span>Écosse</span>
+                                </td>
+                                <td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td><td class="p-4 text-center text-gray-400">0</td>
+                                <td class="p-4 text-center font-black text-white bg-gray-950/20">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <p class="text-[10px] text-gray-500 mt-3 text-center sm:text-left font-medium"><i class="fa-solid fa-circle-info mr-1"></i> Les scores et les points s'actualiseront automatiquement dès le coup d'envoi.</p>
+        </div>
+    </section>
+
+    <section id="vision" class="bg-gray-950/60 border-t border-b border-gray-900 py-16 sm:py-20 text-center">
+        <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <i class="fa-solid fa-star text-amber-500 text-3xl sm:text-4xl mb-4 sm:mb-6"></i>
+            <h2 class="font-athletic text-2xl sm:text-5xl font-black uppercase text-white mb-4 sm:mb-6 tracking-wide">RENMEN PEYI A, HONNEUR ET PATRIE</h2>
+            <p class="text-gray-400 font-medium text-sm sm:text-lg max-w-3xl mx-auto px-2">
+                Chaque fiche technique et chaque analyse propulsées par **PWESPORTS** servent un objectif unique : propulser la couverture médiatique de nos Grenadiers au plus haut niveau mondial.
+            </p>
+        </div>
+    </section>
+
+    <footer class="bg-[#060911] text-gray-500 text-xs py-10 border-t border-gray-950 text-center">
+        <p>&copy; 2026 <span class="text-white font-bold font-athletic tracking-wide">PWESPORTS</span>. Tous droits réservés.</p>
+    </footer>
+
+    <div id="player-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="relative bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-2xl max-h-[90vh] sm:max-h-none overflow-y-auto sm:overflow-hidden shadow-2xl transition-all duration-300 transform translate-y-full sm:translate-y-0">
+            <div class="sticky top-0 z-10 bg-[#0f1524] pt-4 px-4 sm:absolute sm:top-4 sm:right-4 sm:p-0 flex justify-between items-center sm:block border-b border-gray-900 sm:border-none pb-3 sm:pb-0">
+                <div class="w-12 h-1.5 bg-gray-800 rounded-full mx-auto absolute top-2 left-1/2 -translate-x-1/2 sm:hidden"></div>
+                <button onclick="closeModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="modal-body" class="p-5 sm:p-10"></div>
         </div>
     </div>
 
     <script>
+        // Mwen ranje "johny_placide" pou l matche egzakteman "jhonny_placide.jpg" ki sou GitHub ou a!
         const playersDataset = [
-            { id: "jhonny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia" },
-            { id: "frantzdy_pierrot", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor" },
-            { id: "ricardo_ade", name: "Ricardo Adé", role: "Défenseurs", club: "LDU Quito" },
-            { id: "duckens_nazon", name: "Duckens Nazon", role: "Attaquants", club: "Kayserispor" }
-            // Ou ka ajoute lòt yo menm jan an isit
+            { id: "jhonny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia (Ligue 2)", birth: "29 janvier 1988 (38 ans)", nat: "Haïtienne & Française", strengths: "Gardien de but charismatique et leader vocal incontournable.", journey: "Formé au Havre AC, il s'illustre en Ligue 1 au Stade de Reims.", icon: "fa-shield-halved", badge: "Capitaine" },
+            { id: "alexandre_pierre", name: "Alexandre Pierre", role: "Gardiens", club: "FC Sochaux-Montbéliard", birth: "25 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Grande envergure (1m90), très explosif sur sa ligne.", journey: "Formé au Stade Lavallois, pro au RC Strasbourg.", icon: "fa-hands" },
+            { id: "josue_duverger", name: "Josué Duverger", role: "Gardiens", club: "FC Cosmos Koblenz", birth: "27 avril 2000 (26 ans)", nat: "Haïtienne & Canadienne", strengths: "Excellents réflexes sur sa ligne de but.", journey: "Formé au Portugal au sein de Belenenses.", icon: "fa-hands" },
+            { id: "ricardo_ade", name: "Ricardo Adé Kat", role: "Défenseurs", club: "LDU Quito (LigaPro)", birth: "21 mai 1990 (35 ans)", nat: "Haïtienne", strengths: "Défenseur central d'un leadership exceptionnel.", journey: "Après des débuts en Haïti, il s'impose en Équateur.", icon: "fa-gavel", badge: "Ministre" },
+            { id: "hannes_delcroix", name: "Hannes Piterson Delcroix", role: "Défenseurs", club: "FC Lugano (Super League)", birth: "28 février 1999 (27 ans)", nat: "Haïtienne & Belge", strengths: "Défenseur central moderne (gaucher).", journey: "Formé au RSC Anderlecht, passé par Burnley.", icon: "fa-shield" },
+            { id: "carlens_arcus", name: "Carlens Arcus", role: "Défenseurs", club: "Angers SCO (Ligue 1)", birth: "28 juin 1996 (29 ans)", nat: "Haïtienne", strengths: "Vitesse explosive dans son couloir.", journey: "AJ Auxerre puis Vitesse Arnhem.", icon: "fa-bolt" },
+            { id: "jean_kelvin_duverne", name: "Jean-Kévin Duverne", role: "Défenseurs", club: "KAA Gent (Jupiler League)", birth: "12 juillet 1997 (28 ans)", nat: "Française & Haïtienne", strengths: "Grande polyvalence défensive.", journey: "Formé au RC Lens, puis FC Nantes.", icon: "fa-arrows-up-down-left-right" },
+            { id: "duke_lacroix", name: "Duke Lacroix", role: "Défenseurs", club: "Colorado Springs (USL)", birth: "14 octobre 1993 (32 ans)", nat: "Haïtienne & Américaine", strengths: "Défenseur latéral gauche d'expérience.", journey: "Cadre respecté de la ligue USL Championship.", icon: "fa-road" },
+            { id: "martin-experience", name: "Martin Yves Expérience", role: "Défenseurs", club: "AS Nancy-Lorraine (Ligue 2)", birth: "9 mars 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Latéral ou piston gauche moderne.", journey: "S'engage avec l'AS Nancy-Lorraine.", icon: "fa-left-long" },
+            { id: "wilguens_paugain", name: "Wilguens Raphael Paugain", role: "Défenseurs", club: "SV Zulte Waregem", birth: "24 août 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Arrière droit moderne et physique.", journey: "S'engage sur le long terme avec Zulte Waregem.", icon: "fa-user-shield" },
+            { id: "keeto_thermoncy", name: "Keeto Thermoncy", role: "Défenseurs", club: "Young Boys U21", birth: "29 mars 2006 (20 ans)", nat: "Haïtienne & Suisse", strengths: "Défenseur central moderne et imposant.", journey: "Intégré à l'académie d'élite du BSC Young Boys.", icon: "fa-gem", badge: "Espoir" },
+            { id: "jean_ricner_bellegarde", name: "Jean-Ricner Bellegarde", role: "Milieux", club: "Wolves (Premier League)", birth: "27 juin 1998 (27 ans)", nat: "Française & Haïtienne", strengths: "Accélération balle au pied dévastatrice.", journey: "Wolverhampton en English Premier League.", icon: "fa-bolt", badge: "Star" },
+            { id: "danley_jean_jacques", name: "Danley Jean-Jacques", role: "Milieux", club: "Philadelphia Union (MLS)", birth: "20 mai 2000 (25 ans)", nat: "Haïtienne", strengths: "Milieu récupérateur infatigable.", journey: "FC Metz avant de s'engager en MLS.", icon: "fa-recycle" },
+            { id: "carl_fred_sainthe", name: "Carl Fred Sainté", role: "Milieux", club: "FC Dallas (MLS)", birth: "9 août 2002 (23 ans)", nat: "Haïtienne", strengths: "Milieu défensif 'sentinelle' à fort impact.", journey: "Rallie l'équipe première en MLS au FC Dallas.", icon: "fa-tower-cell" },
+            { id: "woodensky_pierre", name: "Olivier Woodensky Pierre", role: "Milieux", club: "Violette AC (Haïti)", birth: "30 décembre 2004 (21 ans)", nat: "Haïtienne", strengths: "Milieu défensif moderne.", journey: "Pur produit du Violette AC.", icon: "fa-crown", badge: "Local Hero" },
+            { id: "dominique_simon", name: "Dominique Célidor Simon", role: "Milieux", club: "Tatran Prešov", birth: "29 juillet 2000 (25 ans)", nat: "Haïtienne & Française", strengths: "Milieu défensif de grand volume.", journey: "S'impose en Slovaquie.", icon: "fa-anchor" },
+            { id: "leverton_pierre", name: "Leverton Pierre", role: "Milieux", club: "FC Vizela (Portugal)", birth: "9 mars 1998 (28 ans)", nat: "Haïtienne", strengths: "Milieu défensif et relayeur physique.", journey: "S'engage au Portugal à l'été 2025.", icon: "fa-dumbbell" },
+            { id: "frantzdy_pierrot", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor (Turquie)", birth: "29 mars 1995 (31 ans)", nat: "Haïtienne & Américaine", strengths: "Jeu de tête absolument dévastateur.", journey: "Maccabi Haifa, transféré en première division turque.", icon: "fa-jet-fighter", badge: "Tank" },
+            { id: "duckens_nazon", name: "Duckens Nazon", role: "Attaquants", club: "Kayserispor (Turquie)", birth: "7 avril 1994 (32 ans)", nat: "Haïtienne & Française", strengths: "Finition clinique devant le but.", journey: "Exporte ses buts en Turquie à Kayserispor.", icon: "fa-crosshairs", badge: "Légende" },
+            { id: "wilson_isidor", name: "Wilson Isidor", role: "Attaquants", club: "Sunderland (Angleterre)", birth: "27 août 2000 (25 ans)", nat: "Française & Haïtienne", strengths: "Vitesse de pointe explosive.", journey: "Rejoint l'Angleterre à Sunderland.", icon: "fa-fire" },
+            { id: "deedson_louicius", name: "Don Deedson Louicius", role: "Attaquants", club: "FC Dallas (MLS)", birth: "11 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Ailier percutant, vitesse d'exécution.", journey: "S'engage avec le FC Dallas en MLS.", icon: "fa-wand-magic-sparkles" },
+            { id: "derrick_etienne", name: "Derrick Burckley Etienne Jr.", role: "Attaquants", club: "Toronto FC (MLS)", birth: "25 novembre 1996 (29 ans)", nat: "Haïtienne & Américaine", strengths: "Ailier gauche rapide et remuant.", journey: "Cadre majeur du Toronto FC.", icon: "fa-trophy" },
+            { id: "lenny_joseph", name: "Lenny Alvin Pico Joseph", role: "Attaquants", club: "Ferencváros TC", birth: "12 octobre 2000 (25 ans)", nat: "Haïtienne & Française", strengths: "Vitesse de pointe dévastatrice.", journey: "Découvre l'Europa League avec Ferencváros.", icon: "fa-earth-europe" },
+            { id: "josue_casimir", name: "Josué Casimir", role: "Attaquants", club: "AJ Auxerre (Ligue 1)", birth: "24 septembre 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Vitesse explosive, polyvalence tactique.", journey: "Rejoint l'AJ Auxerre en 2025.", icon: "fa-repeat" },
+            { id: "rubens_providence", name: "Rubens Providence", role: "Attaquants", club: "Almere City (Pays-Bas)", birth: "9 juin 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Ailier percutant et technique.", journey: "S'engage en première division néerlandaise.", icon: "fa-child-reaching" },
+            { id: "yassin_fortune", name: "Yassin Enzo Fortuné", role: "Attaquants", club: "FC Vizela (Portugal)", birth: "30 janvier 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Milieu offensif et attaquant puissant.", journey: "Brille au Portugal au FC Vizela.", icon: "fa-mask" }
         ];
 
-        function renderRoster(list) {
+        let currentRoleFilter = "all";
+
+        function renderRoster(targetPlayers) {
             const grid = document.getElementById("roster-grid");
+            const emptyState = document.getElementById("empty-state");
             grid.innerHTML = "";
-            list.forEach(p => {
+            if (targetPlayers.length === 0) { emptyState.classList.remove("hidden"); return; }
+            emptyState.classList.add("hidden");
+
+            targetPlayers.forEach(player => {
                 const card = document.createElement("div");
-                card.className = "bg-[#0e1322] border border-gray-800 p-6 rounded-xl cursor-pointer hover:border-red-500 transition";
-                card.onclick = () => window.openPlayerModal(p.id);
-                card.innerHTML = `<h3 class="font-bold text-lg">${p.name}</h3><p class="text-red-500 text-sm">${p.club}</p>`;
+                card.className = "group relative rounded-2xl border border-gray-900 bg-[#0e1322] p-4 sm:p-6 hover:border-gray-700 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5 active:scale-[0.98] transition-all duration-300 flex flex-col justify-between cursor-pointer";
+                card.onclick = () => openPlayerModal(player.id);
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center border border-gray-800 text-blue-500 group-hover:text-red-500 transition-colors">
+                                <i class="fa-solid ${player.icon || 'fa-user'} text-sm"></i>
+                            </div>
+                            ${player.badge ? `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">${player.badge}</span>` : `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-gray-900 text-gray-400">${player.role}</span>`}
+                        </div>
+                        <h3 class="font-athletic text-base sm:text-xl font-bold uppercase text-white tracking-wide mb-1 line-clamp-1">${player.name}</h3>
+                        <p class="text-[10px] text-gray-400 font-semibold line-clamp-1">${player.club}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-900/60 flex items-center justify-between text-gray-500 group-hover:text-gray-300 transition-colors">
+                        <span class="text-[9px] font-bold tracking-wider uppercase">Voir Profil</span>
+                        <i class="fa-solid fa-chevron-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                `;
                 grid.appendChild(card);
             });
         }
 
-        window.changeRoleFilter = (role) => {
-            const filtered = role === "all" ? playersDataset : playersDataset.filter(p => p.role === role);
+        function handleSearchAndFilter() {
+            const searchValue = document.getElementById("search-player").value.toLowerCase().trim();
+            let filtered = playersDataset;
+            if (currentRoleFilter !== "all") filtered = filtered.filter(p => p.role === currentRoleFilter);
+            if (searchValue !== "") {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchValue) || p.club.toLowerCase().includes(searchValue));
+            }
             renderRoster(filtered);
-        };
+        }
 
-        window.openPlayerModal = (id) => {
-            const p = playersDataset.find(player => player.id === id);
-            if (!p) return;
-            document.getElementById("modal-body").innerHTML = `<h2 class="text-2xl font-black">${p.name}</h2><p class="text-gray-400">${p.club}</p>`;
-            document.getElementById("player-modal").classList.remove("hidden");
-        };
+        function changeRoleFilter(role) {
+            currentRoleFilter = role;
+            document.querySelectorAll(".filter-btn").forEach(btn => btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition");
+            document.getElementById(`btn-${role}`).className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase bg-red-600 text-white transition";
+            handleSearchAndFilter();
+        }
 
-        window.closeModal = () => document.getElementById("player-modal").classList.add("hidden");
+        function toggleMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            const icon = document.getElementById("menu-icon");
+            if (menu.classList.contains("hidden")) { menu.classList.remove("hidden"); icon.className = "fa-solid fa-xmark text-xl"; }
+            else { menu.classList.add("hidden"); icon.className = "fa-solid fa-bars text-xl"; }
+        }
 
-        // Premye chajman
-        document.addEventListener('DOMContentLoaded', () => renderRoster(playersDataset));
+        function hideImageSkeleton(imgElement) {
+            imgElement.parentElement.querySelector('.skeleton-loader-bg')?.classList.add('hidden');
+            imgElement.classList.remove('opacity-0');
+        }
+
+        function openPlayerModal(playerId) {
+            const player = playersDataset.find(p => p.id === playerId);
+            if (!player) return;
+            const modal = document.getElementById("player-modal");
+            const modalBody = document.getElementById("modal-body");
+            
+            // Kòd la ap pran foto a dirèkteman ak "id.jpg"
+            const playerImageUrl = `${player.id}.jpg`;
+
+            modalBody.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-6 items-start">
+                    <div class="w-full md:w-1/3 flex flex-col items-center gap-3">
+                        <div class="w-44 h-56 rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden relative flex items-center justify-center">
+                            <div class="skeleton-loader-bg absolute inset-0 animate-pulse-fast flex items-center justify-center">
+                                <i class="fa-solid ${player.icon || 'fa-user'} text-3xl text-gray-600 animate-pulse"></i>
+                            </div>
+                            <img src="${playerImageUrl}" alt="${player.name}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="hideImageSkeleton(this)" onerror="hideImageSkeleton(this); this.parentElement.innerHTML='<i class=\'fa-solid ${player.icon || 'fa-user'} text-5xl text-gray-700\'></i>';">
+                        </div>
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-2">${player.role}</span>
+                        <h2 class="font-athletic text-3xl font-black uppercase text-white mb-1">${player.name}</h2>
+                        <p class="text-red-500 font-bold text-xs uppercase tracking-wider mb-4">${player.club}</p>
+                        <div class="grid grid-cols-2 gap-4 bg-gray-900/40 border border-gray-900 rounded-2xl p-4 mb-5 text-xs">
+                            <div><span class="text-gray-500 uppercase font-bold block">Naissance</span><span>${player.birth}</span></div>
+                            <div><span class="text-gray-500 uppercase font-bold block">Nationalité</span><span>${player.nat}</span></div>
+                        </div>
+                        <div class="space-y-4">
+                            <div><h4 class="font-athletic text-base font-bold uppercase text-white border-b border-gray-900 pb-1 mb-2">Points Forts</h4><p class="text-xs text-gray-300">${player.strengths}</p></div>
+                            <div><h4 class="font-athletic text-base font-bold uppercase text-white border-b border-gray-900 pb-1 mb-2">Parcours</h4><p class="text-xs text-gray-400">${player.journey}</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove("hidden");
+            setTimeout(() => modal.querySelector('.relative').className = "relative bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-2xl overflow-y-auto shadow-2xl transition-all duration-300 transform translate-y-0", 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("player-modal");
+            modal.querySelector('.relative').classList.add("translate-y-full");
+            setTimeout(() => modal.classList.add("hidden"), 250);
+        }
+
+        window.onload = () => renderRoster(playersDataset);
     </script>
 </body>
 </html>
+
 
 
