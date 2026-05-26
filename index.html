@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWESPORTS | Les Grenadiers</title>
+    <title>PWESPORTS | Les Grenadiers - Mondial 2026</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
@@ -18,24 +18,41 @@
     <nav class="sticky top-0 z-40 border-b border-gray-800 bg-[#0b0f19]/90 backdrop-blur-md">
         <div class="mx-auto max-w-7xl px-4 h-20 flex items-center justify-between">
             <span class="font-athletic text-3xl font-extrabold text-white">PWE<span class="text-red-500">SPORTS</span></span>
-            <button onclick="toggleMobileMenu()" class="md:hidden text-white"><i class="fa-solid fa-bars text-xl"></i></button>
+            <div class="hidden md:flex space-x-6 text-sm font-bold tracking-widest">
+                <a href="#effectif" class="hover:text-red-500 transition">EFFECTIF</a>
+                <a href="#mondial" class="hover:text-red-500 transition">MONDIAL 2026</a>
+            </div>
         </div>
     </nav>
 
-    <main id="effectif" class="mx-auto max-w-7xl px-4 py-12">
-        <div class="flex justify-center gap-2 mb-10 overflow-x-auto no-scrollbar">
-            <button onclick="filterPlayers('all')" id="btn-all" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white">Tous</button>
-            <button onclick="filterPlayers('Gardiens')" id="btn-Gardiens" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-gray-800 text-gray-400">Gardiens</button>
-            <button onclick="filterPlayers('Défenseurs')" id="btn-Défenseurs" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-gray-800 text-gray-400">Défenseurs</button>
-            <button onclick="filterPlayers('Milieux')" id="btn-Milieux" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-gray-800 text-gray-400">Milieux</button>
-            <button onclick="filterPlayers('Attaquants')" id="btn-Attaquants" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-gray-800 text-gray-400">Attaquants</button>
-        </div>
+    <main class="mx-auto max-w-7xl px-4 py-12">
+        
+        <section id="effectif" class="mb-20">
+            <h2 class="font-athletic text-4xl text-center uppercase mb-10">L'Armée Rouge et Bleu</h2>
+            <div class="flex justify-center gap-2 mb-10 overflow-x-auto no-scrollbar">
+                <button onclick="filterPlayers('all')" id="btn-all" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white">Tous</button>
+                <button onclick="filterPlayers('Gardiens')" id="btn-Gardiens" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-gray-800 text-gray-400">Gardiens</button>
+                <button onclick="filterPlayers('Défenseurs')" id="btn-Défenseurs" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-gray-800 text-gray-400">Défenseurs</button>
+                <button onclick="filterPlayers('Milieux')" id="btn-Milieux" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-gray-800 text-gray-400">Milieux</button>
+                <button onclick="filterPlayers('Attaquants')" id="btn-Attaquants" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-gray-800 text-gray-400">Attaquants</button>
+            </div>
+            <div id="roster-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        </section>
 
-        <div id="roster-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        <section id="mondial" class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div class="bg-[#0e1322] p-8 rounded-3xl border border-gray-800">
+                <h3 class="font-athletic text-2xl mb-6">📅 KALANDRIYE</h3>
+                <div id="kalandriye-container" class="space-y-4 text-sm"></div>
+            </div>
+            <div class="bg-[#0e1322] p-8 rounded-3xl border border-gray-800">
+                <h3 class="font-athletic text-2xl mb-6">🏆 KLASMAN</h3>
+                <div id="klasman-container" class="text-sm"></div>
+            </div>
+        </section>
     </main>
 
     <div id="player-modal" class="fixed inset-0 z-50 hidden bg-black/80 flex items-center justify-center p-4">
-        <div id="modal-content" class="bg-[#0f1524] border border-gray-800 rounded-3xl w-full max-w-2xl p-8 relative transition-all duration-300 transform scale-95">
+        <div class="bg-[#0f1524] border border-gray-800 rounded-3xl w-full max-w-2xl p-8 relative">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400"><i class="fa-solid fa-xmark text-2xl"></i></button>
             <div id="modal-body"></div>
         </div>
@@ -43,16 +60,14 @@
 
     <script>
         const playersDataset = [
-            { id: "johny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia", birth: "29 janv 1988", nat: "Haïtienne", strengths: "Leader vocal, réflexes.", journey: "Le Havre, Reims.", icon: "fa-shield-halved", badge: "Capitaine" },
-            { id: "frantzdy_pierrot", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor", birth: "29 mars 1995", nat: "Haïtienne", strengths: "Puissance, jeu de tête.", journey: "Maccabi Haifa.", icon: "fa-jet-fighter", badge: "Tank" }
-            // ... (Ajoute rès 26 jwè yo isit la menm jan an)
+            { id: "johny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia", stats: { match: 82, but: 0 }, strengths: "Leader vocal", journey: "Reims, Le Havre" },
+            { id: "frantzdy_pierrot", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor", stats: { match: 45, but: 22 }, strengths: "Jeu de tête", journey: "Maccabi Haifa" }
         ];
 
         function renderRoster(role = "all") {
             const grid = document.getElementById("roster-grid");
             grid.innerHTML = "";
             const filtered = role === "all" ? playersDataset : playersDataset.filter(p => p.role === role);
-            
             filtered.forEach(p => {
                 const card = document.createElement("div");
                 card.className = "bg-[#0e1322] border border-gray-800 p-6 rounded-2xl cursor-pointer hover:border-red-500 transition";
@@ -63,31 +78,30 @@
         }
 
         window.filterPlayers = (role) => {
-            document.querySelectorAll(".filter-btn").forEach(b => b.classList.replace("bg-red-600", "bg-gray-800"));
-            document.getElementById(`btn-${role}`).classList.replace("bg-gray-800", "bg-red-600");
+            document.querySelectorAll(".filter-btn").forEach(b => {
+                b.className = "filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-gray-800 text-gray-400";
+            });
+            document.getElementById(`btn-${role}`).className = "filter-btn px-5 py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white";
             renderRoster(role);
         };
 
         window.openPlayerModal = (id) => {
             const p = playersDataset.find(x => x.id === id);
-            const body = document.getElementById("modal-body");
-            body.innerHTML = `
-                <div class="flex gap-6">
-                    <div class="w-1/3 bg-gray-800 h-48 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid ${p.icon} text-5xl text-gray-500"></i>
-                    </div>
-                    <div class="w-2/3">
-                        <h2 class="text-3xl font-black uppercase">${p.name}</h2>
-                        <p class="text-red-500 font-bold">${p.club}</p>
-                        <p class="mt-4 text-sm text-gray-300">${p.strengths}</p>
-                    </div>
+            if (!p) return;
+            document.getElementById("modal-body").innerHTML = `
+                <h2 class="text-3xl font-black uppercase mb-2">${p.name}</h2>
+                <div class="flex gap-4 my-4">
+                    <div class="bg-gray-900 p-4 rounded-xl">Matchs: ${p.stats.match}</div>
+                    <div class="bg-gray-900 p-4 rounded-xl">Buts: ${p.stats.but}</div>
                 </div>
+                <p class="text-gray-300"><strong>Parcours:</strong> ${p.journey}</p>
             `;
             document.getElementById("player-modal").classList.remove("hidden");
         };
 
         window.closeModal = () => document.getElementById("player-modal").classList.add("hidden");
 
+        // Inisyalizasyon
         renderRoster();
     </script>
 </body>
