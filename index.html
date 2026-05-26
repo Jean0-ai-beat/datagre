@@ -1,87 +1,304 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWESPORTS | Grenadiers</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>PWESPORTS | Les Grenadiers - Mondial 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0b0f19;
+        }
+        .font-athletic {
+            font-family: 'Oswald', sans-serif;
+        }
+        /* Kache scrollbar pou carousel filtè a */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-<body class="bg-gray-950 text-white font-sans p-4">
+<body class="text-gray-200 antialiased bg-[#0b0f19]">
 
-    <div class="flex flex-wrap gap-2 mb-6 justify-center">
-        <button onclick="changeRoleFilter('all')" class="bg-red-600 px-4 py-2 rounded-lg text-xs font-bold">TOUS</button>
-        <button onclick="changeRoleFilter('Gardiens')" class="bg-gray-800 px-4 py-2 rounded-lg text-xs font-bold">GARDIENS</button>
-        <button onclick="changeRoleFilter('Défenseurs')" class="bg-gray-800 px-4 py-2 rounded-lg text-xs font-bold">DÉFENSEURS</button>
-        <button onclick="changeRoleFilter('Milieux')" class="bg-gray-800 px-4 py-2 rounded-lg text-xs font-bold">MILIEUX</button>
-        <button onclick="changeRoleFilter('Attaquants')" class="bg-gray-800 px-4 py-2 rounded-lg text-xs font-bold">ATTAQUANTS</button>
-    </div>
+    <nav class="sticky top-0 z-40 border-b border-gray-800 bg-[#0b0f19]/90 backdrop-blur-md">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-20 items-center justify-between">
+                <div class="flex items-center">
+                    <span class="font-athletic text-3xl font-extrabold tracking-wider text-white">PWE<span class="text-red-500">SPORTS</span></span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#accueil" class="text-sm font-semibold tracking-wide text-white hover:text-red-500 transition">ACCUEIL</a>
+                    <a href="#effectif" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">LES GUERRIERS</a>
+                    <a href="#vision" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">MONDIAL 2026</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://www.tiktok.com" target="_blank" class="flex items-center space-x-2 rounded-full bg-red-600 px-4 py-2 text-xs font-bold uppercase text-white shadow-lg shadow-red-600/20 hover:bg-red-700 transition">
+                        <i class="fab fa-tiktok"></i> <span class="hidden sm:inline">Suivre</span>
+                    </a>
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-gray-400 hover:text-white p-2">
+                        <i id="menu-icon" class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden border-b border-gray-800 bg-[#0b0f19] px-4 pt-2 pb-6 space-y-3 transition-all">
+            <a href="#accueil" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-white py-2">ACCUEIL</a>
+            <a href="#effectif" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">LES GUERRIERS</a>
+            <a href="#vision" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">MONDIAL 2026</a>
+        </div>
+    </nav>
 
-    <div id="roster-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+    <header id="accueil" class="relative overflow-hidden py-16 sm:py-24 text-center border-b border-gray-900">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+            <div class="inline-flex items-center gap-x-2 rounded-full border border-red-500/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold uppercase text-red-400 mb-6">
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Route pour le Mondial 2026
+            </div>
+            <h1 class="font-athletic text-4xl sm:text-7xl lg:text-8xl font-black uppercase text-white mb-6 leading-none">
+                MARCHE HISTORIQUE:<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">LES GRENADIERS</span>
+            </h1>
+            <p class="mx-auto max-w-2xl text-sm sm:text-xl text-gray-400 font-medium mb-8 sm:mb-10 px-2">
+                26 Guerriers. Une Nation. La Scène Mondiale. Découvrez les profils détaillés d'Haïti prête à conquérir les USA, le Canada et le Mexique.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#effectif" class="w-full sm:w-auto rounded-xl bg-blue-600 px-8 py-4 text-sm font-bold uppercase text-white shadow-xl shadow-blue-600/30 hover:bg-blue-700 transition">Explorer l'Effectif</a>
+            </div>
+        </div>
+    </header>
 
-    <div id="player-modal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
-        <div class="bg-gray-900 p-6 rounded-2xl max-w-sm w-full border border-gray-700">
-            <div id="modal-body"></div>
-            <button onclick="closeModal()" class="mt-4 w-full bg-gray-800 py-2 rounded-lg font-bold">FÈMEN</button>
+    <main id="effectif" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
+            <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-3">L'Armée Rouge et Bleu</h2>
+            <p class="text-xs sm:text-sm text-gray-400 font-medium px-4">Filtrez les joueurs par compartiment tactique pour analyser leurs forces.</p>
+        </div>
+
+        <div class="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-auto mb-10 max-w-2xl">
+            <div class="flex sm:wrap justify-start sm:justify-center gap-2 bg-gray-900/50 p-1.5 rounded-2xl border border-gray-800 whitespace-nowrap min-w-max sm:min-w-0">
+                <button onclick="filterPlayers('all')" id="btn-all" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white transition">Tous</button>
+                <button onclick="filterPlayers('Gardiens')" id="btn-Gardiens" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Gardiens</button>
+                <button onclick="filterPlayers('Défenseurs')" id="btn-Défenseurs" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Défenseurs</button>
+                <button onclick="filterPlayers('Milieux')" id="btn-Milieux" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Milieux</button>
+                <button onclick="filterPlayers('Attaquants')" id="btn-Attaquants" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Attaquants</button>
+            </div>
+        </div>
+
+        <div id="roster-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            </div>
+    </main>
+
+    <section id="vision" class="bg-gray-950/60 border-t border-b border-gray-900 py-16 sm:py-20 text-center">
+        <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <i class="fa-solid fa-star text-amber-500 text-3xl sm:text-4xl mb-4 sm:mb-6"></i>
+            <h2 class="font-athletic text-2xl sm:text-5xl font-black uppercase text-white mb-4 sm:mb-6 tracking-wide">RENMEN PEYI A, HONNEUR ET PATRIE</h2>
+            <p class="text-gray-400 font-medium text-sm sm:text-lg max-w-3xl mx-auto px-2">
+                Chaque fiche technique et chaque analyse propulsées par **PWESPORTS** servent un objectif unique : propulser la couverture médiatique de nos Grenadiers au plus haut niveau mondial.
+            </p>
+        </div>
+    </section>
+
+    <footer class="bg-[#060911] text-gray-500 text-xs py-10 border-t border-gray-950 text-center">
+        <p>&copy; 2026 <span class="text-white font-bold font-athletic tracking-wide">PWESPORTS</span>. Tous droits réservés.</p>
+    </footer>
+
+    <div id="player-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="relative bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-2xl max-h-[90vh] sm:max-h-none overflow-y-auto sm:overflow-hidden shadow-2xl transition-all duration-300 transform translate-y-full sm:translate-y-0">
+            <div class="sticky top-0 z-10 bg-[#0f1524] pt-4 px-4 sm:absolute sm:top-4 sm:right-4 sm:p-0 flex justify-between items-center sm:block border-b border-gray-900 sm:border-none pb-3 sm:pb-0">
+                <div class="w-12 h-1.5 bg-gray-800 rounded-full mx-auto absolute top-2 left-1/2 -translate-x-1/2 sm:hidden"></div>
+                <span class="text-xs font-bold text-gray-500 uppercase font-athletic sm:hidden">Détails Joueur</span>
+                <button onclick="closeModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="h-1.5 bg-gradient-to-r from-red-600 via-blue-600 to-amber-500 hidden sm:block"></div>
+            <div id="modal-body" class="p-5 sm:p-10"></div>
         </div>
     </div>
 
     <script>
-        const players = [
-            { id: "p1", name: "Johny Placide", role: "Gardiens", club: "SC Bastia" },
-            { id: "p2", name: "Alexandre Pierre", role: "Gardiens", club: "FC Sochaux" },
-            { id: "p3", name: "Josué Duverger", role: "Gardiens", club: "FC Cosmos" },
-            { id: "p4", name: "Ricardo Adé", role: "Défenseurs", club: "LDU Quito" },
-            { id: "p5", name: "Hannes Delcroix", role: "Défenseurs", club: "FC Lugano" },
-            { id: "p6", name: "Carlens Arcus", role: "Défenseurs", club: "Angers SCO" },
-            { id: "p7", name: "Jean-Kévin Duverne", role: "Défenseurs", club: "KAA Gent" },
-            { id: "p8", name: "Duke Lacroix", role: "Défenseurs", club: "Colorado" },
-            { id: "p9", name: "Martin Expérience", role: "Défenseurs", club: "AS Nancy" },
-            { id: "p10", name: "Wilguens Paugain", role: "Défenseurs", club: "Zulte Waregem" },
-            { id: "p11", name: "Keeto Thermoncy", role: "Défenseurs", club: "Young Boys" },
-            { id: "p12", name: "Jean-Ricner Bellegarde", role: "Milieux", club: "Wolves" },
-            { id: "p13", name: "Danley Jean-Jacques", role: "Milieux", club: "Philadelphia" },
-            { id: "p14", name: "Carl Fred Sainté", role: "Milieux", club: "FC Dallas" },
-            { id: "p15", name: "Woodensky Pierre", role: "Milieux", club: "Violette AC" },
-            { id: "p16", name: "Dominique Simon", role: "Milieux", club: "Tatran Prešov" },
-            { id: "p17", name: "Leverton Pierre", role: "Milieux", club: "FC Vizela" },
-            { id: "p18", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor" },
-            { id: "p19", name: "Duckens Nazon", role: "Attaquants", club: "Kayserispor" },
-            { id: "p20", name: "Wilson Isidor", role: "Attaquants", club: "Sunderland" },
-            { id: "p21", name: "Don Deedson Louicius", role: "Attaquants", club: "FC Dallas" },
-            { id: "p22", name: "Derrick Etienne Jr.", role: "Attaquants", club: "Toronto FC" },
-            { id: "p23", name: "Lenny Joseph", role: "Attaquants", club: "Ferencváros" },
-            { id: "p24", name: "Josué Casimir", role: "Attaquants", club: "AJ Auxerre" },
-            { id: "p25", name: "Rubens Providence", role: "Attaquants", club: "Almere City" },
-            { id: "p26", name: "Yassin Fortuné", role: "Attaquants", club: "FC Vizela" }
+        const playersDataset = [
+            { id: "johny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia (Ligue 2)", birth: "29 janvier 1988 (38 ans)", nat: "Haïtienne & Française", strengths: "Gardien de but charismatique et leader vocal incontournable. Doté de réflexes exceptionnels sur sa ligne, d'une immense expérience internationale et d'un jeu au pied précis.", journey: "Formé au Havre AC, il s'illustre en Ligue 1 au Stade de Reims. Voyageur d'expérience passant par Guingamp, l'Angleterre (Oldham) et la Bulgarie (Tsarsko Selo), il s'impose ensuite comme le rempart historique du SC Bastia.", icon: "fa-shield-halved", badge: "Capitaine" },
+            { id: "alexandre_pierre", name: "Alexandre Pierre", role: "Gardiens", club: "FC Sochaux-Montbéliard", birth: "25 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Grande envergure (1m90), très explosif sur sa ligne, relances précises et impérial dans les duels aériens.", journey: "Formé au Stade Lavallois, il passe par la réserve du Angers SCO avant de signer pro au RC Strasbourg. Il est ensuite prêté au FC Annecy pour gagner du temps de jeu.", icon: "fa-handcuffs" },
+            { id: "josue_duverger", name: "Josué Duverger", role: "Gardiens", club: "FC Cosmos Koblenz", birth: "27 avril 2000 (26 ans)", nat: "Haïtienne & Canadienne", strengths: "Gardien de but à l'envergure impressionnante (1,87 m), excellents réflexes sur sa ligne de but, habile sur les sorties aériennes and doté d'une forte présence athlétique.", journey: "Formé au Portugal au sein des prestigieuses académies du Sporting CP et de Belenenses, il commence sa carrière professionnelle au Vitória Setúbal avant de rejoindre l'União Santarém. Il poursuit sa progression en Allemagne.", icon: "fa-hands" },
+            { id: "ricardo_ade", name: "Ricardo Adé Kat", role: "Défenseurs", club: "LDU Quito (LigaPro)", birth: "21 mai 1990 (35 ans)", nat: "Haïtienne", strengths: "Défenseur central d'un leadership exceptionnel. Véritable 'ministre de la défense', il excelle dans le duel aérien, le tacle glissé salvateur, la couverture défensive et l'autorité naturelle sur le terrain.", journey: "Après des débuts en Haïti (Don Bosco), il s'impose au Chili (Santiago Morning) avant de conquérir l'Équateur. Champion historique avec Aucas, il rejoint ensuite le géant LDU Quito avec qui il remporte la Copa Sudamericana.", icon: "fa-gavel", badge: "Ministre" },
+            { id: "hannes_delcroix", name: "Hannes Piterson Delcroix", role: "Défenseurs", club: "FC Lugano (Super League)", birth: "28 février 1999 (27 ans)", nat: "Haïtienne & Belge", strengths: "Défenseur central moderne (gaucher), solide dans l'impact physique, lecture du jeu remarquable, relance précise et capable d'évoluer également comme arrière gauche.", journey: "Formé au RSC Anderlecht où il s'impose chez les pros, il connaît un prêt au RKC Waalwijk avant de s'enforcer en Angleterre à Burnley. Il prend ensuite un nouveau virage en rejoignant l'élite suisse à Lugano.", icon: "fa-shield" },
+            { id: "carlens_arcus", name: "Carlens Arcus", role: "Défenseurs", club: "Angers SCO (Ligue 1)", birth: "28 juin 1996 (29 ans)", nat: "Haïtienne", strengths: "Vitesse explosive dans son couloir, gros volume de jeu (box-to-box), rigueur défensive dans les duels et qualité de centre en pleine course.", journey: "Révélé en France au Troyes AC puis à l'AJ Auxerre où il devient un cadre indiscutable. Il découvre ensuite l'Eredivisie avec le Vitesse Arnhem avant de s'mposer en Ligue 1.", icon: "fa-bolt" },
+            { id: "jean_kevin_duverne", name: "Jean-Kévin Duverne", role: "Défenseurs", club: "KAA Gent (Jupiler League)", birth: "12 juillet 1997 (28 ans)", nat: "Française & Haïtienne", strengths: "Grande polyvalence défensive (axe et côtés), vitesse de pointe impressionnante, impact physique dans les duels et relance propre.", journey: "Formé au RC Lens, il explose en Ligue 1 avec le Stade Brestois avant de s'engager au FC Nantes. Solide sur ses appuis, il poursuit son aventure en première division belge.", icon: "fa-arrows-up-down-left-right" },
+            { id: "duke_lacroix", name: "Duke Lacroix", role: "Défenseurs", club: "Colorado Springs (USL)", birth: "14 octobre 1993 (32 ans)", nat: "Haïtienne & Américaine", strengths: "Défenseur latéral gauche d'experience, ultra-rapide et endurant. Reconverti avec succès sur le flanc défensif, il excelle dans les transitions rapides et apporte un soutien offensif constant.", journey: "Formé au niveau universitaire (Penn Quakers), il s'impose en USL Championship avec Indy Eleven, Orange County, puis Sacramento Republic. Cadre respecté de la ligue, il rejoint ensuite Colorado Springs Switchbacks.", icon: "fa-road" },
+            { id: "martin_experience", name: "Martin Yves Expérience", role: "Défenseurs", club: "AS Nancy-Lorraine (Ligue 2)", birth: "9 mars 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Latéral ou piston gauche moderne (1,78 m), gaucher exclusif. Réputé pour sa solidité dans les duels, son excellente qualité de centre en pleine course et sa discipline tactique.", journey: "Formé en partie en Espagne (Xerez CD), il s'est affirmé dans le football français avec l'US Avranches puis le SO Cholet. En 2024, il s'engage avec l'AS Nancy-Lorraine avec qui il décroche la promotion en Ligue 2.", icon: "fa-left-long" },
+            { id: "wilguens_paugain", name: "Wilguens Raphael Paugain", role: "Défenseurs", club: "SV Zulte Waregem", birth: "24 août 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Arrière droit moderne et physique (1,80 m). Très solide dans le un-contre-un défensif, il possède un gros volume de course pour apporter le surnombre dans son couloir et adresser de bons centres.", journey: "Formé à l'AS Nancy-Lorraine, il passe par Chypre (Akritas) et la Lettonie (FK Auda) avant de rejoindre le SKN St. Pölten. Prêté puis définitivement transféré en Belgique, il s'engage sur le long terme avec Zulte Waregem.", icon: "fa-user-shield" },
+            { id: "keeto_thermoncy", name: "Keeto Thermoncy", role: "Défenseurs", club: "Young Boys U21", birth: "29 mars 2006 (20 ans)", nat: "Haïtienne & Suisse", strengths: "Défenseur central moderne et imposing (1,85 m). Impressionnant dans les duels physiques, solide dans les airs and doté d'une excellente lecture du jeu pour casser les lignes adverses.", journey: "Formé au FC Fribourg puis intégré à l'académie d'élite du BSC Young Boys. Il s'impose rapidement comme le patron de la charnière de l'équipe réserve (U21) en Promotion League, frappant aux portes de l'équipe première.", icon: "fa-gem", badge: "Espoir" },
+            { id: "jean_ricner_bellegarde", name: "Jean-Ricner Bellegarde", role: "Milieux", club: "Wolves (Premier League)", birth: "27 juin 1998 (27 ans)", nat: "Française & Haïtienne", strengths: "Accélération balle au pied dévastatrice, énorme volume de course, habileté technique dans les petits espaces et projection rapide vers l'avant.", journey: "Formé et révélé au RC Lens, il explose littéralement en Ligue 1 avec le RC Strasbourg où il devient le maître à jouer du milieu. Ses performances de haut niveau lui ouvrent les portes de la English Premier League à Wolverhampton.", icon: "fa-bolt", badge: "Star" },
+            { id: "danley_jean_jacques", name: "Danley Jean-Jacques", role: "Milieux", club: "Philadelphia Union (MLS)", birth: "20 mai 2000 (25 ans)", nat: "Haïtienne", strengths: "Milieu récupérateur infatigable, grosse intensité dans le pressing, habileté à casser les lignes par la passe et transition rapide défense-attaque.", journey: "Révélé en Haïti au Don Bosco FC, il rejoint la France et s'impose comme une pièce maîtresse de l'entrejeu du FC Metz en Ligue 1 et Ligue 2 avant de s'engager de l'autre côté de l'Atlantique en MLS.", icon: "fa-recycle" },
+            { id: "carl_fred_sainte", name: "Carl Fred Sainté", role: "Milieux", club: "FC Dallas (MLS)", birth: "9 août 2002 (23 ans)", nat: "Haïtienne", strengths: "Milieu défensif 'sentinelle' à fort impact (1,84 m). Doté d'un gros abattage physique pour la récupération des ballons, d'un excellent sens de l'interception et d'une relance propre et verticale.", journey: "Formé au Violette AC (Haïti), il lance sa carrière internationale aux USA à New Mexico United avant de s'mposer en Europe. Après un passage remarquable au FC Dallas (MLS NEXT Pro), il rallie l'équipe première en MLS.", icon: "fa-tower-cell" },
+            { id: "woodensky_pierre", name: "Olivier Woodensky Pierre", role: "Milieux", club: "Violette AC (Haïti)", birth: "30 décembre 2004 (21 ans)", nat: "Haïtienne", strengths: "Milieu défensif moderne, doté d'une excellente vision du jeu, d'une grande intelligence tactique et d'un leadership fort dans l'organisation de l'entrejeu.", journey: "Pur produit du Violette AC, il fait un passage remarqué au Real Hope FA avant de revenir porter le Vieux Tigre au sommet. Il réalise le doublé national (Série d'Ouverture et de Clôture) et s'impose comme le meilleur joueur local.", icon: "fa-crown", badge: "Local Hero" },
+            { id: "dominique_simon", name: "Dominique Célidor Simon", role: "Milieux", club: "Tatran Prešov", birth: "29 juillet 2000 (25 ans)", nat: "Haïtienne & Française", strengths: "Milieu défensif de grand volume, excellent pour ratisser les ballons, casser les lignes par la passe et imposer un rythme physique rigoureux dans le cœur du jeu.", journey: "Formé en France (FCM Aubervilliers), il lance sa carrière pro en Estonie à Paide où il gagne la Coupe nationale. Après des piges en Géorgie (Dinamo Tbilissi) et en République Tchèque (Pardubice), il s'impose en Slovaquie.", icon: "fa-anchor" },
+            { id: "leverton_pierre", name: "Leverton Pierre", role: "Milieux", club: "FC Vizela (Portugal)", birth: "9 mars 1998 (28 ans)", nat: "Haïtienne", strengths: "Milieu défensif et relayeur physique, excellent à la récupération de balle, lecture du jeu tranchante, impact dans l'entrejeu et grosse combativité.", journey: "Révélé au CS Saint-Louis, il rejoint la France à l'AC Ajaccio. Il devient une valeur sûre de l'US Dunkerque (Ligue 2/National) avant de passer par Avranches et Châteauroux. Ses performances l'emmènent au Portugal à l'été 2025.", icon: "fa-dumbbell" },
+            { id: "frantzdy_pierrot", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor (Turquie)", birth: "29 mars 1995 (31 ans)", nat: "Haïtienne & Américaine", strengths: "Jeu de tête absolument dévastateur, puissance athlétique hors norme, redoutable dans la conservation dos au but et grand finisseur dans la surface.", journey: "Passé par la Belgique (Mouscron) puis l'EA Guingamp en France, il brille au Maccabi Haifa (buteur en Ligue des Champions). Transféré à l'AEK Athènes, il évolue sous forme de prêt en première division turque.", icon: "fa-jet-fighter", badge: "Tank" },
+            { id: "duckens_nazon", name: "Duckens Nazon", role: "Attaquants", club: "Kayserispor (Turquie)", birth: "7 avril 1994 (32 ans)", nat: "Haïtienne & Française", strengths: "Finition clinique devant le but, puissance physique impressionnante dos au jeu, grand leadership sur le front de l'attaque et un sens du placement redoutable.", journey: "Un véritable globe-trotter des surfaces: passé par la France, l'Angleterre (Coventry, Oldham), Saint-Trond en Belgique et une aventure ultra-prolifique au CSKA Sofia avant d'export ses buts en Turquie.", icon: "fa-crosshairs", badge: "Légende" },
+            { id: "wilson_isidor", name: "Wilson Isidor", role: "Attaquants", club: "Sunderland (Angleterre)", birth: "27 août 2000 (25 ans)", nat: "Française & Haïtienne", strengths: "Attaquant polyvalent et percutant, vitesse de pointe explosive, appels dévastateurs dans la profondeur et grande efficacité devant le but.", journey: "Formé au Stade Rennais puis révélé à l'AS Monaco, il brille en prêt à Bastia-Borgo avant d'exploser en Russie au Lokomotiv Moscou et au Zénith Saint-Pétersbourg. Il rejoint ensuite l'Angleterre à Sunderland.", icon: "fa-fire" },
+            { id: "deedson_louicius", name: "Don Deedson Louicius", role: "Attaquants", club: "FC Dallas (MLS)", birth: "11 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Ailier percutant, vitesse d'exécution chirurgicale sur les flancs, excellente agilité technique pour éliminer en un-contre-un et superbe qualité de frappe du pied gauche.", journey: "Révélé au Danemark sous les couleurs de l'IK Hobro puis de l'OB Odense où il enchaîne les buts, ses performances lui ouvrent les portes de la Major League Soccer en s'engageant avec le FC Dallas.", icon: "fa-wand-magic-sparkles" },
+            { id: "derrick_etienne", name: "Derrick Burckley Etienne Jr.", role: "Attaquants", club: "Toronto FC (MLS)", birth: "25 novembre 1996 (29 ans)", nat: "Haïtienne & Américaine", strengths: "Ailier gauche rapide et remuant, doté d'une excellente percussion, d'une grande créativité dans la zone de vérité et d'une riche expérience des grands rendez-vous en MLS.", journey: "Formé aux New York Red Bulls, il brille ensuite au Columbus Crew où il est couronné Champion de la MLS Cup. Après des passages remarqués à Atlanta United, il devient un cadre majeur du Toronto FC.", icon: "fa-trophy" },
+            { id: "lenny_joseph", name: "Lenny Alvin Pico Joseph", role: "Attaquants", club: "Ferencváros TC", birth: "12 octobre 2000 (25 ans)", nat: "Haïtienne & Française", strengths: "Vitesse de pointe dévastatrice sur le front de l'attaque, percussion dynamique comme avant-centre ou sur les ailes, et grosse efficacité devant le but.", journey: "Formé en France (Le Puy, Metz), il s'affirme à Grenoble en Ligue 2 avant de franchir un cap majeur en s'engager avec le géant hongrois de Ferencváros, découvrant ainsi l'Europa League et enchaînant les buts.", icon: "fa-earth-europe" },
+            { id: "josue_casimir", name: "Josué Casimir", role: "Attaquants", club: "AJ Auxerre (Ligue 1)", birth: "24 septembre 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Vitesse explosive, polyvalence tactique sur tout le flanc droit (ailier ou piston), capacité de percussion en un-contre-un et grand volume de repli défensif.", journey: "Formé au Havre AC avec qui il devient Champion de Ligue 2 en 2023 et s'impose in Ligue 1, avant de rejoindre l'AJ Auxerre en 2025 pour y franchir un nouveau cap.", icon: "fa-repeat" },
+            { id: "rubens_providence", name: "Rubens Providence", role: "Attaquants", club: "Almere City (Pays-Bas)", birth: "9 juin 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Ailier percutant et technique, doté d'une excellente accélération, d'une grande agilité dans les petits espaces et d'une forte capacité à éliminer en un-contre-un.", journey: "Formé au Paris Saint-Germain puis recruté par l'AS Roma, il poursuit son développement à l'AS Tsvetanov (Estonie) et au TSV Hartberg en Autriche avant de s'engager en première division néerlandaise avec Almere City.", icon: "fa-child-reaching" },
+            { id: "yassin_fortune", name: "Yassin Enzo Fortuné", role: "Attaquants", club: "FC Vizela (Portugal)", birth: "30 janvier 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Milieu offensif et attaquant puissant (1,86 m), doté d'une excellente percussion technique, d'un grand sens du collectif et d'un profil athlétique précieux pour l'attaque.", journey: "Formé au RC Lens puis au prestigieux centre d'Arsenal FC. Il commence sa carrière professionnelle au FC Sion en Suisse, passe par Angers SCO, le SO Cholet, le Polissia Jytomyr (Ukraine) et QRM, avant de briller au Portugal.", icon: "fa-mask" }
         ];
 
-        function render(list) {
+        function renderRoster(filterRole = "all") {
             const grid = document.getElementById("roster-grid");
             grid.innerHTML = "";
-            list.forEach(p => {
+
+            const targetPlayers = filterRole === "all" 
+                ? playersDataset 
+                : playersDataset.filter(p => p.role === filterRole);
+
+            targetPlayers.forEach(player => {
                 const card = document.createElement("div");
-                card.className = "bg-gray-900 p-4 rounded-xl border border-gray-800 cursor-pointer hover:border-red-600";
-                card.onclick = () => openModal(p);
-                card.innerHTML = `<h3 class="font-bold">${p.name}</h3><p class="text-xs text-red-500">${p.club}</p>`;
+                card.className = "relative rounded-2xl border border-gray-900 bg-[#0e1322] p-4 sm:p-6 hover:border-gray-700 transition-all duration-300 flex flex-col justify-between cursor-pointer";
+                card.onclick = () => openPlayerModal(player.id);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3 sm:mb-4">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gray-900 flex items-center justify-center border border-gray-800 text-blue-500">
+                                <i class="fa-solid ${player.icon || 'fa-user'} text-sm sm:text-lg"></i>
+                            </div>
+                            ${player.badge ? `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">${player.badge}</span>` : `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-gray-900 text-gray-400">${player.role}</span>`}
+                        </div>
+                        <h3 class="font-athletic text-base sm:text-xl font-bold uppercase text-white tracking-wide mb-1 break-words line-clamp-1">${player.name}</h3>
+                        <p class="text-[10px] sm:text-xs text-gray-400 font-semibold mb-2 line-clamp-1">${player.club}</p>
+                    </div>
+                    <div class="mt-2 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-900/60 flex items-center justify-between text-gray-500">
+                        <span class="text-[9px] sm:text-[11px] font-bold tracking-wider uppercase">Voir Profil</span>
+                        <i class="fa-solid fa-chevron-right text-[10px] sm:text-xs"></i>
+                    </div>
+                `;
                 grid.appendChild(card);
             });
         }
 
-        window.changeRoleFilter = (role) => {
-            const filtered = (role === 'all') ? players : players.filter(p => p.role === role);
-            render(filtered);
+        function filterPlayers(role) {
+            document.querySelectorAll(".filter-btn").forEach(btn => {
+                btn.className = "filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition";
+            });
+            
+            const activeBtn = document.getElementById(`btn-${role}`);
+            activeBtn.className = "filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white transition";
+
+            renderRoster(role);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            const icon = document.getElementById("menu-icon");
+            if (menu.classList.contains("hidden")) {
+                menu.classList.remove("hidden");
+                icon.className = "fa-solid fa-xmark text-xl";
+            } else {
+                menu.classList.add("hidden");
+                icon.className = "fa-solid fa-bars text-xl";
+            }
+        }
+
+        function openPlayerModal(playerId) {
+            const player = playersDataset.find(p => p.id === playerId);
+            if (!player) return;
+
+            const modal = document.getElementById("player-modal");
+            const modalContent = modal.querySelector('.relative');
+            const modalBody = document.getElementById("modal-body");
+
+            const playerImageUrl = `${player.id}.jpg.jpg`;
+
+            modalBody.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-5 sm:gap-6 items-start">
+                    <div class="w-full md:w-1/3 flex flex-col items-center gap-3">
+                        <div class="w-44 h-56 sm:w-full sm:aspect-[3/4] rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden shadow-inner flex items-center justify-center relative">
+                            <img src="${playerImageUrl}" 
+                                 alt="${player.name}" 
+                                 class="w-full h-full object-cover"
+                                 data-retry="0"
+                                 onerror="
+                                    let retryCount = parseInt(this.getAttribute('data-retry'));
+                                    if (retryCount < 2) {
+                                        this.setAttribute('data-retry', retryCount + 1);
+                                        setTimeout(() => { this.src = this.src; }, 300);
+                                    } else {
+                                        this.onerror=null; 
+                                        this.parentElement.innerHTML='<i class=\'fa-solid ${player.icon || 'fa-user'} text-5xl text-gray-700\'></i>';
+                                    }
+                                 ">
+                        </div>
+                        ${player.badge ? `<span class="w-44 sm:w-full text-center px-2.5 py-1.5 rounded-xl text-xs font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-sm">${player.badge}</span>` : ''}
+                    </div>
+
+                    <div class="w-full md:w-2/3">
+                        <span class="inline-block px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-2">${player.role}</span>
+                        <h2 class="font-athletic text-3xl sm:text-4xl font-black uppercase text-white tracking-tight mb-1">${player.name}</h2>
+                        <p class="text-red-500 font-bold text-xs sm:text-sm uppercase tracking-wider mb-4 sm:mb-6">${player.club}</p>
+                        
+                        <div class="grid grid-cols-2 gap-4 bg-gray-900/40 border border-gray-900 rounded-2xl p-4 mb-5 sm:mb-6 text-[11px] sm:text-xs">
+                            <div>
+                                <span class="text-gray-500 uppercase font-bold block mb-0.5">Naissance</span>
+                                <span class="text-gray-200 font-medium">${player.birth}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 uppercase font-bold block mb-0.5">Nationalité</span>
+                                <span class="text-gray-200 font-medium">${player.nat}</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 sm:space-y-6">
+                            <div>
+                                <h4 class="font-athletic text-base sm:text-lg font-bold uppercase text-white tracking-wide border-b border-gray-900 pb-1 mb-2">Points Forts</h4>
+                                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${player.strengths}</p>
+                            </div>
+                            <div>
+                                <h4 class="font-athletic text-base sm:text-lg font-bold uppercase text-white tracking-wide border-b border-gray-900 pb-1 mb-2">Parcours en Club</h4>
+                                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">${player.journey}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove("hidden");
+            
+            // Ti delè pou animasyon glisad anba-anlè a ka deklanche sou mobil
+            setTimeout(() => {
+                modalContent.classList.remove("translate-y-full");
+                modalContent.classList.add("translate-y-0");
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("player-modal");
+            const modalContent = modal.querySelector('.relative');
+            
+            modalContent.classList.remove("translate-y-0");
+            modalContent.classList.add("translate-y-full");
+            
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 250);
+        }
+
+        window.onload = () => {
+            renderRoster();
         };
-
-        window.openModal = (p) => {
-            document.getElementById("modal-body").innerHTML = `<h2 class="text-xl font-bold">${p.name}</h2><p class="text-gray-400">${p.club}</p>`;
-            document.getElementById("player-modal").classList.remove("hidden");
-        };
-
-        window.closeModal = () => document.getElementById("player-modal").classList.add("hidden");
-
-        render(players);
     </script>
 </body>
 </html>
+
+
 
