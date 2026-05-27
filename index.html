@@ -167,88 +167,111 @@
     </main>
 
     <!-- ===================== SECTION TACTIQUE ===================== -->
-    <section id="tactique" class="border-t border-gray-900 py-16 sm:py-20">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
+    <!-- ===================== SECTION TACTIQUE ===================== -->
+    <section id="tactique" class="border-t border-gray-900 py-10 sm:py-16">
+        <div class="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+
+            <!-- TITRE -->
+            <div class="text-center mb-6 sm:mb-10">
                 <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest block mb-2">Analyse Tactique — Coupe du Monde 2026</span>
-                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-2">Composition <span id="tactic-title-formation" class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">4-2-3-1</span></h2>
-                <p class="text-xs text-gray-500 font-medium mt-2">Cliquez sur un joueur pour voir sa fiche · Glissez-le pour changer sa position · Faites glisser un remplaçant sur le terrain pour l'intégrer au XI</p>
+                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-2">
+                    Composition <span id="tactic-title-formation" class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">4-2-3-1</span>
+                </h2>
+                <p class="hidden sm:block text-xs text-gray-500 font-medium mt-2">Cliquez sur un joueur pour voir sa fiche · Glissez pour changer sa position · Glissez un remplaçant sur le terrain pour l'intégrer au XI</p>
+                <p class="sm:hidden text-xs text-gray-500 font-medium mt-2">Touchez un joueur pour voir sa fiche · Onglet Banc pour effectuer des remplacements</p>
             </div>
 
-            <div class="flex flex-col xl:flex-row gap-6 items-start justify-center">
+            <!-- FORMATION SELECTOR (toujours visible) -->
+            <div class="max-w-sm mx-auto mb-5">
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="applyFormation('4-2-3-1')" id="form-4231" class="formation-btn py-2.5 rounded-xl text-xs font-bold transition">4-2-3-1</button>
+                    <button onclick="applyFormation('4-3-3')"   id="form-433"  class="formation-btn py-2.5 rounded-xl text-xs font-bold transition">4-3-3</button>
+                    <button onclick="applyFormation('4-4-2')"   id="form-442"  class="formation-btn py-2.5 rounded-xl text-xs font-bold transition">4-4-2</button>
+                    <button onclick="applyFormation('3-5-2')"   id="form-352"  class="formation-btn py-2.5 rounded-xl text-xs font-bold transition">3-5-2</button>
+                    <button onclick="applyFormation('5-3-2')"   id="form-532"  class="formation-btn py-2.5 rounded-xl text-xs font-bold transition">5-3-2</button>
+                    <button onclick="applyFormation('4-1-4-1')" id="form-4141" class="formation-btn py-2.5 rounded-xl text-xs font-bold transition">4-1-4-1</button>
+                </div>
+            </div>
 
-                <!-- COL GAUCHE : Sélection formation + info joueur + télécharger -->
-                <div class="w-full xl:w-72 space-y-4 order-2 xl:order-1">
+            <!-- TABS MOBIL (hidden sur desktop) -->
+            <div class="flex xl:hidden gap-1 bg-gray-900/60 p-1 rounded-2xl border border-gray-900 mb-4 max-w-sm mx-auto">
+                <button onclick="switchTab('terrain')" id="tab-terrain" class="tactic-tab flex-1 py-2.5 rounded-xl text-xs font-bold transition"><i class="fa-solid fa-futbol mr-1"></i>Terrain</button>
+                <button onclick="switchTab('banc')"    id="tab-banc"    class="tactic-tab flex-1 py-2.5 rounded-xl text-xs font-bold transition"><i class="fa-solid fa-users mr-1"></i>Banc <span id="bench-count" class="ml-0.5">15</span></button>
+                <button onclick="switchTab('xi')"      id="tab-xi"      class="tactic-tab flex-1 py-2.5 rounded-xl text-xs font-bold transition"><i class="fa-solid fa-shirt mr-1"></i>XI</button>
+            </div>
 
-                    <!-- Sélecteur de formation -->
-                    <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4">
-                        <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3"><i class="fa-solid fa-sliders mr-1.5 text-blue-500"></i>Changer la Formation</p>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="applyFormation('4-2-3-1')" id="form-4231" class="formation-btn py-2 rounded-xl text-xs font-bold transition">4-2-3-1</button>
-                            <button onclick="applyFormation('4-3-3')"   id="form-433"  class="formation-btn py-2 rounded-xl text-xs font-bold transition">4-3-3</button>
-                            <button onclick="applyFormation('4-4-2')"   id="form-442"  class="formation-btn py-2 rounded-xl text-xs font-bold transition">4-4-2</button>
-                            <button onclick="applyFormation('3-5-2')"   id="form-352"  class="formation-btn py-2 rounded-xl text-xs font-bold transition">3-5-2</button>
-                            <button onclick="applyFormation('5-3-2')"   id="form-532"  class="formation-btn py-2 rounded-xl text-xs font-bold transition">5-3-2</button>
-                            <button onclick="applyFormation('4-1-4-1')" id="form-4141" class="formation-btn py-2 rounded-xl text-xs font-bold transition">4-1-4-1</button>
-                        </div>
-                    </div>
+            <!-- LAYOUT DESKTOP : 3 colonnes / MOBILE : tabs -->
+            <div class="flex flex-col xl:flex-row gap-5 items-start justify-center">
 
-                    <!-- Panneau info joueur sélectionné -->
-                    <div id="tactic-info-panel" class="bg-[#0e1322] border border-gray-900 rounded-2xl p-5 min-h-[150px] flex items-center justify-center transition-all">
+                <!-- COL GAUCHE desktop | onglet XI mobile -->
+                <div id="panel-xi" class="hidden xl:block w-full xl:w-72 space-y-4">
+                    <!-- Info joueur -->
+                    <div id="tactic-info-panel" class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4 min-h-[140px] flex items-center justify-center transition-all">
                         <div class="text-center text-gray-600">
                             <i class="fa-solid fa-hand-pointer text-2xl mb-2 block"></i>
-                            <p class="text-xs font-semibold">Cliquez sur un joueur sur le terrain pour afficher sa fiche</p>
+                            <p class="text-xs font-semibold">Cliquez sur un joueur<br>pour afficher sa fiche</p>
                         </div>
                     </div>
-
-                    <!-- Bouton Télécharger -->
-                    <button onclick="downloadLineup()" class="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 px-5 py-3.5 text-xs font-bold uppercase text-white shadow-lg shadow-blue-600/20 hover:from-blue-700 hover:to-blue-900 transition">
+                    <!-- Télécharger -->
+                    <button onclick="downloadLineup()" class="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 px-5 py-3 text-xs font-bold uppercase text-white shadow-lg shadow-blue-600/20 hover:from-blue-700 hover:to-blue-900 transition">
                         <i class="fa-solid fa-download"></i> Télécharger le Onze (PNG)
                     </button>
-
-                    <!-- Liste XI titulaires -->
+                    <!-- Liste XI -->
                     <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4">
                         <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3"><i class="fa-solid fa-shirt mr-1.5 text-red-500"></i>XI Titulaires</p>
                         <div id="lineup-list" class="space-y-1.5"></div>
                     </div>
                 </div>
 
-                <!-- COL CENTRE : Terrain -->
-                <div class="w-full xl:w-auto flex-shrink-0 order-1 xl:order-2 flex flex-col items-center">
-                    <div id="pitch-container" class="relative mx-auto select-none"
-                         style="width:340px; height:510px; background:linear-gradient(180deg,#1a3a1a 0%,#1e4a1e 50%,#1a3a1a 100%); border-radius:12px; border:2px solid #2d5a2d; overflow:visible;">
-                        <svg width="340" height="510" style="position:absolute;top:0;left:0;pointer-events:none;" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="10" y="10" width="320" height="490" rx="8" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-                            <line x1="10" y1="255" x2="330" y2="255" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-                            <circle cx="170" cy="255" r="40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-                            <circle cx="170" cy="255" r="3" fill="rgba(255,255,255,0.3)"/>
-                            <rect x="75" y="10" width="190" height="75" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
-                            <rect x="75" y="425" width="190" height="75" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
-                            <rect x="115" y="10" width="110" height="35" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
-                            <rect x="115" y="465" width="110" height="35" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
-                            <rect x="140" y="4" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
-                            <rect x="140" y="496" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
-                            <circle cx="170" cy="70" r="2.5" fill="rgba(255,255,255,0.3)"/>
-                            <circle cx="170" cy="440" r="2.5" fill="rgba(255,255,255,0.3)"/>
-                            <path d="M10,25 A15,15 0 0,1 25,10" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
-                            <path d="M315,10 A15,15 0 0,1 330,25" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
-                            <path d="M10,485 A15,15 0 0,0 25,500" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
-                            <path d="M315,500 A15,15 0 0,0 330,485" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
-                        </svg>
-                        <div id="pitch-players"></div>
-                        <!-- Drop zone overlay (shown when dragging from bench) -->
-                        <div id="pitch-dropzone" style="position:absolute;inset:0;border-radius:10px;border:2px dashed rgba(251,191,36,0.5);background:rgba(251,191,36,0.04);display:none;pointer-events:none;z-index:50;">
-                            <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:10px;font-weight:700;color:rgba(251,191,36,0.8);">Déposez ici pour intégrer au XI</div>
+                <!-- COL CENTRE : Terrain (toujours visible sur desktop, onglet Terrain sur mobile) -->
+                <div id="panel-terrain" class="w-full xl:w-auto flex-shrink-0 flex flex-col items-center">
+                    <!-- Terrain responsive wrapper -->
+                    <div id="pitch-wrapper" class="w-full max-w-[340px] sm:max-w-[340px]">
+                        <div id="pitch-container" class="relative mx-auto select-none"
+                             style="width:100%;padding-top:150%;background:linear-gradient(180deg,#1a3a1a 0%,#1e4a1e 50%,#1a3a1a 100%);border-radius:12px;border:2px solid #2d5a2d;overflow:hidden;">
+                            <svg id="pitch-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 340 510" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                                <rect x="10" y="10" width="320" height="490" rx="8" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                                <line x1="10" y1="255" x2="330" y2="255" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                                <circle cx="170" cy="255" r="40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                                <circle cx="170" cy="255" r="3" fill="rgba(255,255,255,0.3)"/>
+                                <rect x="75" y="10" width="190" height="75" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                                <rect x="75" y="425" width="190" height="75" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                                <rect x="115" y="10" width="110" height="35" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
+                                <rect x="115" y="465" width="110" height="35" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
+                                <rect x="140" y="4" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                                <rect x="140" y="496" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                                <circle cx="170" cy="70" r="2.5" fill="rgba(255,255,255,0.3)"/>
+                                <circle cx="170" cy="440" r="2.5" fill="rgba(255,255,255,0.3)"/>
+                                <path d="M10,25 A15,15 0 0,1 25,10" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                                <path d="M315,10 A15,15 0 0,1 330,25" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                                <path d="M10,485 A15,15 0 0,0 25,500" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                                <path d="M315,500 A15,15 0 0,0 330,485" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+                            </svg>
+                            <div id="pitch-players" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
+                            <div id="pitch-dropzone" style="position:absolute;inset:0;border-radius:10px;border:2px dashed rgba(251,191,36,0.5);background:rgba(251,191,36,0.04);display:none;pointer-events:none;z-index:50;">
+                                <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:10px;font-weight:700;color:rgba(251,191,36,0.8);">Déposer ici pour intégrer au XI</div>
+                            </div>
                         </div>
                     </div>
-                    <p class="text-center text-[10px] text-gray-600 mt-3 font-medium">⬆ Attaque en haut — Défense en bas</p>
+                    <p class="text-center text-[10px] text-gray-600 mt-2 font-medium">⬆ Attaque — Défense ⬇</p>
+
+                    <!-- Télécharger visible sous terrain sur mobile -->
+                    <button onclick="downloadLineup()" class="xl:hidden mt-3 w-full max-w-[340px] flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800 px-5 py-3 text-xs font-bold uppercase text-white shadow-lg shadow-blue-600/20 transition">
+                        <i class="fa-solid fa-download"></i> Télécharger le Onze (PNG)
+                    </button>
                 </div>
 
-                <!-- COL DROITE : Banc des remplaçants -->
-                <div class="w-full xl:w-72 space-y-4 order-3">
+                <!-- COL DROITE desktop | onglet Banc mobile -->
+                <div id="panel-banc" class="hidden xl:block w-full xl:w-72 space-y-4">
                     <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4">
-                        <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3"><i class="fa-solid fa-bench-tree mr-1.5 text-amber-500"></i>Banc des Remplaçants <span id="bench-count" class="text-amber-400 ml-1">15</span></p>
-                        <div id="bench-list" class="space-y-1.5 max-h-[520px] overflow-y-auto no-scrollbar pr-1"></div>
+                        <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3">
+                            <i class="fa-solid fa-users mr-1.5 text-amber-500"></i>
+                            Banc des Remplaçants
+                            <span class="xl:hidden" id="bench-count-desktop"></span>
+                        </p>
+                        <p class="xl:hidden text-[10px] text-amber-400/70 mb-3 font-medium"><i class="fa-solid fa-circle-info mr-1"></i>Touchez un remplaçant puis choisissez qui remplacer</p>
+                        <p class="hidden xl:block text-[10px] text-amber-400/70 mb-3 font-medium"><i class="fa-solid fa-circle-info mr-1"></i>Glissez un joueur sur le terrain pour le titulariser</p>
+                        <div id="bench-list" class="space-y-1.5 max-h-[460px] overflow-y-auto no-scrollbar pr-1"></div>
                     </div>
                 </div>
 
@@ -256,6 +279,20 @@
         </div>
     </section>
     <!-- =================== FIN SECTION TACTIQUE =================== -->
+
+    <!-- MODAL REMPLACEMENT MOBILE -->
+    <div id="sub-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end justify-center p-0">
+        <div class="bg-[#0f1524] border-t border-gray-800 rounded-t-3xl w-full max-w-lg max-h-[75vh] overflow-y-auto shadow-2xl">
+            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-5 py-4 flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wide">Remplacement</p>
+                    <p class="text-sm font-bold text-white" id="sub-modal-title">Choisir qui remplacer</p>
+                </div>
+                <button onclick="closeSubModal()" class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            <div id="sub-modal-body" class="p-4 space-y-2"></div>
+        </div>
+    </div>
 
     <section id="calendrier" class="border-t border-gray-900 bg-gray-950/30 py-16">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
