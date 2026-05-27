@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=400;600;700&family=Oswald:wght=700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -147,7 +147,7 @@
 
             <div class="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0">
                 <div class="flex sm:wrap justify-start sm:justify-center gap-2 bg-gray-900/40 p-1.5 rounded-2xl border border-gray-900/60 whitespace-nowrap min-w-max sm:min-w-0">
-                    <button onclick="changeRoleFilter('all')" id="btn-all" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white transition">Tous</button>
+                    <button onclick="changeRoleFilter('all')" id="btn-all" class="filter-btn active-filter px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white transition">Tous</button>
                     <button onclick="changeRoleFilter('Gardiens')" id="btn-Gardiens" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Gardiens</button>
                     <button onclick="changeRoleFilter('Défenseurs')" id="btn-Défenseurs" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Défenseurs</button>
                     <button onclick="changeRoleFilter('Milieux')" id="btn-Milieux" class="filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition">Milieux</button>
@@ -157,7 +157,7 @@
         </div>
 
         <div id="roster-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-            </div>
+        </div>
         
         <div id="empty-state" class="hidden text-center py-12">
             <i class="fa-solid fa-user-slash text-gray-700 text-4xl mb-3"></i>
@@ -371,7 +371,7 @@
             <i class="fa-solid fa-star text-amber-500 text-3xl sm:text-4xl mb-4 sm:mb-6"></i>
             <h2 class="font-athletic text-2xl sm:text-5xl font-black uppercase text-white mb-4 sm:mb-6 tracking-wide">RENMEN PEYI A, HONNEUR ET PATRIE</h2>
             <p class="text-gray-400 font-medium text-sm sm:text-lg max-w-3xl mx-auto px-2">
-                Chaque fiche technique et chaque analyse propulsées par **PWESPORTS** servent un objectif unique : propulser la couverture médiatique de nos Grenadiers au plus haut niveau mondial.
+                Chaque fiche technique et chaque analyse propulsées par PWESPORTS servent un objectif unique : propulser la couverture médiatique de nos Grenadiers au plus haut niveau mondial.
             </p>
         </div>
     </section>
@@ -392,65 +392,106 @@
         </div>
     </div>
 
-<script>
+    <script>
         const playersDataset = [
-            { id: "johny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia (Ligue 2)", birth: "29 janvier 1988 (38 ans)", nat: "Haïtienne & Française", strengths: "Gardien de but charismatique et leader vocal incontournable. Doté de réflexes exceptionnels sur sa ligne, d'une immense expérience internationale et d'un jeu au pied précis.", journey: "Formé au Havre AC, il s'illustre en Ligue 1 au Stade de Reims. Voyageur d'expérience passant par Guingamp, l'Angleterre (Oldham) et la Bulgarie (Tsarsko Selo), il s'impose ensuite comme le rempart historique du SC Bastia.", icon: "fa-shield-halved", badge: "Capitaine" },
-            { id: "alexandre_pierre", name: "Alexandre Pierre", role: "Gardiens", club: "FC Sochaux-Montbéliard", birth: "25 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Grande envergure (1m90), très explosif sur sa ligne, relances précises et impérial dans les duels aériens.", journey: "Formé au Stade Lavallois, il passe par la réserve du Angers SCO avant de signer pro au RC Strasbourg. Il est ensuite prêté au FC Annecy pour gagner du temps de jeu.", icon: "fa-handcuffs" },
-            { id: "josue_duverger", name: "Josué Duverger", role: "Gardiens", club: "FC Cosmos Koblenz", birth: "27 avril 2000 (26 ans)", nat: "Haïtienne & Canadienne", strengths: "Gardien de but à l'envergure impressionnante (1,87 m), excellents réflexes sur sa ligne de but, habile sur les sorties aériennes and doté d'une forte présence athlétique.", journey: "Formé au Portugal au sein des prestigieuses académies du Sporting CP et de Belenenses, il commence sa carrière professionnelle au Vitória Setúbal avant de rejoindre l'União Santarém. Il poursuit sa progression en Allemagne.", icon: "fa-hands" },
-            { id: "ricardo_ade", name: "Ricardo Adé Kat", role: "Défenseurs", club: "LDU Quito (LigaPro)", birth: "21 mai 1990 (35 ans)", nat: "Haïtienne", strengths: "Défenseur central d'un leadership exceptionnel. Véritable 'ministre de la défense', il excelle dans le duel aérien, le tacle glissé salvateur, la couverture défensive et l'autorité naturelle sur le terrain.", journey: "Après des débuts en Haïti (Don Bosco), il s'impose au Chili (Santiago Morning) avant de conquérir l'Équateur. Champion historique avec Aucas, il rejoint ensuite le géant LDU Quito avec qui il remporte la Copa Sudamericana.", icon: "fa-gavel", badge: "Ministre" },
-            { id: "hannes_delcroix", name: "Hannes Piterson Delcroix", role: "Défenseurs", club: "FC Lugano (Super League)", birth: "28 février 1999 (27 ans)", nat: "Haïtienne & Belge", strengths: "Défenseur central moderne (gaucher), solide dans l'impact physique, lecture du jeu remarquable, relance précise et capable d'évoluer également comme arrière gauche.", journey: "Formé au RSC Anderlecht où il s'impose chez les pros, il connaît un prêt au RKC Waalwijk avant de s'enforcer en Angleterre à Burnley. Il prend ensuite un nouveau virage en rejoignant l'élite suisse à Lugano.", icon: "fa-shield" },
-            { id: "carlens_arcus", name: "Carlens Arcus", role: "Défenseurs", club: "Angers SCO (Ligue 1)", birth: "28 juin 1996 (29 ans)", nat: "Haïtienne", strengths: "Vitesse explosive dans son couloir, gros volume de jeu (box-to-box), rigueur défensive dans les duels et qualité de centre en pleine course.", journey: "Révélé en France au Troyes AC puis à l'AJ Auxerre où il devient un cadre indiscutable. Il découvre ensuite l'Eredivisie avec le Vitesse Arnhem avant de s'mposer en Ligue 1.", icon: "fa-bolt" },
-            { id: "jean_kevin_duverne", name: "Jean-Kévin Duverne", role: "Défenseurs", club: "KAA Gent (Jupiler League)", birth: "12 juillet 1997 (28 ans)", nat: "Française & Haïtienne", strengths: "Grande polyvalence défensive (axe et côtés), vitesse de pointe impressionnante, impact physique dans les duels et relance propre.", journey: "Formé au RC Lens, il explose en Ligue 1 avec le Stade Brestois avant de s'engager au FC Nantes. Solide sur ses appuis, il poursuit son aventure en première division belge.", icon: "fa-arrows-up-down-left-right" },
-            { id: "duke_lacroix", name: "Duke Lacroix", role: "Défenseurs", club: "Colorado Springs (USL)", birth: "14 octobre 1993 (32 ans)", nat: "Haïtienne & Américaine", strengths: "Défenseur latéral gauche d'experience, ultra-rapide et endurant. Reconverti avec succès sur le flanc défensif, il excelle dans les transitions rapides and apporte un soutien offensif constant.", journey: "Formé au niveau universitaire (Penn Quakers), il s'impose en USL Championship avec Indy Eleven, Orange County, puis Sacramento Republic. Cadre respecté de la ligue, il rejoint ensuite Colorado Springs Switchbacks.", icon: "fa-road" },
-            { id: "martin_experience", name: "Martin Yves Expérience", role: "Défenseurs", club: "AS Nancy-Lorraine (Ligue 2)", birth: "9 mars 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Latéral ou piston gauche moderne (1,78 m), gaucher exclusif. Réputé pour sa solidité dans les duels, son excellente qualité de centre en pleine course et sa discipline tactique.", journey: "Formé en partie en Espagne (Xerez CD), il s'est affirmé dans le football français avec l'US Avranches puis le SO Cholet. En 2024, il s'engage avec l'AS Nancy-Lorraine avec qui il décroche la promotion en Ligue 2.", icon: "fa-left-long" },
-            { id: "wilguens_paugain", name: "Wilguens Raphael Paugain", role: "Défenseurs", club: "SV Zulte Waregem", birth: "24 août 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Arrière droit moderne et physique (1,80 m). Très solide dans le un-contre-un défensif, il possède un gros volume de course pour apporter le surnombre dans son couloir et adresser de bons centres.", journey: "Formé à l'AS Nancy-Lorraine, il passe par Chypre (Akritas) et la Lettonie (FK Auda) avant de rejoindre le SKN St. Pölten. Prêté puis définitivement transféré en Belgique, il s'engage sur le long terme avec Zulte Waregem.", icon: "fa-user-shield" },
-            { id: "keeto_thermoncy", name: "Keeto Thermoncy", role: "Défenseurs", club: "Young Boys U21", birth: "29 mars 2006 (20 ans)", nat: "Haïtienne & Suisse", strengths: "Défenseur central moderne et imposing (1,85 m). Impressionnant dans les duels physiques, solide dans les airs and doté d'une excellente lecture du jeu pour casser les lignes adverses.", journey: "Formé au FC Fribourg puis intégré à l'académie d'élite du BSC Young Boys. Il s'impose rapidement comme le patron de la charnière de l'équipe réserve (U21) en Promotion League, frappant aux portes de l'équipe première.", icon: "fa-gem", badge: "Espoir" },
-            { id: "jean_ricner_bellegarde", name: "Jean-Ricner Bellegarde", role: "Milieux", club: "Wolves (Premier League)", birth: "27 juin 1998 (27 ans)", nat: "Française & Haïtienne", strengths: "Accélération balle au pied dévastatrice, énorme volume de course, habileté technique dans les petits espaces et projection rapide vers l'avant.", journey: "Formé et révélé au RC Lens, il explose littéralement en Ligue 1 avec le RC Strasbourg où il devient le maître à jouer du milieu. Ses performances de haut niveau lui ouvrent les portes de la English Premier League à Wolverhampton.", icon: "fa-bolt", badge: "Star" },
-            { id: "danley_jean_jacques", name: "Danley Jean-Jacques", role: "Milieux", club: "Philadelphia Union (MLS)", birth: "20 mai 2000 (25 ans)", nat: "Haïtienne", strengths: "Milieu récupérateur infatigable, grosse intensité dans le pressing, habileté à casser les lignes par la passe et transition rapide défense-attaque.", journey: "Révélé en Haïti au Don Bosco FC, il rejoint la France et s'impose comme une pièce maîtresse de l'entrejeu du FC Metz en Ligue 1 et Ligue 2 avant de s'engager de l'autre côté de l'Atlantique en MLS.", icon: "fa-recycle" },
-            { id: "carl_fred_sainte", name: "Carl Fred Sainté", role: "Milieux", club: "FC Dallas (MLS)", birth: "9 août 2002 (23 ans)", nat: "Haïtienne", strengths: "Milieu défensif 'sentinelle' à fort impact (1,84 m). Doté d'un gros abattage physique pour la récupération des ballons, d'un excellent sens de l'interception et d'une relance propre et verticale.", journey: "Formé au Violette AC (Haïti), il lance sa carrière internationale aux USA à New Mexico United avant de s'mposer en Europe. Après un passage remarquable au FC Dallas (MLS NEXT Pro), il rallie l'équipe première en MLS.", icon: "fa-tower-cell" },
-            { id: "woodensky_pierre", name: "Olivier Woodensky Pierre", role: "Milieux", club: "Violette AC (Haïti)", birth: "30 décembre 2004 (21 ans)", nat: "Haïtienne", strengths: "Milieu défensif moderne, doté d'une excellente vision du jeu, d'une grande intelligence tactique et d'un leadership fort dans l'organisation de l'entrejeu.", journey: "Pur produit du Violette AC, il fait un passage remarqué au Real Hope FA avant de revenir porter le Vieux Tigre au sommet. Il réalise le doublé national (Série d'Ouverture et de Clôture) et s'impose comme le meilleur joueur local.", icon: "fa-crown", badge: "Local Hero" },
-            { id: "dominique_simon", name: "Dominique Célidor Simon", role: "Milieux", club: "Tatran Prešov", birth: "29 juillet 2000 (25 ans)", nat: "Haïtienne & Française", strengths: "Milieu défensif de grand volume, excellent pour ratisser les ballons, casser les lignes par la passe et imposer un rythme physique rigoureux dans le cœur du jeu.", journey: "Formé en France (FCM Aubervilliers), il lance sa carrière pro en Estonie à Paide où il gagne la Coupe nationale. Après des piges en Géorgie (Dinamo Tbilissi) et en République Tchèque (Pardubice), il s'impose en Slovaquie.", icon: "fa-anchor" },
-            { id: "leverton_pierre", name: "Leverton Pierre", role: "Milieux", club: "FC Vizela (Portugal)", birth: "9 mars 1998 (28 ans)", nat: "Haïtienne", strengths: "Milieu défensif et relayeur physique, excellent à la récupération de balle, lecture du jeu tranchante, impact dans l'entrejeu et grosse combativité.", journey: "Révélé au CS Saint-Louis, il rejoint la France à l'AC Ajaccio. Il devient une valeur sûre de l'US Dunkerque (Ligue 2/National) avant de passer par Avranches et Châteauroux. Ses performances l'emmènent au Portugal à l'été 2025.", icon: "fa-dumbbell" },
-            { id: "frantzdy_pierrot", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor (Turquie)", birth: "29 mars 1995 (31 ans)", nat: "Haïtienne & Américaine", strengths: "Jeu de tête absolument dévastateur, puissance athlétique hors norme, redoutable dans la conservation dos au but et grand finisseur dans la surface.", journey: "Passé par la Belgique (Mouscron) puis l'EA Guingamp en France, il brille au Maccabi Haifa (buteur en Ligue des Champions). Transféré à l'AEK Athènes, il évolue sous forme de prêt en première division turque.", icon: "fa-jet-fighter", badge: "Tank" },
-            { id: "duckens_nazon", name: "Duckens Nazon", role: "Attaquants", club: "Kayserispor (Turquie)", birth: "7 avril 1994 (32 ans)", nat: "Haïtienne & Française", strengths: "Finition clinique devant le but, puissance physique impressionnante dos au jeu, grand leadership sur le front de l'attaque et un sens du placement redoutable.", journey: "Un véritable globe-trotter des surfaces: passé par la France, l'Angleterre (Coventry, Oldham), Saint-Trond en Belgique et une aventure ultra-prolifique au CSKA Sofia avant d'export ses buts en Turquie.", icon: "fa-crosshairs", badge: "Légende" },
-            { id: "wilson_isidor", name: "Wilson Isidor", role: "Attaquants", club: "Sunderland (Angleterre)", birth: "27 août 2000 (25 ans)", nat: "Française & Haïtienne", strengths: "Attaquant polyvalent et percutant, vitesse de pointe explosive, appels dévastateurs dans la profondeur et grande efficacité devant le but.", journey: "Formé au Stade Rennais puis révélé à l'AS Monaco, il brille en prêt à Bastia-Borgo avant d'exploser en Russie au Lokomotiv Moscou et au Zénith Saint-Pétersbourg. Il rejoint ensuite l'Angleterre à Sunderland.", icon: "fa-fire" },
-            { id: "deedson_louicius", name: "Don Deedson Louicius", role: "Attaquants", club: "FC Dallas (MLS)", birth: "11 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Ailier percutant, vitesse d'exécution chirurgicale sur les flancs, excellente agilité technique pour éliminer en un-contre-un et superbe qualité de frappe du pied gauche.", journey: "Révélé au Danemark sous les couleurs de l'IK Hobro puis de l'OB Odense où il enchaîne les buts, ses performances lui ouvrent les portes de la Major League Soccer en s'engageant avec le FC Dallas.", icon: "fa-wand-magic-sparkles" },
-            { id: "derrick_etienne", name: "Derrick Burckley Etienne Jr.", role: "Attaquants", club: "Toronto FC (MLS)", birth: "25 novembre 1996 (29 ans)", nat: "Haïtienne & Américaine", strengths: "Ailier gauche rapide et remuant, doté d'une excellente percussion, d'une grande créativité dans la zone de vérité et d'une riche expérience des grands rendez-vous en MLS.", journey: "Formé aux New York Red Bulls, il brille ensuite au Columbus Crew où il est couronné Champion de la MLS Cup. Après des passages remarqués à Atlanta United, il devient un cadre majeur du Toronto FC.", icon: "fa-trophy" },
-            { id: "lenny_joseph", name: "Lenny Alvin Pico Joseph", role: "Attaquants", club: "Ferencváros TC", birth: "12 octobre 2000 (25 ans)", nat: "Haïtienne & Française", strengths: "Vitesse de pointe dévastatrice sur le front de l'attaque, percussion dynamique comme avant-centre ou sur les ailes, et grosse efficacité devant le but.", journey: "Formé en France (Le Puy, Metz), il s'affirme à Grenoble en Ligue 2 avant de franchir un cap majeur en s'engager avec le géant hongrois de Ferencváros, découvrant ainsi l'Europa League et enchaînant les buts.", icon: "fa-earth-europe" },
-            { id: "josue_casimir", name: "Josué Casimir", role: "Attaquants", club: "AJ Auxerre (Ligue 1)", birth: "24 septembre 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Vitesse explosive, polyvalence tactique sur tout le flanc droit (ailier ou piston), capacité de percussion en un-contre-un et grand volume de repli défensif.", journey: "Formé au Havre AC avec qui il devient Champion de Ligue 2 en 2023 et s'impose en Ligue 1, avant de rejoindre l'AJ Auxerre en 2025 pour y franchir un nouveau cap.", icon: "fa-repeat" },
-            { id: "rubens_providence", name: "Rubens Providence", role: "Attaquants", club: "Almere City (Pays-Bas)", birth: "9 juin 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Ailier percutant et technique, doté d'une excellente accélération, d'une grande agilité dans les petits espaces et d'une forte capacité à éliminer en un-contre-un.", journey: "Formé au Paris Saint-Germain puis recruté par l'AS Roma, il poursuit son développement à l'AS Tsvetanov (Estonie) et au TSV Hartberg en Autriche avant de s'engager en première division néerlandaise avec Almere City.", icon: "fa-child-reaching" },
-            { id: "yassin_fortune", name: "Yassin Enzo Fortuné", role: "Attaquants", club: "FC Vizela (Portugal)", birth: "30 janvier 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Milieu offensif et attaquant puissant (1,86 m), doté d'une excellente percussion technique, d'un grand sens du collectif et d'un profil athlétique précieux pour l'attaque.", journey: "Formé au RC Lens puis au prestigieux centre d'Arsenal FC. Il commence sa carrière professionnelle au FC Sion en Suisse, passe par Angers SCO, le SO Cholet, le Polissia Jytomyr (Ukraine) et QRM, avant de briller au Portugal.", icon: "fa-mask" }
+            { id: "jhonny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia (Ligue 2)", birth: "29 janvier 1988 (38 ans)", nat: "Haïtienne & Française", strengths: "Gardien de but charismatique et leader vocal incontournable.", journey: "Formé au Havre AC, il s'illustre en Ligue 1 au Stade de Reims.", icon: "fa-shield-halved", badge: "Capitaine" },
+            { id: "alexandre_pierre", name: "Alexandre Pierre", role: "Gardiens", club: "FC Sochaux-Montbéliard", birth: "25 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Grande envergure (1m90), très explosif sur sa ligne.", journey: "Formé au Stade Lavallois, pro au RC Strasbourg.", icon: "fa-hands" },
+            { id: "josue_duverger", name: "Josué Duverger", role: "Gardiens", club: "FC Cosmos Koblenz", birth: "27 avril 2000 (26 ans)", nat: "Haïtienne & Canadienne", strengths: "Excellents réflexes sur sa ligne de but.", journey: "Formé au Portugal au sein de Belenenses.", icon: "fa-hands" },
+            { id: "ricardo_ade", name: "Ricardo Adé Kat", role: "Défenseurs", club: "LDU Quito (LigaPro)", birth: "21 mai 1990 (35 ans)", nat: "Haïtienne", strengths: "Défenseur central d'un leadership exceptionnel.", journey: "Après des débuts en Haïti, il s'impose en Équateur.", icon: "fa-gavel", badge: "Ministre" },
+            { id: "hannes_delcroix", name: "Hannes Piterson Delcroix", role: "Défenseurs", club: "FC Lugano (Super League)", birth: "28 février 1999 (27 ans)", nat: "Haïtienne & Belge", strengths: "Défenseur central moderne (gaucher).", journey: "Formé au RSC Anderlecht, passé par Burnley.", icon: "fa-shield" },
+            { id: "carlens_arcus", name: "Carlens Arcus", role: "Défenseurs", club: "Angers SCO (Ligue 1)", birth: "28 juin 1996 (29 ans)", nat: "Haïtienne", strengths: "Vitesse explosive dans son couloir.", journey: "AJ Auxerre puis Vitesse Arnhem.", icon: "fa-bolt" },
+            { id: "jean_kelvin_duverne", name: "Jean-Kévin Duverne", role: "Défenseurs", club: "KAA Gent (Jupiler League)", birth: "12 juillet 1997 (28 ans)", nat: "Française & Haïtienne", strengths: "Grande polyvalence défensive.", journey: "Formé au RC Lens, puis FC Nantes.", icon: "fa-arrows-up-down-left-right" },
+            { id: "duke_lacroix", name: "Duke Lacroix", role: "Défenseurs", club: "Colorado Springs (USL)", birth: "14 octobre 1993 (32 ans)", nat: "Haïtienne & Américaine", strengths: "Défenseur latéral gauche d'expérience.", journey: "Cadre respecté de la ligue USL Championship.", icon: "fa-road" },
+            { id: "martin_experience", name: "Martin Yves Expérience", role: "Défenseurs", club: "AS Nancy-Lorraine (Ligue 2)", birth: "9 mars 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Latéral ou piston gauche moderne.", journey: "S'engage avec l'AS Nancy-Lorraine.", icon: "fa-left-long" },
+            { id: "wilguens_paugain", name: "Wilguens Raphael Paugain", role: "Défenseurs", club: "SV Zulte Waregem", birth: "24 août 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Arrière droit moderne et physique.", journey: "S'engage sur le long terme avec Zulte Waregem.", icon: "fa-user-shield" },
+            { id: "keeto_thermoncy", name: "Keeto Thermoncy", role: "Défenseurs", club: "Young Boys U21", birth: "29 mars 2006 (20 ans)", nat: "Haïtienne & Suisse", strengths: "Défenseur central moderne et imposing.", journey: "Intégré à l'académie d'élite du BSC Young Boys.", icon: "fa-gem", badge: "Espoir" },
+            { id: "jean_ricner_bellegarde", name: "Jean-Ricner Bellegarde", role: "Milieux", club: "Wolves (Premier League)", birth: "27 juin 1998 (27 ans)", nat: "Française & Haïtienne", strengths: "Accélération balle au pied dévastatrice.", journey: "Wolverhampton en English Premier League.", icon: "fa-bolt", badge: "Star" },
+            { id: "danley_jean_jacques", name: "Danley Jean-Jacques", role: "Milieux", club: "Philadelphia Union (MLS)", birth: "20 mai 2000 (25 ans)", nat: "Haïtienne", strengths: "Milieu récupérateur infatigable.", journey: "FC Metz avant de s'engager en MLS.", icon: "fa-recycle" },
+            { id: "carl_fred_sainthe", name: "Carl Fred Sainté", role: "Milieux", club: "FC Dallas (MLS)", birth: "9 août 2002 (23 ans)", nat: "Haïtienne", strengths: "Milieu défensif 'sentinelle' à fort impact.", journey: "Rallie l'équipe première en MLS au FC Dallas.", icon: "fa-tower-cell" },
+            { id: "woodensky_pierre", name: "Olivier Woodensky Pierre", role: "Milieux", club: "Violette AC (Haïti)", birth: "30 décembre 2004 (21 ans)", nat: "Haïtienne", strengths: "Milieu défensif moderne.", journey: "Pur produit du Violette AC.", icon: "fa-crown", badge: "Local Hero" },
+            { id: "dominique_simon", name: "Dominique Célidor Simon", role: "Milieux", club: "Tatran Prešov", birth: "29 juillet 2000 (25 ans)", nat: "Haïtienne & Française", strengths: "Milieu défensif de grand volume.", journey: "S'impose en Slovaquie.", icon: "fa-anchor" },
+            { id: "leverton_pierre", name: "Leverton Pierre", role: "Milieux", club: "FC Vizela (Portugal)", birth: "9 mars 1998 (28 ans)", nat: "Haïtienne", strengths: "Milieu défensif et relayeur physique.", journey: "S'engage au Portugal à l'été 2025.", icon: "fa-dumbbell" },
+            { id: "frantzdy_pierrot", name: "Frantzdy Pierrot", role: "Attaquants", club: "Çaykur Rizespor (Turquie)", birth: "29 mars 1995 (31 ans)", nat: "Haïtienne & Américaine", strengths: "Jeu de tête absolument dévastateur.", journey: "Maccabi Haifa, transféré en première division turque.", icon: "fa-jet-fighter", badge: "Tank" },
+            { id: "duckens_nazon", name: "Duckens Nazon", role: "Attaquants", club: "Kayserispor (Turquie)", birth: "7 avril 1994 (32 ans)", nat: "Haïtienne & Française", strengths: "Finition clinique devant le but.", journey: "Exporte ses buts en Turquie à Kayserispor.", icon: "fa-crosshairs", badge: "Légende" },
+            { id: "wilson_isidor", name: "Wilson Isidor", role: "Attaquants", club: "Sunderland (Angleterre)", birth: "27 août 2000 (25 ans)", nat: "Française & Haïtienne", strengths: "Vitesse de pointe explosive.", journey: "Rejoint l'Angleterre à Sunderland.", icon: "fa-fire" },
+            { id: "deedson_louicius", name: "Don Deedson Louicius", role: "Attaquants", club: "FC Dallas (MLS)", birth: "11 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Ailier percutant, vitesse d'exécution.", journey: "S'engage avec le FC Dallas en MLS.", icon: "fa-wand-magic-sparkles" },
+            { id: "derrick_etienne", name: "Derrick Burckley Etienne Jr.", role: "Attaquants", club: "Toronto FC (MLS)", birth: "25 novembre 1996 (29 ans)", nat: "Haïtienne & Américaine", strengths: "Ailier gauche rapide et remuant.", journey: "Cadre majeur du Toronto FC.", icon: "fa-trophy" },
+            { id: "lenny_joseph", name: "Lenny Alvin Pico Joseph", role: "Attaquants", club: "Ferencváros TC", birth: "12 octobre 2000 (25 ans)", nat: "Haïtienne & Française", strengths: "Vitesse de pointe dévastatrice.", journey: "Découvre l'Europa League avec Ferencváros.", icon: "fa-earth-europe" },
+            { id: "josue_casimir", name: "Josué Casimir", role: "Attaquants", club: "AJ Auxerre (Ligue 1)", birth: "24 septembre 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Vitesse explosive, polyvalence tactique.", journey: "Rejoint l'AJ Auxerre en 2025.", icon: "fa-repeat" },
+            { id: "rubens_providence", name: "Rubens Providence", role: "Attaquants", club: "Almere City (Pays-Bas)", birth: "9 juin 2001 (24 ans)", nat: "Haïtienne & Française", strengths: "Ailier percutant et technique.", journey: "S'engage en première division néerlandaise.", icon: "fa-child-reaching" },
+            { id: "yassin_fortune", name: "Yassin Enzo Fortuné", role: "Attaquants", club: "FC Vizela (Portugal)", birth: "30 janvier 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Milieu offensif et attaquant puissant.", journey: "Brille au Portugal au FC Vizela.", icon: "fa-mask" }
         ];
 
         let currentRoleFilter = "all";
 
+        // -------------------------------------------------------
+        // FIX: Render roster cards using safe DOM methods instead
+        // of innerHTML with broken template literal escaping
+        // -------------------------------------------------------
         function renderRoster(targetPlayers) {
             const grid = document.getElementById("roster-grid");
             const emptyState = document.getElementById("empty-state");
             grid.innerHTML = "";
-            if (targetPlayers.length === 0) { emptyState.classList.remove("hidden"); return; }
+
+            if (targetPlayers.length === 0) {
+                emptyState.classList.remove("hidden");
+                return;
+            }
             emptyState.classList.add("hidden");
 
-            targetPlayers.forEach(player => {
+            targetPlayers.forEach(function(player) {
                 const card = document.createElement("div");
                 card.className = "group relative rounded-2xl border border-gray-900 bg-[#0e1322] p-4 sm:p-6 hover:border-gray-700 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5 active:scale-[0.98] transition-all duration-300 flex flex-col justify-between cursor-pointer";
-                card.onclick = () => openPlayerModal(player.id);
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center border border-gray-800 text-blue-500 group-hover:text-red-500 transition-colors">
-                                <i class="fa-solid \${player.icon || 'fa-user'} text-sm"></i>
-                            </div>
-                            \${player.badge ? `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">\${player.badge}</span>` : `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-gray-900 text-gray-400">\${player.role}</span>`}
-                        </div>
-                        <h3 class="font-athletic text-base sm:text-xl font-bold uppercase text-white tracking-wide mb-1 line-clamp-1">\${player.name}</h3>
-                        <p class="text-[10px] text-gray-400 font-semibold line-clamp-1">\${player.club}</p>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-gray-900/60 flex items-center justify-between text-gray-500 group-hover:text-gray-300 transition-colors">
-                        <span class="text-[9px] font-bold tracking-wider uppercase">Voir Profil</span>
-                        <i class="fa-solid fa-chevron-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
-                    </div>
-                `;
+                card.addEventListener("click", function() { openPlayerModal(player.id); });
+
+                // Icon box
+                const iconBox = document.createElement("div");
+                iconBox.className = "w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center border border-gray-800 text-blue-500 group-hover:text-red-500 transition-colors";
+                const iconEl = document.createElement("i");
+                iconEl.className = "fa-solid " + (player.icon || "fa-user") + " text-sm";
+                iconBox.appendChild(iconEl);
+
+                // Badge or role tag
+                const tag = document.createElement("span");
+                if (player.badge) {
+                    tag.className = "px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20";
+                    tag.textContent = player.badge;
+                } else {
+                    tag.className = "px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-gray-900 text-gray-400";
+                    tag.textContent = player.role;
+                }
+
+                const topRow = document.createElement("div");
+                topRow.className = "flex items-center justify-between mb-3";
+                topRow.appendChild(iconBox);
+                topRow.appendChild(tag);
+
+                const nameEl = document.createElement("h3");
+                nameEl.className = "font-athletic text-base sm:text-xl font-bold uppercase text-white tracking-wide mb-1 line-clamp-1";
+                nameEl.textContent = player.name;
+
+                const clubEl = document.createElement("p");
+                clubEl.className = "text-[10px] text-gray-400 font-semibold line-clamp-1";
+                clubEl.textContent = player.club;
+
+                const contentDiv = document.createElement("div");
+                contentDiv.appendChild(topRow);
+                contentDiv.appendChild(nameEl);
+                contentDiv.appendChild(clubEl);
+
+                // Footer
+                const footer = document.createElement("div");
+                footer.className = "mt-4 pt-3 border-t border-gray-900/60 flex items-center justify-between text-gray-500 group-hover:text-gray-300 transition-colors";
+                const footerLabel = document.createElement("span");
+                footerLabel.className = "text-[9px] font-bold tracking-wider uppercase";
+                footerLabel.textContent = "Voir Profil";
+                const footerIcon = document.createElement("i");
+                footerIcon.className = "fa-solid fa-chevron-right text-[10px] group-hover:translate-x-1 transition-transform";
+                footer.appendChild(footerLabel);
+                footer.appendChild(footerIcon);
+
+                card.appendChild(contentDiv);
+                card.appendChild(footer);
                 grid.appendChild(card);
             });
         }
@@ -458,78 +499,194 @@
         function handleSearchAndFilter() {
             const searchValue = document.getElementById("search-player").value.toLowerCase().trim();
             let filtered = playersDataset;
-            if (currentRoleFilter !== "all") filtered = filtered.filter(p => p.role === currentRoleFilter);
+            if (currentRoleFilter !== "all") {
+                filtered = filtered.filter(function(p) { return p.role === currentRoleFilter; });
+            }
             if (searchValue !== "") {
-                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchValue) || p.club.toLowerCase().includes(searchValue));
+                filtered = filtered.filter(function(p) {
+                    return p.name.toLowerCase().includes(searchValue) || p.club.toLowerCase().includes(searchValue);
+                });
             }
             renderRoster(filtered);
         }
 
+        // -------------------------------------------------------
+        // FIX: changeRoleFilter — use direct getElementById instead
+        // of template literal with escaped ${role}
+        // -------------------------------------------------------
         function changeRoleFilter(role) {
             currentRoleFilter = role;
-            document.querySelectorAll(".filter-btn").forEach(btn => btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition");
-            document.getElementById(`btn-\${role}`).className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase bg-red-600 text-white transition";
+
+            // Reset all buttons
+            document.querySelectorAll(".filter-btn").forEach(function(btn) {
+                btn.className = "filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase text-gray-400 hover:text-white transition";
+            });
+
+            // Activate selected button
+            var activeBtn = document.getElementById("btn-" + role);
+            if (activeBtn) {
+                activeBtn.className = "filter-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs font-bold uppercase bg-red-600 text-white transition";
+            }
+
             handleSearchAndFilter();
         }
 
         function toggleMobileMenu() {
             const menu = document.getElementById("mobile-menu");
             const icon = document.getElementById("menu-icon");
-            if (menu.classList.contains("hidden")) { menu.classList.remove("hidden"); icon.className = "fa-solid fa-xmark text-xl"; }
-            else { menu.classList.add("hidden"); icon.className = "fa-solid fa-bars text-xl"; }
+            if (menu.classList.contains("hidden")) {
+                menu.classList.remove("hidden");
+                icon.className = "fa-solid fa-xmark text-xl";
+            } else {
+                menu.classList.add("hidden");
+                icon.className = "fa-solid fa-bars text-xl";
+            }
         }
 
         function hideImageSkeleton(imgElement) {
-            imgElement.parentElement.querySelector('.skeleton-loader-bg')?.classList.add('hidden');
+            const skeleton = imgElement.parentElement.querySelector('.skeleton-loader-bg');
+            if (skeleton) skeleton.classList.add('hidden');
             imgElement.classList.remove('opacity-0');
         }
 
+        // -------------------------------------------------------
+        // FIX: openPlayerModal — rewritten with safe DOM methods
+        // to avoid broken template literal escaping for icon classes
+        // -------------------------------------------------------
         function openPlayerModal(playerId) {
-            const player = playersDataset.find(p => p.id === playerId);
+            const player = playersDataset.find(function(p) { return p.id === playerId; });
             if (!player) return;
+
             const modal = document.getElementById("player-modal");
             const modalBody = document.getElementById("modal-body");
-            
-            const playerImageUrl = `\${player.id}.jpg`;
+            modalBody.innerHTML = "";
 
-            modalBody.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-6 items-start">
-                    <div class="w-full md:w-1/3 flex flex-col items-center gap-3">
-                        <div class="w-44 h-56 rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden relative flex items-center justify-center">
-                            <div class="skeleton-loader-bg absolute inset-0 animate-pulse-fast flex items-center justify-center">
-                                <i class="fa-solid \${player.icon || 'fa-user'} text-3xl text-gray-600 animate-pulse"></i>
-                            </div>
-                            <img src="\${playerImageUrl}" alt="\${player.name}" class="w-full h-full object-cover opacity-0 transition-opacity duration-300" onload="hideImageSkeleton(this)" onerror="hideImageSkeleton(this); this.parentElement.innerHTML='<i class=\\'fa-solid \${player.icon || \\'fa-user\\'} text-5xl text-gray-700\\'></i>';">
-                        </div>
-                    </div>
-                    <div class="w-full md:w-2/3">
-                        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-2">\${player.role}</span>
-                        <h2 class="font-athletic text-3xl font-black uppercase text-white mb-1">\${player.name}</h2>
-                        <p class="text-red-500 font-bold text-xs uppercase tracking-wider mb-4">\${player.club}</p>
-                        <div class="grid grid-cols-2 gap-4 bg-gray-900/40 border border-gray-900 rounded-2xl p-4 mb-5 text-xs">
-                            <div><span class="text-gray-500 uppercase font-bold block">Naissance</span><span>\${player.birth}</span></div>
-                            <div><span class="text-gray-500 uppercase font-bold block">Nationalité</span><span>\${player.nat}</span></div>
-                        </div>
-                        <div class="space-y-4">
-                            <div><h4 class="font-athletic text-base font-bold uppercase text-white border-b border-gray-900 pb-1 mb-2">Points Forts</h4><p class="text-xs text-gray-300">\${player.strengths}</p></div>
-                            <div><h4 class="font-athletic text-base font-bold uppercase text-white border-b border-gray-900 pb-1 mb-2">Parcours</h4><p class="text-xs text-gray-400">\${player.journey}</p></div>
-                        </div>
-                    </div>
-                </div>
-            `;
+            // Outer flex wrapper
+            const flex = document.createElement("div");
+            flex.className = "flex flex-col md:flex-row gap-6 items-start";
+
+            // --- LEFT COLUMN: image ---
+            const leftCol = document.createElement("div");
+            leftCol.className = "w-full md:w-1/3 flex flex-col items-center gap-3";
+
+            const imgWrapper = document.createElement("div");
+            imgWrapper.className = "w-44 h-56 rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden relative flex items-center justify-center";
+
+            const skeleton = document.createElement("div");
+            skeleton.className = "skeleton-loader-bg absolute inset-0 animate-pulse-fast flex items-center justify-center";
+            const skeletonIcon = document.createElement("i");
+            skeletonIcon.className = "fa-solid " + (player.icon || "fa-user") + " text-3xl text-gray-600 animate-pulse";
+            skeleton.appendChild(skeletonIcon);
+
+            const img = document.createElement("img");
+            img.src = player.id + ".jpg";
+            img.alt = player.name;
+            img.className = "w-full h-full object-cover opacity-0 transition-opacity duration-300";
+            img.onload = function() { hideImageSkeleton(this); };
+            img.onerror = function() {
+                hideImageSkeleton(this);
+                this.parentElement.innerHTML = "";
+                const fallbackIcon = document.createElement("i");
+                fallbackIcon.className = "fa-solid " + (player.icon || "fa-user") + " text-5xl text-gray-700";
+                this.parentElement.appendChild(fallbackIcon);
+            };
+
+            imgWrapper.appendChild(skeleton);
+            imgWrapper.appendChild(img);
+            leftCol.appendChild(imgWrapper);
+
+            // --- RIGHT COLUMN: info ---
+            const rightCol = document.createElement("div");
+            rightCol.className = "w-full md:w-2/3";
+
+            const roleBadge = document.createElement("span");
+            roleBadge.className = "inline-block px-3 py-1 rounded-full text-xs font-bold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-2";
+            roleBadge.textContent = player.role;
+
+            const nameH2 = document.createElement("h2");
+            nameH2.className = "font-athletic text-3xl font-black uppercase text-white mb-1";
+            nameH2.textContent = player.name;
+
+            const clubP = document.createElement("p");
+            clubP.className = "text-red-500 font-bold text-xs uppercase tracking-wider mb-4";
+            clubP.textContent = player.club;
+
+            // Info grid
+            const infoGrid = document.createElement("div");
+            infoGrid.className = "grid grid-cols-2 gap-4 bg-gray-900/40 border border-gray-900 rounded-2xl p-4 mb-5 text-xs";
+
+            const birthDiv = document.createElement("div");
+            const birthLabel = document.createElement("span");
+            birthLabel.className = "text-gray-500 uppercase font-bold block";
+            birthLabel.textContent = "Naissance";
+            const birthVal = document.createElement("span");
+            birthVal.textContent = player.birth;
+            birthDiv.appendChild(birthLabel);
+            birthDiv.appendChild(birthVal);
+
+            const natDiv = document.createElement("div");
+            const natLabel = document.createElement("span");
+            natLabel.className = "text-gray-500 uppercase font-bold block";
+            natLabel.textContent = "Nationalité";
+            const natVal = document.createElement("span");
+            natVal.textContent = player.nat;
+            natDiv.appendChild(natLabel);
+            natDiv.appendChild(natVal);
+
+            infoGrid.appendChild(birthDiv);
+            infoGrid.appendChild(natDiv);
+
+            // Strengths & Journey
+            const detailsDiv = document.createElement("div");
+            detailsDiv.className = "space-y-4";
+
+            function makeSection(titleText, bodyText) {
+                const section = document.createElement("div");
+                const h4 = document.createElement("h4");
+                h4.className = "font-athletic text-base font-bold uppercase text-white border-b border-gray-900 pb-1 mb-2";
+                h4.textContent = titleText;
+                const p = document.createElement("p");
+                p.className = "text-xs text-gray-300";
+                p.textContent = bodyText;
+                section.appendChild(h4);
+                section.appendChild(p);
+                return section;
+            }
+
+            detailsDiv.appendChild(makeSection("Points Forts", player.strengths));
+            detailsDiv.appendChild(makeSection("Parcours", player.journey));
+
+            rightCol.appendChild(roleBadge);
+            rightCol.appendChild(nameH2);
+            rightCol.appendChild(clubP);
+            rightCol.appendChild(infoGrid);
+            rightCol.appendChild(detailsDiv);
+
+            flex.appendChild(leftCol);
+            flex.appendChild(rightCol);
+            modalBody.appendChild(flex);
+
             modal.classList.remove("hidden");
-            setTimeout(() => modal.querySelector('.relative').className = "relative bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-2xl overflow-y-auto shadow-2xl transition-all duration-300 transform translate-y-0", 10);
+            setTimeout(function() {
+                const inner = modal.querySelector('.relative');
+                if (inner) inner.classList.remove("translate-y-full");
+            }, 10);
         }
 
         function closeModal() {
             const modal = document.getElementById("player-modal");
-            modal.querySelector('.relative').classList.add("translate-y-full");
-            setTimeout(() => modal.classList.add("hidden"), 250);
+            const inner = modal.querySelector('.relative');
+            if (inner) inner.classList.add("translate-y-full");
+            setTimeout(function() { modal.classList.add("hidden"); }, 250);
         }
 
-        // JS LOGIC FOR THE COUNTDOWN TIMER
+        // Close modal when clicking backdrop
+        document.getElementById("player-modal").addEventListener("click", function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Countdown timer
         function initMatchCountdown() {
-            // Match Date: June 13, 2026 at 21:00 UTC-4 (Haïti Time)
             const targetDate = new Date("June 13, 2026 21:00:00").getTime();
 
             function updateTimer() {
@@ -557,14 +714,13 @@
             }
 
             updateTimer();
-            const timerInterval = setInterval(updateTimer, 1000);
+            var timerInterval = setInterval(updateTimer, 1000);
         }
 
-        window.onload = () => {
+        window.onload = function() {
             renderRoster(playersDataset);
             initMatchCountdown();
         };
     </script>
 </body>
 </html>
-
