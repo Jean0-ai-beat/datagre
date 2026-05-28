@@ -212,6 +212,11 @@
                                 <rect x="130" y="468" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
                                 <circle cx="160" cy="58" r="2.5" fill="rgba(255,255,255,0.3)"/>
                                 <circle cx="160" cy="422" r="2.5" fill="rgba(255,255,255,0.3)"/>
+                                <!-- Watermark PWESPORTS -->
+                                <text x="160" y="245" text-anchor="middle" dominant-baseline="middle"
+                                      font-family="Oswald, sans-serif" font-size="26" font-weight="900"
+                                      letter-spacing="5" fill="rgba(255,255,255,0.045)"
+                                      transform="rotate(-35, 160, 245)">PWESPORTS</text>
                             </svg>
                             <div id="pitch-players" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
                         </div>
@@ -507,7 +512,7 @@
             { id: "jhonny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia (Ligue 2)", birth: "29 janvier 1988 (38 ans)", nat: "Haïtienne & Française", strengths: "Gardien de but charismatique et leader vocal incontournable.", journey: "Formé au Havre AC, il s'illustre en Ligue 1 au Stade de Reims.", icon: "fa-shield-halved", badge: "Capitaine" },
             { id: "alexandre_pierre", name: "Alexandre Pierre", role: "Gardiens", club: "FC Sochaux-Montbéliard", birth: "25 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Grande envergure (1m90), très explosif sur sa ligne.", journey: "Formé au Stade Lavallois, pro au RC Strasbourg.", icon: "fa-hands" },
             { id: "josue_duverger", name: "Josué Duverger", role: "Gardiens", club: "FC Cosmos Koblenz", birth: "27 avril 2000 (26 ans)", nat: "Haïtienne & Canadienne", strengths: "Excellents réflexes sur sa ligne de but.", journey: "Formé au Portugal au sein de Belenenses.", icon: "fa-hands" },
-            { id: "ricardo_ade", name: "Ricardo Adé Kat", role: "Défenseurs", club: "LDU Quito (LigaPro)", birth: "21 mai 1990 (35 ans)", nat: "Haïtienne", strengths: "Défenseur central d'un leadership exceptionnel.", journey: "Après des débuts en Haïti, il s'impose en Équateur.", icon: "fa-gavel", badge: "Ministre" },
+            { id: "ricardo_ade", name: "Ricardo Adé Kat", shortName: "Adé", role: "Défenseurs", club: "LDU Quito (LigaPro)", birth: "21 mai 1990 (35 ans)", nat: "Haïtienne", strengths: "Défenseur central d'un leadership exceptionnel.", journey: "Après des débuts en Haïti, il s'impose en Équateur.", icon: "fa-gavel", badge: "Ministre" },
             { id: "hannes_delcroix", name: "Hannes Piterson Delcroix", role: "Défenseurs", club: "FC Lugano (Super League)", birth: "28 février 1999 (27 ans)", nat: "Haïtienne & Belge", strengths: "Défenseur central moderne (gaucher).", journey: "Formé au RSC Anderlecht, passé par Burnley.", icon: "fa-shield" },
             { id: "carlens_arcus", name: "Carlens Arcus", role: "Défenseurs", club: "Angers SCO (Ligue 1)", birth: "28 juin 1996 (29 ans)", nat: "Haïtienne", strengths: "Vitesse explosive dans son couloir.", journey: "AJ Auxerre puis Vitesse Arnhem.", icon: "fa-bolt" },
             { id: "jean_kelvin_duverne", name: "Jean-Kévin Duverne", role: "Défenseurs", club: "KAA Gent (Jupiler League)", birth: "12 juillet 1997 (28 ans)", nat: "Française & Haïtienne", strengths: "Grande polyvalence défensive.", journey: "Formé au RC Lens, puis FC Nantes.", icon: "fa-arrows-up-down-left-right" },
@@ -880,7 +885,15 @@
     var selectedStarterId = null; // id du titulaire en attente de remplacement
 
     /* ---- UTILITAIRES ---- */
-    function getLastName(n) { var p=n.trim().split(' '); return p[p.length-1]; }
+    function getLastName(n, id) {
+        // Chercher shortName dans dataset si id fourni
+        if (id) {
+            var p = playersDataset.find(function(pl){ return pl.id===id; });
+            if (p && p.shortName) return p.shortName;
+        }
+        var parts = n.trim().split(' ');
+        return parts[parts.length-1];
+    }
 
     function posColor(pos) {
         if (!pos) return '#3b82f6';
@@ -941,7 +954,7 @@
 
             var lbl = document.createElement('div');
             lbl.style.cssText = 'font-family:Oswald,sans-serif;font-size:'+fs+'px;font-weight:700;color:'+(isSelected?'#fbbf24':'#fff')+';text-shadow:0 1px 3px rgba(0,0,0,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:'+(diam+14)+'px;';
-            lbl.textContent = getLastName(player.name);
+            lbl.textContent = getLastName(player.name, player.id);
 
             wrap.appendChild(circle);
             wrap.appendChild(lbl);
@@ -1195,7 +1208,7 @@
             ctx.fillStyle='#fff';ctx.font='bold 7px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
             ctx.fillText(entry.pos,cx2,cy2);
             ctx.textBaseline='top';ctx.shadowColor='rgba(0,0,0,0.9)';ctx.shadowBlur=3;
-            ctx.font='bold 7px Arial';ctx.fillText(getLastName(player.name),cx2,cy2+rr+2);ctx.shadowBlur=0;
+            ctx.font='bold 7px Arial';ctx.fillText(getLastName(player.name, player.id),cx2,cy2+rr+2);ctx.shadowBlur=0;
         });
         var LX=PX+PW+20,LY=PY,LW=W-LX-14;
         ctx.fillStyle='#0e1322';roundRect(ctx,LX,LY,LW,PH,10);ctx.fill();
