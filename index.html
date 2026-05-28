@@ -1,3 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWESPORTS | Les Grenadiers - Coupe du Monde 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0b0f19;
+        }
+        .font-athletic {
+            font-family: 'Oswald', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        @keyframes pulse-bg {
+            0%, 100% { background-color: #1e293b; }
+            50% { background-color: #334155; }
+        }
+        .animate-pulse-fast {
+            animation: pulse-bg 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
 <body class="text-gray-200 antialiased bg-[#0b0f19]">
 
     <nav class="sticky top-0 z-40 border-b border-gray-800 bg-[#0b0f19]/90 backdrop-blur-md">
@@ -1126,7 +1162,7 @@
         renderLineupList();
     }
 
-    /* ---- TÉLÉCHARGEMENT PNG ---- */
+    /* ---- TÉLÉCHARGEMENT PNG — Terrain uniquement ---- */
     function roundRect(ctx,x,y,w,h,r){
         ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
         ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);
@@ -1134,73 +1170,132 @@
         ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);
         ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
     }
+
     function downloadLineup() {
-        var W=820,H=640;
-        var cv=document.createElement('canvas'); cv.width=W; cv.height=H;
-        var ctx=cv.getContext('2d');
-        ctx.fillStyle='#0b0f19'; ctx.fillRect(0,0,W,H);
-        var g=ctx.createLinearGradient(0,0,W,0);
-        g.addColorStop(0,'#b91c1c');g.addColorStop(0.5,'#1e3a8a');g.addColorStop(1,'#b91c1c');
-        ctx.fillStyle=g; ctx.fillRect(0,0,W,54);
-        ctx.fillStyle='#fff';ctx.font='bold 18px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
-        ctx.fillText('PWESPORTS — HAÏTI '+currentFormation+' — COUPE DU MONDE FIFA 2026',W/2,27);
-        var PX=24,PY=70,PW=300,PH=450;
-        var pg=ctx.createLinearGradient(PX,PY,PX,PY+PH);
-        pg.addColorStop(0,'#1a3a1a');pg.addColorStop(0.5,'#1e4a1e');pg.addColorStop(1,'#1a3a1a');
-        ctx.fillStyle=pg; roundRect(ctx,PX,PY,PW,PH,10); ctx.fill();
-        ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=1.5;
-        roundRect(ctx,PX+7,PY+7,PW-14,PH-14,6); ctx.stroke();
-        ctx.beginPath();ctx.moveTo(PX+7,PY+PH/2);ctx.lineTo(PX+PW-7,PY+PH/2);ctx.stroke();
-        ctx.beginPath();ctx.arc(PX+PW/2,PY+PH/2,35,0,Math.PI*2);ctx.stroke();
-        ctx.beginPath();ctx.arc(PX+PW/2,PY+PH/2,3,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,0.3)';ctx.fill();
-        ctx.strokeStyle='rgba(255,255,255,0.12)';
-        ctx.strokeRect(PX+60,PY+6,180,65);ctx.strokeRect(PX+60,PY+PH-71,180,65);
-        ctx.strokeRect(PX+100,PY+6,100,28);ctx.strokeRect(PX+100,PY+PH-34,100,28);
-        ctx.strokeStyle='rgba(255,255,255,0.25)';ctx.lineWidth=2;
-        ctx.strokeRect(PX+120,PY,60,9);ctx.strokeRect(PX+120,PY+PH-9,60,9);
+        /* Dimensions : format portrait centré sur le terrain */
+        var W = 440, H = 720;
+        var cv  = document.createElement('canvas');
+        cv.width = W; cv.height = H;
+        var ctx = cv.getContext('2d');
+
+        /* ── Fond général ── */
+        ctx.fillStyle = '#0b0f19';
+        ctx.fillRect(0, 0, W, H);
+
+        /* ── Bandeau titre (gradient rouge → bleu → rouge) ── */
+        var grad = ctx.createLinearGradient(0,0,W,0);
+        grad.addColorStop(0,   '#b91c1c');
+        grad.addColorStop(0.5, '#1e3a8a');
+        grad.addColorStop(1,   '#b91c1c');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, 52);
+
+        /* ── Texte titre ── */
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 13px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('PWESPORTS — HAÏTI ' + currentFormation, W/2, 18);
+        ctx.font = '11px Arial, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.65)';
+        ctx.fillText('COUPE DU MONDE FIFA 2026', W/2, 36);
+
+        /* ── Terrain ── */
+        var PAD = 16;
+        var PX  = PAD, PY = 62;
+        var PW  = W - PAD*2;
+        var PH  = H - PY - 48;
+
+        /* Pelouse */
+        var pg = ctx.createLinearGradient(PX, PY, PX, PY+PH);
+        pg.addColorStop(0,   '#1a3a1a');
+        pg.addColorStop(0.5, '#1e4a1e');
+        pg.addColorStop(1,   '#1a3a1a');
+        ctx.fillStyle = pg;
+        roundRect(ctx, PX, PY, PW, PH, 10);
+        ctx.fill();
+
+        /* Lignes terrain */
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 1.5;
+        roundRect(ctx, PX+7, PY+7, PW-14, PH-14, 6); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(PX+7, PY+PH/2); ctx.lineTo(PX+PW-7, PY+PH/2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH/2, PW*0.12, 0, Math.PI*2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH/2, 3, 0, Math.PI*2);
+        ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.fill();
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        var bw = PW*0.58, bx = PX+(PW-bw)/2;
+        ctx.strokeRect(bx, PY+7,  bw, PH*0.145);
+        ctx.strokeRect(bx, PY+PH-PH*0.145-7, bw, PH*0.145);
+        var sw = PW*0.34, sx2 = PX+(PW-sw)/2;
+        ctx.strokeRect(sx2, PY+7,  sw, PH*0.065);
+        ctx.strokeRect(sx2, PY+PH-PH*0.065-7, sw, PH*0.065);
+
+        ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.lineWidth=2;
+        var gw=PW*0.2, gx=PX+(PW-gw)/2;
+        ctx.strokeRect(gx, PY,      gw, 8);
+        ctx.strokeRect(gx, PY+PH-8, gw, 8);
+
         ctx.fillStyle='rgba(255,255,255,0.25)';
-        ctx.beginPath();ctx.arc(PX+PW/2,PY+54,2,0,Math.PI*2);ctx.fill();
-        ctx.beginPath();ctx.arc(PX+PW/2,PY+PH-54,2,0,Math.PI*2);ctx.fill();
-        var coords=formationCoords[currentFormation];
-        currentLineup.forEach(function(entry,i){
-            var player=playersDataset.find(function(p){return p.id===entry.id;});
-            if(!player) return;
-            var c=tokenPositions[entry.id]||{l:coords[i][0],t:coords[i][1]};
-            var cx2=PX+(c.l/100)*PW, cy2=PY+(c.t/100)*PH, color=posColor(entry.pos), rr=15;
-            ctx.beginPath();ctx.arc(cx2,cy2,rr,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
-            ctx.strokeStyle='rgba(255,255,255,0.7)';ctx.lineWidth=2;ctx.stroke();
-            ctx.fillStyle='#fff';ctx.font='bold 7px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
-            ctx.fillText(entry.pos,cx2,cy2);
-            ctx.textBaseline='top';ctx.shadowColor='rgba(0,0,0,0.9)';ctx.shadowBlur=3;
-            ctx.font='bold 7px Arial';ctx.fillText(getLastName(player.name, player.id),cx2,cy2+rr+2);ctx.shadowBlur=0;
+        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH*0.125,    2.5, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH-PH*0.125, 2.5, 0, Math.PI*2); ctx.fill();
+
+        /* ── WATERMARK PWESPORTS ── */
+        ctx.save();
+        ctx.translate(PX + PW/2, PY + PH/2);
+        ctx.rotate(-35 * Math.PI / 180);
+        ctx.font = 'bold ' + Math.round(PW * 0.12) + 'px Oswald, Arial, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.045)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.letterSpacing = '6px';
+        ctx.fillText('PWESPORTS', 0, 0);
+        ctx.restore();
+
+        /* ── Tokens joueurs ── */
+        var coords = formationCoords[currentFormation];
+        var TR = Math.round(PW * 0.058); // rayon token
+        var FS = Math.max(8, Math.round(PW * 0.028));
+        var LS = Math.max(7, Math.round(PW * 0.026));
+
+        currentLineup.forEach(function(entry, i) {
+            var player = playersDataset.find(function(p){ return p.id===entry.id; });
+            if (!player) return;
+            var c   = tokenPositions[entry.id] || { l:coords[i][0], t:coords[i][1] };
+            var cx2 = PX + (c.l/100)*PW;
+            var cy2 = PY + (c.t/100)*PH;
+            var col = posColor(entry.pos);
+
+            /* Cercle */
+            ctx.beginPath(); ctx.arc(cx2, cy2, TR, 0, Math.PI*2);
+            ctx.fillStyle = col; ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 2; ctx.stroke();
+
+            /* Poste */
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold ' + FS + 'px Arial, sans-serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(entry.pos, cx2, cy2);
+
+            /* Nom */
+            ctx.font = 'bold ' + LS + 'px Arial, sans-serif';
+            ctx.textBaseline = 'top';
+            ctx.shadowColor = 'rgba(0,0,0,0.95)'; ctx.shadowBlur = 4;
+            ctx.fillText(getLastName(player.name, player.id), cx2, cy2 + TR + 3);
+            ctx.shadowBlur = 0;
         });
-        var LX=PX+PW+20,LY=PY,LW=W-LX-14;
-        ctx.fillStyle='#0e1322';roundRect(ctx,LX,LY,LW,PH,10);ctx.fill();
-        ctx.strokeStyle='rgba(255,255,255,0.07)';ctx.lineWidth=1;roundRect(ctx,LX,LY,LW,PH,10);ctx.stroke();
-        ctx.fillStyle='#fff';ctx.font='bold 12px Arial';ctx.textAlign='left';ctx.textBaseline='top';
-        ctx.fillText('XI TITULAIRES — '+currentFormation,LX+12,LY+12);
-        ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=1;
-        ctx.beginPath();ctx.moveTo(LX+12,LY+30);ctx.lineTo(LX+LW-12,LY+30);ctx.stroke();
-        currentLineup.forEach(function(entry,i){
-            var player=playersDataset.find(function(p){return p.id===entry.id;});
-            if(!player) return;
-            var ry=LY+42+i*38,color=posColor(entry.pos);
-            ctx.fillStyle=color;roundRect(ctx,LX+10,ry,28,14,3);ctx.fill();
-            ctx.fillStyle='#fff';ctx.font='bold 6px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
-            ctx.fillText(entry.pos,LX+24,ry+7);
-            ctx.textAlign='left';ctx.textBaseline='top';
-            ctx.font='bold 9px Arial';ctx.fillStyle='#fff';ctx.fillText(player.name,LX+44,ry);
-            ctx.font='8px Arial';ctx.fillStyle='#94a3b8';ctx.fillText(player.club.split('(')[0].trim(),LX+44,ry+13);
-            if(i<currentLineup.length-1){
-                ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
-                ctx.beginPath();ctx.moveTo(LX+10,ry+33);ctx.lineTo(LX+LW-10,ry+33);ctx.stroke();
-            }
-        });
-        ctx.fillStyle='rgba(255,255,255,0.2)';ctx.font='8px Arial';
-        ctx.textAlign='center';ctx.textBaseline='bottom';
-        ctx.fillText('pwesports.com — Coupe du Monde FIFA 2026',W/2,H-6);
-        var a=document.createElement('a');
-        a.download='haiti-xi-'+currentFormation+'.png';a.href=cv.toDataURL('image/png');a.click();
+
+        /* ── Footer ── */
+        ctx.fillStyle = 'rgba(255,255,255,0.22)';
+        ctx.font = '9px Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+        ctx.fillText('pwesports.com — Coupe du Monde FIFA 2026', W/2, H - 8);
+
+        /* ── Téléchargement ── */
+        var a = document.createElement('a');
+        a.download = 'haiti-xi-' + currentFormation + '.png';
+        a.href = cv.toDataURL('image/png');
+        a.click();
     }
 
     /* ---- INIT ---- */
