@@ -118,6 +118,8 @@
                     <a href="#accueil" class="text-sm font-semibold tracking-wide text-white hover:text-red-500 transition">ACCUEIL</a>
                     <a href="#effectif" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">LES GUERRIERS</a>
                     <a href="#tactique" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">TACTIQUE</a>
+                    <a href="#stats-joueurs" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">STATS</a>
+                    <a href="#actualites" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">ACTUALITÉS</a>
                     <a href="#calendrier" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">CALENDRIER</a>
                     <a href="#classement" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">STATS & LIVE</a>
                 </div>
@@ -135,6 +137,8 @@
             <a href="#accueil" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-white py-2">ACCUEIL</a>
             <a href="#effectif" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">LES GUERRIERS</a>
             <a href="#tactique" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">TACTIQUE</a>
+            <a href="#stats-joueurs" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">STATS JOUEURS</a>
+            <a href="#actualites" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">ACTUALITÉS</a>
             <a href="#calendrier" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">CALENDRIER</a>
             <a href="#classement" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">STATS & LIVE</a>
         </div>
@@ -533,6 +537,177 @@
             </p>
         </div>
     </section>
+
+    <!-- ===================== SECTION STATS JOUEURS ===================== -->
+    <section id="stats-joueurs" class="border-t border-gray-900 py-16 sm:py-20">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+
+            <!-- Titre -->
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold text-purple-400 uppercase tracking-widest block mb-2">Analyse Individuelle</span>
+                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-2">
+                    Stats <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">Grenadiers</span>
+                </h2>
+                <p class="text-xs text-gray-500 mt-2">Sélectionnez un joueur pour visualiser son profil complet</p>
+            </div>
+
+            <!-- Sélecteur joueur -->
+            <div class="max-w-xs mx-auto mb-8">
+                <div class="relative">
+                    <select id="stats-player-select" onchange="renderPlayerStats(this.value)"
+                        class="w-full appearance-none bg-[#0e1322] border border-gray-800 rounded-2xl px-5 py-3.5 text-sm font-bold text-white focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/10 transition cursor-pointer">
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center">
+                        <i class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layout : Radar gauche + Barres droite -->
+            <div id="stats-panel" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- RADAR -->
+                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p id="radar-player-name" class="font-athletic text-lg font-black uppercase text-white"></p>
+                            <p id="radar-player-club" class="text-xs text-red-500 font-bold mt-0.5"></p>
+                        </div>
+                        <div id="radar-pos-badge" class="px-3 py-1 rounded-lg text-xs font-black uppercase"></div>
+                    </div>
+                    <div class="flex justify-center">
+                        <canvas id="radar-canvas" width="280" height="280"></canvas>
+                    </div>
+                    <!-- Légende radar -->
+                    <div class="grid grid-cols-3 gap-2 mt-4">
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Vitesse</span><span id="leg-vitesse" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Tir</span><span id="leg-tir" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Passe</span><span id="leg-passe" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Défense</span><span id="leg-defense" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Physique</span><span id="leg-physique" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Dribble</span><span id="leg-dribble" class="text-xs font-black text-white">—</span></div>
+                    </div>
+                </div>
+
+                <!-- BARRES -->
+                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-6 flex flex-col justify-center">
+                    <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-5">
+                        <i class="fa-solid fa-chart-bar mr-1.5 text-blue-400"></i>Profil Détaillé
+                    </p>
+                    <div id="bars-container" class="space-y-4"></div>
+                </div>
+
+            </div>
+
+            <!-- Note de bas -->
+            <p class="text-center text-[10px] text-gray-600 mt-6">
+                <i class="fa-solid fa-circle-info mr-1"></i>
+                *Estimations PWESPORTS basées sur les performances en club et en sélection nationale — pas des données officielles FIFA.
+            </p>
+        </div>
+    </section>
+    <!-- =================== FIN SECTION STATS JOUEURS =================== -->
+
+    <!-- ===================== SECTION ACTUALITÉS ===================== -->
+    <section id="actualites" class="border-t border-gray-900 py-16 sm:py-20 bg-gray-950/20">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+            <!-- Titre -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-10 gap-4">
+                <div>
+                    <span class="text-xs font-bold text-red-400 uppercase tracking-widest block mb-2">Dernières Nouvelles</span>
+                    <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white">
+                        Actualités <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">Grenadiers</span>
+                    </h2>
+                </div>
+                <!-- Bouton Ajouter article (admin) -->
+                <button onclick="openNewsModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold uppercase text-white transition shadow-lg shadow-red-600/20 flex-shrink-0">
+                    <i class="fa-solid fa-plus"></i> Ajouter un article
+                </button>
+            </div>
+
+            <!-- 3 GRANDES CARTES MAGAZINE -->
+            <div id="news-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- Injecté par JS -->
+            </div>
+
+            <!-- FEED LIVE : Google News / RSS -->
+            <div class="border-t border-gray-900 pt-10">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-1">
+                            <span class="w-2 h-2 rounded-full bg-blue-400 inline-block mr-1 animate-pulse"></span>Feed Live
+                        </span>
+                        <h3 class="font-athletic text-xl sm:text-2xl font-extrabold uppercase text-white">Haïti Football — Monde</h3>
+                    </div>
+                    <button onclick="fetchLiveFeed()" id="feed-refresh-btn" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-400 hover:text-white transition">
+                        <i id="feed-refresh-icon" class="fa-solid fa-rotate-right text-xs"></i>
+                        <span class="hidden sm:inline">Actualiser</span>
+                    </button>
+                </div>
+                <div id="live-feed-container" class="space-y-3">
+                    <!-- Injecté par JS -->
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- =================== FIN SECTION ACTUALITÉS =================== -->
+
+    <!-- MODAL AJOUT / ÉDITION ARTICLE -->
+    <div id="news-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
+                <h3 class="font-athletic text-lg font-black uppercase text-white" id="news-modal-title">Nouvel Article</h3>
+                <button onclick="closeNewsModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Catégorie</label>
+                    <select id="news-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
+                        <option value="Officiel">🔴 Officiel</option>
+                        <option value="Transfert">🔵 Transfert</option>
+                        <option value="Performance">⚡ Performance</option>
+                        <option value="Coupe du Monde">🏆 Coupe du Monde</option>
+                        <option value="Interview">🎙️ Interview</option>
+                        <option value="Blessure">🏥 Blessure</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Titre de l'article *</label>
+                    <input id="news-title" type="text" placeholder="Ex: Bellegarde prolonge avec Wolverhampton..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Résumé *</label>
+                    <textarea id="news-excerpt" rows="3" placeholder="Résumé court de l'article (2-3 phrases)..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Lien source (optionnel)</label>
+                    <input id="news-link" type="url" placeholder="https://..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Emoji / Icône de couverture</label>
+                    <div class="grid grid-cols-6 gap-2" id="emoji-picker">
+                        <!-- Injecté par JS -->
+                    </div>
+                </div>
+                <input type="hidden" id="news-edit-index" value="-1">
+                <div class="flex gap-3 pt-2">
+                    <button onclick="saveNewsArticle()" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
+                        <i class="fa-solid fa-save mr-2"></i>Publier
+                    </button>
+                    <button onclick="closeNewsModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition">
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <section id="vision" class="bg-gray-950/60 border-t border-b border-gray-900 py-16 sm:py-20 text-center">
         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -1078,8 +1253,6 @@
         setInterval(fetchStandings, 3 * 60 * 1000);
     }
     </script>
-</body>
-</html>
     <script>
     /* ---- XI TITULAIRES PAR DÉFAUT (selon votre sélection) ---- */
     var defaultLineup = [
@@ -1686,7 +1859,588 @@
         initMatchCountdown();
         initTactics();
         initStandings();
+        initPlayerStats();
     };
+    </script>
+
+    <!-- ============================================================
+         STATS JOUEURS — Radar Canvas + Barres Animées
+    ============================================================ -->
+    <script>
+    /* ---- DONNÉES STATS (sur 100) ---- */
+    var playerStatsData = {
+        // GARDIENS — réflexes, relance, positionnement, agilité, leadership
+        'jhonny_placide':         { vitesse:52, tir:10, passe:68, defense:88, physique:78, dribble:12 },
+        'alexandre_pierre':       { vitesse:58, tir:10, passe:62, defense:84, physique:80, dribble:10 },
+        'josue_duverger':         { vitesse:55, tir:10, passe:60, defense:82, physique:76, dribble:10 },
+        // DÉFENSEURS
+        'ricardo_ade':            { vitesse:60, tir:35, passe:68, defense:88, physique:85, dribble:40 },
+        'hannes_delcroix':        { vitesse:68, tir:40, passe:72, defense:85, physique:80, dribble:50 },
+        'carlens_arcus':          { vitesse:85, tir:55, passe:70, defense:72, physique:74, dribble:75 },
+        'jean_kelvin_duverne':    { vitesse:75, tir:45, passe:74, defense:78, physique:76, dribble:65 },
+        'duke_lacroix':           { vitesse:72, tir:42, passe:68, defense:76, physique:74, dribble:60 },
+        'martin_experience':      { vitesse:78, tir:48, passe:70, defense:74, physique:72, dribble:68 },
+        'wilguens_paugain':       { vitesse:80, tir:52, passe:72, defense:75, physique:76, dribble:70 },
+        'keeto_thermoncy':        { vitesse:74, tir:38, passe:65, defense:80, physique:78, dribble:55 },
+        // MILIEUX
+        'jean_ricner_bellegarde': { vitesse:88, tir:70, passe:80, defense:68, physique:78, dribble:82 },
+        'danley_jean_jacques':    { vitesse:76, tir:55, passe:78, defense:82, physique:84, dribble:65 },
+        'carl_fred_sainthe':      { vitesse:72, tir:50, passe:75, defense:85, physique:82, dribble:60 },
+        'woodensky_pierre':       null,  // Non disponible
+        'dominique_simon':        { vitesse:68, tir:48, passe:76, defense:83, physique:82, dribble:58 },
+        'leverton_pierre':        { vitesse:74, tir:55, passe:78, defense:80, physique:80, dribble:65 },
+        // ATTAQUANTS
+        'frantzdy_pierrot':       { vitesse:72, tir:78, passe:58, defense:55, physique:90, dribble:60 },
+        'duckens_nazon':          { vitesse:80, tir:85, passe:65, defense:45, physique:76, dribble:78 },
+        'wilson_isidor':          { vitesse:92, tir:78, passe:68, defense:42, physique:75, dribble:82 },
+        'deedson_louicius':       { vitesse:88, tir:72, passe:70, defense:48, physique:72, dribble:80 },
+        'derrick_etienne':        { vitesse:86, tir:70, passe:72, defense:50, physique:74, dribble:78 },
+        'lenny_joseph':           { vitesse:90, tir:75, passe:70, defense:44, physique:73, dribble:84 },
+        'josue_casimir':          { vitesse:85, tir:72, passe:74, defense:50, physique:74, dribble:80 },
+        'rubens_providence':      { vitesse:84, tir:70, passe:72, defense:48, physique:72, dribble:78 },
+        'yassin_fortune':         { vitesse:78, tir:74, passe:76, defense:52, physique:76, dribble:74 }
+    };
+
+    var statLabels = ['vitesse','tir','passe','defense','physique','dribble'];
+    var statColors = {
+        vitesse:'#f59e0b', tir:'#ef4444', passe:'#3b82f6',
+        defense:'#8b5cf6', physique:'#22c55e', dribble:'#ec4899'
+    };
+    var statIcons = {
+        vitesse:'fa-bolt', tir:'fa-crosshairs', passe:'fa-futbol',
+        defense:'fa-shield-halved', physique:'fa-dumbbell', dribble:'fa-person-running'
+    };
+
+    /* ---- INIT ---- */
+    function initPlayerStats() {
+        var sel = document.getElementById('stats-player-select');
+        if (!sel) return;
+        sel.innerHTML = '';
+        playersDataset.forEach(function(p) {
+            var opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.name + ' — ' + p.role;
+            sel.appendChild(opt);
+        });
+        // Afficher Wilson Isidor par défaut
+        sel.value = 'wilson_isidor';
+        renderPlayerStats('wilson_isidor');
+    }
+
+    /* ---- RENDU COMPLET ---- */
+    function renderPlayerStats(playerId) {
+        var player = playersDataset.find(function(p){ return p.id===playerId; });
+        var stats  = playerStatsData[playerId];
+        if (!player) return;
+
+        // Infos header radar
+        document.getElementById('radar-player-name').textContent = player.name;
+        document.getElementById('radar-player-club').textContent = player.club;
+
+        var badge = document.getElementById('radar-pos-badge');
+        var posCol = player.role==='Gardiens'?'#6366f1':player.role==='Défenseurs'?'#ef4444':player.role==='Milieux'?'#f59e0b':'#22c55e';
+        badge.textContent = player.role;
+        badge.style.background = posCol + '22';
+        badge.style.color = posCol;
+        badge.style.border = '1px solid ' + posCol + '44';
+
+        // Joueur non disponible (stats = null)
+        if (!stats) {
+            // Vider légendes
+            statLabels.forEach(function(k){
+                var el = document.getElementById('leg-' + k);
+                if (el) el.textContent = '—';
+            });
+            // Vider canvas avec message
+            var canvas = document.getElementById('radar-canvas');
+            if (canvas) {
+                var ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(255,255,255,0.06)';
+                ctx.beginPath();
+                // Hexagone vide
+                var n=6, cx=canvas.width/2, cy=canvas.height/2, r=canvas.width/2-28;
+                for(var i=0;i<n;i++){
+                    var a=(Math.PI*2/n)*i-Math.PI/2;
+                    i===0?ctx.moveTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r):ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);
+                }
+                ctx.closePath();
+                ctx.fillStyle='rgba(255,255,255,0.03)';
+                ctx.strokeStyle='rgba(255,255,255,0.08)';
+                ctx.lineWidth=1.5;
+                ctx.fill(); ctx.stroke();
+                // Texte centré
+                ctx.font='bold 13px Montserrat,sans-serif';
+                ctx.fillStyle='rgba(255,255,255,0.35)';
+                ctx.textAlign='center';
+                ctx.textBaseline='middle';
+                ctx.fillText('NON DISPONIBLE', cx, cy-10);
+                ctx.font='10px Montserrat,sans-serif';
+                ctx.fillStyle='rgba(255,255,255,0.2)';
+                ctx.fillText('Données indisponibles', cx, cy+10);
+            }
+            // Barres vides
+            var bars = document.getElementById('bars-container');
+            if (bars) {
+                bars.innerHTML = '<div style="text-align:center;padding:30px 0;color:rgba(255,255,255,0.2);">'
+                    + '<i class="fa-solid fa-lock" style="font-size:2rem;display:block;margin-bottom:10px;"></i>'
+                    + '<p style="font-size:12px;font-weight:700;">Statistiques non disponibles</p>'
+                    + '<p style="font-size:10px;margin-top:4px;color:rgba(255,255,255,0.15);">Woodensky Pierre — Violette AC (Haïti)</p>'
+                    + '</div>';
+            }
+            return;
+        }
+
+        // Légendes
+        statLabels.forEach(function(k){
+            var el = document.getElementById('leg-' + k);
+            if (el) el.textContent = stats[k];
+        });
+
+        drawRadar(stats);
+        drawBars(stats, player.role);
+    }
+
+    /* ---- RADAR CANVAS ---- */
+    function drawRadar(stats) {
+        var canvas = document.getElementById('radar-canvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        var W = canvas.width, H = canvas.height;
+        var cx = W/2, cy = H/2;
+        var maxR = Math.min(W,H)/2 - 28;
+        var n = statLabels.length;
+
+        ctx.clearRect(0, 0, W, H);
+
+        function angle(i) { return (Math.PI*2/n)*i - Math.PI/2; }
+        function pt(i, r) {
+            return { x: cx + Math.cos(angle(i))*r, y: cy + Math.sin(angle(i))*r };
+        }
+
+        // Grilles de fond (3 niveaux)
+        [0.33, 0.66, 1].forEach(function(lvl) {
+            ctx.beginPath();
+            for (var i=0; i<n; i++) {
+                var p = pt(i, maxR*lvl);
+                i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y);
+            }
+            ctx.closePath();
+            ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+            ctx.lineWidth   = 1;
+            ctx.stroke();
+            if (lvl===1) {
+                ctx.fillStyle = 'rgba(255,255,255,0.02)';
+                ctx.fill();
+            }
+        });
+
+        // Axes
+        for (var i=0; i<n; i++) {
+            var p = pt(i, maxR);
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(p.x, p.y);
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth   = 1;
+            ctx.stroke();
+        }
+
+        // Polygone stats (animé)
+        var values  = statLabels.map(function(k){ return (stats[k]||0)/100; });
+        var frames  = 0, totalF = 30;
+
+        function animRadar(f) {
+            ctx.clearRect(0, 0, W, H);
+            // Re-draw grilles
+            [0.33,0.66,1].forEach(function(lvl){
+                ctx.beginPath();
+                for (var i2=0; i2<n; i2++) {
+                    var p2=pt(i2,maxR*lvl);
+                    i2===0?ctx.moveTo(p2.x,p2.y):ctx.lineTo(p2.x,p2.y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=1; ctx.stroke();
+                if(lvl===1){ctx.fillStyle='rgba(255,255,255,0.02)';ctx.fill();}
+            });
+            for(var i3=0;i3<n;i3++){
+                var p3=pt(i3,maxR);
+                ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(p3.x,p3.y);
+                ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=1;ctx.stroke();
+            }
+            // Polygone
+            var prog = Math.min(1, f/totalF);
+            var eased = 1 - Math.pow(1-prog, 3); // ease-out cubic
+            ctx.beginPath();
+            for(var i4=0;i4<n;i4++){
+                var r4=maxR*values[i4]*eased;
+                var p4=pt(i4,r4);
+                i4===0?ctx.moveTo(p4.x,p4.y):ctx.lineTo(p4.x,p4.y);
+            }
+            ctx.closePath();
+            // Remplissage gradient
+            var grd=ctx.createRadialGradient(cx,cy,0,cx,cy,maxR);
+            grd.addColorStop(0,'rgba(59,130,246,0.35)');
+            grd.addColorStop(1,'rgba(239,68,68,0.15)');
+            ctx.fillStyle=grd;
+            ctx.fill();
+            ctx.strokeStyle='rgba(99,179,255,0.8)';
+            ctx.lineWidth=2;
+            ctx.stroke();
+            // Points sur chaque sommet
+            for(var i5=0;i5<n;i5++){
+                var r5=maxR*values[i5]*eased;
+                var p5=pt(i5,r5);
+                ctx.beginPath();ctx.arc(p5.x,p5.y,4,0,Math.PI*2);
+                ctx.fillStyle=statColors[statLabels[i5]];ctx.fill();
+            }
+            if(f<totalF) requestAnimationFrame(function(){ animRadar(f+1); });
+        }
+        animRadar(0);
+
+        // Labels
+        for(var i6=0;i6<n;i6++){
+            var lp=pt(i6,maxR+18);
+            ctx.font='bold 10px Montserrat,sans-serif';
+            ctx.fillStyle='rgba(255,255,255,0.7)';
+            ctx.textAlign='center';
+            ctx.textBaseline='middle';
+            ctx.fillText(statLabels[i6].toUpperCase(), lp.x, lp.y);
+        }
+    }
+
+    /* ---- BARRES ANIMÉES ---- */
+    function drawBars(stats, role) {
+        var container = document.getElementById('bars-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        statLabels.forEach(function(key) {
+            var val   = stats[key] || 0;
+            var color = statColors[key];
+            var icon  = statIcons[key];
+            var label = key.charAt(0).toUpperCase() + key.slice(1);
+
+            var wrap = document.createElement('div');
+
+            var topRow = document.createElement('div');
+            topRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;';
+
+            var lbl = document.createElement('div');
+            lbl.style.cssText = 'display:flex;align-items:center;gap:6px;';
+            lbl.innerHTML = '<i class="fa-solid ' + icon + '" style="color:' + color + ';font-size:10px;width:14px;text-align:center;"></i>'
+                + '<span style="font-size:10px;font-weight:700;color:#d1d5db;text-transform:uppercase;letter-spacing:0.05em;">' + label + '</span>';
+
+            var num = document.createElement('span');
+            num.style.cssText = 'font-family:Oswald,sans-serif;font-size:13px;font-weight:900;color:#fff;';
+            num.textContent = val;
+
+            topRow.appendChild(lbl);
+            topRow.appendChild(num);
+
+            var barBg = document.createElement('div');
+            barBg.style.cssText = 'width:100%;height:7px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden;';
+
+            var barFill = document.createElement('div');
+            barFill.style.cssText = 'height:100%;border-radius:99px;background:' + color + ';width:0%;transition:width 0.8s cubic-bezier(0.34,1.56,0.64,1);';
+
+            barBg.appendChild(barFill);
+            wrap.appendChild(topRow);
+            wrap.appendChild(barBg);
+            container.appendChild(wrap);
+
+            // Animer après un court délai
+            setTimeout(function(f, v){ f.style.width = v + '%'; }, 80, barFill, val);
+        });
+    }
+    </script>
+    <!-- ============================================================
+         ACTUALITÉS — Articles manuels + Feed Live
+    ============================================================ -->
+    <script>
+    /* ---- ARTICLES PAR DÉFAUT ---- */
+    var newsArticles = [
+        {
+            category: 'Coupe du Monde',
+            title: 'Haïti dans le Groupe C : Brésil, Maroc et Écosse au programme',
+            excerpt: 'Le tirage au sort de la FIFA a placé les Grenadiers dans un groupe relevé. Haïti affrontera le Brésil le 19 juin, l\'Écosse le 13 juin et le Maroc le 24 juin 2026 dans les stades américains.',
+            date: '2025-12-15',
+            link: '',
+            emoji: '🏆',
+            featured: true
+        },
+        {
+            category: 'Performance',
+            title: 'Jean-Ricner Bellegarde impressionne en Premier League',
+            excerpt: 'Le milieu des Grenadiers continue de s\'affirmer sous les couleurs de Wolverhampton. Ses performances régulières en Premier League font de lui l\'un des joueurs les plus attendus du Mondial 2026.',
+            date: '2026-03-10',
+            link: '',
+            emoji: '⚡',
+            featured: false
+        },
+        {
+            category: 'Officiel',
+            title: 'Wilson Isidor rejoint Sunderland et vise le Mondial',
+            excerpt: 'L\'attaquant de pointe des Grenadiers a signé avec Sunderland en Championship anglaise. Avec sa vitesse explosive, Isidor sera l\'une des armes offensives majeures d\'Haïti au Mondial 2026.',
+            date: '2026-01-22',
+            link: '',
+            emoji: '🔵',
+            featured: false
+        }
+    ];
+
+    var selectedEmoji = '📰';
+    var emojiOptions  = ['🏆','⚡','🔴','🔵','🎙️','🏥','⚽','🇭🇹','💪','🌟','📊','🔥'];
+
+    var categoryColors = {
+        'Officiel'      : { bg:'rgba(239,68,68,0.12)',  border:'rgba(239,68,68,0.3)',   text:'#f87171' },
+        'Transfert'     : { bg:'rgba(59,130,246,0.12)', border:'rgba(59,130,246,0.3)',  text:'#60a5fa' },
+        'Performance'   : { bg:'rgba(245,158,11,0.12)', border:'rgba(245,158,11,0.3)',  text:'#fbbf24' },
+        'Coupe du Monde': { bg:'rgba(168,85,247,0.12)', border:'rgba(168,85,247,0.3)',  text:'#c084fc' },
+        'Interview'     : { bg:'rgba(34,197,94,0.12)',  border:'rgba(34,197,94,0.3)',   text:'#4ade80' },
+        'Blessure'      : { bg:'rgba(107,114,128,0.12)',border:'rgba(107,114,128,0.3)', text:'#9ca3af' }
+    };
+
+    function fmtDate(d) {
+        try {
+            var dt = new Date(d);
+            return dt.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+        } catch(e) { return d; }
+    }
+
+    /* ---- RENDU GRILLE 3 CARTES ---- */
+    function renderNewsGrid() {
+        var grid = document.getElementById('news-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        if (newsArticles.length === 0) {
+            grid.innerHTML = '<div class="col-span-3 text-center py-16 text-gray-600"><i class="fa-solid fa-newspaper text-4xl mb-3 block"></i><p class="text-sm font-semibold">Aucun article publié · Cliquez sur "Ajouter un article"</p></div>';
+            return;
+        }
+
+        newsArticles.forEach(function(article, idx) {
+            var col = categoryColors[article.category] || categoryColors['Officiel'];
+            var card = document.createElement('div');
+            card.className = 'group relative bg-[#0e1322] border border-gray-900 rounded-2xl overflow-hidden hover:border-gray-700 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-300 flex flex-col';
+
+            card.innerHTML = [
+                /* Bande couleur en haut */
+                '<div style="height:3px;background:linear-gradient(90deg,' + col.text + ',transparent);"></div>',
+                '<div class="p-6 flex flex-col flex-1">',
+                  /* Emoji cover */
+                  '<div class="text-4xl mb-4">' + (article.emoji||'📰') + '</div>',
+                  /* Catégorie + date */
+                  '<div class="flex items-center justify-between mb-3">',
+                    '<span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase" style="background:'+col.bg+';color:'+col.text+';border:1px solid '+col.border+';">' + article.category + '</span>',
+                    '<span class="text-[10px] text-gray-600 font-medium">' + fmtDate(article.date) + '</span>',
+                  '</div>',
+                  /* Titre */
+                  '<h3 class="font-athletic text-lg font-black uppercase text-white mb-3 leading-tight group-hover:text-blue-400 transition-colors">' + article.title + '</h3>',
+                  /* Résumé */
+                  '<p class="text-xs text-gray-400 leading-relaxed flex-1">' + article.excerpt + '</p>',
+                  /* Actions */
+                  '<div class="flex items-center justify-between mt-5 pt-4 border-t border-gray-900">',
+                    article.link
+                      ? '<a href="'+article.link+'" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-[10px] font-bold text-blue-400 hover:text-blue-300 transition uppercase"><i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>Lire la source</a>'
+                      : '<span class="text-[10px] text-gray-700">PWESPORTS</span>',
+                    '<div class="flex gap-2">',
+                      '<button onclick="editNewsArticle('+idx+')" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-500 hover:text-white hover:border-gray-700 transition"><i class="fa-solid fa-pen text-[9px]"></i></button>',
+                      '<button onclick="deleteNewsArticle('+idx+')" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-500 hover:text-red-400 hover:border-red-900 transition"><i class="fa-solid fa-trash text-[9px]"></i></button>',
+                    '</div>',
+                  '</div>',
+                '</div>'
+            ].join('');
+
+            grid.appendChild(card);
+        });
+    }
+
+    /* ---- MODAL AJOUT / ÉDITION ---- */
+    function openNewsModal(editIdx) {
+        var modal = document.getElementById('news-modal');
+        var title = document.getElementById('news-modal-title');
+
+        // Emoji picker
+        var picker = document.getElementById('emoji-picker');
+        picker.innerHTML = '';
+        emojiOptions.forEach(function(em) {
+            var btn = document.createElement('button');
+            btn.textContent = em;
+            btn.style.cssText = 'font-size:20px;padding:8px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);cursor:pointer;transition:background 0.15s;';
+            btn.onmouseover = function(){ this.style.background='rgba(255,255,255,0.1)'; };
+            btn.onmouseout  = function(){ this.style.background= (this.textContent===selectedEmoji) ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.04)'; };
+            btn.onclick = function(){
+                selectedEmoji = em;
+                picker.querySelectorAll('button').forEach(function(b){ b.style.background='rgba(255,255,255,0.04)'; b.style.borderColor='rgba(255,255,255,0.08)'; });
+                this.style.background='rgba(59,130,246,0.2)'; this.style.borderColor='rgba(59,130,246,0.4)';
+            };
+            if (em === selectedEmoji) { btn.style.background='rgba(59,130,246,0.2)'; btn.style.borderColor='rgba(59,130,246,0.4)'; }
+            picker.appendChild(btn);
+        });
+
+        if (editIdx !== undefined && editIdx >= 0 && newsArticles[editIdx]) {
+            var a = newsArticles[editIdx];
+            title.textContent = 'Modifier l\'article';
+            document.getElementById('news-category').value  = a.category;
+            document.getElementById('news-title').value     = a.title;
+            document.getElementById('news-excerpt').value   = a.excerpt;
+            document.getElementById('news-link').value      = a.link || '';
+            document.getElementById('news-edit-index').value = editIdx;
+            selectedEmoji = a.emoji || '📰';
+        } else {
+            title.textContent = 'Nouvel Article';
+            document.getElementById('news-category').value  = 'Officiel';
+            document.getElementById('news-title').value     = '';
+            document.getElementById('news-excerpt').value   = '';
+            document.getElementById('news-link').value      = '';
+            document.getElementById('news-edit-index').value = '-1';
+            selectedEmoji = '📰';
+        }
+        modal.classList.remove('hidden');
+    }
+
+    function closeNewsModal() {
+        document.getElementById('news-modal').classList.add('hidden');
+    }
+
+    function saveNewsArticle() {
+        var title   = document.getElementById('news-title').value.trim();
+        var excerpt = document.getElementById('news-excerpt').value.trim();
+        if (!title || !excerpt) {
+            alert('Le titre et le résumé sont obligatoires.');
+            return;
+        }
+        var article = {
+            category: document.getElementById('news-category').value,
+            title:    title,
+            excerpt:  excerpt,
+            link:     document.getElementById('news-link').value.trim(),
+            date:     new Date().toISOString().split('T')[0],
+            emoji:    selectedEmoji,
+            featured: false
+        };
+        var editIdx = parseInt(document.getElementById('news-edit-index').value);
+        if (editIdx >= 0) {
+            newsArticles[editIdx] = article;
+        } else {
+            newsArticles.unshift(article); // Ajouter en tête
+        }
+        closeNewsModal();
+        renderNewsGrid();
+    }
+
+    function editNewsArticle(idx)   { openNewsModal(idx); }
+    function deleteNewsArticle(idx) {
+        if (confirm('Supprimer cet article ?')) {
+            newsArticles.splice(idx, 1);
+            renderNewsGrid();
+        }
+    }
+
+    /* ---- FEED LIVE via RSS2JSON (CORS-friendly, gratuit) ---- */
+    var FEED_URLS = [
+        'https://www.goal.com/feeds/en/news',
+        'https://www.fifa.com/newsondeck/news/rss'
+    ];
+
+    function fetchLiveFeed() {
+        var container = document.getElementById('live-feed-container');
+        var icon      = document.getElementById('feed-refresh-icon');
+        if (!container) return;
+        if (icon) icon.classList.add('fa-spin');
+
+        // Skeleton
+        container.innerHTML = [1,2,3,4].map(function(){
+            return '<div class="flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 animate-pulse-fast"><div class="w-12 h-12 rounded-xl bg-gray-800 flex-shrink-0"></div><div class="flex-1 space-y-2"><div class="h-3 bg-gray-800 rounded w-3/4"></div><div class="h-2 bg-gray-800 rounded w-1/2"></div></div></div>';
+        }).join('');
+
+        // API rss2json.com — gratuit, 1000 req/jour
+        var rssUrl = 'https://www.lemonde.fr/sport/rss_full.xml';
+        var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl) + '&api_key=public&count=6&q=haiti+football';
+
+        fetch(apiUrl)
+            .then(function(r){ return r.json(); })
+            .then(function(data){
+                if (icon) icon.classList.remove('fa-spin');
+                if (data.status === 'ok' && data.items && data.items.length > 0) {
+                    renderFeedItems(data.items);
+                } else {
+                    renderFeedFallback();
+                }
+            })
+            .catch(function(){
+                if (icon) icon.classList.remove('fa-spin');
+                renderFeedFallback();
+            });
+    }
+
+    function renderFeedItems(items) {
+        var container = document.getElementById('live-feed-container');
+        container.innerHTML = '';
+        items.slice(0, 6).forEach(function(item) {
+            var row = document.createElement('a');
+            row.href   = item.link || '#';
+            row.target = '_blank';
+            row.rel    = 'noopener noreferrer';
+            row.className = 'flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 hover:border-gray-700 hover:bg-gray-900/40 transition-all group items-start';
+
+            var pub = item.pubDate ? new Date(item.pubDate).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}) : '';
+            var img = item.thumbnail || item.enclosure && item.enclosure.link || '';
+
+            row.innerHTML = [
+                img ? '<img src="'+img+'" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 border border-gray-800" onerror="this.style.display=\'none\'">' : '<div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 text-xl">⚽</div>',
+                '<div class="flex-1 min-w-0">',
+                  '<p class="text-xs font-bold text-white group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">' + (item.title||'') + '</p>',
+                  '<div class="flex items-center gap-2 text-[10px] text-gray-600">',
+                    '<span>' + (item.author||'Source externe') + '</span>',
+                    pub ? '<span>·</span><span>'+pub+'</span>' : '',
+                  '</div>',
+                '</div>',
+                '<i class="fa-solid fa-chevron-right text-[10px] text-gray-700 group-hover:text-blue-400 transition-colors flex-shrink-0 mt-1"></i>'
+            ].join('');
+            container.appendChild(row);
+        });
+    }
+
+    function renderFeedFallback() {
+        var container = document.getElementById('live-feed-container');
+        // Liens curatés manuellement
+        var links = [
+            { title:'FIFA — Actualités Coupe du Monde 2026', url:'https://www.fifa.com/fr/tournaments/mens/worldcup/canadamexicousa2026', source:'FIFA.com', emoji:'🏆' },
+            { title:'Les Grenadiers — FHF Officiel', url:'https://www.fhfonline.com', source:'FHF Online', emoji:'🇭🇹' },
+            { title:'Haïti football — RFI Sport', url:'https://www.rfi.fr/fr/sports/football', source:'RFI Sport', emoji:'📻' },
+            { title:'Wilson Isidor — Sunderland AFC', url:'https://www.safc.com', source:'SAFC.com', emoji:'⚽' },
+            { title:'Bellegarde — Wolverhampton Wanderers', url:'https://www.wolves.co.uk', source:'Wolves.co.uk', emoji:'🐺' },
+            { title:'Haïti vs Écosse — 13 Juin 2026, Boston', url:'https://www.fifa.com', source:'FIFA.com', emoji:'⚡' }
+        ];
+        container.innerHTML = '';
+        links.forEach(function(l) {
+            var row = document.createElement('a');
+            row.href='https://'+l.url.replace('https://',''); row.target='_blank'; row.rel='noopener noreferrer';
+            row.className = 'flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 hover:border-gray-700 hover:bg-gray-900/40 transition-all group items-center';
+            row.innerHTML = [
+                '<div class="w-12 h-12 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center text-xl flex-shrink-0">'+l.emoji+'</div>',
+                '<div class="flex-1 min-w-0">',
+                  '<p class="text-xs font-bold text-white group-hover:text-blue-400 transition-colors mb-0.5">'+l.title+'</p>',
+                  '<p class="text-[10px] text-gray-600">'+l.source+'</p>',
+                '</div>',
+                '<i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-700 group-hover:text-blue-400 transition-colors flex-shrink-0"></i>'
+            ].join('');
+            container.appendChild(row);
+        });
+    }
+
+    /* ---- FERMER MODALS SUR BACKDROP ---- */
+    document.getElementById('news-modal').addEventListener('click', function(e){
+        if (e.target===this) closeNewsModal();
+    });
+
+    /* ---- INIT ---- */
+    function initNews() {
+        renderNewsGrid();
+        fetchLiveFeed();
+    }
     </script>
 </body>
 </html>
