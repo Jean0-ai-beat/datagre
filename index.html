@@ -1181,45 +1181,47 @@
         var body = document.getElementById('standings-body');
         if (!body) return;
 
-        // Trier par pts desc, puis diff buts
-        data.sort(function(a,b){
+        // Trier une COPIE (ne pas muter l'original)
+        var sorted = data.slice().sort(function(a,b){
             if (b.pts !== a.pts) return b.pts - a.pts;
-            return (b.bp-b.bc) - (a.bp-a.bc);
+            var diffA = (a.bp||0) - (a.bc||0);
+            var diffB = (b.bp||0) - (b.bc||0);
+            if (diffB !== diffA) return diffB - diffA;
+            return (b.bp||0) - (a.bp||0);
         });
 
         body.innerHTML = '';
-        data.forEach(function(team, i) {
-            var pos    = i + 1;
+        sorted.forEach(function(team, i) {
+            var pos     = i + 1;
             var isHaiti = team.haiti;
-            var qualify = pos <= 2; // Top 2 qualifiés
+            var qualify = pos <= 2;
 
             var tr = document.createElement('tr');
             tr.className = isHaiti
                 ? 'bg-blue-500/5 hover:bg-blue-500/10 transition border-l-2 border-blue-500'
                 : 'hover:bg-gray-900/30 transition';
 
-            var posColor = qualify ? '#22c55e' : '#6b7280';
-            if (isHaiti) posColor = '#60a5fa';
+            var posCol = qualify ? '#22c55e' : '#6b7280';
+            if (isHaiti) posCol = '#60a5fa';
 
             tr.innerHTML = [
-                '<td class="p-3 text-center font-black text-xs" style="color:'+posColor+'">'+pos+'</td>',
+                '<td class="p-3 text-center font-black text-xs" style="color:'+posCol+'">'+pos+'</td>',
                 '<td class="p-3"><div class="flex items-center gap-2">',
                   '<img src="https://flagcdn.com/w20/'+team.code+'.png" class="w-5 h-auto rounded-sm" alt="'+team.name+'">',
                   '<span class="'+(isHaiti?'font-black text-white':'font-bold text-white')+'">'+team.name+'</span>',
                 '</div></td>',
-                '<td class="p-3 text-center text-gray-400">'+team.pj+'</td>',
-                '<td class="p-3 text-center text-gray-400">'+team.g+'</td>',
-                '<td class="p-3 text-center text-gray-400">'+team.n+'</td>',
-                '<td class="p-3 text-center text-gray-400">'+team.p+'</td>',
-                '<td class="p-3 text-center text-gray-400">'+team.bp+'</td>',
-                '<td class="p-3 text-center text-gray-400">'+team.bc+'</td>',
-                '<td class="p-3 text-center font-black '+(isHaiti?'text-blue-400 bg-blue-500/10':'text-white bg-gray-950/20')+'">'+team.pts+'</td>'
+                '<td class="p-3 text-center text-gray-400">'+(team.pj||0)+'</td>',
+                '<td class="p-3 text-center text-gray-400">'+(team.g||0)+'</td>',
+                '<td class="p-3 text-center text-gray-400">'+(team.n||0)+'</td>',
+                '<td class="p-3 text-center text-gray-400">'+(team.p||0)+'</td>',
+                '<td class="p-3 text-center text-gray-400">'+(team.bp||0)+'</td>',
+                '<td class="p-3 text-center text-gray-400">'+(team.bc||0)+'</td>',
+                '<td class="p-3 text-center font-black '+(isHaiti?'text-blue-400 bg-blue-500/10':'text-white bg-gray-950/20')+'">'+(team.pts||0)+'</td>'
             ].join('');
 
             body.appendChild(tr);
         });
 
-        // Timestamp
         var upd = document.getElementById('standings-updated');
         if (upd) {
             var now = new Date();
@@ -1332,10 +1334,11 @@
 
     /* ---- INIT ---- */
     function initStandings() {
+        // Afficher les 4 équipes immédiatement
         renderStandings(standingsData);
         renderScorers(scorersData);
-        // Auto-refresh toutes les 3 minutes si le tournoi est en cours
-        fetchStandings();
+        // Essayer de mettre à jour via API en arrière-plan
+        setTimeout(fetchStandings, 1500);
         setInterval(fetchStandings, 3 * 60 * 1000);
     }
     </script>
@@ -2496,7 +2499,7 @@
         document.getElementById('submit-excerpt').value = '';
         document.getElementById('submit-link').value    = '';
         if (isAdminLogged) renderPendingList();
-        setTimeout(closeSubmitModal, 2500);
+        setTimeout(closeSubmitModal, 5000);
     }
 
     /* ──────────────── FEED LIVE ──────────────── */
