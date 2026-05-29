@@ -1466,8 +1466,8 @@
                 wrap.addEventListener('mousedown', function(ev){ startPitchDrag(ev, wrap, eid); });
                 wrap.addEventListener('touchstart', function(ev){ startPitchDrag(ev, wrap, eid); }, {passive:true});
             })(entry.id, circle, color);
-        });
-    }
+        }); // end forEach
+    } // end renderPitchPlayers
 
     /* ---- LISTE XI TITULAIRES ---- */
     function renderLineupList() {
@@ -2251,14 +2251,14 @@
 
     /* ---- ARTICLES PUBLIÉS ---- */
     var newsArticles = [
-        { category:'Coupe du Monde', title:'Haïti dans le Groupe C : Brésil, Maroc et Écosse au programme',
-          excerpt:'Le tirage au sort de la FIFA a placé les Grenadiers dans un groupe relevé. Haïti affrontera le Brésil le 19 juin, l'Écosse le 13 juin et le Maroc le 24 juin 2026 dans les stades américains.',
+        { category:'Coupe du Monde', title:"Haïti dans le Groupe C : Brésil, Maroc et Écosse au programme",
+          excerpt:"Le tirage au sort de la FIFA a placé les Grenadiers dans un groupe relevé. Haïti affrontera le Brésil le 19 juin, l'Écosse le 13 juin et le Maroc le 24 juin 2026 dans les stades américains.",
           date:'2025-12-15', link:'', emoji:'🏆', author:'PWESPORTS' },
-        { category:'Performance', title:'Jean-Ricner Bellegarde impressionne en Premier League',
-          excerpt:'Le milieu des Grenadiers continue de s'affirmer sous les couleurs de Wolverhampton. Ses performances régulières en Premier League font de lui l'un des joueurs les plus attendus du Mondial 2026.',
+        { category:'Performance', title:"Jean-Ricner Bellegarde impressionne en Premier League",
+          excerpt:"Le milieu des Grenadiers continue de s'affirmer sous les couleurs de Wolverhampton. Ses performances régulières en Premier League font de lui l'un des joueurs les plus attendus du Mondial 2026.",
           date:'2026-03-10', link:'', emoji:'⚡', author:'PWESPORTS' },
-        { category:'Officiel', title:'Wilson Isidor rejoint Sunderland et vise le Mondial',
-          excerpt:'L'attaquant de pointe des Grenadiers a signé avec Sunderland en Championship anglaise. Avec sa vitesse explosive, Isidor sera l'une des armes offensives majeures d'Haïti au Mondial 2026.',
+        { category:'Officiel', title:"Wilson Isidor rejoint Sunderland et vise le Mondial",
+          excerpt:"L'attaquant de pointe des Grenadiers a signé avec Sunderland en Championship anglaise. Avec sa vitesse explosive, Isidor sera l'une des armes offensives majeures d'Haïti au Mondial 2026.",
           date:'2026-01-22', link:'', emoji:'🔵', author:'PWESPORTS' }
     ];
 
@@ -2426,7 +2426,7 @@
 
     function openNewsModal(editIdx) {
         buildEmojiPicker('📰');
-        document.getElementById('news-modal-title').textContent = editIdx >= 0 ? 'Modifier l'article' : 'Nouvel Article';
+        document.getElementById('news-modal-title').textContent = editIdx >= 0 ? "Modifier l'article" : 'Nouvel Article';
         if (editIdx >= 0 && newsArticles[editIdx]) {
             var a = newsArticles[editIdx];
             document.getElementById('news-category').value  = a.category;
@@ -2529,7 +2529,8 @@
             row.className='flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 hover:border-gray-700 hover:bg-gray-900/40 transition-all group items-start';
             var pub=item.pubDate?new Date(item.pubDate).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):'';
             var img=item.thumbnail||(item.enclosure&&item.enclosure.link)||'';
-            row.innerHTML=(img?'<img src="'+img+'" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 border border-gray-800" onerror="this.style.display='none'">':'<div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 text-xl">⚽</div>')
+            var imgHtml = img ? '<img src="' + img + '" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 border border-gray-800" onerror="this.style.display=\'none\'">' : '<div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 text-xl">⚽</div>';
+            row.innerHTML = imgHtml
                 +'<div class="flex-1 min-w-0"><p class="text-xs font-bold text-white group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">'+(item.title||'')+'</p><div class="flex items-center gap-2 text-[10px] text-gray-600"><span>'+(item.author||'Source externe')+'</span>'+(pub?'<span>·</span><span>'+pub+'</span>':'')+'</div></div>'
                 +'<i class="fa-solid fa-chevron-right text-[10px] text-gray-700 group-hover:text-blue-400 transition-colors flex-shrink-0 mt-1"></i>';
             c.appendChild(row);
