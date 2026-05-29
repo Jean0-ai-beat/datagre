@@ -380,20 +380,6 @@
         </div>
     </div>
 
-    <!-- MODAL REMPLACEMENT MOBILE -->
-    <div id="sub-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end justify-center p-0">
-        <div class="bg-[#0f1524] border-t border-gray-800 rounded-t-3xl w-full max-w-lg max-h-[75vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-5 py-4 flex items-center justify-between">
-                <div>
-                    <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wide">Remplacement</p>
-                    <p class="text-sm font-bold text-white" id="sub-modal-title">Choisir qui remplacer</p>
-                </div>
-                <button onclick="closeSubModal()" class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark text-sm"></i></button>
-            </div>
-            <div id="sub-modal-body" class="p-4 space-y-2"></div>
-        </div>
-    </div>
-
     <section id="calendrier" class="border-t border-gray-900 bg-gray-950/30 py-16">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
@@ -612,7 +598,7 @@
     <section id="actualites" class="border-t border-gray-900 py-16 sm:py-20 bg-gray-950/20">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-            <!-- Titre -->
+            <!-- En-tête -->
             <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-10 gap-4">
                 <div>
                     <span class="text-xs font-bold text-red-400 uppercase tracking-widest block mb-2">Dernières Nouvelles</span>
@@ -620,18 +606,46 @@
                         Actualités <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">Grenadiers</span>
                     </h2>
                 </div>
-                <!-- Bouton Ajouter article (admin) -->
-                <button onclick="openNewsModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold uppercase text-white transition shadow-lg shadow-red-600/20 flex-shrink-0">
-                    <i class="fa-solid fa-plus"></i> Ajouter un article
-                </button>
+                <div class="flex gap-3 flex-wrap">
+                    <!-- Bouton Soumettre (tous) -->
+                    <button onclick="openSubmitModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-700 bg-gray-900/60 hover:bg-gray-800 text-xs font-bold uppercase text-gray-300 hover:text-white transition flex-shrink-0">
+                        <i class="fa-solid fa-paper-plane"></i> Soumettre un article
+                    </button>
+                    <!-- Bouton Admin -->
+                    <button onclick="openAdminLogin()" id="btn-admin-news" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold uppercase text-white transition shadow-lg shadow-red-600/20 flex-shrink-0">
+                        <i class="fa-solid fa-lock" id="admin-icon"></i>
+                        <span id="admin-btn-label">Admin</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panneau admin (caché par défaut) -->
+            <div id="admin-panel" class="hidden mb-8 bg-red-500/5 border border-red-500/20 rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-xs font-bold uppercase text-red-400 tracking-wider"><i class="fa-solid fa-shield-halved mr-2"></i>Mode Administrateur PWESPORTS</p>
+                    <div class="flex gap-2">
+                        <button onclick="openNewsModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold uppercase text-white transition">
+                            <i class="fa-solid fa-plus text-[9px]"></i> Nouvel article
+                        </button>
+                        <button onclick="logoutAdmin()" class="px-3 py-2 rounded-xl border border-red-500/30 text-xs font-bold text-red-400 hover:text-white transition">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i>Déconnexion
+                        </button>
+                    </div>
+                </div>
+                <!-- File d'attente -->
+                <div id="pending-section">
+                    <p class="text-[10px] font-bold uppercase text-amber-400 tracking-wider mb-3">
+                        <i class="fa-solid fa-clock mr-1"></i>Articles en attente d'approbation
+                        <span id="pending-count" class="ml-2 bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">0</span>
+                    </p>
+                    <div id="pending-list" class="space-y-2"></div>
+                </div>
             </div>
 
             <!-- 3 GRANDES CARTES MAGAZINE -->
-            <div id="news-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <!-- Injecté par JS -->
-            </div>
+            <div id="news-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"></div>
 
-            <!-- FEED LIVE : Google News / RSS -->
+            <!-- FEED LIVE -->
             <div class="border-t border-gray-900 pt-10">
                 <div class="flex items-center justify-between mb-6">
                     <div>
@@ -640,26 +654,46 @@
                         </span>
                         <h3 class="font-athletic text-xl sm:text-2xl font-extrabold uppercase text-white">Haïti Football — Monde</h3>
                     </div>
-                    <button onclick="fetchLiveFeed()" id="feed-refresh-btn" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-400 hover:text-white transition">
+                    <button onclick="fetchLiveFeed()" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-400 hover:text-white transition">
                         <i id="feed-refresh-icon" class="fa-solid fa-rotate-right text-xs"></i>
                         <span class="hidden sm:inline">Actualiser</span>
                     </button>
                 </div>
-                <div id="live-feed-container" class="space-y-3">
-                    <!-- Injecté par JS -->
-                </div>
+                <div id="live-feed-container" class="space-y-3"></div>
             </div>
-
         </div>
     </section>
     <!-- =================== FIN SECTION ACTUALITÉS =================== -->
 
-    <!-- MODAL AJOUT / ÉDITION ARTICLE -->
+    <!-- MODAL LOGIN ADMIN -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#0f1524] border border-gray-800 rounded-2xl w-full max-w-sm shadow-2xl p-6">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 rounded-full bg-red-600/10 border border-red-600/30 flex items-center justify-center mx-auto mb-3">
+                    <i class="fa-solid fa-lock text-red-500 text-xl"></i>
+                </div>
+                <h3 class="font-athletic text-xl font-black uppercase text-white">Espace Admin</h3>
+                <p class="text-xs text-gray-500 mt-1">PWESPORTS — Accès restreint</p>
+            </div>
+            <div class="space-y-3">
+                <input id="admin-password" type="password" placeholder="Mot de passe admin..."
+                    class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-red-500/50 transition"
+                    onkeydown="if(event.key==='Enter') verifyAdmin()">
+                <p id="admin-error" class="hidden text-xs text-red-400 font-semibold text-center">Mot de passe incorrect</p>
+                <button onclick="verifyAdmin()" class="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i>Connexion
+                </button>
+                <button onclick="closeAdminLogin()" class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AJOUT/ÉDITION ARTICLE (admin) -->
     <div id="news-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
             <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
                 <h3 class="font-athletic text-lg font-black uppercase text-white" id="news-modal-title">Nouvel Article</h3>
-                <button onclick="closeNewsModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white transition">
+                <button onclick="closeNewsModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -676,13 +710,13 @@
                     </select>
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Titre de l'article *</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Titre *</label>
                     <input id="news-title" type="text" placeholder="Ex: Bellegarde prolonge avec Wolverhampton..."
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
                 </div>
                 <div>
                     <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Résumé *</label>
-                    <textarea id="news-excerpt" rows="3" placeholder="Résumé court de l'article (2-3 phrases)..."
+                    <textarea id="news-excerpt" rows="3" placeholder="2-3 phrases..."
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
                 </div>
                 <div>
@@ -691,24 +725,76 @@
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Emoji / Icône de couverture</label>
-                    <div class="grid grid-cols-6 gap-2" id="emoji-picker">
-                        <!-- Injecté par JS -->
-                    </div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Emoji couverture</label>
+                    <div class="grid grid-cols-6 gap-2" id="emoji-picker"></div>
                 </div>
                 <input type="hidden" id="news-edit-index" value="-1">
                 <div class="flex gap-3 pt-2">
                     <button onclick="saveNewsArticle()" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
                         <i class="fa-solid fa-save mr-2"></i>Publier
                     </button>
-                    <button onclick="closeNewsModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition">
-                        Annuler
-                    </button>
+                    <button onclick="closeNewsModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition">Annuler</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL SOUMISSION (users) -->
+    <div id="submit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
+                <div>
+                    <h3 class="font-athletic text-lg font-black uppercase text-white">Soumettre un article</h3>
+                    <p class="text-[10px] text-amber-400/80 mt-0.5"><i class="fa-solid fa-clock mr-1"></i>En attente d'approbation par l'admin PWESPORTS</p>
+                </div>
+                <button onclick="closeSubmitModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Votre nom / Pseudo *</label>
+                    <input id="submit-author" type="text" placeholder="Ex: Jean Paul..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Catégorie</label>
+                    <select id="submit-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
+                        <option value="Officiel">🔴 Officiel</option>
+                        <option value="Transfert">🔵 Transfert</option>
+                        <option value="Performance">⚡ Performance</option>
+                        <option value="Coupe du Monde">🏆 Coupe du Monde</option>
+                        <option value="Interview">🎙️ Interview</option>
+                        <option value="Blessure">🏥 Blessure</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Titre *</label>
+                    <input id="submit-title" type="text" placeholder="Titre de votre article..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Résumé *</label>
+                    <textarea id="submit-excerpt" rows="4" placeholder="Décrivez l'actualité en 2-4 phrases..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Lien source (optionnel)</label>
+                    <input id="submit-link" type="url" placeholder="https://..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <p id="submit-success" class="hidden text-xs text-emerald-400 font-semibold text-center py-2">
+                    <i class="fa-solid fa-circle-check mr-1"></i>Article soumis ! L'équipe PWESPORTS va l'examiner.
+                </p>
+                <div class="flex gap-3 pt-2">
+                    <button onclick="submitUserArticle()" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-bold uppercase text-white transition">
+                        <i class="fa-solid fa-paper-plane mr-2"></i>Envoyer
+                    </button>
+                    <button onclick="closeSubmitModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <section id="vision" class="bg-gray-950/60 border-t border-b border-gray-900 py-16 sm:py-20 text-center">
         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <i class="fa-solid fa-star text-amber-500 text-3xl sm:text-4xl mb-4 sm:mb-6"></i>
@@ -1860,6 +1946,7 @@
         initTactics();
         initStandings();
         initPlayerStats();
+        initNews();
     };
     </script>
 
@@ -2155,288 +2242,329 @@
     }
     </script>
     <!-- ============================================================
-         ACTUALITÉS — Articles manuels + Feed Live
+         ACTUALITÉS v2 — Admin login + File attente + Soumission users
     ============================================================ -->
     <script>
-    /* ---- ARTICLES PAR DÉFAUT ---- */
+    /* ---- CONFIG ADMIN (changer le mot de passe ici) ---- */
+    var ADMIN_PASSWORD = 'pwesports2026';
+    var isAdminLogged  = false;
+
+    /* ---- ARTICLES PUBLIÉS ---- */
     var newsArticles = [
-        {
-            category: 'Coupe du Monde',
-            title: 'Haïti dans le Groupe C : Brésil, Maroc et Écosse au programme',
-            excerpt: 'Le tirage au sort de la FIFA a placé les Grenadiers dans un groupe relevé. Haïti affrontera le Brésil le 19 juin, l\'Écosse le 13 juin et le Maroc le 24 juin 2026 dans les stades américains.',
-            date: '2025-12-15',
-            link: '',
-            emoji: '🏆',
-            featured: true
-        },
-        {
-            category: 'Performance',
-            title: 'Jean-Ricner Bellegarde impressionne en Premier League',
-            excerpt: 'Le milieu des Grenadiers continue de s\'affirmer sous les couleurs de Wolverhampton. Ses performances régulières en Premier League font de lui l\'un des joueurs les plus attendus du Mondial 2026.',
-            date: '2026-03-10',
-            link: '',
-            emoji: '⚡',
-            featured: false
-        },
-        {
-            category: 'Officiel',
-            title: 'Wilson Isidor rejoint Sunderland et vise le Mondial',
-            excerpt: 'L\'attaquant de pointe des Grenadiers a signé avec Sunderland en Championship anglaise. Avec sa vitesse explosive, Isidor sera l\'une des armes offensives majeures d\'Haïti au Mondial 2026.',
-            date: '2026-01-22',
-            link: '',
-            emoji: '🔵',
-            featured: false
-        }
+        { category:'Coupe du Monde', title:'Haïti dans le Groupe C : Brésil, Maroc et Écosse au programme',
+          excerpt:'Le tirage au sort de la FIFA a placé les Grenadiers dans un groupe relevé. Haïti affrontera le Brésil le 19 juin, l'Écosse le 13 juin et le Maroc le 24 juin 2026 dans les stades américains.',
+          date:'2025-12-15', link:'', emoji:'🏆', author:'PWESPORTS' },
+        { category:'Performance', title:'Jean-Ricner Bellegarde impressionne en Premier League',
+          excerpt:'Le milieu des Grenadiers continue de s'affirmer sous les couleurs de Wolverhampton. Ses performances régulières en Premier League font de lui l'un des joueurs les plus attendus du Mondial 2026.',
+          date:'2026-03-10', link:'', emoji:'⚡', author:'PWESPORTS' },
+        { category:'Officiel', title:'Wilson Isidor rejoint Sunderland et vise le Mondial',
+          excerpt:'L'attaquant de pointe des Grenadiers a signé avec Sunderland en Championship anglaise. Avec sa vitesse explosive, Isidor sera l'une des armes offensives majeures d'Haïti au Mondial 2026.',
+          date:'2026-01-22', link:'', emoji:'🔵', author:'PWESPORTS' }
     ];
+
+    /* ---- FILE D'ATTENTE (soumissions users) ---- */
+    var pendingArticles = [];
 
     var selectedEmoji = '📰';
     var emojiOptions  = ['🏆','⚡','🔴','🔵','🎙️','🏥','⚽','🇭🇹','💪','🌟','📊','🔥'];
 
     var categoryColors = {
-        'Officiel'      : { bg:'rgba(239,68,68,0.12)',  border:'rgba(239,68,68,0.3)',   text:'#f87171' },
-        'Transfert'     : { bg:'rgba(59,130,246,0.12)', border:'rgba(59,130,246,0.3)',  text:'#60a5fa' },
-        'Performance'   : { bg:'rgba(245,158,11,0.12)', border:'rgba(245,158,11,0.3)',  text:'#fbbf24' },
-        'Coupe du Monde': { bg:'rgba(168,85,247,0.12)', border:'rgba(168,85,247,0.3)',  text:'#c084fc' },
-        'Interview'     : { bg:'rgba(34,197,94,0.12)',  border:'rgba(34,197,94,0.3)',   text:'#4ade80' },
-        'Blessure'      : { bg:'rgba(107,114,128,0.12)',border:'rgba(107,114,128,0.3)', text:'#9ca3af' }
+        'Officiel'      :{ bg:'rgba(239,68,68,0.12)',  border:'rgba(239,68,68,0.3)',   text:'#f87171' },
+        'Transfert'     :{ bg:'rgba(59,130,246,0.12)', border:'rgba(59,130,246,0.3)',  text:'#60a5fa' },
+        'Performance'   :{ bg:'rgba(245,158,11,0.12)', border:'rgba(245,158,11,0.3)',  text:'#fbbf24' },
+        'Coupe du Monde':{ bg:'rgba(168,85,247,0.12)', border:'rgba(168,85,247,0.3)',  text:'#c084fc' },
+        'Interview'     :{ bg:'rgba(34,197,94,0.12)',  border:'rgba(34,197,94,0.3)',   text:'#4ade80' },
+        'Blessure'      :{ bg:'rgba(107,114,128,0.12)',border:'rgba(107,114,128,0.3)', text:'#9ca3af' }
     };
 
     function fmtDate(d) {
-        try {
-            var dt = new Date(d);
-            return dt.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
-        } catch(e) { return d; }
+        try { return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); }
+        catch(e){ return d; }
     }
 
-    /* ---- RENDU GRILLE 3 CARTES ---- */
+    /* ──────────────── GRILLE ARTICLES ──────────────── */
     function renderNewsGrid() {
         var grid = document.getElementById('news-grid');
         if (!grid) return;
         grid.innerHTML = '';
-
         if (newsArticles.length === 0) {
-            grid.innerHTML = '<div class="col-span-3 text-center py-16 text-gray-600"><i class="fa-solid fa-newspaper text-4xl mb-3 block"></i><p class="text-sm font-semibold">Aucun article publié · Cliquez sur "Ajouter un article"</p></div>';
+            grid.innerHTML = '<div class="col-span-3 text-center py-16 text-gray-600"><i class="fa-solid fa-newspaper text-4xl mb-3 block"></i><p class="text-sm font-semibold">Aucun article publié</p></div>';
             return;
         }
-
         newsArticles.forEach(function(article, idx) {
             var col = categoryColors[article.category] || categoryColors['Officiel'];
             var card = document.createElement('div');
-            card.className = 'group relative bg-[#0e1322] border border-gray-900 rounded-2xl overflow-hidden hover:border-gray-700 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-300 flex flex-col';
-
+            card.className = 'group relative bg-[#0e1322] border border-gray-900 rounded-2xl overflow-hidden hover:border-gray-700 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col';
+            var adminBtns = isAdminLogged
+                ? '<div class="flex gap-2">'
+                  + '<button onclick="editNewsArticle('+idx+')" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-500 hover:text-white transition"><i class="fa-solid fa-pen text-[9px]"></i></button>'
+                  + '<button onclick="deleteNewsArticle('+idx+')" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-500 hover:text-red-400 transition"><i class="fa-solid fa-trash text-[9px]"></i></button>'
+                  + '</div>'
+                : '<span class="text-[10px] text-gray-600">'+(article.author||'PWESPORTS')+'</span>';
             card.innerHTML = [
-                /* Bande couleur en haut */
-                '<div style="height:3px;background:linear-gradient(90deg,' + col.text + ',transparent);"></div>',
+                '<div style="height:3px;background:linear-gradient(90deg,'+col.text+',transparent);"></div>',
                 '<div class="p-6 flex flex-col flex-1">',
-                  /* Emoji cover */
-                  '<div class="text-4xl mb-4">' + (article.emoji||'📰') + '</div>',
-                  /* Catégorie + date */
+                  '<div class="text-4xl mb-4">'+(article.emoji||'📰')+'</div>',
                   '<div class="flex items-center justify-between mb-3">',
-                    '<span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase" style="background:'+col.bg+';color:'+col.text+';border:1px solid '+col.border+';">' + article.category + '</span>',
-                    '<span class="text-[10px] text-gray-600 font-medium">' + fmtDate(article.date) + '</span>',
+                    '<span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase" style="background:'+col.bg+';color:'+col.text+';border:1px solid '+col.border+';">'+article.category+'</span>',
+                    '<span class="text-[10px] text-gray-600">'+fmtDate(article.date)+'</span>',
                   '</div>',
-                  /* Titre */
-                  '<h3 class="font-athletic text-lg font-black uppercase text-white mb-3 leading-tight group-hover:text-blue-400 transition-colors">' + article.title + '</h3>',
-                  /* Résumé */
-                  '<p class="text-xs text-gray-400 leading-relaxed flex-1">' + article.excerpt + '</p>',
-                  /* Actions */
+                  '<h3 class="font-athletic text-lg font-black uppercase text-white mb-3 leading-tight group-hover:text-blue-400 transition-colors">'+article.title+'</h3>',
+                  '<p class="text-xs text-gray-400 leading-relaxed flex-1">'+article.excerpt+'</p>',
                   '<div class="flex items-center justify-between mt-5 pt-4 border-t border-gray-900">',
-                    article.link
-                      ? '<a href="'+article.link+'" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-[10px] font-bold text-blue-400 hover:text-blue-300 transition uppercase"><i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>Lire la source</a>'
-                      : '<span class="text-[10px] text-gray-700">PWESPORTS</span>',
-                    '<div class="flex gap-2">',
-                      '<button onclick="editNewsArticle('+idx+')" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-500 hover:text-white hover:border-gray-700 transition"><i class="fa-solid fa-pen text-[9px]"></i></button>',
-                      '<button onclick="deleteNewsArticle('+idx+')" class="w-7 h-7 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-500 hover:text-red-400 hover:border-red-900 transition"><i class="fa-solid fa-trash text-[9px]"></i></button>',
-                    '</div>',
+                    article.link ? '<a href="'+article.link+'" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-[10px] font-bold text-blue-400 hover:text-blue-300 transition uppercase"><i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>Lire la source</a>' : '<span></span>',
+                    adminBtns,
                   '</div>',
                 '</div>'
             ].join('');
-
             grid.appendChild(card);
         });
     }
 
-    /* ---- MODAL AJOUT / ÉDITION ---- */
-    function openNewsModal(editIdx) {
-        var modal = document.getElementById('news-modal');
-        var title = document.getElementById('news-modal-title');
+    /* ──────────────── ADMIN LOGIN ──────────────── */
+    function openAdminLogin() {
+        if (isAdminLogged) { logoutAdmin(); return; }
+        document.getElementById('admin-login-modal').classList.remove('hidden');
+        document.getElementById('admin-error').classList.add('hidden');
+        setTimeout(function(){ document.getElementById('admin-password').focus(); }, 100);
+    }
+    function closeAdminLogin() {
+        document.getElementById('admin-login-modal').classList.add('hidden');
+        document.getElementById('admin-password').value = '';
+    }
+    function verifyAdmin() {
+        var pwd = document.getElementById('admin-password').value;
+        if (pwd === ADMIN_PASSWORD) {
+            isAdminLogged = true;
+            closeAdminLogin();
+            document.getElementById('admin-panel').classList.remove('hidden');
+            document.getElementById('admin-icon').className = 'fa-solid fa-unlock';
+            document.getElementById('admin-btn-label').textContent = 'Mode Admin ✓';
+            document.getElementById('btn-admin-news').className = 'flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold uppercase text-white transition shadow-lg flex-shrink-0';
+            renderPendingList();
+            renderNewsGrid();
+        } else {
+            document.getElementById('admin-error').classList.remove('hidden');
+            document.getElementById('admin-password').value = '';
+        }
+    }
+    function logoutAdmin() {
+        isAdminLogged = false;
+        document.getElementById('admin-panel').classList.add('hidden');
+        document.getElementById('admin-icon').className = 'fa-solid fa-lock';
+        document.getElementById('admin-btn-label').textContent = 'Admin';
+        document.getElementById('btn-admin-news').className = 'flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold uppercase text-white transition shadow-lg shadow-red-600/20 flex-shrink-0';
+        renderNewsGrid();
+    }
 
-        // Emoji picker
+    /* ──────────────── FILE D'ATTENTE ──────────────── */
+    function renderPendingList() {
+        var list  = document.getElementById('pending-list');
+        var count = document.getElementById('pending-count');
+        if (!list) return;
+        if (count) count.textContent = pendingArticles.length;
+        if (pendingArticles.length === 0) {
+            list.innerHTML = '<p class="text-xs text-gray-600 italic py-2">Aucun article en attente.</p>';
+            return;
+        }
+        list.innerHTML = '';
+        pendingArticles.forEach(function(a, idx) {
+            var col = categoryColors[a.category] || categoryColors['Officiel'];
+            var row = document.createElement('div');
+            row.className = 'flex items-start gap-4 p-4 rounded-xl bg-[#0e1322] border border-amber-500/15';
+            row.innerHTML = [
+                '<div class="flex-1 min-w-0">',
+                  '<div class="flex items-center gap-2 mb-1">',
+                    '<span class="px-2 py-0.5 rounded text-[9px] font-black uppercase" style="background:'+col.bg+';color:'+col.text+';">'+a.category+'</span>',
+                    '<span class="text-[10px] text-gray-500">par '+a.author+'</span>',
+                  '</div>',
+                  '<p class="text-xs font-bold text-white mb-1">'+a.title+'</p>',
+                  '<p class="text-[10px] text-gray-500 line-clamp-2">'+a.excerpt+'</p>',
+                '</div>',
+                '<div class="flex gap-2 flex-shrink-0">',
+                  '<button onclick="approveArticle('+idx+')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-[10px] font-bold text-white transition"><i class="fa-solid fa-check mr-1"></i>Approuver</button>',
+                  '<button onclick="rejectArticle('+idx+')" class="px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800 hover:border-red-900 hover:text-red-400 text-[10px] font-bold text-gray-400 transition"><i class="fa-solid fa-xmark mr-1"></i>Rejeter</button>',
+                '</div>'
+            ].join('');
+            list.appendChild(row);
+        });
+    }
+
+    function approveArticle(idx) {
+        var a = pendingArticles.splice(idx, 1)[0];
+        a.date = new Date().toISOString().split('T')[0];
+        newsArticles.unshift(a);
+        renderPendingList();
+        renderNewsGrid();
+    }
+    function rejectArticle(idx) {
+        if (confirm('Rejeter cet article ?')) {
+            pendingArticles.splice(idx, 1);
+            renderPendingList();
+        }
+    }
+
+    /* ──────────────── MODAL ADMIN (ajout/édition) ──────────────── */
+    function buildEmojiPicker(currentEmoji) {
         var picker = document.getElementById('emoji-picker');
+        if (!picker) return;
         picker.innerHTML = '';
+        selectedEmoji = currentEmoji || '📰';
         emojiOptions.forEach(function(em) {
             var btn = document.createElement('button');
             btn.textContent = em;
-            btn.style.cssText = 'font-size:20px;padding:8px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);cursor:pointer;transition:background 0.15s;';
-            btn.onmouseover = function(){ this.style.background='rgba(255,255,255,0.1)'; };
-            btn.onmouseout  = function(){ this.style.background= (this.textContent===selectedEmoji) ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.04)'; };
+            var active = em === selectedEmoji;
+            btn.style.cssText = 'font-size:20px;padding:8px;border-radius:10px;cursor:pointer;transition:background 0.15s;background:'+(active?'rgba(59,130,246,0.2)':'rgba(255,255,255,0.04)')+';border:1px solid '+(active?'rgba(59,130,246,0.4)':'rgba(255,255,255,0.08)')+';';
             btn.onclick = function(){
                 selectedEmoji = em;
                 picker.querySelectorAll('button').forEach(function(b){ b.style.background='rgba(255,255,255,0.04)'; b.style.borderColor='rgba(255,255,255,0.08)'; });
                 this.style.background='rgba(59,130,246,0.2)'; this.style.borderColor='rgba(59,130,246,0.4)';
             };
-            if (em === selectedEmoji) { btn.style.background='rgba(59,130,246,0.2)'; btn.style.borderColor='rgba(59,130,246,0.4)'; }
             picker.appendChild(btn);
         });
+    }
 
-        if (editIdx !== undefined && editIdx >= 0 && newsArticles[editIdx]) {
+    function openNewsModal(editIdx) {
+        buildEmojiPicker('📰');
+        document.getElementById('news-modal-title').textContent = editIdx >= 0 ? 'Modifier l'article' : 'Nouvel Article';
+        if (editIdx >= 0 && newsArticles[editIdx]) {
             var a = newsArticles[editIdx];
-            title.textContent = 'Modifier l\'article';
             document.getElementById('news-category').value  = a.category;
             document.getElementById('news-title').value     = a.title;
             document.getElementById('news-excerpt').value   = a.excerpt;
-            document.getElementById('news-link').value      = a.link || '';
+            document.getElementById('news-link').value      = a.link||'';
             document.getElementById('news-edit-index').value = editIdx;
-            selectedEmoji = a.emoji || '📰';
+            buildEmojiPicker(a.emoji||'📰');
         } else {
-            title.textContent = 'Nouvel Article';
             document.getElementById('news-category').value  = 'Officiel';
             document.getElementById('news-title').value     = '';
             document.getElementById('news-excerpt').value   = '';
             document.getElementById('news-link').value      = '';
             document.getElementById('news-edit-index').value = '-1';
-            selectedEmoji = '📰';
         }
-        modal.classList.remove('hidden');
+        document.getElementById('news-modal').classList.remove('hidden');
     }
-
-    function closeNewsModal() {
-        document.getElementById('news-modal').classList.add('hidden');
-    }
+    function closeNewsModal() { document.getElementById('news-modal').classList.add('hidden'); }
 
     function saveNewsArticle() {
         var title   = document.getElementById('news-title').value.trim();
         var excerpt = document.getElementById('news-excerpt').value.trim();
-        if (!title || !excerpt) {
-            alert('Le titre et le résumé sont obligatoires.');
-            return;
-        }
+        if (!title||!excerpt) { alert('Titre et résumé obligatoires.'); return; }
         var article = {
             category: document.getElementById('news-category').value,
-            title:    title,
-            excerpt:  excerpt,
-            link:     document.getElementById('news-link').value.trim(),
-            date:     new Date().toISOString().split('T')[0],
-            emoji:    selectedEmoji,
-            featured: false
+            title: title, excerpt: excerpt,
+            link: document.getElementById('news-link').value.trim(),
+            date: new Date().toISOString().split('T')[0],
+            emoji: selectedEmoji, author: 'PWESPORTS'
         };
-        var editIdx = parseInt(document.getElementById('news-edit-index').value);
-        if (editIdx >= 0) {
-            newsArticles[editIdx] = article;
-        } else {
-            newsArticles.unshift(article); // Ajouter en tête
-        }
+        var idx = parseInt(document.getElementById('news-edit-index').value);
+        if (idx >= 0) { newsArticles[idx] = article; } else { newsArticles.unshift(article); }
         closeNewsModal();
         renderNewsGrid();
     }
-
     function editNewsArticle(idx)   { openNewsModal(idx); }
     function deleteNewsArticle(idx) {
-        if (confirm('Supprimer cet article ?')) {
-            newsArticles.splice(idx, 1);
-            renderNewsGrid();
-        }
+        if (confirm('Supprimer cet article ?')) { newsArticles.splice(idx,1); renderNewsGrid(); }
     }
 
-    /* ---- FEED LIVE via RSS2JSON (CORS-friendly, gratuit) ---- */
-    var FEED_URLS = [
-        'https://www.goal.com/feeds/en/news',
-        'https://www.fifa.com/newsondeck/news/rss'
-    ];
+    /* ──────────────── MODAL SOUMISSION USERS ──────────────── */
+    function openSubmitModal() {
+        document.getElementById('submit-success').classList.add('hidden');
+        document.getElementById('submit-author').value  = '';
+        document.getElementById('submit-title').value   = '';
+        document.getElementById('submit-excerpt').value = '';
+        document.getElementById('submit-link').value    = '';
+        document.getElementById('submit-modal').classList.remove('hidden');
+    }
+    function closeSubmitModal() { document.getElementById('submit-modal').classList.add('hidden'); }
 
+    function submitUserArticle() {
+        var author  = document.getElementById('submit-author').value.trim();
+        var title   = document.getElementById('submit-title').value.trim();
+        var excerpt = document.getElementById('submit-excerpt').value.trim();
+        if (!author||!title||!excerpt) { alert('Nom, titre et résumé sont obligatoires.'); return; }
+        pendingArticles.push({
+            category: document.getElementById('submit-category').value,
+            title: title, excerpt: excerpt,
+            link: document.getElementById('submit-link').value.trim(),
+            emoji: '📰', author: author,
+            date: new Date().toISOString().split('T')[0]
+        });
+        document.getElementById('submit-success').classList.remove('hidden');
+        document.getElementById('submit-author').value  = '';
+        document.getElementById('submit-title').value   = '';
+        document.getElementById('submit-excerpt').value = '';
+        document.getElementById('submit-link').value    = '';
+        if (isAdminLogged) renderPendingList();
+        setTimeout(closeSubmitModal, 2500);
+    }
+
+    /* ──────────────── FEED LIVE ──────────────── */
     function fetchLiveFeed() {
         var container = document.getElementById('live-feed-container');
         var icon      = document.getElementById('feed-refresh-icon');
         if (!container) return;
         if (icon) icon.classList.add('fa-spin');
-
-        // Skeleton
         container.innerHTML = [1,2,3,4].map(function(){
-            return '<div class="flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 animate-pulse-fast"><div class="w-12 h-12 rounded-xl bg-gray-800 flex-shrink-0"></div><div class="flex-1 space-y-2"><div class="h-3 bg-gray-800 rounded w-3/4"></div><div class="h-2 bg-gray-800 rounded w-1/2"></div></div></div>';
+            return '<div class="flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 animate-pulse-fast"><div class="w-12 h-12 rounded-xl bg-gray-800 flex-shrink-0"></div><div class="flex-1 space-y-2 py-1"><div class="h-3 bg-gray-800 rounded w-3/4"></div><div class="h-2 bg-gray-800 rounded w-1/2"></div></div></div>';
         }).join('');
-
-        // API rss2json.com — gratuit, 1000 req/jour
         var rssUrl = 'https://www.lemonde.fr/sport/rss_full.xml';
-        var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl) + '&api_key=public&count=6&q=haiti+football';
-
+        var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl) + '&api_key=public&count=6';
         fetch(apiUrl)
             .then(function(r){ return r.json(); })
             .then(function(data){
                 if (icon) icon.classList.remove('fa-spin');
-                if (data.status === 'ok' && data.items && data.items.length > 0) {
-                    renderFeedItems(data.items);
-                } else {
-                    renderFeedFallback();
-                }
+                if (data.status==='ok' && data.items && data.items.length>0) { renderFeedItems(data.items); }
+                else { renderFeedFallback(); }
             })
-            .catch(function(){
-                if (icon) icon.classList.remove('fa-spin');
-                renderFeedFallback();
-            });
+            .catch(function(){ if(icon) icon.classList.remove('fa-spin'); renderFeedFallback(); });
     }
 
     function renderFeedItems(items) {
-        var container = document.getElementById('live-feed-container');
-        container.innerHTML = '';
-        items.slice(0, 6).forEach(function(item) {
-            var row = document.createElement('a');
-            row.href   = item.link || '#';
-            row.target = '_blank';
-            row.rel    = 'noopener noreferrer';
-            row.className = 'flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 hover:border-gray-700 hover:bg-gray-900/40 transition-all group items-start';
-
-            var pub = item.pubDate ? new Date(item.pubDate).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}) : '';
-            var img = item.thumbnail || item.enclosure && item.enclosure.link || '';
-
-            row.innerHTML = [
-                img ? '<img src="'+img+'" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 border border-gray-800" onerror="this.style.display=\'none\'">' : '<div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 text-xl">⚽</div>',
-                '<div class="flex-1 min-w-0">',
-                  '<p class="text-xs font-bold text-white group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">' + (item.title||'') + '</p>',
-                  '<div class="flex items-center gap-2 text-[10px] text-gray-600">',
-                    '<span>' + (item.author||'Source externe') + '</span>',
-                    pub ? '<span>·</span><span>'+pub+'</span>' : '',
-                  '</div>',
-                '</div>',
-                '<i class="fa-solid fa-chevron-right text-[10px] text-gray-700 group-hover:text-blue-400 transition-colors flex-shrink-0 mt-1"></i>'
-            ].join('');
-            container.appendChild(row);
+        var c = document.getElementById('live-feed-container');
+        c.innerHTML = '';
+        items.slice(0,6).forEach(function(item){
+            var row=document.createElement('a');
+            row.href=item.link||'#'; row.target='_blank'; row.rel='noopener noreferrer';
+            row.className='flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 hover:border-gray-700 hover:bg-gray-900/40 transition-all group items-start';
+            var pub=item.pubDate?new Date(item.pubDate).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):'';
+            var img=item.thumbnail||(item.enclosure&&item.enclosure.link)||'';
+            row.innerHTML=(img?'<img src="'+img+'" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 border border-gray-800" onerror="this.style.display='none'">':'<div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 text-xl">⚽</div>')
+                +'<div class="flex-1 min-w-0"><p class="text-xs font-bold text-white group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">'+(item.title||'')+'</p><div class="flex items-center gap-2 text-[10px] text-gray-600"><span>'+(item.author||'Source externe')+'</span>'+(pub?'<span>·</span><span>'+pub+'</span>':'')+'</div></div>'
+                +'<i class="fa-solid fa-chevron-right text-[10px] text-gray-700 group-hover:text-blue-400 transition-colors flex-shrink-0 mt-1"></i>';
+            c.appendChild(row);
         });
     }
 
     function renderFeedFallback() {
-        var container = document.getElementById('live-feed-container');
-        // Liens curatés manuellement
+        var c = document.getElementById('live-feed-container');
+        c.innerHTML = '';
         var links = [
             { title:'FIFA — Actualités Coupe du Monde 2026', url:'https://www.fifa.com/fr/tournaments/mens/worldcup/canadamexicousa2026', source:'FIFA.com', emoji:'🏆' },
-            { title:'Les Grenadiers — FHF Officiel', url:'https://www.fhfonline.com', source:'FHF Online', emoji:'🇭🇹' },
-            { title:'Haïti football — RFI Sport', url:'https://www.rfi.fr/fr/sports/football', source:'RFI Sport', emoji:'📻' },
+            { title:'Les Grenadiers — FHF Officiel Facebook', url:'https://www.facebook.com/share/1CxGMAzYmG/', source:'FHF Facebook', emoji:'🇭🇹' },
+            { title:'FIFA — Page Facebook Officielle', url:'https://www.facebook.com/share/1BGBaLESH5/', source:'FIFA Facebook', emoji:'🌍' },
             { title:'Wilson Isidor — Sunderland AFC', url:'https://www.safc.com', source:'SAFC.com', emoji:'⚽' },
             { title:'Bellegarde — Wolverhampton Wanderers', url:'https://www.wolves.co.uk', source:'Wolves.co.uk', emoji:'🐺' },
             { title:'Haïti vs Écosse — 13 Juin 2026, Boston', url:'https://www.fifa.com', source:'FIFA.com', emoji:'⚡' }
         ];
-        container.innerHTML = '';
-        links.forEach(function(l) {
-            var row = document.createElement('a');
-            row.href='https://'+l.url.replace('https://',''); row.target='_blank'; row.rel='noopener noreferrer';
-            row.className = 'flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 hover:border-gray-700 hover:bg-gray-900/40 transition-all group items-center';
-            row.innerHTML = [
-                '<div class="w-12 h-12 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center text-xl flex-shrink-0">'+l.emoji+'</div>',
-                '<div class="flex-1 min-w-0">',
-                  '<p class="text-xs font-bold text-white group-hover:text-blue-400 transition-colors mb-0.5">'+l.title+'</p>',
-                  '<p class="text-[10px] text-gray-600">'+l.source+'</p>',
-                '</div>',
-                '<i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-700 group-hover:text-blue-400 transition-colors flex-shrink-0"></i>'
-            ].join('');
-            container.appendChild(row);
+        links.forEach(function(l){
+            var row=document.createElement('a');
+            row.href=l.url; row.target='_blank'; row.rel='noopener noreferrer';
+            row.className='flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 hover:border-gray-700 hover:bg-gray-900/40 transition-all group items-center';
+            row.innerHTML='<div class="w-12 h-12 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center text-xl flex-shrink-0">'+l.emoji+'</div>'
+                +'<div class="flex-1 min-w-0"><p class="text-xs font-bold text-white group-hover:text-blue-400 transition-colors mb-0.5">'+l.title+'</p><p class="text-[10px] text-gray-600">'+l.source+'</p></div>'
+                +'<i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-700 group-hover:text-blue-400 transition-colors flex-shrink-0"></i>';
+            c.appendChild(row);
         });
     }
 
-    /* ---- FERMER MODALS SUR BACKDROP ---- */
-    document.getElementById('news-modal').addEventListener('click', function(e){
-        if (e.target===this) closeNewsModal();
+    /* ──────────────── FERMER SUR BACKDROP ──────────────── */
+    ['news-modal','submit-modal','admin-login-modal'].forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('click', function(e){ if(e.target===this) this.classList.add('hidden'); });
     });
 
-    /* ---- INIT ---- */
+    /* ──────────────── INIT ──────────────── */
     function initNews() {
         renderNewsGrid();
         fetchLiveFeed();
