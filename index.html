@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWESPORTS | Les Grenadiers d'Haïti — Coupe du Monde 2026</title>
+    <title id="page-title">PWESPORTS | Les Grenadiers d'Haïti — Coupe du Monde 2026</title>
 
     <!-- SEO -->
     <meta name="description" content="Suivez les Grenadiers d'Haïti à la Coupe du Monde FIFA 2026 ! Fiches joueurs, composition tactique interactive, calendrier et classement du Groupe C en temps réel.">
@@ -120,6 +120,7 @@
                     <a href="#tactique" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_tactique">TACTIQUE</a>
                     <a href="#stats-joueurs" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_stats">STATS</a>
                     <a href="#actualites" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_actualites">ACTUALITÉS</a>
+                    <a href="#galerie" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_galerie">GALERIE</a>
                     <a href="#calendrier" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_calendrier">CALENDRIER</a>
                     <a href="#classement" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_live">STATS & LIVE</a>
                 </div>
@@ -145,6 +146,7 @@
             <a href="#tactique" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_tactique">TACTIQUE</a>
             <a href="#stats-joueurs" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_stats">STATS JOUEURS</a>
             <a href="#actualites" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_actualites">ACTUALITÉS</a>
+            <a href="#galerie" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_galerie">GALERIE</a>
             <a href="#calendrier" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_calendrier">CALENDRIER</a>
             <a href="#classement" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_live">STATS & LIVE</a>
         </div>
@@ -237,7 +239,7 @@
         <div class="grid grid-cols-5 gap-2 max-w-2xl mx-auto mb-8 bg-gray-950/60 p-3 sm:p-4 rounded-2xl border border-gray-900 text-center">
             <div>
                 <div class="font-athletic text-lg sm:text-2xl font-black text-white">26</div>
-                <div class="text-[9px] sm:text-xs text-gray-500 uppercase font-semibold">Total</div>
+                <div class="text-[9px] sm:text-xs text-gray-500 uppercase font-semibold" data-i18n="lbl_total">Total</div>
             </div>
             <div class="border-l border-gray-900">
                 <div class="font-athletic text-lg sm:text-2xl font-black text-blue-400">3</div>
@@ -479,7 +481,7 @@
                         </div>
                         <button onclick="fetchStandings()" id="btn-refresh" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-400 hover:text-white hover:border-gray-700 transition">
                             <i id="refresh-icon" class="fa-solid fa-rotate-right text-xs"></i>
-                            <span class="hidden sm:inline">Actualiser</span>
+                            <span class="hidden sm:inline" data-i18n="btn_refresh">Actualiser</span>
                         </button>
                     </div>
 
@@ -492,8 +494,8 @@
                                 <thead>
                                     <tr class="bg-gray-950 border-b border-gray-900 text-gray-500 font-bold uppercase tracking-wider text-[10px]">
                                         <th class="p-3 w-10 text-center">Pos</th>
-                                        <th class="p-3">Équipe</th>
-                                        <th class="p-3 text-center w-10">MJ</th>
+                                        <th class="p-3" data-i18n="col_equipe">Équipe</th>
+                                        <th class="p-3 text-center w-10" data-i18n="col_mj">MJ</th>
                                         <th class="p-3 text-center w-10">G</th>
                                         <th class="p-3 text-center w-10">N</th>
                                         <th class="p-3 text-center w-10">P</th>
@@ -572,12 +574,12 @@
                     </div>
                     <!-- Légende radar -->
                     <div class="grid grid-cols-3 gap-2 mt-4">
-                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Vitesse</span><span id="leg-vitesse" class="text-xs font-black text-white">—</span></div>
-                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Tir</span><span id="leg-tir" class="text-xs font-black text-white">—</span></div>
-                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Passe</span><span id="leg-passe" class="text-xs font-black text-white">—</span></div>
-                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Défense</span><span id="leg-defense" class="text-xs font-black text-white">—</span></div>
-                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Physique</span><span id="leg-physique" class="text-xs font-black text-white">—</span></div>
-                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block">Dribble</span><span id="leg-dribble" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block" data-i18n="stat_vitesse">Vitesse</span><span id="leg-vitesse" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block" data-i18n="stat_tir">Tir</span><span id="leg-tir" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block" data-i18n="stat_passe">Passe</span><span id="leg-passe" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block" data-i18n="stat_defense">Défense</span><span id="leg-defense" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block" data-i18n="stat_physique">Physique</span><span id="leg-physique" class="text-xs font-black text-white">—</span></div>
+                        <div class="text-center"><span class="text-[9px] text-gray-500 uppercase font-bold block" data-i18n="stat_dribble">Dribble</span><span id="leg-dribble" class="text-xs font-black text-white">—</span></div>
                     </div>
                 </div>
 
@@ -615,10 +617,10 @@
                 <div class="flex gap-3 flex-wrap">
                     <!-- Bouton Soumettre (tous) -->
                     <button onclick="openSubmitModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-700 bg-gray-900/60 hover:bg-gray-800 text-xs font-bold uppercase text-gray-300 hover:text-white transition flex-shrink-0">
-                        <i class="fa-solid fa-paper-plane"></i> Soumettre un article
+                        <i class="fa-solid fa-paper-plane"></i> <span data-i18n="btn_submit_art">Soumettre un article</span>
                     </button>
-                    <!-- Bouton Admin -->
-                    <button onclick="openAdminLogin()" id="btn-admin-news" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold uppercase text-white transition shadow-lg shadow-red-600/20 flex-shrink-0">
+                    <!-- Bouton Admin — caché, visible seulement via ?admin dans l'URL -->
+                    <button onclick="openAdminLogin()" id="btn-admin-news" class="hidden items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold uppercase text-white transition shadow-lg shadow-red-600/20 flex-shrink-0">
                         <i class="fa-solid fa-lock" id="admin-icon"></i>
                         <span id="admin-btn-label" data-i18n="btn_admin">Admin</span>
                     </button>
@@ -662,7 +664,7 @@
                     </div>
                     <button onclick="fetchLiveFeed()" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-400 hover:text-white transition">
                         <i id="feed-refresh-icon" class="fa-solid fa-rotate-right text-xs"></i>
-                        <span class="hidden sm:inline">Actualiser</span>
+                        <span class="hidden sm:inline" data-i18n="btn_refresh">Actualiser</span>
                     </button>
                 </div>
                 <div id="live-feed-container" class="space-y-3"></div>
@@ -687,9 +689,9 @@
                     onkeydown="if(event.key==='Enter') verifyAdmin()">
                 <p id="admin-error" class="hidden text-xs text-red-400 font-semibold text-center" data-i18n="admin_error">Mot de passe incorrect</p>
                 <button onclick="verifyAdmin()" class="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
-                    <i class="fa-solid fa-right-to-bracket mr-2"></i>Connexion
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i><span data-i18n="btn_login">Connexion</span>
                 </button>
-                <button onclick="closeAdminLogin()" class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition">Annuler</button>
+                <button onclick="closeAdminLogin()" class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition" data-i18n="btn_cancel">Annuler</button>
             </div>
         </div>
     </div>
@@ -705,7 +707,7 @@
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Catégorie</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
                     <select id="news-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
                         <option value="Officiel">🔴 Officiel</option>
                         <option value="Transfert">🔵 Transfert</option>
@@ -716,30 +718,30 @@
                     </select>
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Titre *</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
                     <input id="news-title" type="text" placeholder="Ex: Bellegarde prolonge avec Wolverhampton..."
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Résumé *</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
                     <textarea id="news-excerpt" rows="3" placeholder="2-3 phrases..."
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Lien source (optionnel)</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
                     <input id="news-link" type="url" placeholder="https://..."
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Emoji couverture</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_emoji">Emoji couverture</label>
                     <div class="grid grid-cols-6 gap-2" id="emoji-picker"></div>
                 </div>
                 <input type="hidden" id="news-edit-index" value="-1">
                 <div class="flex gap-3 pt-2">
                     <button onclick="saveNewsArticle()" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
-                        <i class="fa-solid fa-save mr-2"></i>Publier
+                        <i class="fa-solid fa-save mr-2"></i><span data-i18n="btn_publish">Publier</span>
                     </button>
-                    <button onclick="closeNewsModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition">Annuler</button>
+                    <button onclick="closeNewsModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
                 </div>
             </div>
         </div>
@@ -759,12 +761,12 @@
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Votre nom / Pseudo *</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_author">Votre nom / Pseudo *</label>
                     <input id="submit-author" type="text" placeholder="Ex: Jean Paul..."
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Catégorie</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
                     <select id="submit-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
                         <option value="Officiel">🔴 Officiel</option>
                         <option value="Transfert">🔵 Transfert</option>
@@ -775,32 +777,237 @@
                     </select>
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Titre *</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
                     <input id="submit-title" type="text" placeholder="Titre de votre article..."
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Résumé *</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
                     <textarea id="submit-excerpt" rows="4" placeholder="Décrivez l'actualité en 2-4 phrases..."
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5">Lien source (optionnel)</label>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
                     <input id="submit-link" type="url" placeholder="https://..."
                         class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
                 </div>
                 <p id="submit-success" class="hidden text-xs text-emerald-400 font-semibold text-center py-2">
-                    <i class="fa-solid fa-circle-check mr-1"></i>Article soumis ! L'équipe PWESPORTS va l'examiner.
+                    <i class="fa-solid fa-circle-check mr-1"></i><span data-i18n="msg_submitted">Article soumis ! L'équipe PWESPORTS va l'examiner.</span>
                 </p>
                 <div class="flex gap-3 pt-2">
                     <button onclick="submitUserArticle()" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-bold uppercase text-white transition">
-                        <i class="fa-solid fa-paper-plane mr-2"></i>Envoyer
+                        <i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="btn_send">Envoyer</span>
                     </button>
-                    <button onclick="closeSubmitModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition">Annuler</button>
+                    <button onclick="closeSubmitModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- ===================== SECTION GALERIE ===================== -->
+    <section id="galerie" class="border-t border-gray-900 py-16 sm:py-20">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+            <!-- Titre -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 gap-4">
+                <div>
+                    <span class="text-xs font-bold text-pink-400 uppercase tracking-widest block mb-2" data-i18n="gal_badge">Photos & Vidéos</span>
+                    <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white">
+                        <span data-i18n="gal_title">Galerie</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500"> PWESPORTS</span>
+                    </h2>
+                </div>
+                <!-- Bouton Admin Galerie — caché, visible seulement via ?admin -->
+                <button onclick="openGalAdminCheck()" id="gal-admin-btn"
+                    class="hidden items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 text-xs font-bold uppercase text-gray-400 hover:text-white transition flex-shrink-0">
+                    <i class="fa-solid fa-lock text-xs" id="gal-admin-icon"></i>
+                    <span id="gal-admin-label" data-i18n="btn_admin">Admin</span>
+                </button>
+            </div>
+
+            <!-- TABS Foto / Vidéo -->
+            <div class="flex gap-1 bg-gray-900/60 p-1 rounded-2xl border border-gray-900 mb-8 max-w-xs">
+                <button onclick="switchGalTab('photos')" id="gal-tab-photos"
+                    class="gal-tab flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-images text-xs"></i>
+                    <span data-i18n="gal_tab_photos">Photos</span>
+                </button>
+                <button onclick="switchGalTab('videos')" id="gal-tab-videos"
+                    class="gal-tab flex-1 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-play text-xs"></i>
+                    <span data-i18n="gal_tab_videos">Vidéos</span>
+                </button>
+            </div>
+
+            <!-- PANEL PHOTOS -->
+            <div id="gal-panel-photos">
+                <!-- Admin: ajouter photo -->
+                <div id="gal-add-photo-bar" class="hidden mb-6 flex gap-3 items-center">
+                    <button onclick="openAddPhotoModal()"
+                        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-xs font-bold uppercase text-white transition shadow-lg shadow-pink-600/20">
+                        <i class="fa-solid fa-plus"></i>
+                        <span data-i18n="gal_add_photo">Ajouter une photo</span>
+                    </button>
+                </div>
+                <!-- Grid photos -->
+                <div id="photos-grid" class="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3"></div>
+                <div id="photos-empty" class="hidden text-center py-16 text-gray-600">
+                    <i class="fa-solid fa-images text-4xl mb-3 block"></i>
+                    <p class="text-sm font-semibold" data-i18n="gal_empty_photo">Aucune photo pour le moment</p>
+                </div>
+            </div>
+
+            <!-- PANEL VIDEOS -->
+            <div id="gal-panel-videos" class="hidden">
+                <!-- Admin: ajouter vidéo -->
+                <div id="gal-add-video-bar" class="hidden mb-6">
+                    <button onclick="openAddVideoModal()"
+                        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold uppercase text-white transition shadow-lg shadow-red-600/20">
+                        <i class="fa-solid fa-plus"></i>
+                        <span data-i18n="gal_add_video">Ajouter une vidéo</span>
+                    </button>
+                </div>
+                <!-- Grid vidéos -->
+                <div id="videos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                <div id="videos-empty" class="hidden text-center py-16 text-gray-600">
+                    <i class="fa-solid fa-film text-4xl mb-3 block"></i>
+                    <p class="text-sm font-semibold" data-i18n="gal_empty_video">Aucune vidéo pour le moment</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- =================== FIN SECTION GALERIE =================== -->
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/95 flex items-center justify-center p-4"
+         onclick="if(event.target===this)closeLightbox()">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-900 border border-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition z-10">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button onclick="prevPhoto()" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gray-900/80 border border-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition z-10">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button onclick="nextPhoto()" class="absolute right-16 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gray-900/80 border border-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition z-10">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <div class="max-w-4xl w-full">
+            <img id="lightbox-img" src="" alt="" class="w-full max-h-[75vh] object-contain rounded-xl">
+            <div class="mt-4 flex items-center justify-between">
+                <div>
+                    <p id="lightbox-caption" class="text-sm font-bold text-white"></p>
+                    <p id="lightbox-tag" class="text-xs text-gray-500 mt-0.5"></p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleLike('photo', lightboxCurrentIdx)" id="lightbox-like-btn"
+                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-800 text-sm font-bold text-gray-400 hover:text-red-400 hover:border-red-900 transition">
+                        <i class="fa-solid fa-heart"></i>
+                        <span id="lightbox-like-count">0</span>
+                    </button>
+                    <button onclick="openCommentModal('photo', lightboxCurrentIdx)"
+                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-800 text-sm font-bold text-gray-400 hover:text-blue-400 hover:border-blue-900 transition">
+                        <i class="fa-solid fa-comment"></i>
+                        <span id="lightbox-comment-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AJOUT PHOTO (Admin) -->
+    <div id="add-photo-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-md shadow-2xl">
+            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between">
+                <h3 class="font-athletic text-lg font-black uppercase text-white" data-i18n="gal_add_photo">Ajouter une photo</h3>
+                <button onclick="closeAddPhotoModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="gal_photo_url">URL de la photo *</label>
+                    <input id="photo-url" type="url" placeholder="https://..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="gal_photo_caption">Légende</label>
+                    <input id="photo-caption" type="text" placeholder="Ex: Haïti vs Écosse — Boston 2026"
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="gal_photo_tag">Tag</label>
+                    <select id="photo-tag" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500/50 transition">
+                        <option value="Match">⚽ Match</option>
+                        <option value="Entraînement">🏃 Entraînement</option>
+                        <option value="Célébration">🎉 Célébration</option>
+                        <option value="Portrait">📸 Portrait</option>
+                        <option value="Fan Zone">❤️ Fan Zone</option>
+                    </select>
+                </div>
+                <!-- Prévisualisation -->
+                <div id="photo-preview-wrap" class="hidden">
+                    <img id="photo-preview" src="" alt="" class="w-full h-40 object-cover rounded-xl border border-gray-800">
+                </div>
+                <button onclick="previewPhoto()" class="w-full py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold text-gray-400 hover:text-white transition" data-i18n="gal_preview">Prévisualiser</button>
+                <div class="flex gap-3 pt-1">
+                    <button onclick="savePhoto()" class="flex-1 py-3 rounded-xl bg-pink-600 hover:bg-pink-700 text-sm font-bold uppercase text-white transition" data-i18n="btn_publish">Publier</button>
+                    <button onclick="closeAddPhotoModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AJOUT VIDEO (Admin) -->
+    <div id="add-video-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-md shadow-2xl">
+            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between">
+                <h3 class="font-athletic text-lg font-black uppercase text-white" data-i18n="gal_add_video">Ajouter une vidéo</h3>
+                <button onclick="closeAddVideoModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="gal_video_url">Lien YouTube ou TikTok *</label>
+                    <input id="video-url" type="url" placeholder="https://youtube.com/watch?v=... ou https://tiktok.com/..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                    <p class="text-[10px] text-gray-600 mt-1.5" data-i18n="gal_video_hint">YouTube, YouTube Shorts ou TikTok acceptés</p>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="gal_photo_caption">Titre</label>
+                    <input id="video-title" type="text" placeholder="Ex: Résumé Haïti vs Écosse"
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <div class="flex gap-3 pt-1">
+                    <button onclick="saveVideo()" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition" data-i18n="btn_publish">Publier</button>
+                    <button onclick="closeAddVideoModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COMMENTAIRES -->
+    <div id="comment-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-md max-h-[80vh] flex flex-col shadow-2xl">
+            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between flex-shrink-0">
+                <h3 class="font-athletic text-lg font-black uppercase text-white" data-i18n="gal_comments">Commentaires</h3>
+                <button onclick="closeCommentModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="comment-list" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar"></div>
+            <div class="flex-shrink-0 border-t border-gray-900 p-4 flex gap-2">
+                <input id="comment-author" type="text" placeholder="Votre nom..." data-i18n-placeholder="gal_your_name"
+                    class="w-28 bg-[#0e1322] border border-gray-800 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition flex-shrink-0">
+                <input id="comment-text" type="text" placeholder="Votre commentaire..." data-i18n-placeholder="gal_your_comment"
+                    class="flex-1 bg-[#0e1322] border border-gray-800 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition"
+                    onkeydown="if(event.key==='Enter')submitComment()">
+                <button onclick="submitComment()" class="px-3 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-xs font-bold text-white transition flex-shrink-0">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <section id="vision" class="bg-gray-950/60 border-t border-b border-gray-900 py-16 sm:py-20 text-center">
         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <i class="fa-solid fa-star text-amber-500 text-3xl sm:text-4xl mb-4 sm:mb-6"></i>
@@ -1956,7 +2163,9 @@
         initStandings();
         initPlayerStats();
         initNews();
+        initGalerie();
         initI18n();
+        initAdminMode();
     };
     </script>
 
@@ -2707,6 +2916,58 @@
 
         /* ── FOOTER ── */
         footer_rights:  { fr:'Tous droits réservés.',   ht:'Tout dwa rezève.',    en:'All rights reserved.' },
+
+        /* ── GALERIE ── */
+        nav_galerie:    { fr:'GALERIE',         ht:'GALRI',           en:'GALLERY'           },
+        gal_badge:      { fr:'Photos & Vidéos', ht:'Foto & Videyo',   en:'Photos & Videos'   },
+        gal_title:      { fr:'Galerie',         ht:'Galri',           en:'Gallery'           },
+        gal_tab_photos: { fr:'Photos',          ht:'Foto',            en:'Photos'            },
+        gal_tab_videos: { fr:'Vidéos',          ht:'Videyo',          en:'Videos'            },
+        gal_add_photo:  { fr:'Ajouter une photo',   ht:'Ajoute yon foto',  en:'Add a photo'   },
+        gal_add_video:  { fr:'Ajouter une vidéo',   ht:'Ajoute yon videyo',en:'Add a video'   },
+        gal_empty_photo:{ fr:'Aucune photo pour le moment', ht:'Pa gen foto pou kounye a', en:'No photos yet' },
+        gal_empty_video:{ fr:'Aucune vidéo pour le moment', ht:'Pa gen videyo pou kounye a', en:'No videos yet' },
+        gal_photo_url:  { fr:'URL de la photo *',   ht:'URL foto a *',     en:'Photo URL *'   },
+        gal_photo_caption:{ fr:'Légende',           ht:'Lejand',           en:'Caption'       },
+        gal_photo_tag:  { fr:'Tag',                 ht:'Tag',              en:'Tag'           },
+        gal_preview:    { fr:'Prévisualiser',        ht:'Previzyon',        en:'Preview'       },
+        gal_video_url:  { fr:'Lien YouTube ou TikTok *', ht:'Lyen YouTube oswa TikTok *', en:'YouTube or TikTok link *' },
+        gal_video_hint: { fr:'YouTube, YouTube Shorts ou TikTok acceptés', ht:'YouTube, YouTube Shorts oswa TikTok aksepte', en:'YouTube, YouTube Shorts or TikTok accepted' },
+        gal_comments:   { fr:'Commentaires',        ht:'Kòmantè',          en:'Comments'      },
+        gal_your_name:  { fr:'Votre nom...',        ht:'Non ou...',         en:'Your name...'  },
+        gal_your_comment:{ fr:'Votre commentaire...', ht:'Kòmantè ou...', en:'Your comment...' },
+
+        /* ── STATS RADAR LABELS ── */
+        stat_vitesse:   { fr:'Vitesse',   ht:'Vitès',    en:'Speed'     },
+        stat_tir:       { fr:'Tir',       ht:'Tir',      en:'Shooting'  },
+        stat_passe:     { fr:'Passe',     ht:'Pase',     en:'Passing'   },
+        stat_defense:   { fr:'Défense',   ht:'Defans',   en:'Defense'   },
+        stat_physique:  { fr:'Physique',  ht:'Fizik',    en:'Physical'  },
+        stat_dribble:   { fr:'Dribble',   ht:'Dribòl',   en:'Dribbling' },
+
+        /* ── TABLE HEADERS ── */
+        col_equipe:     { fr:'Équipe',    ht:'Ekip',     en:'Team'      },
+        col_mj:         { fr:'MJ',        ht:'MJ',       en:'MP'        },
+        lbl_total:      { fr:'Total',     ht:'Total',    en:'Total'     },
+
+        /* ── FORM LABELS ── */
+        lbl_categorie:  { fr:'Catégorie',              ht:'Kategori',              en:'Category'               },
+        lbl_titre:      { fr:'Titre *',                ht:'Tit *',                 en:'Title *'                },
+        lbl_resume:     { fr:'Résumé *',               ht:'Rezime *',              en:'Summary *'              },
+        lbl_lien:       { fr:'Lien source (optionnel)',ht:'Lyen sous (opsyonèl)',   en:'Source link (optional)' },
+        lbl_emoji:      { fr:'Emoji couverture',       ht:'Emoji kouvèti',         en:'Cover emoji'            },
+        lbl_author:     { fr:'Votre nom / Pseudo *',   ht:'Non ou / Pseudo *',     en:'Your name / Nickname *' },
+
+        /* ── BUTTONS ── */
+        btn_cancel:     { fr:'Annuler',   ht:'Anile',    en:'Cancel'    },
+        btn_publish:    { fr:'Publier',   ht:'Pibliye',  en:'Publish'   },
+        btn_send:       { fr:'Envoyer',   ht:'Voye',     en:'Send'      },
+        btn_login:      { fr:'Connexion', ht:'Konekte',  en:'Login'     },
+
+        /* ── MESSAGES ── */
+        msg_submitted:  { fr:"Article soumis ! L'équipe PWESPORTS va l'examiner.",
+                          ht:"Atik ou a soumèt! Ekip PWESPORTS ap egzaminen li.",
+                          en:"Article submitted! The PWESPORTS team will review it." },
     };
 
     var currentLang = 'fr';
@@ -2715,7 +2976,6 @@
         var idx = LANGS.indexOf(currentLang);
         currentLang = LANGS[(idx + 1) % LANGS.length];
         applyLang(currentLang);
-        try { localStorage.setItem('pwesports_lang', currentLang); } catch(e){}
     }
 
     function applyLang(lang) {
@@ -2771,11 +3031,483 @@
     }
 
     function initI18n() {
-        // Load saved language
-        var saved = 'fr';
-        try { saved = localStorage.getItem('pwesports_lang') || 'fr'; } catch(e){}
-        if (LANGS.indexOf(saved) === -1) saved = 'fr';
-        applyLang(saved);
+        // Toujours démarrer en Français — l'utilisateur choisit s'il veut changer
+        applyLang('fr');
+    }
+    </script>
+    <!-- ============================================================
+         GALERIE — Photos + Vidéos + Lightbox + Likes + Commentaires
+    ============================================================ -->
+    <script>
+    /* ---- DONNÉES ---- */
+    var galPhotos = [
+        { url:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_Haiti.svg/320px-Flag_of_Haiti.svg.png', caption:'Drapeau Haïti — Fièreté Nationale', tag:'Célébration', likes:12, comments:[] },
+        { url:'https://flagcdn.com/w320/ht.png', caption:"Les Grenadiers — Coupe du Monde 2026", tag:'Match', likes:8, comments:[] }
+    ];
+    var galVideos = [
+        { url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ', title:'Hymne National Haïti', type:'youtube', likes:5, comments:[] }
+    ];
+
+    var galAdminLogged    = false;
+    var currentGalTab     = 'photos';
+    var lightboxCurrentIdx = 0;
+    var commentTarget     = { type: null, idx: null };
+
+    /* ---- TABS ---- */
+    function switchGalTab(tab) {
+        currentGalTab = tab;
+        var photos = document.getElementById('gal-panel-photos');
+        var videos = document.getElementById('gal-panel-videos');
+        var tabP   = document.getElementById('gal-tab-photos');
+        var tabV   = document.getElementById('gal-tab-videos');
+        if (tab === 'photos') {
+            photos.classList.remove('hidden'); videos.classList.add('hidden');
+            tabP.style.cssText = 'background:#db2777;color:#fff;';
+            tabV.style.cssText = 'background:transparent;color:#9ca3af;';
+        } else {
+            videos.classList.remove('hidden'); photos.classList.add('hidden');
+            tabV.style.cssText = 'background:#dc2626;color:#fff;';
+            tabP.style.cssText = 'background:transparent;color:#9ca3af;';
+        }
+    }
+
+    /* ---- ADMIN ---- */
+    function openGalAdminCheck() {
+        if (galAdminLogged) { logoutGalAdmin(); return; }
+        // Réutilise le même modal admin login
+        document.getElementById('admin-login-modal').classList.remove('hidden');
+        document.getElementById('admin-error').classList.add('hidden');
+        document.getElementById('admin-password').value = '';
+        // Override verify pour galerie
+        document.getElementById('admin-password').onkeydown = function(e) {
+            if (e.key === 'Enter') verifyGalAdmin();
+        };
+        // Override bouton connexion
+        var btn = document.querySelector('#admin-login-modal button[onclick="verifyAdmin()"]');
+        if (btn) btn.setAttribute('onclick', 'verifyGalAdmin()');
+    }
+
+    function verifyGalAdmin() {
+        var pwd = document.getElementById('admin-password').value;
+        if (pwd === ADMIN_PASSWORD) {
+            galAdminLogged = true;
+            document.getElementById('admin-login-modal').classList.add('hidden');
+            document.getElementById('admin-password').value = '';
+            document.getElementById('gal-admin-icon').className = 'fa-solid fa-unlock text-xs';
+            document.getElementById('gal-admin-label').textContent = 'Admin ✓';
+            document.getElementById('gal-admin-btn').className = 'flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold uppercase text-white transition flex-shrink-0';
+            document.getElementById('gal-add-photo-bar').classList.remove('hidden');
+            document.getElementById('gal-add-video-bar').classList.remove('hidden');
+            // Restore default admin button behavior
+            var btn = document.querySelector('#admin-login-modal button[onclick="verifyGalAdmin()"]');
+            if (btn) btn.setAttribute('onclick', 'verifyAdmin()');
+            renderPhotos(); renderVideos();
+        } else {
+            document.getElementById('admin-error').classList.remove('hidden');
+            document.getElementById('admin-password').value = '';
+        }
+    }
+
+    function logoutGalAdmin() {
+        galAdminLogged = false;
+        document.getElementById('gal-admin-icon').className = 'fa-solid fa-lock text-xs';
+        document.getElementById('gal-admin-label').textContent = i18n.btn_admin ? (i18n.btn_admin[currentLang]||'Admin') : 'Admin';
+        document.getElementById('gal-admin-btn').className = 'flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 text-xs font-bold uppercase text-gray-400 hover:text-white transition flex-shrink-0';
+        document.getElementById('gal-add-photo-bar').classList.add('hidden');
+        document.getElementById('gal-add-video-bar').classList.add('hidden');
+        renderPhotos(); renderVideos();
+    }
+
+    /* ---- RENDU PHOTOS ---- */
+    function renderPhotos() {
+        var grid   = document.getElementById('photos-grid');
+        var empty  = document.getElementById('photos-empty');
+        if (!grid) return;
+        grid.innerHTML = '';
+        if (galPhotos.length === 0) {
+            empty.classList.remove('hidden'); return;
+        }
+        empty.classList.add('hidden');
+        galPhotos.forEach(function(photo, idx) {
+            var wrap = document.createElement('div');
+            wrap.className = 'break-inside-avoid mb-3 relative group cursor-pointer rounded-xl overflow-hidden border border-gray-900 hover:border-gray-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40';
+
+            var img = document.createElement('img');
+            img.src = photo.url;
+            img.alt = photo.caption || '';
+            img.className = 'w-full object-cover group-hover:scale-105 transition-transform duration-500';
+            img.loading = 'lazy';
+            img.onerror = function() { this.src = 'https://via.placeholder.com/400x300/0e1322/374151?text=Photo'; };
+            img.onclick = function() { openLightbox(idx); };
+
+            // Overlay info
+            var overlay = document.createElement('div');
+            overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3';
+
+            var tagEl = document.createElement('span');
+            tagEl.style.cssText = 'font-size:9px;font-weight:700;background:rgba(219,39,119,0.8);color:#fff;padding:2px 6px;border-radius:4px;display:inline-block;margin-bottom:4px;width:fit-content;text-transform:uppercase;';
+            tagEl.textContent = photo.tag || '';
+
+            var captionEl = document.createElement('p');
+            captionEl.style.cssText = 'font-size:10px;font-weight:600;color:#fff;line-height:1.3;margin-bottom:6px;';
+            captionEl.textContent = photo.caption || '';
+
+            var actionsRow = document.createElement('div');
+            actionsRow.style.cssText = 'display:flex;gap:8px;';
+
+            var likeBtn = document.createElement('button');
+            likeBtn.style.cssText = 'display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#f9a8d4;background:rgba(0,0,0,0.4);padding:3px 8px;border-radius:6px;border:none;cursor:pointer;';
+            likeBtn.innerHTML = '<i class="fa-solid fa-heart" style="font-size:9px;"></i> ' + (photo.likes || 0);
+            likeBtn.onclick = function(e) { e.stopPropagation(); toggleLike('photo', idx); renderPhotos(); };
+
+            var cmtBtn = document.createElement('button');
+            cmtBtn.style.cssText = 'display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#93c5fd;background:rgba(0,0,0,0.4);padding:3px 8px;border-radius:6px;border:none;cursor:pointer;';
+            cmtBtn.innerHTML = '<i class="fa-solid fa-comment" style="font-size:9px;"></i> ' + (photo.comments ? photo.comments.length : 0);
+            cmtBtn.onclick = function(e) { e.stopPropagation(); openCommentModal('photo', idx); };
+
+            actionsRow.appendChild(likeBtn);
+            actionsRow.appendChild(cmtBtn);
+
+            // Admin delete button
+            if (galAdminLogged) {
+                var delBtn = document.createElement('button');
+                delBtn.style.cssText = 'margin-left:auto;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#fca5a5;background:rgba(0,0,0,0.4);padding:3px 8px;border-radius:6px;border:none;cursor:pointer;';
+                delBtn.innerHTML = '<i class="fa-solid fa-trash" style="font-size:9px;"></i>';
+                delBtn.onclick = function(e) { e.stopPropagation(); if(confirm('Supprimer?')){ galPhotos.splice(idx,1); renderPhotos(); } };
+                actionsRow.appendChild(delBtn);
+            }
+
+            overlay.appendChild(tagEl);
+            overlay.appendChild(captionEl);
+            overlay.appendChild(actionsRow);
+
+            wrap.appendChild(img);
+            wrap.appendChild(overlay);
+            grid.appendChild(wrap);
+        });
+    }
+
+    /* ---- RENDU VIDEOS ---- */
+    function getEmbedInfo(url) {
+        // YouTube
+        var ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+        if (ytMatch) return { type:'youtube', id: ytMatch[1], thumb: 'https://img.youtube.com/vi/'+ytMatch[1]+'/hqdefault.jpg' };
+        // TikTok
+        var ttMatch = url.match(/tiktok\.com\/@[^\/]+\/video\/(\d+)/);
+        if (ttMatch) return { type:'tiktok', id: ttMatch[1], thumb: null };
+        return null;
+    }
+
+    function renderVideos() {
+        var grid  = document.getElementById('videos-grid');
+        var empty = document.getElementById('videos-empty');
+        if (!grid) return;
+        grid.innerHTML = '';
+        if (galVideos.length === 0) { empty.classList.remove('hidden'); return; }
+        empty.classList.add('hidden');
+
+        galVideos.forEach(function(video, idx) {
+            var info = getEmbedInfo(video.url);
+            var card = document.createElement('div');
+            card.className = 'group bg-[#0e1322] border border-gray-900 rounded-2xl overflow-hidden hover:border-gray-700 hover:-translate-y-1 hover:shadow-xl transition-all duration-300';
+
+            var thumbDiv = document.createElement('div');
+            thumbDiv.style.cssText = 'position:relative;aspect-ratio:16/9;background:#111827;cursor:pointer;overflow:hidden;';
+
+            if (info && info.type === 'youtube') {
+                var thumbImg = document.createElement('img');
+                thumbImg.src = info.thumb;
+                thumbImg.style.cssText = 'width:100%;height:100%;object-fit:cover;transition:transform 0.4s;';
+                thumbImg.className = 'group-hover:scale-105';
+                var playBtn = document.createElement('div');
+                playBtn.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;';
+                playBtn.innerHTML = '<div style="width:52px;height:52px;border-radius:50%;background:rgba(220,38,38,0.9);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,0.5);"><i class="fa-solid fa-play" style="color:#fff;font-size:18px;margin-left:3px;"></i></div>';
+                thumbDiv.appendChild(thumbImg);
+                thumbDiv.appendChild(playBtn);
+                thumbDiv.onclick = function() { openVideoPlayer(video.url, info, video.title); };
+            } else if (info && info.type === 'tiktok') {
+                thumbDiv.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;"><i class="fab fa-tiktok" style="font-size:2.5rem;color:#fff;"></i><p style="font-size:11px;color:#9ca3af;font-weight:600;">TikTok</p></div>';
+                thumbDiv.onclick = function() { window.open(video.url, '_blank'); };
+            } else {
+                thumbDiv.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;"><i class="fa-solid fa-play-circle" style="font-size:3rem;color:#374151;"></i></div>';
+            }
+
+            var infoDiv = document.createElement('div');
+            infoDiv.style.cssText = 'padding:12px 14px;';
+
+            var titleEl = document.createElement('p');
+            titleEl.style.cssText = 'font-family:Oswald,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;margin-bottom:8px;line-height:1.3;';
+            titleEl.textContent = video.title || '';
+
+            var actRow = document.createElement('div');
+            actRow.style.cssText = 'display:flex;align-items:center;gap:8px;';
+
+            var likeBtn = document.createElement('button');
+            likeBtn.style.cssText = 'display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#9ca3af;background:rgba(0,0,0,0.3);padding:4px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:color 0.15s;';
+            likeBtn.innerHTML = '<i class="fa-solid fa-heart" style="font-size:9px;"></i> '+(video.likes||0);
+            likeBtn.onmouseover = function(){this.style.color='#f9a8d4';};
+            likeBtn.onmouseout  = function(){this.style.color='#9ca3af';};
+            likeBtn.onclick = function() { toggleLike('video', idx); renderVideos(); };
+
+            var cmtBtn = document.createElement('button');
+            cmtBtn.style.cssText = 'display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#9ca3af;background:rgba(0,0,0,0.3);padding:4px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:color 0.15s;';
+            cmtBtn.innerHTML = '<i class="fa-solid fa-comment" style="font-size:9px;"></i> '+(video.comments?video.comments.length:0);
+            cmtBtn.onmouseover = function(){this.style.color='#93c5fd';};
+            cmtBtn.onmouseout  = function(){this.style.color='#9ca3af';};
+            cmtBtn.onclick = function() { openCommentModal('video', idx); };
+
+            if (galAdminLogged) {
+                var delBtn = document.createElement('button');
+                delBtn.style.cssText = 'margin-left:auto;display:flex;align-items:center;gap:4px;font-size:10px;color:#fca5a5;background:rgba(0,0,0,0.3);padding:4px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;';
+                delBtn.innerHTML = '<i class="fa-solid fa-trash" style="font-size:9px;"></i>';
+                delBtn.onclick = function() { if(confirm('Supprimer?')){ galVideos.splice(idx,1); renderVideos(); } };
+                actRow.appendChild(delBtn);
+            }
+
+            actRow.appendChild(likeBtn);
+            actRow.appendChild(cmtBtn);
+            infoDiv.appendChild(titleEl);
+            infoDiv.appendChild(actRow);
+            card.appendChild(thumbDiv);
+            card.appendChild(infoDiv);
+            grid.appendChild(card);
+        });
+    }
+
+    /* ---- VIDEO PLAYER ---- */
+    function openVideoPlayer(url, info, title) {
+        var lb = document.getElementById('lightbox');
+        var img = document.getElementById('lightbox-img');
+        img.style.display = 'none';
+
+        // Remove any old iframe
+        var old = document.getElementById('video-iframe-wrap');
+        if (old) old.remove();
+
+        var wrap = document.createElement('div');
+        wrap.id = 'video-iframe-wrap';
+        wrap.style.cssText = 'width:100%;aspect-ratio:16/9;';
+
+        var iframe = document.createElement('iframe');
+        if (info && info.type === 'youtube') {
+            iframe.src = 'https://www.youtube.com/embed/' + info.id + '?autoplay=1';
+        }
+        iframe.style.cssText = 'width:100%;height:100%;border:none;border-radius:12px;';
+        iframe.allow = 'autoplay; fullscreen';
+        wrap.appendChild(iframe);
+
+        var container = lb.querySelector('.max-w-4xl');
+        container.insertBefore(wrap, container.firstChild);
+
+        document.getElementById('lightbox-caption').textContent = title || '';
+        document.getElementById('lightbox-tag').textContent = '';
+        document.getElementById('lightbox-like-btn').style.display = 'none';
+        document.getElementById('lightbox').querySelector('button[onclick="prevPhoto()"]').style.display = 'none';
+        document.getElementById('lightbox').querySelector('button[onclick="nextPhoto()"]').style.display = 'none';
+
+        lb.classList.remove('hidden');
+    }
+
+    /* ---- LIGHTBOX PHOTOS ---- */
+    function openLightbox(idx) {
+        lightboxCurrentIdx = idx;
+        var photo = galPhotos[idx];
+        if (!photo) return;
+
+        // Remove any video iframe
+        var old = document.getElementById('video-iframe-wrap');
+        if (old) old.remove();
+
+        var img = document.getElementById('lightbox-img');
+        img.style.display = 'block';
+        img.src = photo.url;
+
+        document.getElementById('lightbox-caption').textContent = photo.caption || '';
+        document.getElementById('lightbox-tag').textContent = photo.tag || '';
+        document.getElementById('lightbox-like-count').textContent = photo.likes || 0;
+        document.getElementById('lightbox-comment-count').textContent = photo.comments ? photo.comments.length : 0;
+        document.getElementById('lightbox-like-btn').style.display = '';
+        document.getElementById('lightbox').querySelector('button[onclick="prevPhoto()"]').style.display = '';
+        document.getElementById('lightbox').querySelector('button[onclick="nextPhoto()"]').style.display = '';
+
+        document.getElementById('lightbox').classList.remove('hidden');
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.add('hidden');
+        var old = document.getElementById('video-iframe-wrap');
+        if (old) old.remove();
+        document.getElementById('lightbox-img').style.display = 'block';
+    }
+
+    function prevPhoto() {
+        lightboxCurrentIdx = (lightboxCurrentIdx - 1 + galPhotos.length) % galPhotos.length;
+        openLightbox(lightboxCurrentIdx);
+    }
+    function nextPhoto() {
+        lightboxCurrentIdx = (lightboxCurrentIdx + 1) % galPhotos.length;
+        openLightbox(lightboxCurrentIdx);
+    }
+
+    // Keyboard nav
+    document.addEventListener('keydown', function(e) {
+        var lb = document.getElementById('lightbox');
+        if (!lb || lb.classList.contains('hidden')) return;
+        if (e.key === 'ArrowLeft')  prevPhoto();
+        if (e.key === 'ArrowRight') nextPhoto();
+        if (e.key === 'Escape')     closeLightbox();
+    });
+
+    /* ---- LIKES ---- */
+    function toggleLike(type, idx) {
+        var item = type === 'photo' ? galPhotos[idx] : galVideos[idx];
+        if (!item) return;
+        item.likes = (item.likes || 0) + 1;
+        if (type === 'photo' && !document.getElementById('lightbox').classList.contains('hidden')) {
+            document.getElementById('lightbox-like-count').textContent = item.likes;
+        }
+    }
+
+    /* ---- COMMENTAIRES ---- */
+    function openCommentModal(type, idx) {
+        commentTarget = { type: type, idx: idx };
+        renderComments();
+        document.getElementById('comment-modal').classList.remove('hidden');
+    }
+    function closeCommentModal() {
+        document.getElementById('comment-modal').classList.add('hidden');
+        renderPhotos(); renderVideos();
+    }
+
+    function renderComments() {
+        var item = commentTarget.type === 'photo' ? galPhotos[commentTarget.idx] : galVideos[commentTarget.idx];
+        if (!item) return;
+        var list = document.getElementById('comment-list');
+        list.innerHTML = '';
+        if (!item.comments || item.comments.length === 0) {
+            list.innerHTML = '<p style="text-align:center;color:#4b5563;font-size:11px;padding:24px 0;">Aucun commentaire — Soyez le premier !</p>';
+            return;
+        }
+        item.comments.forEach(function(c) {
+            var row = document.createElement('div');
+            row.style.cssText = 'display:flex;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05);';
+            var av = document.createElement('div');
+            av.style.cssText = 'width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ef4444,#3b82f6);display:flex;align-items:center;justify-content:center;font-family:Oswald,sans-serif;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;';
+            av.textContent = (c.author||'?')[0].toUpperCase();
+            var content = document.createElement('div');
+            content.style.flex = '1';
+            var nameEl = document.createElement('span');
+            nameEl.style.cssText = 'font-size:11px;font-weight:700;color:#e5e7eb;display:block;margin-bottom:2px;';
+            nameEl.textContent = c.author || 'Anonyme';
+            var textEl = document.createElement('p');
+            textEl.style.cssText = 'font-size:11px;color:#9ca3af;line-height:1.4;';
+            textEl.textContent = c.text;
+            content.appendChild(nameEl); content.appendChild(textEl);
+            row.appendChild(av); row.appendChild(content);
+            // Admin delete
+            if (galAdminLogged) {
+                var delBtn = document.createElement('button');
+                delBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                delBtn.style.cssText = 'color:#6b7280;font-size:10px;background:none;border:none;cursor:pointer;flex-shrink:0;';
+                delBtn.onclick = (function(cmt) { return function() {
+                    var arr = commentTarget.type==='photo' ? galPhotos[commentTarget.idx].comments : galVideos[commentTarget.idx].comments;
+                    var ci = arr.indexOf(cmt);
+                    if (ci > -1) arr.splice(ci, 1);
+                    renderComments();
+                }; })(c);
+                row.appendChild(delBtn);
+            }
+            list.appendChild(row);
+        });
+    }
+
+    function submitComment() {
+        var author = document.getElementById('comment-author').value.trim();
+        var text   = document.getElementById('comment-text').value.trim();
+        if (!text) return;
+        var item = commentTarget.type === 'photo' ? galPhotos[commentTarget.idx] : galVideos[commentTarget.idx];
+        if (!item) return;
+        if (!item.comments) item.comments = [];
+        item.comments.push({ author: author || 'Anonyme', text: text, date: new Date().toISOString() });
+        document.getElementById('comment-author').value = '';
+        document.getElementById('comment-text').value = '';
+        renderComments();
+        // Update count in lightbox if open
+        if (commentTarget.type === 'photo') {
+            var lbCmt = document.getElementById('lightbox-comment-count');
+            if (lbCmt) lbCmt.textContent = item.comments.length;
+        }
+    }
+
+    /* ---- AJOUT PHOTO ---- */
+    function openAddPhotoModal()  { document.getElementById('add-photo-modal').classList.remove('hidden'); }
+    function closeAddPhotoModal() { document.getElementById('add-photo-modal').classList.add('hidden'); }
+    function previewPhoto() {
+        var url = document.getElementById('photo-url').value.trim();
+        if (!url) return;
+        var prev = document.getElementById('photo-preview');
+        var wrap = document.getElementById('photo-preview-wrap');
+        prev.src = url; wrap.classList.remove('hidden');
+    }
+    function savePhoto() {
+        var url     = document.getElementById('photo-url').value.trim();
+        var caption = document.getElementById('photo-caption').value.trim();
+        var tag     = document.getElementById('photo-tag').value;
+        if (!url) { alert('URL obligatoire'); return; }
+        galPhotos.unshift({ url: url, caption: caption, tag: tag, likes: 0, comments: [] });
+        closeAddPhotoModal();
+        document.getElementById('photo-url').value = '';
+        document.getElementById('photo-caption').value = '';
+        document.getElementById('photo-preview-wrap').classList.add('hidden');
+        renderPhotos();
+    }
+
+    /* ---- AJOUT VIDÉO ---- */
+    function openAddVideoModal()  { document.getElementById('add-video-modal').classList.remove('hidden'); }
+    function closeAddVideoModal() { document.getElementById('add-video-modal').classList.add('hidden'); }
+    function saveVideo() {
+        var url   = document.getElementById('video-url').value.trim();
+        var title = document.getElementById('video-title').value.trim();
+        if (!url) { alert('URL obligatoire'); return; }
+        var info = getEmbedInfo(url);
+        galVideos.unshift({ url: url, title: title || 'Vidéo', type: info ? info.type : 'youtube', likes: 0, comments: [] });
+        closeAddVideoModal();
+        document.getElementById('video-url').value = '';
+        document.getElementById('video-title').value = '';
+        renderVideos();
+    }
+
+    /* ---- FERMER MODALS SUR BACKDROP ---- */
+    ['add-photo-modal','add-video-modal','comment-modal'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('click', function(e) { if(e.target===this) this.classList.add('hidden'); });
+    });
+
+    /* ---- INIT ---- */
+    function initGalerie() {
+        switchGalTab('photos');
+        renderPhotos();
+        renderVideos();
+    }
+    </script>
+    <!-- ============================================================
+         ADMIN MODE — Détection URL ?admin
+    ============================================================ -->
+    <script>
+    function initAdminMode() {
+        var params = new URLSearchParams(window.location.search);
+        if (params.has('admin')) {
+            // Révéler les boutons admin
+            var newsBtn = document.getElementById('btn-admin-news');
+            var galBtn  = document.getElementById('gal-admin-btn');
+            if (newsBtn) { newsBtn.classList.remove('hidden'); newsBtn.classList.add('flex'); }
+            if (galBtn)  { galBtn.classList.remove('hidden');  galBtn.classList.add('flex');  }
+            // Ouvrir directement le modal de connexion
+            setTimeout(function() { openAdminLogin(); }, 600);
+            // Nettoyer l'URL sans recharger (discret)
+            var cleanUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }
     }
     </script>
 </body>
