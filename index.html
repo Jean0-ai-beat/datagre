@@ -2660,41 +2660,42 @@
         if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Envoi...'; }
 
         var form = document.getElementById('submit-form');
-        var data = new FormData(form);
+        var formData = new FormData(form);
 
-        fetch('/', { method: 'POST', body: data })
-        .then(function(response) {
-            if (response.ok || response.status === 200) {
-                submitCount++;
-                // Afficher succès
-                document.getElementById('submit-success').classList.remove('hidden');
-                if (form) form.reset();
-                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="btn_send">Envoyer</span>'; }
-                setTimeout(closeSubmitModal, 5000);
-            } else {
-                throw new Error('Erreur réseau');
-            }
+        // Encoder en URL pour Netlify
+        var encoded = [];
+        formData.forEach(function(val, key) {
+            encoded.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+        });
+
+        fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: encoded.join('&')
+        })
+        .then(function() {
+            submitCount++;
+            document.getElementById('submit-success').classList.remove('hidden');
+            form.reset();
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i><span>Envoyer</span>'; }
+            setTimeout(closeSubmitModal, 5000);
         })
         .catch(function() {
-            // Fallback : sauvegarder localement si Netlify échoue
-            var author  = document.querySelector('[name="author"]').value.trim();
-            var title   = document.querySelector('[name="title"]').value.trim();
-            var excerpt = document.querySelector('[name="excerpt"]').value.trim();
-            var link    = document.querySelector('[name="link"]').value.trim();
-            var cat     = document.querySelector('[name="category"]').value;
-
-            function sanitize(str) {
-                return str.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').slice(0,500);
-            }
+            // Fallback localStorage
+            var sanitize = function(s){ return s.replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,500); };
             pendingArticles.push({
-                category: cat, title: sanitize(title), excerpt: sanitize(excerpt),
-                link: link.replace(/javascript:/gi,''), emoji: '📰',
-                author: sanitize(author), date: new Date().toISOString().split('T')[0]
+                category: formData.get('category') || 'Officiel',
+                title:    sanitize(formData.get('title')  || ''),
+                excerpt:  sanitize(formData.get('excerpt')|| ''),
+                link:     (formData.get('link') || '').replace(/javascript:/gi,''),
+                emoji:    '📰',
+                author:   sanitize(formData.get('author') || ''),
+                date:     new Date().toISOString().split('T')[0]
             });
             savePending();
             submitCount++;
             document.getElementById('submit-success').classList.remove('hidden');
-            if (form) form.reset();
+            form.reset();
             if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i><span>Envoyer</span>'; }
             if (isAdminLogged) renderPendingList();
             setTimeout(closeSubmitModal, 5000);
