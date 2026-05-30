@@ -121,6 +121,7 @@
                     <a href="#stats-joueurs" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_stats">STATS</a>
                     <a href="#actualites" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_actualites">ACTUALITÉS</a>
                     <a href="#galerie" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_galerie">GALERIE</a>
+                    <a href="#photo-frame" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_frame">PHOTO FRAME</a>
                     <a href="#calendrier" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_calendrier">CALENDRIER</a>
                     <a href="#classement" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_live">STATS & LIVE</a>
                 </div>
@@ -147,6 +148,7 @@
             <a href="#stats-joueurs" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_stats">STATS JOUEURS</a>
             <a href="#actualites" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_actualites">ACTUALITÉS</a>
             <a href="#galerie" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_galerie">GALERIE</a>
+            <a href="#photo-frame" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_frame">PHOTO FRAME</a>
             <a href="#calendrier" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_calendrier">CALENDRIER</a>
             <a href="#classement" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_live">STATS & LIVE</a>
         </div>
@@ -1007,6 +1009,128 @@
             </div>
         </div>
     </div>
+
+    <!-- ===================== SECTION PHOTO FRAME AI ===================== -->
+    <section id="photo-frame" class="border-t border-gray-900 py-16 sm:py-20 bg-gray-950/30">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+
+            <!-- Titre -->
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-2" data-i18n="frame_badge">Supporter les Grenadiers</span>
+                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-2">
+                    <span data-i18n="frame_title">Crée ta Photo</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500"> 🇭🇹 IA</span>
+                </h2>
+                <p class="text-xs text-gray-500 mt-2" data-i18n="frame_subtitle">Décris ta vision — l'IA génère une image avec le drapeau d'Haïti et le logo PWESPORTS</p>
+            </div>
+
+            <!-- LAYOUT -->
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+
+                <!-- GAUCHE : Contrôles -->
+                <div class="w-full lg:w-80 space-y-4">
+
+                    <!-- Suggestions de prompts -->
+                    <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4">
+                        <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-amber-400"></i>
+                            <span data-i18n="frame_suggestions">Suggestions</span>
+                        </p>
+                        <div class="flex flex-wrap gap-2" id="prompt-suggestions">
+                            <button onclick="usePromptSuggestion(this)" class="prompt-chip px-2.5 py-1.5 rounded-lg text-[10px] font-semibold bg-gray-900 border border-gray-800 text-gray-300 hover:border-red-500/40 hover:text-white hover:bg-red-500/5 transition">⚽ Joueur célèbre un but</button>
+                            <button onclick="usePromptSuggestion(this)" class="prompt-chip px-2.5 py-1.5 rounded-lg text-[10px] font-semibold bg-gray-900 border border-gray-800 text-gray-300 hover:border-red-500/40 hover:text-white hover:bg-red-500/5 transition">🏟️ Stade plein de supporters</button>
+                            <button onclick="usePromptSuggestion(this)" class="prompt-chip px-2.5 py-1.5 rounded-lg text-[10px] font-semibold bg-gray-900 border border-gray-800 text-gray-300 hover:border-red-500/40 hover:text-white hover:bg-red-500/5 transition">🇭🇹 Fan avec drapeau Haïti</button>
+                            <button onclick="usePromptSuggestion(this)" class="prompt-chip px-2.5 py-1.5 rounded-lg text-[10px] font-semibold bg-gray-900 border border-gray-800 text-gray-300 hover:border-red-500/40 hover:text-white hover:bg-red-500/5 transition">🌃 Port-au-Prince la nuit</button>
+                            <button onclick="usePromptSuggestion(this)" class="prompt-chip px-2.5 py-1.5 rounded-lg text-[10px] font-semibold bg-gray-900 border border-gray-800 text-gray-300 hover:border-red-500/40 hover:text-white hover:bg-red-500/5 transition">🏆 Trophée Coupe du Monde</button>
+                            <button onclick="usePromptSuggestion(this)" class="prompt-chip px-2.5 py-1.5 rounded-lg text-[10px] font-semibold bg-gray-900 border border-gray-800 text-gray-300 hover:border-red-500/40 hover:text-white hover:bg-red-500/5 transition">💪 Équipe unie avant le match</button>
+                        </div>
+                    </div>
+
+                    <!-- Zone de prompt -->
+                    <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4">
+                        <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3">
+                            <i class="fa-solid fa-pen-fancy mr-1.5 text-blue-400"></i>
+                            <span data-i18n="frame_your_prompt">Ton prompt</span>
+                        </p>
+                        <textarea id="ai-prompt" rows="4" placeholder="Décris l'image que tu veux créer... Ex: Un joueur de football haïtien en rouge et bleu qui célèbre un but magnifique sous les feux d'artifice"
+                            class="w-full bg-[#0b0f19] border border-gray-800 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/10 transition resize-none leading-relaxed"></textarea>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-[10px] text-gray-600" id="prompt-char-count">0 / 300</span>
+                            <button onclick="improvePrompt()" class="flex items-center gap-1.5 text-[10px] font-bold text-purple-400 hover:text-purple-300 transition">
+                                <i class="fa-solid fa-sparkles text-[9px]"></i>
+                                <span data-i18n="frame_improve">Améliorer avec IA</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Options overlay -->
+                    <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4">
+                        <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3">
+                            <i class="fa-solid fa-layer-group mr-1.5 text-pink-400"></i>
+                            <span data-i18n="frame_overlays">Overlays automatiques</span>
+                        </p>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="ai-overlay-flag" checked class="w-4 h-4 rounded accent-red-500">
+                                <span class="text-2xl">🇭🇹</span>
+                                <span class="text-xs font-bold text-white" data-i18n="frame_flag">Drapeau Haïti</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="ai-overlay-logo" checked class="w-4 h-4 rounded accent-blue-500">
+                                <i class="fa-solid fa-shield-halved text-blue-400 text-lg w-6 text-center"></i>
+                                <span class="text-xs font-bold text-white" data-i18n="frame_logo">Logo PWESPORTS</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Bouton Générer -->
+                    <button onclick="generateAIFrame()" id="ai-generate-btn"
+                        class="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl text-sm font-black uppercase text-white shadow-xl transition-all hover:scale-[1.02] hover:shadow-2xl"
+                        style="background:linear-gradient(135deg,#ef4444 0%,#1e3a8a 100%);">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span data-i18n="frame_generate">Générer avec l'IA</span>
+                    </button>
+
+                    <!-- Bouton télécharger (caché jusqu'à génération) -->
+                    <button onclick="downloadAIFrame()" id="ai-download-btn"
+                        class="hidden w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-sm font-bold uppercase text-white transition">
+                        <i class="fa-solid fa-download"></i>
+                        <span data-i18n="frame_download">Télécharger</span>
+                    </button>
+                </div>
+
+                <!-- DROITE : Canvas résultat -->
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="relative w-full max-w-md mx-auto">
+                        <canvas id="ai-frame-canvas" width="512" height="512"
+                            class="w-full rounded-2xl border border-gray-800 shadow-2xl"
+                            style="aspect-ratio:1/1;background:#0e1322;">
+                        </canvas>
+
+                        <!-- Placeholder -->
+                        <div id="ai-frame-placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-2xl">
+                            <div class="text-6xl">🇭🇹</div>
+                            <p class="text-xs text-gray-600 font-semibold text-center px-8" data-i18n="frame_placeholder">Décris ton image et clique sur Générer</p>
+                        </div>
+
+                        <!-- Loading overlay -->
+                        <div id="ai-frame-loading" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-2xl" style="background:rgba(11,15,25,0.85);">
+                            <div class="relative">
+                                <div class="w-16 h-16 rounded-full border-4 border-gray-800 border-t-red-500 animate-spin"></div>
+                                <div class="absolute inset-0 flex items-center justify-center text-2xl">🇭🇹</div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-sm font-bold text-white" data-i18n="frame_generating">Génération en cours...</p>
+                                <p id="ai-loading-step" class="text-xs text-gray-500 mt-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-center text-[10px] text-gray-600 mt-3" data-i18n="frame_hint">Format 512×512 — Idéal pour Instagram, Facebook, TikTok</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- =================== FIN SECTION PHOTO FRAME AI =================== -->
 
     <section id="vision" class="bg-gray-950/60 border-t border-b border-gray-900 py-16 sm:py-20 text-center">
         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -2164,6 +2288,7 @@
         initPlayerStats();
         initNews();
         initGalerie();
+        initPhotoFrame();
         initI18n();
         initAdminMode();
     };
@@ -3631,6 +3756,311 @@
             window.history.replaceState({}, document.title, cleanUrl);
         }
     }
+    </script>
+
+    <!-- ============================================================
+         PHOTO FRAME AI — Génération par IA + Canvas Overlay
+    ============================================================ -->
+    <script>
+    var aiGeneratedImageUrl = null;
+    var aiFrameCanvas       = null;
+    var aiFrameCtx          = null;
+    var aiFlagImage         = null;
+    var aiLogoImage         = null;
+
+    /* ---- SUGGESTIONS ---- */
+    function usePromptSuggestion(btn) {
+        var text = btn.textContent.trim().replace(/^[^\s]+\s/, '');
+        var ta = document.getElementById('ai-prompt');
+        if (ta) { ta.value = text; ta.dispatchEvent(new Event('input')); ta.focus(); }
+    }
+
+    /* ---- COMPTEUR CARACTÈRES ---- */
+    document.addEventListener('DOMContentLoaded', function() {
+        var ta = document.getElementById('ai-prompt');
+        if (ta) ta.addEventListener('input', function() {
+            var cc = document.getElementById('prompt-char-count');
+            if (cc) cc.textContent = this.value.length + ' / 300';
+            if (this.value.length > 300) this.value = this.value.slice(0,300);
+        });
+    });
+
+    /* ---- AMÉLIORER PROMPT AVEC CLAUDE ---- */
+    function improvePrompt() {
+        var ta  = document.getElementById('ai-prompt');
+        var btn = document.querySelector('button[onclick="improvePrompt()"]');
+        if (!ta || !ta.value.trim()) {
+            ta && ta.focus();
+            ta && (ta.placeholder = "Écris d'abord un prompt...");
+            return;
+        }
+        var orig = ta.value.trim();
+        if (btn) { btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-[9px]"></i><span>En cours...</span>'; btn.disabled = true; }
+
+        fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 200,
+                messages: [{
+                    role: 'user',
+                    content: "Améliore ce prompt pour générer une image sportive professionnelle liée à l'équipe de football d'Haïti (Les Grenadiers), avec des couleurs rouge et bleu, ambiance Coupe du Monde 2026. Réponds SEULEMENT avec le prompt amélioré en français, maximum 200 caractères, sans guillemets ni explication. Prompt original: " + orig
+                }]
+            })
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            if (btn) { btn.innerHTML = '<i class="fa-solid fa-sparkles text-[9px]"></i><span data-i18n="frame_improve">Améliorer avec IA</span>'; btn.disabled = false; }
+            if (data.content && data.content[0] && data.content[0].text) {
+                ta.value = data.content[0].text.trim().replace(/^["']|["']$/g, '');
+                ta.dispatchEvent(new Event('input'));
+            }
+        })
+        .catch(function(){
+            if (btn) { btn.innerHTML = '<i class="fa-solid fa-sparkles text-[9px]"></i><span>Améliorer avec IA</span>'; btn.disabled = false; }
+        });
+    }
+
+    /* ---- GÉNÉRATION PRINCIPALE ---- */
+    function generateAIFrame() {
+        var prompt = document.getElementById('ai-prompt') && document.getElementById('ai-prompt').value.trim();
+        if (!prompt) {
+            var ta = document.getElementById('ai-prompt');
+            if (ta) { ta.focus(); ta.style.borderColor = '#ef4444'; setTimeout(function(){ ta.style.borderColor=''; },2000); }
+            return;
+        }
+
+        // UI loading
+        document.getElementById('ai-frame-placeholder').style.display = 'none';
+        document.getElementById('ai-frame-loading').classList.remove('hidden');
+        document.getElementById('ai-generate-btn').disabled = true;
+        document.getElementById('ai-download-btn').classList.add('hidden');
+        setLoadingStep("Optimisation du prompt...");
+
+        // Step 1 : Claude améliore + traduit en anglais le prompt pour image gen
+        fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 300,
+                messages: [{
+                    role: 'user',
+                    content: 'Transform this into a detailed English image generation prompt for a professional sports photo. Focus on: Haiti national football team colors (red and blue), World Cup 2026 atmosphere, photorealistic style, dramatic lighting. Return ONLY the English prompt, max 250 characters, no explanations. French input: ' + prompt
+                }]
+            })
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            var engPrompt = (data.content && data.content[0] && data.content[0].text)
+                ? data.content[0].text.trim()
+                : prompt + ', Haiti football, red and blue, World Cup 2026, professional sports photography';
+
+            setLoadingStep("Génération de l'image...");
+            return generateImageWithPollinations(engPrompt);
+        })
+        .then(function(imageUrl){
+            aiGeneratedImageUrl = imageUrl;
+            setLoadingStep("Application des overlays...");
+            return applyOverlaysToCanvas(imageUrl);
+        })
+        .then(function(){
+            document.getElementById('ai-frame-loading').classList.add('hidden');
+            document.getElementById('ai-generate-btn').disabled = false;
+            document.getElementById('ai-download-btn').classList.remove('hidden');
+            document.getElementById('ai-download-btn').classList.add('flex');
+        })
+        .catch(function(err){
+            console.error(err);
+            document.getElementById('ai-frame-loading').classList.add('hidden');
+            document.getElementById('ai-generate-btn').disabled = false;
+            showFrameError();
+        });
+    }
+
+    /* ---- GÉNÉRATION IMAGE via Pollinations AI (gratuit, CORS-OK) ---- */
+    function generateImageWithPollinations(prompt) {
+        return new Promise(function(resolve, reject){
+            // Pollinations.ai — API image gratuite, pas de clé requise
+            var fullPrompt = prompt + ', Haiti national football team, red and blue jersey, World Cup 2026, hyperrealistic, 4k';
+            var url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&nologo=true&enhance=true&model=flux';
+            // Vérifier que l'image charge bien
+            var img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload  = function(){ resolve(url); };
+            img.onerror = function(){ reject(new Error('Image generation failed')); };
+            img.src = url;
+            // Timeout 30 secondes
+            setTimeout(function(){ reject(new Error('Timeout')); }, 30000);
+        });
+    }
+
+    /* ---- APPLIQUER OVERLAYS SUR CANVAS ---- */
+    function applyOverlaysToCanvas(imageUrl) {
+        return new Promise(function(resolve){
+            var canvas = document.getElementById('ai-frame-canvas');
+            var ctx    = canvas.getContext('2d');
+            var W = 512, H = 512;
+            canvas.width = W; canvas.height = H;
+
+            var img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                // Image générée
+                ctx.drawImage(img, 0, 0, W, H);
+
+                // Gradient bas
+                var grad = ctx.createLinearGradient(0, H*0.65, 0, H);
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.6)');
+                ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
+
+                // Bandeau PWESPORTS en bas
+                ctx.fillStyle = 'rgba(11,15,25,0.75)';
+                ctx.fillRect(0, H-44, W, 44);
+                ctx.font = 'bold 14px Oswald,Arial,sans-serif';
+                ctx.fillStyle = '#fff'; ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('PWE', 12, H-22);
+                ctx.fillStyle = '#ef4444';
+                ctx.fillText('SPORTS', 12+ctx.measureText('PWE').width, H-22);
+                ctx.font = 'bold 11px Arial,sans-serif';
+                ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                ctx.textAlign = 'right';
+                ctx.fillText('GRENADIERS • MONDIAL 2026 🇭🇹', W-12, H-22);
+
+                var showFlag = document.getElementById('ai-overlay-flag') && document.getElementById('ai-overlay-flag').checked;
+                var showLogo = document.getElementById('ai-overlay-logo') && document.getElementById('ai-overlay-logo').checked;
+
+                function done() { resolve(); }
+
+                function applyLogo() {
+                    if (!showLogo) { done(); return; }
+                    loadAiLogoImage(function(logo){
+                        if (logo) {
+                            var ls=60, lx=W-ls-12, ly=12;
+                            ctx.save();
+                            ctx.beginPath(); ctx.arc(lx+ls/2,ly+ls/2,ls/2,0,Math.PI*2); ctx.clip();
+                            ctx.drawImage(logo,lx,ly,ls,ls); ctx.restore();
+                            ctx.strokeStyle='rgba(255,255,255,0.7)'; ctx.lineWidth=2;
+                            ctx.beginPath(); ctx.arc(lx+ls/2,ly+ls/2,ls/2,0,Math.PI*2); ctx.stroke();
+                        }
+                        done();
+                    });
+                }
+
+                if (showFlag) {
+                    loadAiFlagImage(function(flag){
+                        if (flag) {
+                            var fw=100,fh=66,fx=12,fy=12;
+                            ctx.save();
+                            aiRoundRect(ctx,fx,fy,fw,fh,6); ctx.clip();
+                            ctx.drawImage(flag,fx,fy,fw,fh); ctx.restore();
+                            ctx.strokeStyle='rgba(255,255,255,0.6)'; ctx.lineWidth=2;
+                            aiRoundRect(ctx,fx,fy,fw,fh,6); ctx.stroke();
+                        }
+                        applyLogo();
+                    });
+                } else { applyLogo(); }
+            };
+            img.onerror = function(){ resolve(); };
+            img.src = imageUrl;
+        });
+    }
+
+    function loadAiFlagImage(cb) {
+        if (aiFlagImage) { cb(aiFlagImage); return; }
+        var img = new Image(); img.crossOrigin='anonymous';
+        img.onload=function(){ aiFlagImage=img; cb(img); };
+        img.onerror=function(){ cb(null); };
+        img.src='https://flagcdn.com/w160/ht.png';
+    }
+
+    function loadAiLogoImage(cb) {
+        if (aiLogoImage) { cb(aiLogoImage); return; }
+        var navImg = document.querySelector('nav img[alt="PWESPORTS"]');
+        if (navImg && navImg.src) {
+            var img = new Image();
+            img.onload=function(){ aiLogoImage=img; cb(img); };
+            img.onerror=function(){ cb(null); };
+            img.src = navImg.src;
+        } else { cb(null); }
+    }
+
+    function aiRoundRect(ctx,x,y,w,h,r){
+        ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+        ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
+        ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
+        ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
+        ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+    }
+
+    function setLoadingStep(msg) {
+        var el = document.getElementById('ai-loading-step');
+        if (el) el.textContent = msg;
+    }
+
+    function showFrameError() {
+        var canvas = document.getElementById('ai-frame-canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle='#0e1322'; ctx.fillRect(0,0,512,512);
+        ctx.font='bold 16px Arial'; ctx.fillStyle='#ef4444';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('Erreur de génération — Réessaie', 256, 256);
+        ctx.font='12px Arial'; ctx.fillStyle='#6b7280';
+        ctx.fillText('Vérifie ta connexion internet', 256, 290);
+    }
+
+    function downloadAIFrame() {
+        var canvas = document.getElementById('ai-frame-canvas');
+        if (!canvas) return;
+        var a = document.createElement('a');
+        a.download = 'pwesports-ia-' + Date.now() + '.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+    }
+
+    function initPhotoFrame() {
+        // Init char counter
+        var ta = document.getElementById('ai-prompt');
+        if (ta) {
+            ta.addEventListener('input', function(){
+                var cc = document.getElementById('prompt-char-count');
+                if (cc) cc.textContent = this.value.length + ' / 300';
+                if (this.value.length > 300) this.value = this.value.slice(0,300);
+            });
+        }
+    }
+
+    // i18n keys pour photo frame
+    (function(){
+        var keys = {
+            nav_frame:          {fr:'PHOTO FRAME',                      ht:'FÈ FÒT OU',                  en:'PHOTO FRAME'           },
+            frame_badge:        {fr:'Supporter les Grenadiers',         ht:'Sipòte Grenadye yo',          en:'Support the Grenadiers'},
+            frame_title:        {fr:'Crée ta Photo',                    ht:'Fè Foto Ou',                  en:'Create your Photo'     },
+            frame_subtitle:     {fr:"Décris ta vision — l'IA génère une image avec le drapeau d'Haïti et le logo PWESPORTS",
+                                 ht:"Dekri vizyon ou — IA jenere yon imaj ak drapò Ayiti ak logo PWESPORTS",
+                                 en:"Describe your vision — AI generates an image with Haiti flag and PWESPORTS logo"},
+            frame_suggestions:  {fr:'Suggestions',                      ht:'Sijèsyon',                   en:'Suggestions'           },
+            frame_your_prompt:  {fr:'Ton prompt',                       ht:'Pwompt ou',                  en:'Your prompt'           },
+            frame_improve:      {fr:'Améliorer avec IA',                ht:'Amelyore ak IA',             en:'Improve with AI'       },
+            frame_overlays:     {fr:'Overlays automatiques',            ht:'Overdè otomatik',            en:'Automatic overlays'    },
+            frame_flag:         {fr:"Drapeau Haïti",                    ht:'Drapò Ayiti',                en:'Haiti Flag'            },
+            frame_logo:         {fr:'Logo PWESPORTS',                   ht:'Logo PWESPORTS',             en:'PWESPORTS Logo'        },
+            frame_generate:     {fr:"Générer avec l'IA",                ht:'Jenere ak IA',               en:'Generate with AI'      },
+            frame_download:     {fr:'Télécharger',                      ht:'Telechaje',                  en:'Download'              },
+            frame_placeholder:  {fr:'Décris ton image et clique sur Générer',
+                                 ht:'Dekri imaj ou epi klike Jenere',   en:'Describe your image and click Generate'},
+            frame_generating:   {fr:'Génération en cours...',           ht:'Jenere ap fèt...',           en:'Generating...'         },
+            frame_hint:         {fr:'Format 512×512 — Idéal pour Instagram, Facebook, TikTok',
+                                 ht:'Fòma 512×512 — Ideyal pou Instagram, Facebook, TikTok',
+                                 en:'512×512 format — Ideal for Instagram, Facebook, TikTok'},
+        };
+        if (typeof i18n !== 'undefined') {
+            Object.keys(keys).forEach(function(k){ i18n[k]=keys[k]; });
+        }
+    })();
     </script>
 </body>
 </html>
