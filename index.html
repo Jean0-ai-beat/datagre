@@ -3864,8 +3864,18 @@
                 ? data.content[0].text.trim()
                 : prompt + ', Haiti football, red and blue, World Cup 2026, professional sports photography';
 
-            setLoadingStep("Génération de l'image...");
-            return generateImageWithPollinations(engPrompt);
+            setLoadingStep("Génération de l'image (30-60 sec)...");
+            // Compteur visuel
+            var secs = 0;
+            var timer = setInterval(function(){
+                secs++;
+                setLoadingStep("Génération en cours... " + secs + "s");
+            }, 1000);
+            return generateImageWithPollinations(engPrompt).then(function(url){
+                clearInterval(timer); return url;
+            }).catch(function(e){
+                clearInterval(timer); throw e;
+            });
         })
         .then(function(imageUrl){
             aiGeneratedImageUrl = imageUrl;
@@ -3886,20 +3896,26 @@
         });
     }
 
-    /* ---- GÉNÉRATION IMAGE via Pollinations AI (gratuit, CORS-OK) ---- */
+    /* ---- GÉNÉRATION IMAGE via Pollinations AI (gratuit) ---- */
     function generateImageWithPollinations(prompt) {
         return new Promise(function(resolve, reject){
-            // Pollinations.ai — API image gratuite, pas de clé requise
-            var fullPrompt = prompt + ', Haiti national football team, red and blue jersey, World Cup 2026, hyperrealistic, 4k';
-            var url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&nologo=true&enhance=true&model=flux';
-            // Vérifier que l'image charge bien
+            var fullPrompt = prompt + ', Haiti national football team, red and blue jersey, World Cup 2026, hyperrealistic, 4k, professional sports photography';
+            var url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&nologo=true&enhance=true&model=flux&seed=' + Math.floor(Math.random()*9999);
+
             var img = new Image();
-            img.crossOrigin = 'anonymous';
+            // PAS de crossOrigin ici — on affiche l'image directement sans Canvas cross-origin
             img.onload  = function(){ resolve(url); };
-            img.onerror = function(){ reject(new Error('Image generation failed')); };
+            img.onerror = function(){
+                // Fallback: essayer sans enhance
+                var url2 = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&nologo=true&model=flux';
+                var img2 = new Image();
+                img2.onload  = function(){ resolve(url2); };
+                img2.onerror = function(){ reject(new Error('failed')); };
+                img2.src = url2;
+            };
             img.src = url;
-            // Timeout 30 secondes
-            setTimeout(function(){ reject(new Error('Timeout')); }, 30000);
+            // Timeout 60 secondes (Pollinations peut être lent)
+            setTimeout(function(){ reject(new Error('Timeout — Réessaie')); }, 60000);
         });
     }
 
@@ -3912,10 +3928,23 @@
             canvas.width = W; canvas.height = H;
 
             var img = new Image();
-            img.crossOrigin = 'anonymous';
+            // Pas de crossOrigin pour éviter CORS — on dessine directement
             img.onload = function() {
-                // Image générée
-                ctx.drawImage(img, 0, 0, W, H);
+                try {
+                    ctx.drawImage(img, 0, 0, W, H);
+                } catch(e) {
+                    // Si CORS bloque le drawImage, afficher l'image sans canvas overlay
+                    canvas.style.display = 'none';
+                    var imgEl = document.getElementById('ai-result-img');
+                    if (!imgEl) {
+                        imgEl = document.createElement('img');
+                        imgEl.id = 'ai-result-img';
+                        imgEl.style.cssText = 'width:100%;border-radius:14px;border:1px solid #1f2937;';
+                        canvas.parentNode.insertBefore(imgEl, canvas);
+                    }
+                    imgEl.src = imageUrl;
+                    resolve(); return;
+                }
 
                 // Gradient bas
                 var grad = ctx.createLinearGradient(0, H*0.65, 0, H);
@@ -4011,12 +4040,23 @@
     function showFrameError() {
         var canvas = document.getElementById('ai-frame-canvas');
         var ctx = canvas.getContext('2d');
-        ctx.fillStyle='#0e1322'; ctx.fillRect(0,0,512,512);
-        ctx.font='bold 16px Arial'; ctx.fillStyle='#ef4444';
-        ctx.textAlign='center'; ctx.textBaseline='middle';
-        ctx.fillText('Erreur de génération — Réessaie', 256, 256);
-        ctx.font='12px Arial'; ctx.fillStyle='#6b7280';
-        ctx.fillText('Vérifie ta connexion internet', 256, 290);
+        canvas.width = 512; canvas.height = 512;
+        ctx.fillStyle = '#0e1322'; ctx.fillRect(0,0,512,512);
+        // Cercle rouge
+        ctx.beginPath(); ctx.arc(256,200,50,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(239,68,68,0.15)'; ctx.fill();
+        ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.font = 'bold 24px Arial'; ctx.fillStyle = '#ef4444';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('⚠', 256, 200);
+        ctx.font = 'bold 14px Arial'; ctx.fillStyle = '#fff';
+        ctx.fillText('Erreur de génération', 256, 280);
+        ctx.font = '11px Arial'; ctx.fillStyle = '#6b7280';
+        ctx.fillText('Pollinations.ai peut être lent ou indisponible.', 256, 308);
+        ctx.fillText('Clique sur Générer pour réessayer.', 256, 328);
+        // Re-enable generate button
+        var btn = document.getElementById('ai-generate-btn');
+        if (btn) btn.disabled = false;
     }
 
     function downloadAIFrame() {
