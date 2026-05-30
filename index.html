@@ -13,16 +13,18 @@
 
     <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
     <meta property="og:type"        content="website">
-    <meta property="og:url"         content="https://pwesports.com/">
+    <meta property="og:url"         content="https://pwesports.netlify.app/">
     <meta property="og:title"       content="PWESPORTS | Les Grenadiers d'Haïti — Coupe du Monde 2026">
     <meta property="og:description" content="26 Guerriers. Une Nation. La Scène Mondiale. Découvrez les fiches des Grenadiers d'Haïti pour le Mondial 2026 aux USA, Canada et Mexique.">
-    <meta property="og:image"       content="https://pwesports.com/og-image.jpg">
+    <meta property="og:image"       content="https://pwesports.netlify.app/og-preview.jpg">
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:locale"      content="fr_FR">
     <meta property="og:site_name"   content="PWESPORTS">
 
     <!-- Twitter / X Card -->
     <meta name="twitter:card"        content="summary_large_image">
-    <meta name="twitter:site"        content="@pwesports">
+    <meta name="twitter:site"        content="@playwinenjoy">
     <meta name="twitter:title"       content="PWESPORTS | Les Grenadiers d'Haïti — Coupe du Monde 2026">
     <meta name="twitter:description" content="26 Guerriers. Une Nation. La Scène Mondiale. Fiches joueurs, tactique interactive et calendrier des Grenadiers.">
     <meta name="twitter:image"       content="https://pwesports.com/og-image.jpg">
@@ -43,6 +45,9 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #0b0f19;
+        }
+        section, header, main {
+            scroll-margin-top: 80px;
         }
         .font-athletic {
             font-family: 'Oswald', sans-serif;
@@ -104,6 +109,8 @@
         #scroll-dot { animation: scrollDot 1.8s ease-in-out infinite; }
         #hero-glow  { animation: glowPulse 5s ease-in-out infinite;   }
         .second-flip { animation: secondFlip 0.4s ease; }
+        .active-pos { background:#1d4ed8 !important; color:#fff !important; }
+        .frame-pos-btn:hover { background:#1e3a8a !important; color:#fff !important; }
     </style>
 </head>
 <body class="text-gray-200 antialiased bg-[#0b0f19]">
@@ -2255,7 +2262,7 @@
     }
 
     function initMatchCountdown() {
-        var targetDate = new Date('June 13, 2026 21:00:00').getTime();
+        var targetDate = new Date('2026-06-14T02:00:00Z').getTime(); // June 13 21:00 Haiti (UTC-5)
         function updateTimer() {
             var diff = targetDate - new Date().getTime();
             if (diff <= 0) {
