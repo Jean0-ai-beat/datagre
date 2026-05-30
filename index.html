@@ -49,6 +49,64 @@
         section, header, main {
             scroll-margin-top: 80px;
         }
+
+        /* ── SCROLL ANIMATIONS ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1),
+                        transform 0.65s cubic-bezier(0.16,1,0.3,1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+        /* Délais en cascade pour grilles */
+        .reveal-delay-1 { transition-delay: 0.08s; }
+        .reveal-delay-2 { transition-delay: 0.16s; }
+        .reveal-delay-3 { transition-delay: 0.24s; }
+        .reveal-delay-4 { transition-delay: 0.32s; }
+
+        /* ── CARD HOVER EFFECTS ── */
+        .player-card-hover {
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .player-card-hover:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 12px 32px rgba(59,130,246,0.12);
+        }
+
+        /* ── MATCH CARD PULSE ── */
+        .match-card {
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+        .match-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.12) !important;
+        }
+
+        /* ── STAT BAR SHIMMER ── */
+        @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .stat-bar-shine {
+            background-size: 200% auto;
+            animation: shimmer 2.5s linear infinite;
+        }
         .font-athletic {
             font-family: 'Oswald', sans-serif;
         }
@@ -237,7 +295,7 @@
 
     <main id="effectif" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
-            <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-3" data-i18n="sec_guerriers">L'Armée Rouge et Bleu</h2>
+            <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-3 reveal" data-i18n="sec_guerriers">L'Armée Rouge et Bleu</h2>
             <p class="text-xs sm:text-sm text-gray-400 font-medium px-4" data-i18n="sec_guerriers_sub">Analyse tactique et fiches techniques officielles des 26 Grenadiers.</p>
         </div>
 
@@ -401,7 +459,7 @@
             </div>
 
             <div class="space-y-4">
-                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-gray-800 transition">
+                <div class="match-card bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 reveal reveal-delay-1">
                     <div class="text-center sm:text-left">
                         <span class="text-xs font-bold text-red-500 block mb-1">MATCH 1</span>
                         <span class="text-xs text-gray-400 font-medium block"><i class="fa-regular fa-calendar-days mr-1.5"></i>Samedi 13 Juin 2026</span>
@@ -424,7 +482,7 @@
                     </div>
                 </div>
 
-                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-gray-800 transition">
+                <div class="match-card bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 reveal reveal-delay-2">
                     <div class="text-center sm:text-left">
                         <span class="text-xs font-bold text-red-500 block mb-1">MATCH 2</span>
                         <span class="text-xs text-gray-400 font-medium block"><i class="fa-regular fa-calendar-days mr-1.5"></i>Vendredi 19 Juin 2026</span>
@@ -447,7 +505,7 @@
                     </div>
                 </div>
 
-                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-gray-800 transition">
+                <div class="match-card bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 reveal reveal-delay-3">
                     <div class="text-center sm:text-left">
                         <span class="text-xs font-bold text-red-500 block mb-1">MATCH 3</span>
                         <span class="text-xs text-gray-400 font-medium block"><i class="fa-regular fa-calendar-days mr-1.5"></i>Mercredi 24 Juin 2026</span>
@@ -493,7 +551,7 @@
                     <!-- Indicateur statut -->
                     <div id="standings-status" class="hidden items-center gap-2 text-[10px] font-semibold mb-2"></div>
 
-                    <div class="overflow-hidden border border-gray-900 rounded-2xl bg-[#0e1322] p-2">
+                    <div class="overflow-hidden border border-gray-900 rounded-2xl bg-[#0e1322] p-2 reveal">
                         <div class="overflow-x-auto no-scrollbar">
                             <table class="w-full text-left border-collapse text-xs sm:text-sm">
                                 <thead>
@@ -813,7 +871,7 @@
     <section id="vision" class="bg-gray-950/60 border-t border-b border-gray-900 py-16 sm:py-20 text-center">
         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <i class="fa-solid fa-star text-amber-500 text-3xl sm:text-4xl mb-4 sm:mb-6"></i>
-            <h2 class="font-athletic text-2xl sm:text-5xl font-black uppercase text-white mb-4 sm:mb-6 tracking-wide" data-i18n="sec_vision">RENMEN PEYI A, HONNEUR ET PATRIE</h2>
+            <h2 class="font-athletic text-2xl sm:text-5xl font-black uppercase text-white mb-4 sm:mb-6 tracking-wide reveal" data-i18n="sec_vision">RENMEN PEYI A, HONNEUR ET PATRIE</h2>
             <p class="text-gray-400 font-medium text-sm sm:text-lg max-w-3xl mx-auto px-2" data-i18n="sec_vision_sub">
                 Chaque fiche technique et chaque analyse propulsées par PWESPORTS servent un objectif unique : propulser la couverture médiatique de nos Grenadiers au plus haut niveau mondial.
             </p>
@@ -877,6 +935,7 @@
             const emptyState = document.getElementById("empty-state");
             grid.innerHTML = "";
 
+
             if (targetPlayers.length === 0) {
                 emptyState.classList.remove("hidden");
                 return;
@@ -885,7 +944,7 @@
 
             targetPlayers.forEach(function(player) {
                 const card = document.createElement("div");
-                card.className = "group relative rounded-2xl border border-gray-900 bg-[#0e1322] p-4 sm:p-6 hover:border-gray-700 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5 active:scale-[0.98] transition-all duration-300 flex flex-col justify-between cursor-pointer";
+                card.className = "group relative rounded-2xl border border-gray-900 bg-[#0e1322] p-4 sm:p-6 hover:border-gray-700 hover:shadow-xl hover:shadow-blue-500/5 active:scale-[0.98] transition-all duration-300 flex flex-col justify-between cursor-pointer reveal player-card-hover";
                 card.addEventListener("click", function() { openPlayerModal(player.id); });
 
                 // Icon box
@@ -938,6 +997,7 @@
                 card.appendChild(footer);
                 grid.appendChild(card);
             });
+            setTimeout(observeNewCards, 50);
         }
 
         function handleSearchAndFilter() {
@@ -1966,6 +2026,7 @@
         initPlayerStats();
         initNews();
         initI18n();
+        initScrollAnimations();
         initAdminMode();
     };
     </script>
@@ -2360,9 +2421,23 @@
         document.getElementById('admin-login-modal').classList.add('hidden');
         document.getElementById('admin-password').value = '';
     }
+    /* ---- RATE LIMIT: max 5 tentatives, blocage 15 min ---- */
+    var adminAttempts    = 0;
+    var adminBlockedUntil = 0;
+
     function verifyAdmin() {
+        var now = Date.now();
+        if (now < adminBlockedUntil) {
+            var mins = Math.ceil((adminBlockedUntil - now) / 60000);
+            document.getElementById('admin-error').textContent = 'Trop de tentatives. Réessaie dans ' + mins + ' min.';
+            document.getElementById('admin-error').classList.remove('hidden');
+            document.getElementById('admin-password').value = '';
+            return;
+        }
         var pwd = document.getElementById('admin-password').value;
         if (pwd === ADMIN_PASSWORD) {
+            adminAttempts = 0;
+            adminBlockedUntil = 0;
             isAdminLogged = true;
             closeAdminLogin();
             document.getElementById('admin-panel').classList.remove('hidden');
@@ -2372,6 +2447,15 @@
             renderPendingList();
             renderNewsGrid();
         } else {
+            adminAttempts++;
+            if (adminAttempts >= 5) {
+                adminBlockedUntil = Date.now() + 15 * 60 * 1000; // 15 minutes
+                adminAttempts = 0;
+                document.getElementById('admin-error').textContent = 'Compte bloqué 15 minutes — Trop de tentatives.';
+            } else {
+                var left = 5 - adminAttempts;
+                document.getElementById('admin-error').textContent = 'Mot de passe incorrect — ' + left + ' tentative(s) restante(s)';
+            }
             document.getElementById('admin-error').classList.remove('hidden');
             document.getElementById('admin-password').value = '';
         }
@@ -2506,16 +2590,35 @@
     }
     function closeSubmitModal() { document.getElementById('submit-modal').classList.add('hidden'); }
 
+    /* ---- RATE LIMIT soumissions (3 max / 10 min) ---- */
+    var submitCount = 0;
+    var submitWindowStart = 0;
+
     function submitUserArticle() {
+        var now = Date.now();
+        if (now - submitWindowStart > 10 * 60 * 1000) {
+            submitCount = 0;
+            submitWindowStart = now;
+        }
+        if (submitCount >= 3) {
+            alert('Limite atteinte : 3 soumissions maximum par 10 minutes. Réessaie plus tard.');
+            return;
+        }
         var author  = document.getElementById('submit-author').value.trim();
         var title   = document.getElementById('submit-title').value.trim();
         var excerpt = document.getElementById('submit-excerpt').value.trim();
         if (!author||!title||!excerpt) { alert('Nom, titre et résumé sont obligatoires.'); return; }
+        submitCount++;
+        function sanitize(str) {
+            return str.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').slice(0, 500);
+        }
         pendingArticles.push({
             category: document.getElementById('submit-category').value,
-            title: title, excerpt: excerpt,
-            link: document.getElementById('submit-link').value.trim(),
-            emoji: '📰', author: author,
+            title: sanitize(title),
+            excerpt: sanitize(excerpt),
+            link: document.getElementById('submit-link').value.trim().replace(/javascript:/gi,''),
+            emoji: '📰',
+            author: sanitize(author),
             date: new Date().toISOString().split('T')[0]
         });
         document.getElementById('submit-success').classList.remove('hidden');
@@ -2599,6 +2702,55 @@
         fetchLiveFeed();
     }
     </script>
+    <!-- ============================================================
+         SCROLL ANIMATIONS — IntersectionObserver
+    ============================================================ -->
+    <script>
+    function initScrollAnimations() {
+        if (!window.IntersectionObserver) {
+            // Fallback: show all elements immediately
+            document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function(el){
+                el.classList.add('visible');
+            });
+            return;
+        }
+
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Unobserve after animation
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(function(el) {
+            observer.observe(el);
+        });
+    }
+
+    // Re-observe dynamically added cards (player grid)
+    function observeNewCards() {
+        if (!window._revealObserver) {
+            window._revealObserver = new IntersectionObserver(function(entries){
+                entries.forEach(function(e){
+                    if (e.isIntersecting) {
+                        e.target.classList.add('visible');
+                        window._revealObserver.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+        }
+        document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){
+            window._revealObserver.observe(el);
+        });
+    }
+    </script>
+
     <!-- ============================================================
          i18n — Traduction FR / HT / EN
     ============================================================ -->
