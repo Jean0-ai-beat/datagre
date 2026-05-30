@@ -3900,22 +3900,22 @@
     function generateImageWithPollinations(prompt) {
         return new Promise(function(resolve, reject){
             var fullPrompt = prompt + ', Haiti national football team, red and blue jersey, World Cup 2026, hyperrealistic, 4k, professional sports photography';
-            var url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&nologo=true&enhance=true&model=flux&seed=' + Math.floor(Math.random()*9999);
+
+            // Nouvo endpoint unifye gen.pollinations.ai (mai 2026)
+            var url = 'https://gen.pollinations.ai/image/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&nologo=true&model=flux&seed=' + Math.floor(Math.random()*9999);
 
             var img = new Image();
-            // PAS de crossOrigin ici — on affiche l'image directement sans Canvas cross-origin
             img.onload  = function(){ resolve(url); };
             img.onerror = function(){
-                // Fallback: essayer sans enhance
-                var url2 = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&nologo=true&model=flux';
+                // Fallback: essayer sans paramètres optionnels
+                var url2 = 'https://gen.pollinations.ai/image/' + encodeURIComponent(fullPrompt);
                 var img2 = new Image();
                 img2.onload  = function(){ resolve(url2); };
                 img2.onerror = function(){ reject(new Error('failed')); };
                 img2.src = url2;
             };
             img.src = url;
-            // Timeout 60 secondes (Pollinations peut être lent)
-            setTimeout(function(){ reject(new Error('Timeout — Réessaie')); }, 60000);
+            setTimeout(function(){ reject(new Error('Timeout — Réessaie')); }, 90000);
         });
     }
 
