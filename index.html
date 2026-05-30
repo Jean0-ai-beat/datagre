@@ -3896,114 +3896,121 @@
         });
     }
 
-    /* ---- GÉNÉRATION IMAGE via Pollinations AI (gratuit) ---- */
+    /* ---- GÉNÉRATION IMAGE via Pollinations AI ---- */
     function generateImageWithPollinations(prompt) {
         return new Promise(function(resolve, reject){
-            var fullPrompt = prompt + ', Haiti national football team, red and blue jersey, World Cup 2026, hyperrealistic, 4k, professional sports photography';
-
-            // Nouvo endpoint unifye gen.pollinations.ai (mai 2026)
-            var url = 'https://gen.pollinations.ai/image/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&nologo=true&model=flux&seed=' + Math.floor(Math.random()*9999);
-
-            var img = new Image();
-            img.onload  = function(){ resolve(url); };
-            img.onerror = function(){
-                // Fallback: essayer sans paramètres optionnels
-                var url2 = 'https://gen.pollinations.ai/image/' + encodeURIComponent(fullPrompt);
-                var img2 = new Image();
-                img2.onload  = function(){ resolve(url2); };
-                img2.onerror = function(){ reject(new Error('failed')); };
-                img2.src = url2;
-            };
-            img.src = url;
-            setTimeout(function(){ reject(new Error('Timeout — Réessaie')); }, 90000);
+            var fullPrompt = prompt + ', Haiti national football team, red and blue jersey, World Cup 2026, hyperrealistic, 4k';
+            // Utiliser les deux endpoints (ancien + nouveau) comme fallback
+            var urls = [
+                'https://image.pollinations.ai/prompt/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&nologo=true&model=flux&seed=' + Math.floor(Math.random()*9999),
+                'https://gen.pollinations.ai/image/' + encodeURIComponent(fullPrompt) + '?width=512&height=512&model=flux'
+            ];
+            var tried = 0;
+            function tryUrl(url) {
+                var img = new Image();
+                img.onload  = function(){ resolve(url); };
+                img.onerror = function(){
+                    tried++;
+                    if (tried < urls.length) tryUrl(urls[tried]);
+                    else reject(new Error('failed'));
+                };
+                img.src = url;
+            }
+            tryUrl(urls[0]);
+            setTimeout(function(){ reject(new Error('Timeout')); }, 90000);
         });
     }
 
-    /* ---- APPLIQUER OVERLAYS SUR CANVAS ---- */
+    /* ---- AFFICHER IMAGE AVEC OVERLAYS CSS (pas de Canvas CORS) ---- */
     function applyOverlaysToCanvas(imageUrl) {
         return new Promise(function(resolve){
-            var canvas = document.getElementById('ai-frame-canvas');
-            var ctx    = canvas.getContext('2d');
-            var W = 512, H = 512;
-            canvas.width = W; canvas.height = H;
+            var canvas  = document.getElementById('ai-frame-canvas');
+            var wrapper = canvas.parentNode;
 
-            var img = new Image();
-            // Pas de crossOrigin pour éviter CORS — on dessine directement
-            img.onload = function() {
-                try {
-                    ctx.drawImage(img, 0, 0, W, H);
-                } catch(e) {
-                    // Si CORS bloque le drawImage, afficher l'image sans canvas overlay
-                    canvas.style.display = 'none';
-                    var imgEl = document.getElementById('ai-result-img');
-                    if (!imgEl) {
-                        imgEl = document.createElement('img');
-                        imgEl.id = 'ai-result-img';
-                        imgEl.style.cssText = 'width:100%;border-radius:14px;border:1px solid #1f2937;';
-                        canvas.parentNode.insertBefore(imgEl, canvas);
-                    }
-                    imgEl.src = imageUrl;
-                    resolve(); return;
+            // Cacher le canvas, utiliser un conteneur CSS à la place
+            canvas.style.display = 'none';
+
+            // Supprimer ancien conteneur si existe
+            var old = document.getElementById('ai-css-frame');
+            if (old) old.remove();
+
+            var container = document.createElement('div');
+            container.id = 'ai-css-frame';
+            container.style.cssText = 'position:relative;width:100%;aspect-ratio:1/1;border-radius:14px;overflow:hidden;border:1px solid #1f2937;box-shadow:0 4px 24px rgba(0,0,0,0.5);';
+
+            // Image principale
+            var mainImg = document.createElement('img');
+            mainImg.src = imageUrl;
+            mainImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+            mainImg.onerror = function(){ showFrameError(); };
+
+            // Gradient bas
+            var grad = document.createElement('div');
+            grad.style.cssText = 'position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 50%);pointer-events:none;';
+
+            // Bandeau PWESPORTS bas
+            var band = document.createElement('div');
+            band.style.cssText = 'position:absolute;bottom:0;left:0;right:0;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;background:rgba(11,15,25,0.75);';
+            band.innerHTML = '<span style="font-family:Oswald,sans-serif;font-size:13px;font-weight:900;color:#fff;">PWE<span style="color:#ef4444;">SPORTS</span></span>'
+                + '<span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);">GRENADIERS • MONDIAL 2026 🇭🇹</span>';
+
+            container.appendChild(mainImg);
+            container.appendChild(grad);
+            container.appendChild(band);
+
+            // Overlay drapeau Haïti (coin haut gauche)
+            var showFlag = document.getElementById('ai-overlay-flag') && document.getElementById('ai-overlay-flag').checked;
+            if (showFlag) {
+                var flagEl = document.createElement('img');
+                flagEl.src = 'https://flagcdn.com/w80/ht.png';
+                flagEl.style.cssText = 'position:absolute;top:12px;left:12px;width:72px;height:auto;border-radius:6px;border:2px solid rgba(255,255,255,0.7);box-shadow:0 2px 8px rgba(0,0,0,0.5);';
+                container.appendChild(flagEl);
+            }
+
+            // Overlay logo PWESPORTS (coin haut droit)
+            var showLogo = document.getElementById('ai-overlay-logo') && document.getElementById('ai-overlay-logo').checked;
+            if (showLogo) {
+                var navImg = document.querySelector('nav img[alt="PWESPORTS"]');
+                if (navImg) {
+                    var logoEl = document.createElement('img');
+                    logoEl.src = navImg.src;
+                    logoEl.style.cssText = 'position:absolute;top:12px;right:12px;width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,0.7);box-shadow:0 2px 8px rgba(0,0,0,0.5);object-fit:cover;';
+                    container.appendChild(logoEl);
                 }
+            }
 
-                // Gradient bas
-                var grad = ctx.createLinearGradient(0, H*0.65, 0, H);
-                grad.addColorStop(0, 'rgba(0,0,0,0)');
-                grad.addColorStop(1, 'rgba(0,0,0,0.6)');
-                ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
+            wrapper.appendChild(container);
 
-                // Bandeau PWESPORTS en bas
-                ctx.fillStyle = 'rgba(11,15,25,0.75)';
-                ctx.fillRect(0, H-44, W, 44);
-                ctx.font = 'bold 14px Oswald,Arial,sans-serif';
-                ctx.fillStyle = '#fff'; ctx.textAlign = 'left';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('PWE', 12, H-22);
-                ctx.fillStyle = '#ef4444';
-                ctx.fillText('SPORTS', 12+ctx.measureText('PWE').width, H-22);
-                ctx.font = 'bold 11px Arial,sans-serif';
-                ctx.fillStyle = 'rgba(255,255,255,0.5)';
-                ctx.textAlign = 'right';
-                ctx.fillText('GRENADIERS • MONDIAL 2026 🇭🇹', W-12, H-22);
-
-                var showFlag = document.getElementById('ai-overlay-flag') && document.getElementById('ai-overlay-flag').checked;
-                var showLogo = document.getElementById('ai-overlay-logo') && document.getElementById('ai-overlay-logo').checked;
-
-                function done() { resolve(); }
-
-                function applyLogo() {
-                    if (!showLogo) { done(); return; }
-                    loadAiLogoImage(function(logo){
-                        if (logo) {
-                            var ls=60, lx=W-ls-12, ly=12;
-                            ctx.save();
-                            ctx.beginPath(); ctx.arc(lx+ls/2,ly+ls/2,ls/2,0,Math.PI*2); ctx.clip();
-                            ctx.drawImage(logo,lx,ly,ls,ls); ctx.restore();
-                            ctx.strokeStyle='rgba(255,255,255,0.7)'; ctx.lineWidth=2;
-                            ctx.beginPath(); ctx.arc(lx+ls/2,ly+ls/2,ls/2,0,Math.PI*2); ctx.stroke();
-                        }
-                        done();
-                    });
-                }
-
-                if (showFlag) {
-                    loadAiFlagImage(function(flag){
-                        if (flag) {
-                            var fw=100,fh=66,fx=12,fy=12;
-                            ctx.save();
-                            aiRoundRect(ctx,fx,fy,fw,fh,6); ctx.clip();
-                            ctx.drawImage(flag,fx,fy,fw,fh); ctx.restore();
-                            ctx.strokeStyle='rgba(255,255,255,0.6)'; ctx.lineWidth=2;
-                            aiRoundRect(ctx,fx,fy,fw,fh,6); ctx.stroke();
-                        }
-                        applyLogo();
-                    });
-                } else { applyLogo(); }
+            // Mettre à jour le bouton download pour utiliser html2canvas ou juste l'image
+            document.getElementById('ai-download-btn').onclick = function() {
+                downloadAIFrame(imageUrl);
             };
-            img.onerror = function(){ resolve(); };
-            img.src = imageUrl;
+
+            resolve();
         });
     }
+
+    /* ---- TÉLÉCHARGER : utiliser l'image directement ---- */
+    function downloadAIFrame(imageUrl) {
+        // Ouvrir l'image dans un nouvel onglet pour téléchargement
+        // (evite les restrictions CORS pour le download direct)
+        if (!imageUrl) {
+            var frame = document.getElementById('ai-css-frame');
+            if (frame) {
+                var img = frame.querySelector('img');
+                if (img) imageUrl = img.src;
+            }
+        }
+        if (imageUrl) {
+            var a = document.createElement('a');
+            a.href = imageUrl;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.download = 'pwesports-ia-' + Date.now() + '.jpg';
+            a.click();
+        }
+    }
+
 
     function loadAiFlagImage(cb) {
         if (aiFlagImage) { cb(aiFlagImage); return; }
@@ -4039,22 +4046,17 @@
 
     function showFrameError() {
         var canvas = document.getElementById('ai-frame-canvas');
-        var ctx = canvas.getContext('2d');
-        canvas.width = 512; canvas.height = 512;
-        ctx.fillStyle = '#0e1322'; ctx.fillRect(0,0,512,512);
-        // Cercle rouge
-        ctx.beginPath(); ctx.arc(256,200,50,0,Math.PI*2);
-        ctx.fillStyle = 'rgba(239,68,68,0.15)'; ctx.fill();
-        ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2; ctx.stroke();
-        ctx.font = 'bold 24px Arial'; ctx.fillStyle = '#ef4444';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('⚠', 256, 200);
-        ctx.font = 'bold 14px Arial'; ctx.fillStyle = '#fff';
-        ctx.fillText('Erreur de génération', 256, 280);
-        ctx.font = '11px Arial'; ctx.fillStyle = '#6b7280';
-        ctx.fillText('Pollinations.ai peut être lent ou indisponible.', 256, 308);
-        ctx.fillText('Clique sur Générer pour réessayer.', 256, 328);
-        // Re-enable generate button
+        canvas.style.display = 'none';
+        var old = document.getElementById('ai-css-frame');
+        if (old) old.remove();
+        var errDiv = document.createElement('div');
+        errDiv.id = 'ai-css-frame';
+        errDiv.style.cssText = 'width:100%;aspect-ratio:1/1;border-radius:14px;background:#0e1322;border:1px solid #1f2937;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;';
+        errDiv.innerHTML = '<div style="font-size:2.5rem;">⚠️</div>'
+            + '<p style="font-size:13px;font-weight:700;color:#ef4444;">Erreur de génération</p>'
+            + '<p style="font-size:11px;color:#6b7280;text-align:center;padding:0 16px;">Pollinations.ai est peut-être surchargé.<br>Clique sur <strong style="color:#fff;">Générer</strong> pour réessayer.</p>';
+        var wrapper = canvas.parentNode;
+        wrapper.appendChild(errDiv);
         var btn = document.getElementById('ai-generate-btn');
         if (btn) btn.disabled = false;
     }
