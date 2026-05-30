@@ -810,7 +810,7 @@
         </div>
     </div>
 
-    <!-- MODAL SOUMISSION (users) -->
+    <!-- MODAL SOUMISSION (users) — Netlify Forms -->
     <div id="submit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
             <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
@@ -822,47 +822,61 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <div class="p-6 space-y-4">
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_author">Votre nom / Pseudo *</label>
-                    <input id="submit-author" type="text" placeholder="Ex: Jean Paul..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
-                    <select id="submit-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
-                        <option value="Officiel">🔴 Officiel</option>
-                        <option value="Transfert">🔵 Transfert</option>
-                        <option value="Performance">⚡ Performance</option>
-                        <option value="Coupe du Monde">🏆 Coupe du Monde</option>
-                        <option value="Interview">🎙️ Interview</option>
-                        <option value="Blessure">🏥 Blessure</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
-                    <input id="submit-title" type="text" placeholder="Titre de votre article..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
-                    <textarea id="submit-excerpt" rows="4" placeholder="Décrivez l'actualité en 2-4 phrases..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
-                    <input id="submit-link" type="url" placeholder="https://..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                </div>
-                <p id="submit-success" class="hidden text-xs text-emerald-400 font-semibold text-center py-2">
-                    <i class="fa-solid fa-circle-check mr-1"></i><span data-i18n="msg_submitted">Article soumis ! L'équipe PWESPORTS va l'examiner.</span>
-                </p>
-                <div class="flex gap-3 pt-2">
-                    <button onclick="submitUserArticle()" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-bold uppercase text-white transition">
-                        <i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="btn_send">Envoyer</span>
-                    </button>
-                    <button onclick="closeSubmitModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
-                </div>
+            <div class="p-6">
+                <!-- Netlify Forms : data-netlify="true" capture automatiquement -->
+                <form id="submit-form" name="article-submission" method="POST"
+                      data-netlify="true" data-netlify-honeypot="bot-field"
+                      onsubmit="handleNetlifySubmit(event)" class="space-y-4">
+
+                    <!-- Champ honeypot anti-spam caché -->
+                    <input type="hidden" name="form-name" value="article-submission">
+                    <p class="hidden"><input name="bot-field"></p>
+
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_author">Votre nom / Pseudo *</label>
+                        <input name="author" id="submit-author" type="text" placeholder="Ex: Jean Paul..." required
+                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
+                        <select name="category" id="submit-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
+                            <option value="Officiel">🔴 Officiel</option>
+                            <option value="Transfert">🔵 Transfert</option>
+                            <option value="Performance">⚡ Performance</option>
+                            <option value="Coupe du Monde">🏆 Coupe du Monde</option>
+                            <option value="Interview">🎙️ Interview</option>
+                            <option value="Blessure">🏥 Blessure</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
+                        <input name="title" id="submit-title" type="text" placeholder="Titre de votre article..." required
+                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
+                        <textarea name="excerpt" id="submit-excerpt" rows="4" placeholder="Décrivez l'actualité en 2-4 phrases..." required
+                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
+                        <input name="link" id="submit-link" type="url" placeholder="https://..."
+                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                    </div>
+
+                    <!-- Message succès -->
+                    <p id="submit-success" class="hidden text-xs text-emerald-400 font-semibold text-center py-2">
+                        <i class="fa-solid fa-circle-check mr-1"></i>
+                        <span data-i18n="msg_submitted">Article soumis ! L'équipe PWESPORTS va l'examiner.</span>
+                    </p>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="submit" id="submit-btn" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-bold uppercase text-white transition">
+                            <i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="btn_send">Envoyer</span>
+                        </button>
+                        <button type="button" onclick="closeSubmitModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -2326,9 +2340,11 @@
          ACTUALITÉS v2 — Admin login + File attente + Soumission users
     ============================================================ -->
     <script>
-    /* ---- CONFIG ADMIN (changer le mot de passe ici) ---- */
+    /* ---- CONFIG ADMIN ---- */
     var ADMIN_PASSWORD = 'pwesports2026';
     var isAdminLogged  = false;
+    var submitCount = 0;
+    var submitWindowStart = 0;
 
     /* ---- ARTICLES PUBLIÉS ---- */
     var newsArticles = [
@@ -2506,14 +2522,49 @@
         var a = pendingArticles.splice(idx, 1)[0];
         a.date = new Date().toISOString().split('T')[0];
         newsArticles.unshift(a);
+        saveNews();
+        savePending();
         renderPendingList();
         renderNewsGrid();
     }
     function rejectArticle(idx) {
         if (confirm('Rejeter cet article ?')) {
             pendingArticles.splice(idx, 1);
+            savePending();
             renderPendingList();
         }
+    }
+
+    /* ── PERSISTANCE localStorage ── */
+    function savePending() {
+        try { localStorage.setItem('pwe_pending', JSON.stringify(pendingArticles)); } catch(e){}
+    }
+    function saveNews() {
+        try { localStorage.setItem('pwe_news', JSON.stringify(newsArticles)); } catch(e){}
+    }
+    function loadStored() {
+        try {
+            var p = localStorage.getItem('pwe_pending');
+            if (p) pendingArticles = JSON.parse(p);
+        } catch(e){}
+        try {
+            var n = localStorage.getItem('pwe_news');
+            if (n) {
+                var stored = JSON.parse(n);
+                // Merge: garde les articles par défaut + ajoute les nouveaux
+                var defaultIds = newsArticles.map(function(a){ return a.title; });
+                stored.forEach(function(a){
+                    if (defaultIds.indexOf(a.title) === -1) newsArticles.push(a);
+                    else {
+                        // Remplace l'article par défaut si modifié
+                        var idx2 = defaultIds.indexOf(a.title);
+                        newsArticles[idx2] = a;
+                    }
+                });
+                // Trier par date desc
+                newsArticles.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+            }
+        } catch(e){}
     }
 
     /* ──────────────── MODAL ADMIN (ajout/édition) ──────────────── */
@@ -2571,63 +2622,83 @@
         };
         var idx = parseInt(document.getElementById('news-edit-index').value);
         if (idx >= 0) { newsArticles[idx] = article; } else { newsArticles.unshift(article); }
+        saveNews();
         closeNewsModal();
         renderNewsGrid();
     }
     function editNewsArticle(idx)   { openNewsModal(idx); }
     function deleteNewsArticle(idx) {
-        if (confirm('Supprimer cet article ?')) { newsArticles.splice(idx,1); renderNewsGrid(); }
+        if (confirm('Supprimer cet article ?')) {
+            newsArticles.splice(idx,1);
+            saveNews();
+            renderNewsGrid();
+        }
     }
 
     /* ──────────────── MODAL SOUMISSION USERS ──────────────── */
     function openSubmitModal() {
         document.getElementById('submit-success').classList.add('hidden');
-        document.getElementById('submit-author').value  = '';
-        document.getElementById('submit-title').value   = '';
-        document.getElementById('submit-excerpt').value = '';
-        document.getElementById('submit-link').value    = '';
+        var form = document.getElementById('submit-form');
+        if (form) form.reset();
         document.getElementById('submit-modal').classList.remove('hidden');
     }
     function closeSubmitModal() { document.getElementById('submit-modal').classList.add('hidden'); }
 
-    /* ---- RATE LIMIT soumissions (3 max / 10 min) ---- */
-    var submitCount = 0;
-    var submitWindowStart = 0;
+    /* ---- SOUMISSION NETLIFY FORMS ---- */
+    function handleNetlifySubmit(event) {
+        event.preventDefault();
 
-    function submitUserArticle() {
+        // Rate limit
         var now = Date.now();
-        if (now - submitWindowStart > 10 * 60 * 1000) {
-            submitCount = 0;
-            submitWindowStart = now;
-        }
+        if (now - submitWindowStart > 10 * 60 * 1000) { submitCount = 0; submitWindowStart = now; }
         if (submitCount >= 3) {
-            alert('Limite atteinte : 3 soumissions maximum par 10 minutes. Réessaie plus tard.');
+            alert('Limite atteinte : 3 soumissions maximum par 10 minutes.');
             return;
         }
-        var author  = document.getElementById('submit-author').value.trim();
-        var title   = document.getElementById('submit-title').value.trim();
-        var excerpt = document.getElementById('submit-excerpt').value.trim();
-        if (!author||!title||!excerpt) { alert('Nom, titre et résumé sont obligatoires.'); return; }
-        submitCount++;
-        function sanitize(str) {
-            return str.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').slice(0, 500);
-        }
-        pendingArticles.push({
-            category: document.getElementById('submit-category').value,
-            title: sanitize(title),
-            excerpt: sanitize(excerpt),
-            link: document.getElementById('submit-link').value.trim().replace(/javascript:/gi,''),
-            emoji: '📰',
-            author: sanitize(author),
-            date: new Date().toISOString().split('T')[0]
+
+        var btn = document.getElementById('submit-btn');
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Envoi...'; }
+
+        var form = document.getElementById('submit-form');
+        var data = new FormData(form);
+
+        fetch('/', { method: 'POST', body: data })
+        .then(function(response) {
+            if (response.ok || response.status === 200) {
+                submitCount++;
+                // Afficher succès
+                document.getElementById('submit-success').classList.remove('hidden');
+                if (form) form.reset();
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="btn_send">Envoyer</span>'; }
+                setTimeout(closeSubmitModal, 5000);
+            } else {
+                throw new Error('Erreur réseau');
+            }
+        })
+        .catch(function() {
+            // Fallback : sauvegarder localement si Netlify échoue
+            var author  = document.querySelector('[name="author"]').value.trim();
+            var title   = document.querySelector('[name="title"]').value.trim();
+            var excerpt = document.querySelector('[name="excerpt"]').value.trim();
+            var link    = document.querySelector('[name="link"]').value.trim();
+            var cat     = document.querySelector('[name="category"]').value;
+
+            function sanitize(str) {
+                return str.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').slice(0,500);
+            }
+            pendingArticles.push({
+                category: cat, title: sanitize(title), excerpt: sanitize(excerpt),
+                link: link.replace(/javascript:/gi,''), emoji: '📰',
+                author: sanitize(author), date: new Date().toISOString().split('T')[0]
+            });
+            savePending();
+            submitCount++;
+            document.getElementById('submit-success').classList.remove('hidden');
+            if (form) form.reset();
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i><span>Envoyer</span>'; }
+            if (isAdminLogged) renderPendingList();
+            setTimeout(closeSubmitModal, 5000);
         });
-        document.getElementById('submit-success').classList.remove('hidden');
-        document.getElementById('submit-author').value  = '';
-        document.getElementById('submit-title').value   = '';
-        document.getElementById('submit-excerpt').value = '';
-        document.getElementById('submit-link').value    = '';
-        if (isAdminLogged) renderPendingList();
-        setTimeout(closeSubmitModal, 5000);
     }
 
     /* ──────────────── FEED LIVE ──────────────── */
@@ -2698,6 +2769,7 @@
 
     /* ──────────────── INIT ──────────────── */
     function initNews() {
+        loadStored();     // Charger données persistées
         renderNewsGrid();
         fetchLiveFeed();
     }
