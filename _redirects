@@ -1,2 +1,0 @@
-# Redirect HTTP to HTTPS
-http://pwesports.netlify.app/* https://pwesports.netlify.app/:splat 301!
