@@ -1,0 +1,4 @@
+# Redirect HTTP to HTTPS (Netlify handles this automatically but explicit is better)
+http://pwesports.netlify.app/* https://pwesports.netlify.app/:splat 301!
+# 404 fallback
+/* /index.html 200
