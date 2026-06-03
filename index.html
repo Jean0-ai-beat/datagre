@@ -1533,8 +1533,8 @@
         var PW     = rect.width  || 320;
         var PH     = rect.height || 480;
         var coords = formationCoords[currentFormation];
-        var r      = Math.max(14, Math.min(18, PW * 0.055));
-        var fs     = Math.max(6,  Math.min(9,  PW * 0.025));
+        var r      = Math.max(18, Math.min(24, PW * 0.075));
+        var fs     = Math.max(7,  Math.min(11, PW * 0.032));
 
         currentLineup.forEach(function(entry, i) {
             var player = playersDataset.find(function(p){ return p.id===entry.id; });
@@ -1549,25 +1549,39 @@
             var wrap = document.createElement('div');
             wrap.className = 'player-token';
             wrap.setAttribute('data-id', entry.id);
-            wrap.style.cssText = 'position:absolute;left:'+lx+'px;top:'+ty+'px;transform:translate(-50%,-50%);width:'+(diam+14)+'px;text-align:center;cursor:pointer;z-index:10;-webkit-tap-highlight-color:transparent;';
+            wrap.style.cssText = 'position:absolute;left:'+lx+'px;top:'+ty+'px;transform:translate(-50%,-50%);width:'+(r*2+24)+'px;text-align:center;cursor:pointer;z-index:10;-webkit-tap-highlight-color:transparent;';
 
             var circle = document.createElement('div');
             /* ── Vrè jersey Haïti SAETA ── */
-            var jerseySize = diam + 8;
             var num = (typeof playerNumbers !== 'undefined' && playerNumbers[entry.id]) ? playerNumbers[entry.id] : '';
             /* GB=jersey ble, tous = jersey ble domisil */
-            var jerseyImg = currentJersey === 'red' ? JERSEY_RED : currentJersey === 'white' ? JERSEY_WHITE : JERSEY_BLUE;
+            /* GK = jersey jòn (gardyen), lòt = jersey chwazi */
+            var isGK = (entry.pos === 'GB');
+            var jerseyImg = isGK ? null : (currentJersey === 'red' ? JERSEY_RED : currentJersey === 'white' ? JERSEY_WHITE : JERSEY_BLUE);
 
-            circle.style.cssText = 'width:'+jerseySize+'px;height:'+jerseySize+'px;margin:0 auto 2px;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.7))'+(isSelected?'drop-shadow(0 0 8px #fbbf24)':'')+';transition:transform 0.2s;cursor:pointer;';
+            var jerseySize = r * 2 + 10;
+            var gkSvg = '<svg width="'+jerseySize+'" height="'+jerseySize+'" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg">'
+                + '<path d="M11 5 L6 12 L12 14 L12 38 L28 38 L28 14 L34 12 L29 5 L24 7 Q20 10 16 7 Z" fill="#eab308" stroke="rgba(0,0,0,0.3)" stroke-width="1"/>'
+                + '<path d="M16 7 Q20 10 24 7 L24 11 Q20 13 16 11 Z" fill="rgba(255,255,255,0.3)"/>'
+                + (num ? '<text x="20" y="27" text-anchor="middle" dominant-baseline="middle" font-family="Oswald,sans-serif" font-size="10" font-weight="900" fill="rgba(0,0,0,0.75)">'+num+'</text>' : '')
+                + '</svg>';
 
-            circle.innerHTML = '<img src="'+jerseyImg+'" style="width:100%;height:100%;object-fit:contain;border-radius:2px;'+(isSelected?'outline:2px solid #fbbf24;outline-offset:1px;':'')+'">'
-                + (num ? '<span style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-family:Oswald,sans-serif;font-size:'+(fs+1)+'px;font-weight:900;color:white;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 6px rgba(0,0,0,0.7);line-height:1;">'+num+'</span>' : '');
+            circle.style.cssText = 'width:'+jerseySize+'px;height:'+jerseySize+'px;margin:0 auto 2px;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.8))'+(isSelected?' drop-shadow(0 0 10px #fbbf24)':'')+';transition:transform 0.2s;cursor:pointer;';
 
-            wrap.addEventListener('mouseenter', function(){ circle.style.transform='scale(1.18) translateY(-2px)'; });
+            if (isGK) {
+                circle.innerHTML = gkSvg;
+            } else {
+                circle.innerHTML = '<div style="position:relative;width:'+jerseySize+'px;height:'+jerseySize+'px;">'
+                    + '<img src="'+jerseyImg+'" style="width:100%;height:100%;object-fit:contain;'+(isSelected?'filter:drop-shadow(0 0 6px #fbbf24);':'')+'">'
+                    + (num ? '<span style="position:absolute;top:3px;left:50%;transform:translateX(-50%);font-family:Oswald,sans-serif;font-size:'+(fs)+'px;font-weight:900;color:white;text-shadow:0 1px 4px rgba(0,0,0,0.95);line-height:1;background:rgba(0,0,0,0.35);padding:0 3px;border-radius:3px;">'+num+'</span>' : '')
+                    + '</div>';
+            }
+
+            wrap.addEventListener('mouseenter', function(){ circle.style.transform='scale(1.2) translateY(-3px)'; });
             wrap.addEventListener('mouseleave', function(){ circle.style.transform=''; });
 
             var lbl = document.createElement('div');
-            lbl.style.cssText = 'font-family:Oswald,sans-serif;font-size:'+fs+'px;font-weight:700;color:'+(isSelected?'#fbbf24':'#fff')+';text-shadow:0 1px 3px rgba(0,0,0,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:'+(diam+14)+'px;';
+            lbl.style.cssText = 'font-family:Oswald,sans-serif;font-size:'+(fs+1)+'px;font-weight:800;color:'+(isSelected?'#fbbf24':'#fff')+';text-shadow:0 1px 4px rgba(0,0,0,1),0 0 8px rgba(0,0,0,0.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:'+(r*2+24)+'px;letter-spacing:0.02em;';
             lbl.textContent = getLastName(player.name, player.id);
 
             wrap.appendChild(circle);
