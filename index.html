@@ -410,7 +410,26 @@
                         </div>
                     </div>
                     <p class="text-center text-[10px] text-gray-600 mt-2">⬆ Attaque — Défense ⬇</p>
-                    <button onclick="downloadLineup()" class="mt-3 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-2.5 text-xs font-bold uppercase text-white shadow-lg shadow-blue-600/20 hover:from-blue-700 hover:to-blue-900 transition">
+                    <!-- JERSEY SELECTOR -->
+                    <div class="mt-3 flex items-center justify-center gap-2">
+                        <span class="text-[10px] font-bold uppercase text-gray-500 tracking-wider">Maillot:</span>
+                        <button onclick="setJersey('blue')" id="jersey-btn-blue"
+                            class="jersey-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[10px] font-bold uppercase transition"
+                            style="background:#1e3a8a;border-color:#3b82f6;color:#93c5fd;">
+                            <span style="width:10px;height:10px;border-radius:50%;background:#1d4ed8;display:inline-block;border:1px solid #93c5fd;"></span>Domisil
+                        </button>
+                        <button onclick="setJersey('red')" id="jersey-btn-red"
+                            class="jersey-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[10px] font-bold uppercase transition"
+                            style="background:#450a0a;border-color:#374151;color:#9ca3af;">
+                            <span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;border:1px solid #6b7280;"></span>Deyo
+                        </button>
+                        <button onclick="setJersey('white')" id="jersey-btn-white"
+                            class="jersey-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[10px] font-bold uppercase transition"
+                            style="background:#0e1322;border-color:#374151;color:#9ca3af;">
+                            <span style="width:10px;height:10px;border-radius:50%;background:#e5e7eb;display:inline-block;border:1px solid #6b7280;"></span>3yèm
+                        </button>
+                    </div>
+                    <button onclick="downloadLineup()" class="mt-2 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-2.5 text-xs font-bold uppercase text-white shadow-lg shadow-blue-600/20 hover:from-blue-700 hover:to-blue-900 transition">
                         <i class="fa-solid fa-download"></i> <span data-i18n="btn_download">Télécharger le Onze (PNG)</span>
                     </button>
                 </div>
@@ -1533,29 +1552,19 @@
             wrap.style.cssText = 'position:absolute;left:'+lx+'px;top:'+ty+'px;transform:translate(-50%,-50%);width:'+(diam+14)+'px;text-align:center;cursor:pointer;z-index:10;-webkit-tap-highlight-color:transparent;';
 
             var circle = document.createElement('div');
-            var playerRating = window.playerStatsData && window.playerStatsData[entry.id] ?
-                Math.round(Object.values(window.playerStatsData[entry.id]).reduce(function(a,b){return a+b;},0)/6) : null;
+            /* ── Vrè jersey Haïti SAETA ── */
+            var jerseySize = diam + 8;
+            var num = (typeof playerNumbers !== 'undefined' && playerNumbers[entry.id]) ? playerNumbers[entry.id] : '';
+            /* GB=jersey ble, tous = jersey ble domisil */
+            var jerseyImg = currentJersey === 'red' ? JERSEY_RED : currentJersey === 'white' ? JERSEY_WHITE : JERSEY_BLUE;
 
-            circle.style.cssText = [
-                'width:'+diam+'px','height:'+diam+'px','border-radius:50%',
-                'background:linear-gradient(145deg,'+color+','+color+'cc)',
-                'border:'+(isSelected?'3px solid #fbbf24':'2px solid rgba(255,255,255,0.85)'),
-                'box-shadow:'+(isSelected?'0 0 16px #fbbf24, 0 4px 12px rgba(0,0,0,0.7)':'0 4px 12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2)'),
-                'margin:0 auto 2px','display:flex','flex-direction:column','align-items:center','justify-content:center',
-                'font-family:Oswald,sans-serif','font-size:'+fs+'px','font-weight:900','color:#fff',
-                'transition:transform 0.2s,box-shadow 0.2s',
-                'cursor:pointer'
-            ].join(';');
-            circle.innerHTML = '<span style="font-size:'+(fs+1)+'px;font-weight:900;line-height:1;">'+entry.pos+'</span>';
-            if (playerRating) {
-                var ratingEl = document.createElement('span');
-                ratingEl.style.cssText = 'font-size:'+(fs-1)+'px;font-weight:700;color:rgba(255,255,255,0.75);line-height:1;margin-top:1px;';
-                ratingEl.textContent = playerRating;
-                circle.appendChild(ratingEl);
-            }
+            circle.style.cssText = 'width:'+jerseySize+'px;height:'+jerseySize+'px;margin:0 auto 2px;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.7))'+(isSelected?'drop-shadow(0 0 8px #fbbf24)':'')+';transition:transform 0.2s;cursor:pointer;';
 
-            wrap.addEventListener('mouseenter', function(){ circle.style.transform='scale(1.15)'; circle.style.boxShadow='0 6px 20px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2)'; });
-            wrap.addEventListener('mouseleave', function(){ circle.style.transform=''; circle.style.boxShadow=isSelected?'0 0 16px #fbbf24, 0 4px 12px rgba(0,0,0,0.7)':'0 4px 12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2)'; });
+            circle.innerHTML = '<img src="'+jerseyImg+'" style="width:100%;height:100%;object-fit:contain;border-radius:2px;'+(isSelected?'outline:2px solid #fbbf24;outline-offset:1px;':'')+'">'
+                + (num ? '<span style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-family:Oswald,sans-serif;font-size:'+(fs+1)+'px;font-weight:900;color:white;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 6px rgba(0,0,0,0.7);line-height:1;">'+num+'</span>' : '');
+
+            wrap.addEventListener('mouseenter', function(){ circle.style.transform='scale(1.18) translateY(-2px)'; });
+            wrap.addEventListener('mouseleave', function(){ circle.style.transform=''; });
 
             var lbl = document.createElement('div');
             lbl.style.cssText = 'font-family:Oswald,sans-serif;font-size:'+fs+'px;font-weight:700;color:'+(isSelected?'#fbbf24':'#fff')+';text-shadow:0 1px 3px rgba(0,0,0,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:'+(diam+14)+'px;';
@@ -1592,27 +1601,19 @@
             row.onmouseout  = function(){ this.style.background='transparent'; };
 
             var badge = document.createElement('span');
+            var pNum = (typeof playerNumbers !== 'undefined' && playerNumbers[entry.id]) ? playerNumbers[entry.id] : '';
             badge.style.cssText = 'font-family:Oswald,sans-serif;font-size:8px;font-weight:900;background:'+color+';color:#fff;padding:1px 5px;border-radius:4px;flex-shrink:0;min-width:32px;text-align:center;';
-            badge.textContent = entry.pos;
+            badge.textContent = pNum ? '#'+pNum+' '+entry.pos : entry.pos;
 
             var nameEl = document.createElement('span');
             nameEl.style.cssText = 'font-size:10px;font-weight:600;color:#e5e7eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;';
             nameEl.textContent = player.name;
 
-            var pStats = window.playerStatsData && window.playerStatsData[entry.id];
-            var avgRating = pStats ? Math.round(Object.values(pStats).reduce(function(a,b){return a+b;},0)/6) : null;
-            var ratingBadge = document.createElement('span');
-            if (avgRating) {
-                var rColor = avgRating>=80?'#22c55e':avgRating>=70?'#f59e0b':'#9ca3af';
-                ratingBadge.style.cssText = 'font-size:9px;font-weight:800;color:'+rColor+';flex-shrink:0;min-width:24px;text-align:right;';
-                ratingBadge.textContent = avgRating;
-            }
-
             var swapIcon = document.createElement('i');
             swapIcon.className = 'fa-solid fa-right-left';
-            swapIcon.style.cssText = 'color:#374151;font-size:8px;flex-shrink:0;margin-left:4px;';
+            swapIcon.style.cssText = 'color:#374151;font-size:8px;flex-shrink:0;';
 
-            row.appendChild(badge); row.appendChild(nameEl); if(avgRating) row.appendChild(ratingBadge); row.appendChild(swapIcon);
+            row.appendChild(badge); row.appendChild(nameEl); row.appendChild(swapIcon);
             list.appendChild(row);
 
             (function(eid){ row.onclick = function(){ openSubModal(eid); }; })(entry.id);
@@ -1910,6 +1911,32 @@
         a.download = 'haiti-xi-' + currentFormation + '.png';
         a.href = cv.toDataURL('image/png');
         a.click();
+    }
+
+    /* ── JERSEY SELECTOR ── */
+    var currentJersey = 'blue';
+
+    function setJersey(type) {
+        currentJersey = type;
+        // Update button styles
+        var btns = { blue:'#1e3a8a|#3b82f6|#93c5fd', red:'#450a0a|#dc2626|#f87171', white:'#0e1322|#d1d5db|#f3f4f6' };
+        ['blue','red','white'].forEach(function(t) {
+            var btn = document.getElementById('jersey-btn-'+t);
+            if (!btn) return;
+            if (t === type) {
+                var parts = btns[t].split('|');
+                btn.style.background    = parts[0];
+                btn.style.borderColor   = parts[1];
+                btn.style.color         = parts[2];
+                btn.style.boxShadow     = '0 0 8px '+parts[1]+'66';
+            } else {
+                btn.style.background    = '#0e1322';
+                btn.style.borderColor   = '#374151';
+                btn.style.color         = '#9ca3af';
+                btn.style.boxShadow     = '';
+            }
+        });
+        renderPitchPlayers();
     }
 
     /* ---- INIT ---- */
@@ -2365,6 +2392,24 @@
          ACTUALITÉS v2 — Admin login + File attente + Soumission users
     ============================================================ -->
     <script>
+
+    /* ── JERSEY IMAGES (ofisyèl Haïti SAETA) ── */
+    var JERSEY_BLUE  = 'data:image/webp;base64,UklGRl4CAABXRUJQVlA4IFICAACwCwCdASoqADIAPkkejEQioaEarAUAKASEswBghgBntbAbZrzAfrB1It4U59P2TvJ2T0aAEjH8/HPf/AHLRKFnSGT+rOaMyX6GmD9HM/AjubHggPKMXG/TGC1BusVm13tylPhaKQAA/v92Ko/mz6of9bfx7MbsqyenxRc0xVYhKgiEiva8mtHxupc0aX3U80AjNCj+Z7f/DXB0bRnt7W7f2/QXNX1fMP753oq05y8Y1fPn0Dft3DlPhAnrdUegVCYBdLmi5VozbroDtKfsmjQO4V1+j5Orw/sRWp9L4CbqU+sMdmqLDt95ZjfUVKFyDzinkbAmVnDlEyJgUl34wNU7lusNuQxfuaUrbW6q3v87L4aA6uiRKZxcATeiccuqKbjlT1nlgUNlvyTDnOb8bL5czz+jCP/QT95cmNGtoZ4Y3vrp7TLYaWEHj+vrEiSRXPo7gvCGYMlvD78D9GClaZNh81mnYpw3JPI1Ls0W0XP8xPpp31VGZPxap0EtLI9vuGOmr+HP2mw58M6iK2u5MTjkd6YEqlgbCyNP/ty2TCVeJicCFp85e4zL1//A2Bdr6i88+jV052e+zAEXlP332339pk4yloL5caX7RqHEo9tysdNwkcjEeH/4vNfGDqFY6T/MuSx2jHHO0+nXJkj+Sx+frgvpaVpubo0mwv3Cn8p0Z4CVrzshzCsM3DE9m5sCL1ajIPcM+DDtvoFm7LdtrdCIm5+Ub3rISB2mtrspo3cEYm9AB0A59clwYAxEBQrp3LwcLpypSy16U7JheF2tSAAAAAA=';
+    var JERSEY_RED   = 'data:image/webp;base64,UklGRoQCAABXRUJQVlA4IHgCAABQDACdASoqADIAPkkci0QioaEb/VQAKASEswBkCVNv857acBtqPMBjmHoAdKrPkJ1qagNST/u/TW0F/SYvdaDftVEsue6BYCv+0zJgiQFT6URt78wKVIlQs/BHDYgBzwYjDYmpzrecCcPcwAD+/xIboRpyTDyOfheeJXI8gwtzYAS5ia2U7HHNHN8/57vi+zWqw+gQSqIxnpf8If5fxSlC//Q7wmvVEex9zWv5Gnjn53LmzJtt+6T9EnRXxuyp1C2mHURAxawoL7emPH0rqaGHNfisZfPhIrASRqfgcK7pWR78FRG9OGTNbAs2HqgiHex1/8HJlfEDuHmXxq1M9GkoS/HkaTvDAdJu+wNWpY0wDpcOw/3o5Q9O+UrgGGEv19F0jNDyec5XrIl+6pAQE/4ss/vd+yww3x1AG0LbH17v4ZZb5P8+Yqv9bkn43KnJ9bKIHhoXDM/LTx6ZhF+62QrlUJ8yY1H1gKGR29cryRziWOGzUvP7MbeFrv+4DQNa+xdZY32UkB9DCmKJWUmXi3YSiqlZq7oLr+xDjyMeYnKSnmBT//p4JvWgbdtK3vdoOIxvvlD7Wa4uHik/6B33sW7uAn1jfv/gLPgvMheV2C1TelhvzLyCqwdofkPQc/8+CVr3qOGh5HCWjMIxAsB0ky7adghj74XPFs7nzNP8VB0v5QE3Dvx1D9Bw4Wvscuy3Pybfmxpwdmz9fVw8M8xBVmeBPyYF3Xl+YezE/4/5ycFGaeCpkivfm70qDsI58YH9T2Lop5JroXm+bO12MXxbmgrc/oRYfeyAdVw8BmikpjAFQmcBHMlEvLU75jBPL52ptyjnaQjzqAAAAA==';
+    var JERSEY_WHITE = 'data:image/webp;base64,UklGRvoBAABXRUJQVlA4IO4BAACwCgCdASoqADIAPk0gjUQioiGZW2zMKATEs4BnpIWYAN4y8mZ5FvDmMhZ+nnspD+I34WRNrrc+rrplNAl2HSMlNilQezO9sNcfDpImaEejSxkd2sJT/K3IpTHg6UnQAP7/T45/mo1Fk7JzWKxvQl5D4d/5teL8NhJFoy+/M2LxmP+u5/+LD3AOBzIE2gIIJf8tGYIUyhzeu373aqnHljcz7qH3IYtY2eYieL+6sUrbbpY5niAFcKeATZu35V/ZvEXNwNgwy1msqwKq/rUF6ix/TIr+vH13+jkyviQuViXbZ5ZETCIKKaiwh4TdMZqjtpnchqgUHH6TfQAcRaXPM1dGqM2mA1+Y5/CUASv7oyEkx2exL8cxLnnePguXfa7pZf5QVrXNWGMbq88D1/LxrNufM7/lfpPI7aci2Zix3hdy48ckgs1DpaUULOl2oqfh7+39SI1nKBrjomVh8aZ1F2M1v7qSWQZJ8lwB8CqqIevix4s6T/s/VkprxwwWyzgq83s1BO0dO/6zUpfWONu4XpK03N8qy0JwAvEghLZ8ClAg6lFMCat4zc0dkLzbJ04307eIV/gMZ1qnAKHJTtajWxLJr2wFpya6JK9VSb68o+x+ieRrBr5bULHO4KOQKc3iffuUDegG8W8b6XKK5CAAAA==';
+
+    var playerNumbers = {
+        'jhonny_placide':1,'carlens_arcus':2,'keeto_thermoncy':3,
+        'ricardo_ade':4,'hannes_delcroix':5,'carl_fred_sainte':6,
+        'derrick_etienne':7,'martin_experience':8,'duckens_nazon':9,
+        'jean_ricner_bellegarde':10,'deedson_louicius':11,'alexandre_pierre':12,
+        'duke_lacroix':13,'leverton_pierre':14,'rubens_providence':15,
+        'lenny_joseph':16,'danley_jean_jacques':17,'wilson_isidor':18,
+        'yassin_fortune':19,'frantzdy_pierrot':20,'josue_casimir':21,
+        'jean_kelvin_duverne':22,'josue_duverger':23,'wilguens_paugain':24,
+        'dominique_simon':25,'woodensky_pierre':26
+    };
+
     /* ---- CONFIG ADMIN ---- */
     var ADMIN_PASSWORD = 'pwesports2026';
     var isAdminLogged  = false;
@@ -2878,8 +2923,8 @@
         hero_desc:      { fr:'26 Guerriers. Une Équipe. Une Nation. Découvrez les profils détaillés d\'Haïti prête à conquérir les USA, le Canada et le Mexique.',
                           ht:'26 Gèryè. Yon Ekip. Yon Nasyon. Dekouvri pwofil Grenadye Ayiti yo ki prè pou konkeri Etazini, Kanada ak Meksik.',
                           en:'26 Warriors. One Team. One Nation. Discover the detailed profiles of Haiti ready to conquer the USA, Canada and Mexico.' ,
-                         // ht:'26 Gèryè. Yon Nasyon. Sèn Mondyal la. Dekouvri pwofil Grenadye Ayiti yo ki prè pou konkeri Etazini, Kanada ak Meksik.',
-                         // en:'26 Warriors. One Nation. The World Stage. Discover the detailed profiles of Haiti ready to conquer the USA, Canada and Mexico.'  },
+                          ht:'26 Gèryè. Yon Nasyon. Sèn Mondyal la. Dekouvri pwofil Grenadye Ayiti yo ki prè pou konkeri Etazini, Kanada ak Meksik.',
+                          en:'26 Warriors. One Nation. The World Stage. Discover the detailed profiles of Haiti ready to conquer the USA, Canada and Mexico.'  },
         countdown_label:{ fr:'Choc Haïti vs Écosse dans :',                         ht:'Chòk Ayiti kont Ekòs nan :',                          en:'Haiti vs Scotland in:'                          },
         hero_btn1:      { fr:"Explorer l'Effectif",                                 ht:'Eksplore Ekip la',                                    en:'Explore the Squad'                              },
         hero_btn2:      { fr:'Voir les Matchs',                                     ht:'Wè Match yo',                                         en:'View Matches'                                   },
@@ -2928,7 +2973,7 @@
         filter_mid:     { fr:'Milieux',     ht:'Miliè',     en:'Midfielders' },
         filter_att:     { fr:'Attaquants',  ht:'Atakan',    en:'Forwards'    },
         empty_search:   { fr:'Aucun guerrier ne correspond à votre recherche.',
-                          ht:'Pa gen jwé ki koresponn ak rechèch ou a.',
+                          ht:'Pa gen jòg ki koresponn ak rechèch ou a.',
                           en:'No player matches your search.'                },
 
         /* ── TACTIQUE ── */
