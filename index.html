@@ -356,16 +356,69 @@
         <div class="mx-auto max-w-5xl px-3 sm:px-6 lg:px-8">
 
             <!-- TITRE -->
-            <div class="text-center mb-6 sm:mb-10">
+            <div class="text-center mb-6 sm:mb-8">
                 <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest block mb-2" data-i18n="tac_badge">Analyse Tactique — Coupe du Monde 2026</span>
-                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-2">
-                    Composition <span id="tactic-title-formation" class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">4-3-3</span>
+                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-1">
+                    <span id="tac-match-title" class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-blue-500">HAÏTI vs ÉCOSSE</span>
                 </h2>
-                <p class="text-xs text-gray-500 font-medium mt-2" data-i18n="tac_hint">Touchez / cliquez un joueur sur le terrain → choisissez son remplaçant</p>
+                <p class="text-xs text-gray-500 font-medium mt-1" data-i18n="tac_hint">Touchez / cliquez un joueur sur le terrain → choisissez son remplaçant</p>
             </div>
 
-            <!-- FORMATION SELECTOR -->
-            <div class="max-w-sm mx-auto mb-6">
+            <!-- ═══ 3 BOUTONS KONTWÒL ═══ -->
+            <div class="grid grid-cols-3 gap-3 max-w-lg mx-auto mb-6">
+
+                <!-- B1: MATCH -->
+                <div class="relative">
+                    <button onclick="toggleTacPanel('match')" id="tac-btn-match"
+                        class="w-full flex flex-col items-center gap-1 py-3 rounded-2xl border text-[10px] font-bold uppercase transition"
+                        style="background:#0e1322;border-color:#1f2937;color:#9ca3af;">
+                        <i class="fa-solid fa-futbol text-sm text-red-400"></i>
+                        <span>Match</span>
+                        <span id="tac-match-label" class="text-[9px] font-semibold text-red-400 truncate max-w-full px-1">Haïti vs Écosse</span>
+                    </button>
+                </div>
+
+                <!-- B2: COMPOSITION -->
+                <div class="relative">
+                    <button onclick="toggleTacPanel('composition')" id="tac-btn-composition"
+                        class="w-full flex flex-col items-center gap-1 py-3 rounded-2xl border text-[10px] font-bold uppercase transition"
+                        style="background:#0e1322;border-color:#1f2937;color:#9ca3af;">
+                        <i class="fa-solid fa-sliders text-sm text-emerald-400"></i>
+                        <span>Composition</span>
+                        <span id="tac-form-label" class="text-[9px] font-semibold text-emerald-400">4-3-3</span>
+                    </button>
+                </div>
+
+                <!-- B3: JERSEY -->
+                <div class="relative">
+                    <button onclick="toggleTacPanel('jersey')" id="tac-btn-jersey"
+                        class="w-full flex flex-col items-center gap-1 py-3 rounded-2xl border text-[10px] font-bold uppercase transition"
+                        style="background:#0e1322;border-color:#1f2937;color:#9ca3af;">
+                        <i class="fa-solid fa-shirt text-sm text-blue-400"></i>
+                        <span>Jersey</span>
+                        <span id="tac-jersey-label" class="text-[9px] font-semibold text-blue-400">Domisil</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PANELS DEROULANTS -->
+            <div id="tac-panel-match" class="hidden max-w-lg mx-auto mb-4 bg-[#0e1322] border border-gray-800 rounded-2xl p-4">
+                <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3"><i class="fa-solid fa-futbol mr-1 text-red-400"></i>Chwazi match la</p>
+                <div class="grid grid-cols-1 gap-2">
+                    <button onclick="setMatch('HAÏTI vs ÉCOSSE','13 Juin 2026')" class="match-opt-btn flex items-center justify-between px-4 py-3 rounded-xl border text-xs font-bold text-white transition" style="background:#111827;border-color:#374151;">
+                        <span>🇭🇹 Haïti vs Écosse 🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><span class="text-[10px] text-gray-500">13 Juin · Boston</span>
+                    </button>
+                    <button onclick="setMatch('HAÏTI vs BRÉSIL','19 Juin 2026')" class="match-opt-btn flex items-center justify-between px-4 py-3 rounded-xl border text-xs font-bold text-white transition" style="background:#111827;border-color:#374151;">
+                        <span>🇭🇹 Haïti vs Brésil 🇧🇷</span><span class="text-[10px] text-gray-500">19 Juin · Philadelphia</span>
+                    </button>
+                    <button onclick="setMatch('HAÏTI vs MAROC','24 Juin 2026')" class="match-opt-btn flex items-center justify-between px-4 py-3 rounded-xl border text-xs font-bold text-white transition" style="background:#111827;border-color:#374151;">
+                        <span>🇭🇹 Haïti vs Maroc 🇲🇦</span><span class="text-[10px] text-gray-500">24 Juin · Atlanta</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="tac-panel-composition" class="hidden max-w-lg mx-auto mb-4 bg-[#0e1322] border border-gray-800 rounded-2xl p-4">
+                <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3"><i class="fa-solid fa-sliders mr-1 text-emerald-400"></i>Chwazi fòmasyon an</p>
                 <div class="grid grid-cols-3 gap-2">
                     <button onclick="applyFormation('4-3-3')"   id="form-433"  class="formation-btn py-2.5 rounded-xl text-xs font-bold transition" style="background:#111827;color:#9ca3af;border:1px solid #1f2937;">4-3-3</button>
                     <button onclick="applyFormation('4-2-3-1')" id="form-4231" class="formation-btn py-2.5 rounded-xl text-xs font-bold transition" style="background:#111827;color:#9ca3af;border:1px solid #1f2937;">4-2-3-1</button>
@@ -376,7 +429,31 @@
                 </div>
             </div>
 
-            <!-- LAYOUT : Terrain centré + Liste XI en dessous sur mobile, côte à côte sur desktop -->
+            <div id="tac-panel-jersey" class="hidden max-w-lg mx-auto mb-4 bg-[#0e1322] border border-gray-800 rounded-2xl p-4">
+                <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3"><i class="fa-solid fa-shirt mr-1 text-blue-400"></i>Chwazi jersey a</p>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="setJersey('blue')" id="jersey-btn-blue"
+                        class="jersey-btn flex flex-col items-center gap-1.5 py-3 rounded-xl border text-[10px] font-bold uppercase transition"
+                        style="background:#1e3a8a;border-color:#3b82f6;color:#93c5fd;box-shadow:0 0 8px #3b82f666;">
+                        <span style="width:20px;height:24px;background:#1d4ed8;border-radius:3px;border:1.5px solid #93c5fd;display:inline-block;"></span>
+                        Domisil
+                    </button>
+                    <button onclick="setJersey('red')" id="jersey-btn-red"
+                        class="jersey-btn flex flex-col items-center gap-1.5 py-3 rounded-xl border text-[10px] font-bold uppercase transition"
+                        style="background:#0e1322;border-color:#374151;color:#9ca3af;">
+                        <span style="width:20px;height:24px;background:#dc2626;border-radius:3px;border:1.5px solid #6b7280;display:inline-block;"></span>
+                        Deyo
+                    </button>
+                    <button onclick="setJersey('white')" id="jersey-btn-white"
+                        class="jersey-btn flex flex-col items-center gap-1.5 py-3 rounded-xl border text-[10px] font-bold uppercase transition"
+                        style="background:#0e1322;border-color:#374151;color:#9ca3af;">
+                        <span style="width:20px;height:24px;background:#e5e7eb;border-radius:3px;border:1.5px solid #6b7280;display:inline-block;"></span>
+                        3yèm
+                    </button>
+                </div>
+            </div>
+
+            <!-- LAYOUT : Terrain + Panel XI -->
             <div class="flex flex-col lg:flex-row gap-6 items-start justify-center">
 
                 <!-- TERRAIN -->
@@ -400,7 +477,6 @@
                                 <rect x="130" y="468" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
                                 <circle cx="160" cy="58" r="2.5" fill="rgba(255,255,255,0.3)"/>
                                 <circle cx="160" cy="422" r="2.5" fill="rgba(255,255,255,0.3)"/>
-                                <!-- Watermark PWESPORTS -->
                                 <text x="160" y="245" text-anchor="middle" dominant-baseline="middle"
                                       font-family="Oswald, sans-serif" font-size="26" font-weight="900"
                                       letter-spacing="5" fill="rgba(255,255,255,0.045)"
@@ -410,28 +486,35 @@
                         </div>
                     </div>
                     <p class="text-center text-[10px] text-gray-600 mt-2">⬆ Attaque — Défense ⬇</p>
-                    <!-- JERSEY SELECTOR -->
-                    <div class="mt-3 flex items-center justify-center gap-2">
-                        <span class="text-[10px] font-bold uppercase text-gray-500 tracking-wider">Maillot:</span>
-                        <button onclick="setJersey('blue')" id="jersey-btn-blue"
-                            class="jersey-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[10px] font-bold uppercase transition"
-                            style="background:#1e3a8a;border-color:#3b82f6;color:#93c5fd;">
-                            <span style="width:10px;height:10px;border-radius:50%;background:#1d4ed8;display:inline-block;border:1px solid #93c5fd;"></span>Domisil
-                        </button>
-                        <button onclick="setJersey('red')" id="jersey-btn-red"
-                            class="jersey-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[10px] font-bold uppercase transition"
-                            style="background:#450a0a;border-color:#374151;color:#9ca3af;">
-                            <span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;border:1px solid #6b7280;"></span>Deyo
-                        </button>
-                        <button onclick="setJersey('white')" id="jersey-btn-white"
-                            class="jersey-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[10px] font-bold uppercase transition"
-                            style="background:#0e1322;border-color:#374151;color:#9ca3af;">
-                            <span style="width:10px;height:10px;border-radius:50%;background:#e5e7eb;display:inline-block;border:1px solid #6b7280;"></span>3yèm
-                        </button>
+
+                    <!-- BOUTON TELECHAJE ak FORMAT -->
+                    <div class="mt-4 w-full" style="max-width:320px;">
+                        <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider text-center mb-2">
+                            <i class="fa-solid fa-download mr-1 text-blue-400"></i>Telechaje pou :
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="downloadLineup('tiktok')"
+                                class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-white transition hover:-translate-y-0.5"
+                                style="background:linear-gradient(135deg,#ff0050,#ff4080);">
+                                <i class="fab fa-tiktok text-xs"></i> TikTok / Reels
+                            </button>
+                            <button onclick="downloadLineup('square')"
+                                class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-white transition hover:-translate-y-0.5"
+                                style="background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);">
+                                <i class="fab fa-instagram text-xs"></i> Instagram
+                            </button>
+                            <button onclick="downloadLineup('story')"
+                                class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-white transition hover:-translate-y-0.5"
+                                style="background:linear-gradient(135deg,#1877f2,#0a4fa8);">
+                                <i class="fab fa-facebook-f text-xs"></i> Facebook Story
+                            </button>
+                            <button onclick="downloadLineup('twitter')"
+                                class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-white transition hover:-translate-y-0.5"
+                                style="background:#000;border:1px solid #333;">
+                                <i class="fab fa-x-twitter text-xs"></i> Twitter / X
+                            </button>
+                        </div>
                     </div>
-                    <button onclick="downloadLineup()" class="mt-2 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-2.5 text-xs font-bold uppercase text-white shadow-lg shadow-blue-600/20 hover:from-blue-700 hover:to-blue-900 transition">
-                        <i class="fa-solid fa-download"></i> <span data-i18n="btn_download">Télécharger le Onze (PNG)</span>
-                    </button>
                 </div>
 
                 <!-- PANEL DROITE : XI Titulaires -->
@@ -444,7 +527,7 @@
                     </div>
                     <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4">
                         <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-1">
-                            <i class="fa-solid fa-circle-info mr-1.5 text-blue-400"></i>Comment faire un remplacement
+                            <i class="fa-solid fa-circle-info mr-1.5 text-blue-400"></i>Kijan fè yon ranplasman
                         </p>
                         <p class="text-[10px] text-gray-500 leading-relaxed" data-i18n="tac_how_desc">Touchez n'importe quel joueur sur le terrain → une liste de 15 remplaçants apparaît → choisissez celui que vous souhaitez faire entrer.</p>
                     </div>
@@ -453,7 +536,6 @@
             </div>
         </div>
     </section>
-    <!-- =================== FIN SECTION TACTIQUE =================== -->
 
     <!-- MODAL REMPLACEMENT -->
     <div id="sub-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -1809,6 +1891,14 @@
         // Boutons formation
         var title = document.getElementById('tactic-title-formation');
         if (title) title.textContent = formation;
+        // Mete ajou label bouton B2
+        var flbl = document.getElementById('tac-form-label');
+        if (flbl) flbl.textContent = formation;
+        // Ferme panel composition
+        var cpanel = document.getElementById('tac-panel-composition');
+        var cbtn   = document.getElementById('tac-btn-composition');
+        if (cpanel) cpanel.classList.add('hidden');
+        if (cbtn)   { cbtn.style.borderColor='#1f2937'; cbtn.style.background='#0e1322'; }
         document.querySelectorAll('.formation-btn').forEach(function(b){
             b.style.background='#111827'; b.style.color='#9ca3af';
         });
@@ -1828,131 +1918,200 @@
         ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
     }
 
-    function downloadLineup() {
-        /* Dimensions : format portrait centré sur le terrain */
-        var W = 440, H = 720;
-        var cv  = document.createElement('canvas');
+    function downloadLineup(format) {
+        /* ── Dimansyon selon rezo sosyal ──
+           tiktok  : 1080x1920 (9:16 vètikal) — TikTok, Reels, Stories
+           story   : 1080x1920 (9:16 vètikal) — Facebook/Instagram Story
+           square  : 1080x1080 (1:1)          — Instagram Post, Facebook Post
+           twitter : 1200x675  (16:9 orizontal) — Twitter/X
+        */
+        var formats = {
+            tiktok:  { W:1080, H:1920, label:'TikTok_Reels'   },
+            story:   { W:1080, H:1920, label:'Facebook_Story'  },
+            square:  { W:1080, H:1080, label:'Instagram_Post'  },
+            twitter: { W:1200, H:675,  label:'Twitter_X'       }
+        };
+        var fmt = formats[format] || formats['tiktok'];
+        var W = fmt.W, H = fmt.H;
+        var isLandscape = W > H;
+
+        var cv = document.createElement('canvas');
         cv.width = W; cv.height = H;
         var ctx = cv.getContext('2d');
 
-        /* ── Fond général ── */
-        ctx.fillStyle = '#0b0f19';
-        ctx.fillRect(0, 0, W, H);
+        /* ── Fond dégradé ── */
+        var bgGrad = ctx.createLinearGradient(0,0,0,H);
+        bgGrad.addColorStop(0,'#0b0f19'); bgGrad.addColorStop(1,'#111827');
+        ctx.fillStyle = bgGrad; ctx.fillRect(0,0,W,H);
 
-        /* ── Bandeau titre (gradient rouge → bleu → rouge) ── */
+        /* ── Bandeau titre ── */
+        var banH = isLandscape ? Math.round(H*0.13) : Math.round(H*0.07);
         var grad = ctx.createLinearGradient(0,0,W,0);
-        grad.addColorStop(0,   '#b91c1c');
-        grad.addColorStop(0.5, '#1e3a8a');
-        grad.addColorStop(1,   '#b91c1c');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, W, 52);
+        grad.addColorStop(0,'#b91c1c'); grad.addColorStop(0.5,'#1e3a8a'); grad.addColorStop(1,'#b91c1c');
+        ctx.fillStyle = grad; ctx.fillRect(0,0,W,banH);
 
-        /* ── Texte titre ── */
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 13px Arial, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('PWESPORTS — HAÏTI ' + currentFormation, W/2, 18);
-        ctx.font = '11px Arial, sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,0.65)';
-        ctx.fillText('COUPE DU MONDE FIFA 2026', W/2, 36);
+        var t1s = isLandscape ? Math.round(H*0.05) : Math.round(H*0.025);
+        var t2s = isLandscape ? Math.round(H*0.035) : Math.round(H*0.018);
+        ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.font='bold '+t1s+'px Arial,sans-serif';
+        ctx.fillText(currentMatchTitle, W/2, banH*0.32);
+        ctx.font='bold '+(t1s*0.75)+'px Arial,sans-serif';
+        ctx.fillStyle='rgba(255,255,255,0.85)';
+        ctx.fillText('Composition '+currentFormation+' · '+currentMatchDate, W/2, banH*0.62);
+        ctx.font=(t2s*0.85)+'px Arial,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.45)';
+        ctx.fillText('pwesports.netlify.app', W/2, banH*0.88);
 
         /* ── Terrain ── */
-        var PAD = 16;
-        var PX  = PAD, PY = 62;
+        var PAD = isLandscape ? Math.round(W*0.04) : Math.round(W*0.04);
+        var PX  = PAD, PY = banH + Math.round(H*0.015);
         var PW  = W - PAD*2;
-        var PH  = H - PY - 48;
+        var footH = isLandscape ? Math.round(H*0.09) : Math.round(H*0.055);
+        var PH  = H - PY - footH;
 
-        /* Pelouse */
-        var pg = ctx.createLinearGradient(PX, PY, PX, PY+PH);
-        pg.addColorStop(0,   '#1a3a1a');
-        pg.addColorStop(0.5, '#1e4a1e');
-        pg.addColorStop(1,   '#1a3a1a');
-        ctx.fillStyle = pg;
-        roundRect(ctx, PX, PY, PW, PH, 10);
-        ctx.fill();
+        /* Strips gazòn */
+        for (var s=0; s<8; s++) {
+            ctx.fillStyle = s%2===0 ? '#1e4620' : '#1a3a1a';
+            ctx.fillRect(PX, PY+s*(PH/8), PW, PH/8+1);
+        }
+        /* Bòd + lignes */
+        ctx.strokeStyle='rgba(255,255,255,0.18)'; ctx.lineWidth=Math.round(W*0.003);
+        ctx.strokeRect(PX+W*0.015, PY+H*0.008, PW-W*0.03, PH-H*0.016);
+        ctx.beginPath(); ctx.moveTo(PX+W*0.015,PY+PH/2); ctx.lineTo(PX+PW-W*0.015,PY+PH/2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(PX+PW/2,PY+PH/2,PW*0.13,0,Math.PI*2); ctx.stroke();
+        ctx.strokeStyle='rgba(255,255,255,0.12)';
+        var bw2=PW*0.58, bx4=PX+(PW-bw2)/2;
+        ctx.strokeRect(bx4,PY+H*0.008,bw2,PH*0.15);
+        ctx.strokeRect(bx4,PY+PH-PH*0.15-H*0.008,bw2,PH*0.15);
+        ctx.strokeStyle='rgba(255,255,255,0.22)'; ctx.lineWidth=W*0.004;
+        var gw2=PW*0.2, gx3=PX+(PW-gw2)/2;
+        ctx.strokeRect(gx3,PY,gw2,H*0.01); ctx.strokeRect(gx3,PY+PH-H*0.01,gw2,H*0.01);
 
-        /* Lignes terrain */
-        ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 1.5;
-        roundRect(ctx, PX+7, PY+7, PW-14, PH-14, 6); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(PX+7, PY+PH/2); ctx.lineTo(PX+PW-7, PY+PH/2); ctx.stroke();
-        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH/2, PW*0.12, 0, Math.PI*2); ctx.stroke();
-        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH/2, 3, 0, Math.PI*2);
-        ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.fill();
+        /* Watermark */
+        ctx.save(); ctx.translate(PX+PW/2,PY+PH/2); ctx.rotate(-35*Math.PI/180);
+        ctx.font='bold '+Math.round(PW*0.13)+'px Arial,sans-serif';
+        ctx.fillStyle='rgba(255,255,255,0.035)'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('PWESPORTS',0,0); ctx.restore();
 
-        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-        var bw = PW*0.58, bx = PX+(PW-bw)/2;
-        ctx.strokeRect(bx, PY+7,  bw, PH*0.145);
-        ctx.strokeRect(bx, PY+PH-PH*0.145-7, bw, PH*0.145);
-        var sw = PW*0.34, sx2 = PX+(PW-sw)/2;
-        ctx.strokeRect(sx2, PY+7,  sw, PH*0.065);
-        ctx.strokeRect(sx2, PY+PH-PH*0.065-7, sw, PH*0.065);
+        /* ── Jersey images ── */
+        var jerseyMap = { blue:JERSEY_BLUE, red:JERSEY_RED, white:JERSEY_WHITE };
+        var activeB64 = jerseyMap[currentJersey]||JERSEY_BLUE;
+        var gkSvgStr = '<svg xmlns="http://www.w3.org/2000/svg" width="56" height="64" viewBox="0 0 40 44">'
+            +'<path d="M11 5 L6 12 L12 14 L12 38 L28 38 L28 14 L34 12 L29 5 L24 7 Q20 10 16 7 Z" fill="#eab308" stroke="rgba(0,0,0,0.3)" stroke-width="1"/>'
+            +'<path d="M16 7 Q20 10 24 7 L24 11 Q20 13 16 11 Z" fill="rgba(255,255,255,0.3)"/>'
+            +'</svg>';
+        var gkBlob = 'data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(gkSvgStr)));
 
-        ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.lineWidth=2;
-        var gw=PW*0.2, gx=PX+(PW-gw)/2;
-        ctx.strokeRect(gx, PY,      gw, 8);
-        ctx.strokeRect(gx, PY+PH-8, gw, 8);
-
-        ctx.fillStyle='rgba(255,255,255,0.25)';
-        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH*0.125,    2.5, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH-PH*0.125, 2.5, 0, Math.PI*2); ctx.fill();
-
-        /* ── WATERMARK PWESPORTS ── */
-        ctx.save();
-        ctx.translate(PX + PW/2, PY + PH/2);
-        ctx.rotate(-35 * Math.PI / 180);
-        ctx.font = 'bold ' + Math.round(PW * 0.12) + 'px Oswald, Arial, sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,0.045)';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.letterSpacing = '6px';
-        ctx.fillText('PWESPORTS', 0, 0);
-        ctx.restore();
-
-        /* ── Tokens joueurs ── */
         var coords = formationCoords[currentFormation];
-        var TR = Math.round(PW * 0.058); // rayon token
-        var FS = Math.max(8, Math.round(PW * 0.028));
-        var LS = Math.max(7, Math.round(PW * 0.026));
+        var JW = Math.round(PW*0.14);
+        var JH = Math.round(JW*1.18);
+        var FS = Math.round(W*0.022);
+        var LS = Math.round(W*0.020);
 
-        currentLineup.forEach(function(entry, i) {
-            var player = playersDataset.find(function(p){ return p.id===entry.id; });
-            if (!player) return;
-            var c   = tokenPositions[entry.id] || { l:coords[i][0], t:coords[i][1] };
-            var cx2 = PX + (c.l/100)*PW;
-            var cy2 = PY + (c.t/100)*PH;
-            var col = posColor(entry.pos);
+        function drawAll(jImg, gkImg) {
+            currentLineup.forEach(function(entry,i) {
+                var player = playersDataset.find(function(p){return p.id===entry.id;});
+                if (!player) return;
+                var c = tokenPositions[entry.id]||{l:coords[i][0],t:coords[i][1]};
+                var cx3 = PX+(c.l/100)*PW;
+                var cy3 = PY+(c.t/100)*PH;
+                var isGK = entry.pos==='GB';
+                var num = (typeof playerNumbers!=='undefined'&&playerNumbers[entry.id])?playerNumbers[entry.id]:null;
 
-            /* Cercle */
-            ctx.beginPath(); ctx.arc(cx2, cy2, TR, 0, Math.PI*2);
-            ctx.fillStyle = col; ctx.fill();
-            ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 2; ctx.stroke();
+                /* Jersey */
+                ctx.save();
+                ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=Math.round(W*0.015);
+                ctx.drawImage(isGK?gkImg:jImg, cx3-JW/2, cy3-JH/2, JW, JH);
+                ctx.restore();
 
-            /* Poste */
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold ' + FS + 'px Arial, sans-serif';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText(entry.pos, cx2, cy2);
+                /* Badge nimewo */
+                if (num) {
+                    var bW=FS*2.2, bH=FS*1.6;
+                    var bx5=cx3-bW/2, by5=cy3-JH/2-bH/2+W*0.005;
+                    ctx.fillStyle='rgba(0,0,0,0.88)';
+                    ctx.beginPath();
+                    ctx.roundRect ? ctx.roundRect(bx5,by5,bW,bH,W*0.004) : ctx.rect(bx5,by5,bW,bH);
+                    ctx.fill();
+                    ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=W*0.0015; ctx.stroke();
+                    ctx.fillStyle='#fff'; ctx.font='bold '+FS+'px Arial,sans-serif';
+                    ctx.textAlign='center'; ctx.textBaseline='middle';
+                    ctx.fillText(num, cx3, by5+bH/2);
+                }
 
-            /* Nom */
-            ctx.font = 'bold ' + LS + 'px Arial, sans-serif';
-            ctx.textBaseline = 'top';
-            ctx.shadowColor = 'rgba(0,0,0,0.95)'; ctx.shadowBlur = 4;
-            ctx.fillText(getLastName(player.name, player.id), cx2, cy2 + TR + 3);
-            ctx.shadowBlur = 0;
+                /* Non jwè */
+                ctx.font='bold '+LS+'px Arial,sans-serif';
+                ctx.textAlign='center'; ctx.textBaseline='top';
+                ctx.fillStyle='#fff';
+                ctx.shadowColor='rgba(0,0,0,1)'; ctx.shadowBlur=W*0.008;
+                ctx.fillText(getLastName(player.name,player.id), cx3, cy3+JH/2+W*0.004);
+                ctx.shadowBlur=0;
+            });
+
+            /* ── Footer ── */
+            var fts = isLandscape ? Math.round(H*0.028) : Math.round(H*0.016);
+            ctx.fillStyle='rgba(255,255,255,0.15)';
+            ctx.font=fts+'px Arial,sans-serif';
+            ctx.textAlign='center'; ctx.textBaseline='bottom';
+            ctx.fillText('pwesports.netlify.app', W/2, H-fts);
+
+            /* Watermark URL kwen */
+            ctx.fillStyle='rgba(255,255,255,0.35)';
+            ctx.font='bold '+(fts+2)+'px Arial,sans-serif';
+            ctx.textAlign='right';
+            ctx.fillText('🇭🇹 PWESPORTS', W-PAD, H-fts*0.4);
+
+            /* Download */
+            var a = document.createElement('a');
+            a.download = 'haiti-xi-'+currentFormation+'-'+fmt.label+'.png';
+            a.href = cv.toDataURL('image/png');
+            a.click();
+        }
+
+        var loaded=0;
+        var imgJ=new Image(), imgGK=new Image();
+        function onL(){ loaded++; if(loaded===2) drawAll(imgJ,imgGK); }
+        imgJ.onload=onL; imgGK.onload=onL;
+        imgJ.src=activeB64; imgGK.src=gkBlob;
+    }
+
+
+    /* ── PANEL TOGGLE (Match / Composition / Jersey) ── */
+    var currentMatchTitle = 'HAÏTI vs ÉCOSSE';
+    var currentMatchDate  = '13 Juin 2026';
+
+    function toggleTacPanel(panel) {
+        var panels = ['match','composition','jersey'];
+        panels.forEach(function(p) {
+            var el = document.getElementById('tac-panel-'+p);
+            var btn = document.getElementById('tac-btn-'+p);
+            if (!el || !btn) return;
+            if (p === panel && el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                btn.style.borderColor = p==='match'?'#ef4444':p==='composition'?'#10b981':'#3b82f6';
+                btn.style.background  = p==='match'?'#1a0505':p==='composition'?'#021a0e':'#0e1a3a';
+            } else {
+                el.classList.add('hidden');
+                btn.style.borderColor = '#1f2937';
+                btn.style.background  = '#0e1322';
+            }
         });
+    }
 
-        /* ── Footer ── */
-        ctx.fillStyle = 'rgba(255,255,255,0.22)';
-        ctx.font = '9px Arial, sans-serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-        ctx.fillText('pwesports.com — Coupe du Monde FIFA 2026', W/2, H - 8);
-
-        /* ── Téléchargement ── */
-        var a = document.createElement('a');
-        a.download = 'haiti-xi-' + currentFormation + '.png';
-        a.href = cv.toDataURL('image/png');
-        a.click();
+    function setMatch(title, date) {
+        currentMatchTitle = title;
+        currentMatchDate  = date;
+        var lbl = document.getElementById('tac-match-label');
+        var h   = document.getElementById('tac-match-title');
+        if (lbl) lbl.textContent = title.replace('HAÏTI vs ','Haïti vs ').replace('HAÏTI VS ','Haïti vs ');
+        if (h)   h.textContent  = title;
+        // Ferme panel
+        document.getElementById('tac-panel-match').classList.add('hidden');
+        document.getElementById('tac-btn-match').style.borderColor = '#1f2937';
+        document.getElementById('tac-btn-match').style.background  = '#0e1322';
+        // Highlight match seleksyone
+        document.querySelectorAll('.match-opt-btn').forEach(function(b){
+            b.style.borderColor = '#374151';
+            b.style.background  = '#111827';
+        });
     }
 
     /* ── JERSEY SELECTOR ── */
@@ -1960,22 +2119,29 @@
 
     function setJersey(type) {
         currentJersey = type;
+        var labels = { blue:'Domisil', red:'Deyo', white:'3yèm' };
+        var lbl = document.getElementById('tac-jersey-label');
+        if (lbl) lbl.textContent = labels[type] || type;
+        // Ferme panel
+        document.getElementById('tac-panel-jersey').classList.add('hidden');
+        document.getElementById('tac-btn-jersey').style.borderColor = '#1f2937';
+        document.getElementById('tac-btn-jersey').style.background  = '#0e1322';
         // Update button styles
-        var btns = { blue:'#1e3a8a|#3b82f6|#93c5fd', red:'#450a0a|#dc2626|#f87171', white:'#0e1322|#d1d5db|#f3f4f6' };
+        var btns = { blue:'#1e3a8a|#3b82f6|#93c5fd', red:'#1a0505|#ef4444|#fca5a5', white:'#1a1a1a|#d1d5db|#f3f4f6' };
         ['blue','red','white'].forEach(function(t) {
             var btn = document.getElementById('jersey-btn-'+t);
             if (!btn) return;
             if (t === type) {
                 var parts = btns[t].split('|');
-                btn.style.background    = parts[0];
-                btn.style.borderColor   = parts[1];
-                btn.style.color         = parts[2];
-                btn.style.boxShadow     = '0 0 8px '+parts[1]+'66';
+                btn.style.background  = parts[0];
+                btn.style.borderColor = parts[1];
+                btn.style.color       = parts[2];
+                btn.style.boxShadow   = '0 0 10px '+parts[1]+'55';
             } else {
-                btn.style.background    = '#0e1322';
-                btn.style.borderColor   = '#374151';
-                btn.style.color         = '#9ca3af';
-                btn.style.boxShadow     = '';
+                btn.style.background  = '#0e1322';
+                btn.style.borderColor = '#374151';
+                btn.style.color       = '#9ca3af';
+                btn.style.boxShadow   = '';
             }
         });
         renderPitchPlayers();
@@ -2442,7 +2608,7 @@
 
     var playerNumbers = {
         'jhonny_placide':1,'carlens_arcus':2,'keeto_thermoncy':3,
-        'ricardo_ade':4,'hannes_delcroix':5,'carl_fred_sainte':6,
+        'ricardo_ade':4,'hannes_delcroix':5,'carl_fred_sainthe':6,
         'derrick_etienne':7,'martin_experience':8,'duckens_nazon':9,
         'jean_ricner_bellegarde':10,'deedson_louicius':11,'alexandre_pierre':12,
         'duke_lacroix':13,'leverton_pierre':14,'rubens_providence':15,
