@@ -938,6 +938,7 @@
             { id: "yassin_fortune", name: "Yassin Enzo Fortuné", role: "Attaquants", club: "FC Vizela (Portugal)", birth: "30 janvier 1999 (27 ans)", nat: "Haïtienne & Française", strengths: "Milieu offensif et attaquant puissant (1,86 m), doté d'une excellente percussion technique, d'un grand sens du collectif et d'un profil athlétique précieux pour l'attaque.", journey: "Formé au RC Lens puis au prestigieux centre d'Arsenal FC. Il commence sa carrière professionnelle au FC Sion en Suisse, passe par Angers SCO, le SO Cholet, le Polissia Jytomyr (Ukraine) et QRM, avant de briller au Portugal.", icon: "fa-mask" }
         ];
 
+
         let currentRoleFilter = "all";
 
         // -------------------------------------------------------
@@ -2848,7 +2849,7 @@
 
         /* ── HERO ── */
         hero_badge:     { fr:'Route pour le Mondial 2026',                          ht:'Chemen pou Mondyal 2026',                             en:'Road to the World Cup 2026'                     },
-        hero_title:     { fr:'MARCHE HISTORIQUE',  ht:'MACH ISTORIK',                                       en:'HISTORIC MARCH'                                },
+        hero_title:     { fr:'MARCHE HISTORIQUE',  ht:'MACH ISTORIK',                                       en:'HISTORIC MARCH:'                                },
         hero_subtitle:  { fr:'LES GRENADIERS',                                      ht:'GRENADYE YO',                                         en:'THE GRENADIERS'                                 },
         hero_desc:      { fr:'26 Guerriers. Une Équipe. Une Nation. Découvrez les profils détaillés d\'Haïti prête à conquérir les USA, le Canada et le Mexique.',
                           ht:'26 Gèryè. Yon Ekip. Yon Nasyon. Dekouvri pwofil Grenadye Ayiti yo ki prè pou konkeri Etazini, Kanada ak Meksik.',
@@ -2860,7 +2861,7 @@
         hero_btn2:      { fr:'Voir les Matchs',                                     ht:'Wè Match yo',                                         en:'View Matches'                                   },
 
         /* ── SECTIONS TITLES ── */
-        sec_guerriers:  { fr:"L'Armée Bleu et Rouge",                               ht:'Lame Ble ak Wouj la',                                  en:'The Blue and Red Army'                          },
+        sec_guerriers:  { fr:"L'Armée Bleu et Rouge",                               ht:'Lame Wouj ak Ble a',                                  en:'The Red and Blue Army'                          },
         sec_guerriers_sub:{ fr:'Analyse tactique et fiches techniques officielles des 26 Grenadiers.',
                             ht:'Analiz taktik ak fich teknik ofisyèl 26 Grenadye yo.',
                             en:'Tactical analysis and official technical profiles of the 26 Grenadiers.'                                                                                           },
@@ -3197,7 +3198,7 @@
     /* ---- ADMIN MODE — Détection URL ?admin ---- */
     function initAdminMode() {
         var params = new URLSearchParams(window.location.search);
-        if (params.has('admin')) {
+        if (params.get('admin') === 'xW0dpF5GZAzGf29Sr8fMH7qm') {
             var newsBtn = document.getElementById('btn-admin-news');
             var galBtn  = document.getElementById('gal-admin-btn');
             if (newsBtn) { newsBtn.classList.remove('hidden'); newsBtn.classList.add('flex'); }
