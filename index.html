@@ -3886,7 +3886,23 @@
                             + (isActive ? 'bg-blue-600 border-blue-500 text-white' : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white')
                             + '">'+s+'</button>';
                     });
-                    voteZone += '</div></div>';
+                    voteZone += '</div>';
+
+                    /* Input skor manyèl */
+                    voteZone += '<div class="flex items-center gap-2 mt-2 mb-3">';
+                    voteZone += '<input type="number" min="0" max="20" placeholder="0" '
+                        + 'id="sc-h-'+match.id+'" data-match="'+match.id+'" '
+                        + 'oninput="previewCustomScore(this.dataset.match)" '
+                        + 'class="w-12 bg-[#0b0f19] border border-gray-800 rounded-lg text-center font-athletic text-lg font-black text-white focus:outline-none focus:border-blue-500 py-1.5">';
+                    voteZone += '<span class="text-gray-600 font-black text-lg px-1">—</span>';
+                    voteZone += '<input type="number" min="0" max="20" placeholder="0" '
+                        + 'id="sc-a-'+match.id+'" data-match="'+match.id+'" '
+                        + 'oninput="previewCustomScore(this.dataset.match)" '
+                        + 'class="w-12 bg-[#0b0f19] border border-gray-800 rounded-lg text-center font-athletic text-lg font-black text-white focus:outline-none focus:border-blue-500 py-1.5">';
+                    voteZone += '<button data-match="'+match.id+'" onclick="applyCustomScore(this.dataset.match)" '
+                        + 'class="flex-1 py-1.5 rounded-lg text-[10px] font-bold uppercase border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-blue-400 transition">'
+                        + 'Appliquer</button>';
+                    voteZone += '</div>';
 
                     /* Bouton ENVOYER */
                     voteZone += '<button data-match="'+match.id+'" '
