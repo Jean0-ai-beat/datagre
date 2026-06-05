@@ -2920,7 +2920,11 @@
         savePending();
         renderPendingList();
         renderNewsGrid();
-        loadAdminPredictions();
+        switchAdminTab('predictions');
+        loadAdminSubmissions();
+        // Update tab badge
+        var tabCount = document.getElementById('tab-sub-count');
+        if (tabCount) tabCount.textContent = (pendingArticles||[]).length;
     }
     function rejectArticle(idx) {
         if (confirm('Rejeter cet article ?')) {
@@ -4044,6 +4048,66 @@
         if (hwEl) hwEl.textContent = haitiTotal > 0 ? Math.round((haitiWins/haitiTotal)*100) + '%' : '—';
     }
 
+    /* ── CONFIRM BUTTON: Press & Confirm Effect ── */
+    function handleConfirmBtn(btn) {
+        var matchId = btn.dataset.match;
+        var confirmed = btn.dataset.confirmed === 'true';
+
+        if (confirmed) {
+            /* Deja konfime — jis montre animasyon vèt ankò */
+            flashConfirmed(btn, matchId);
+            return;
+        }
+
+        /* Premye klik — chanje koulè → jòn "ou sèten?" */
+        btn.dataset.confirmed = 'true';
+        var icon  = document.getElementById('confirm-icon-' + matchId);
+        var label = document.getElementById('confirm-label-' + matchId);
+
+        btn.style.background  = 'linear-gradient(135deg,#d97706,#f59e0b)';
+        btn.style.boxShadow   = '0 4px 20px rgba(245,158,11,0.5)';
+        btn.style.transform   = 'scale(1.02)';
+        if (icon)  icon.className  = 'fa-solid fa-question text-xs';
+        if (label) label.textContent = 'Ou sèten? Klike ankò pou konfime';
+
+        /* Reset apre 4 sèk si user pa reklike */
+        var timer = setTimeout(function() {
+            if (btn.dataset.confirmed === 'true') {
+                btn.dataset.confirmed = 'false';
+                btn.style.background  = 'linear-gradient(135deg,#1d4ed8,#2563eb)';
+                btn.style.boxShadow   = '0 4px 20px rgba(37,99,235,0.4)';
+                btn.style.transform   = '';
+                if (icon)  icon.className  = 'fa-solid fa-lock text-xs';
+                if (label) label.textContent = 'Confirmer mon vote';
+            }
+        }, 4000);
+        btn.dataset.timer = timer;
+    }
+
+    function flashConfirmed(btn, matchId) {
+        var icon  = document.getElementById('confirm-icon-' + matchId);
+        var label = document.getElementById('confirm-label-' + matchId);
+
+        /* Efase timer si gen youn */
+        if (btn.dataset.timer) clearTimeout(parseInt(btn.dataset.timer));
+
+        /* Vin vèt ak checkmark */
+        btn.style.background  = 'linear-gradient(135deg,#059669,#10b981)';
+        btn.style.boxShadow   = '0 4px 24px rgba(16,185,129,0.6)';
+        btn.style.transform   = 'scale(1.04)';
+        if (icon)  icon.className  = 'fa-solid fa-check text-sm';
+        if (label) label.textContent = 'Vote Confirmé ✓';
+
+        /* Désactiver bouton */
+        btn.style.cursor = 'default';
+        btn.onclick = null;
+
+        /* Lanse lockVote */
+        setTimeout(function() {
+            lockVote(matchId);
+        }, 400);
+    }
+
     /* ── MESSAGES ── */
     function showVoteLockMsg(matchId) {
         var msg = document.createElement('div');
@@ -4122,13 +4186,33 @@
         selectScore(matchId, h+'-'+a);
     }
 
+    /* ── SWITCH TAB ADMIN ── */
+    function switchAdminTab(tab) {
+        var tabs = ['predictions','submissions'];
+        tabs.forEach(function(t) {
+            var panel = document.getElementById('admin-tab-' + t);
+            var btn   = document.getElementById('tab-' + t);
+            if (!panel || !btn) return;
+            if (t === tab) {
+                panel.classList.remove('hidden');
+                btn.style.background = t==='predictions' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)';
+                btn.style.color      = t==='predictions' ? '#10b981' : '#f59e0b';
+                btn.style.borderColor= t==='predictions' ? 'rgba(16,185,129,0.3)' : 'rgba(245,158,11,0.3)';
+            } else {
+                panel.classList.add('hidden');
+                btn.style.background  = '#0e1322';
+                btn.style.color       = '#6b7280';
+                btn.style.borderColor = '#1f2937';
+            }
+        });
+        if (tab === 'submissions') loadAdminSubmissions();
+        if (tab === 'predictions') loadAdminPredictions();
+    }
+
     /* ── ADMIN PREDICTIONS ── */
     function loadAdminPredictions() {
         var statsDiv = document.getElementById('admin-pred-stats');
-        var listDiv  = document.getElementById('admin-votes-list');
-        var totalEl  = document.getElementById('admin-total-voters');
         if (!statsDiv) return;
-
         var community = predState.community || {};
         statsDiv.innerHTML = '';
 
@@ -4138,26 +4222,85 @@
             var homePct = total>0 ? Math.round((com.home/total)*100) : 0;
             var drawPct = total>0 ? Math.round((com.draw/total)*100) : 0;
             var awayPct = total>0 ? Math.round((com.away/total)*100) : 0;
+            var locked  = isMatchLocked(match);
             var div = document.createElement('div');
-            div.className = 'bg-gray-950/40 border border-gray-900 rounded-xl p-3 mb-2';
-            div.innerHTML = '<p class="text-[10px] font-bold text-white mb-2">'
-                + match.home + ' vs ' + match.away
-                + ' <span class="text-gray-500 font-normal">· '+total+' vote(s)</span></p>'
-                + '<div class="flex rounded-lg overflow-hidden h-5 mb-1">'
-                + '<div style="width:'+homePct+'%;background:#3b82f6;" class="flex items-center justify-center text-[8px] font-black text-white">'+homePct+'%</div>'
-                + '<div style="width:'+drawPct+'%;background:#f59e0b;" class="flex items-center justify-center text-[8px] font-black text-white">'+drawPct+'%</div>'
-                + '<div style="width:'+awayPct+'%;background:#ef4444;" class="flex items-center justify-center text-[8px] font-black text-white">'+awayPct+'%</div>'
+            div.className = 'bg-gray-950/40 border border-gray-900 rounded-xl p-3';
+            div.innerHTML =
+                '<div class="flex items-center justify-between mb-2">'
+                + '<p class="text-[10px] font-bold text-white">'
+                + '<img src="https://flagcdn.com/w20/'+match.homeFlag+'.png" class="inline w-3 mr-1">'
+                + match.home + ' vs ' + match.away + '</p>'
+                + '<div class="flex items-center gap-2">'
+                + '<span class="text-[9px] text-gray-500">'+total+' vòt</span>'
+                + (locked ? '<span class="text-[9px] font-bold text-red-400"><i class="fa-solid fa-lock mr-0.5"></i>Fermé</span>' : '<span class="text-[9px] font-bold text-emerald-400">Ouvert</span>')
                 + '</div>'
-                + '<div class="flex justify-between text-[8px] font-bold">'
-                + '<span style="color:#3b82f6">'+match.home+' '+com.home+'</span>'
-                + '<span style="color:#f59e0b">Nul '+com.draw+'</span>'
-                + '<span style="color:#ef4444">'+match.away+' '+com.away+'</span>'
+                + '</div>'
+                + '<div class="flex rounded-lg overflow-hidden h-6 mb-1">'
+                + '<div style="width:'+homePct+'%;background:#3b82f6;min-width:'+(homePct>0?'20px':'0')+'" class="flex items-center justify-center text-[8px] font-black text-white transition-all">'+homePct+'%</div>'
+                + '<div style="width:'+drawPct+'%;background:#f59e0b;min-width:'+(drawPct>0?'20px':'0')+'" class="flex items-center justify-center text-[8px] font-black text-white transition-all">'+drawPct+'%</div>'
+                + '<div style="width:'+awayPct+'%;background:#ef4444;min-width:'+(awayPct>0?'20px':'0')+'" class="flex items-center justify-center text-[8px] font-black text-white transition-all">'+awayPct+'%</div>'
+                + '</div>'
+                + '<div class="grid grid-cols-3 text-[8px] font-bold mt-1">'
+                + '<span style="color:#3b82f6">🏠 '+match.home+' ('+com.home+')</span>'
+                + '<span style="color:#f59e0b" class="text-center">🤝 Nul ('+com.draw+')</span>'
+                + '<span style="color:#ef4444" class="text-right">✈️ '+match.away+' ('+com.away+')</span>'
                 + '</div>';
             statsDiv.appendChild(div);
         });
+    }
 
-        if (listDiv) listDiv.innerHTML = '<p class="text-[10px] text-gray-500">Vòt konfime yo disponib nan <strong class="text-white">app.netlify.com → Forms → prediction-vote</strong></p>';
-        if (totalEl) totalEl.textContent = '—';
+    /* ── ADMIN SOUMISSIONS ── */
+    function loadAdminSubmissions() {
+        var list  = document.getElementById('admin-submissions-list');
+        var count = document.getElementById('admin-sub-count2');
+        var tabCount = document.getElementById('tab-sub-count');
+        if (!list) return;
+
+        var pending = pendingArticles || [];
+        if (count)    count.textContent    = pending.length;
+        if (tabCount) tabCount.textContent = pending.length;
+
+        if (pending.length === 0) {
+            list.innerHTML = '<div class="text-center py-6 text-gray-600">'
+                + '<i class="fa-solid fa-inbox text-2xl block mb-2"></i>'
+                + '<p class="text-xs">Aucune soumission en attente</p>'
+                + '<a href="https://app.netlify.com/sites/pwesports/forms" target="_blank" '
+                + 'class="text-[10px] text-blue-400 hover:text-blue-300 mt-1 block">'
+                + '<i class="fa-brands fa-netlify mr-1"></i>Voir aussi Netlify Forms</a>'
+                + '</div>';
+            return;
+        }
+
+        list.innerHTML = '';
+        pending.forEach(function(article, idx) {
+            var col = categoryColors[article.category] || categoryColors['Officiel'];
+            var card = document.createElement('div');
+            card.className = 'p-4 rounded-xl border border-amber-500/15 bg-[#0e1322]';
+            card.innerHTML =
+                '<div class="flex items-start gap-3 mb-3">'
+                + '<span class="text-2xl flex-shrink-0">'+(article.emoji||'📰')+'</span>'
+                + '<div class="flex-1 min-w-0">'
+                + '<div class="flex items-center gap-2 mb-1">'
+                + '<span class="px-2 py-0.5 rounded text-[9px] font-black uppercase" style="background:'+col.bg+';color:'+col.text+';">'+article.category+'</span>'
+                + '<span class="text-[9px] text-gray-500">par '+article.author+'</span>'
+                + '</div>'
+                + '<p class="text-xs font-bold text-white mb-1 line-clamp-2">'+article.title+'</p>'
+                + '<p class="text-[10px] text-gray-500 line-clamp-3">'+article.excerpt+'</p>'
+                + (article.link ? '<a href="'+article.link+'" target="_blank" class="text-[9px] text-blue-400 mt-1 block truncate">'+article.link+'</a>' : '')
+                + '</div>'
+                + '</div>'
+                + '<div class="flex gap-2">'
+                + '<button onclick="approveArticle('+idx+')" '
+                + 'class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-[10px] font-bold text-white transition">'
+                + '<i class="fa-solid fa-check"></i>Approuver & Publier'
+                + '</button>'
+                + '<button onclick="rejectArticle('+idx+')" '
+                + 'class="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gray-900 border border-gray-800 hover:border-red-900 hover:text-red-400 text-[10px] font-bold text-gray-400 transition">'
+                + '<i class="fa-solid fa-xmark"></i>'
+                + '</button>'
+                + '</div>';
+            list.appendChild(card);
+        });
     }
 
     /* ── INIT ── */
