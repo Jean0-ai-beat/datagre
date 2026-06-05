@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
@@ -170,6 +171,14 @@
         .active-pos { background:#1d4ed8 !important; color:#fff !important; }
         .frame-pos-btn:hover { background:#1e3a8a !important; color:#fff !important; }
     </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-54TL1DDLFG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-54TL1DDLFG');
+    </script>
 </head>
 <body class="text-gray-200 antialiased bg-[#0b0f19]">
 
@@ -186,6 +195,7 @@
                     <a href="#tactique" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_tactique">TACTIQUE</a>
                     <a href="#calendrier" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_calendrier">CALENDRIER</a>
                     <a href="#classement" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_live">STATS & LIVE</a>
+                    <a href="#predictions" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">PRÉDICTIONS</a>
                     <a href="#actualites" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_actualites">ACTUALITÉS</a>
                 </div>
                 <div class="flex items-center space-x-3">
@@ -211,6 +221,7 @@
             <a href="#tactique" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_tactique">TACTIQUE</a>
             <a href="#calendrier" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_calendrier">CALENDRIER</a>
             <a href="#classement" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_live">STATS & LIVE</a>
+            <a href="#predictions" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">PRÉDICTIONS</a>
             <a href="#actualites" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_actualites">ACTUALITÉS</a>
         </div>
     </nav>
@@ -986,7 +997,59 @@
     </div>
 
 
-    <section id="vision" class="bg-gray-950/60 border-t border-b border-gray-900 py-16 sm:py-20 text-center">
+    
+    <!-- ===================== SECTION PRÉDICTIONS ===================== -->
+    <section id="predictions" class="border-t border-gray-900 py-16 sm:py-20 bg-gray-950/30">
+        <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+
+            <!-- TITRE -->
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest block mb-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1 animate-pulse"></span>
+                    Communauté PWESPORTS
+                </span>
+                <h2 class="font-athletic text-3xl sm:text-5xl font-extrabold uppercase text-white mb-2">
+                    Tes <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-500">Prédictions</span>
+                </h2>
+                <p class="text-xs text-gray-500 mt-2">Vote pour chaque match — vois ce que pense la communauté 🌍</p>
+            </div>
+
+            <!-- STATS GLOBALES -->
+            <div class="grid grid-cols-3 gap-3 max-w-lg mx-auto mb-10">
+                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4 text-center">
+                    <div id="total-votes-display" class="font-athletic text-2xl font-black text-emerald-400">0</div>
+                    <div class="text-[10px] text-gray-500 uppercase font-bold mt-1">Votes Total</div>
+                </div>
+                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4 text-center">
+                    <div class="font-athletic text-2xl font-black text-blue-400">3</div>
+                    <div class="text-[10px] text-gray-500 uppercase font-bold mt-1">Matchs</div>
+                </div>
+                <div class="bg-[#0e1322] border border-gray-900 rounded-2xl p-4 text-center">
+                    <div id="haiti-win-pct" class="font-athletic text-2xl font-black text-red-400">—</div>
+                    <div class="text-[10px] text-gray-500 uppercase font-bold mt-1">Haïti Wins</div>
+                </div>
+            </div>
+
+            <!-- CARDS MATCH -->
+            <div class="space-y-6" id="prediction-cards"></div>
+
+            <!-- LEADERBOARD -->
+            <div class="mt-10 bg-[#0e1322] border border-gray-900 rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-1">🏆 Top Prédicteurs</span>
+                        <h3 class="font-athletic text-xl font-black uppercase text-white">Leaderboard</h3>
+                    </div>
+                    <div class="text-xs text-gray-600">Après les matchs</div>
+                </div>
+                <div id="leaderboard-body" class="space-y-2"></div>
+            </div>
+
+        </div>
+    </section>
+    <!-- =================== FIN SECTION PRÉDICTIONS =================== -->
+
+<section id="vision" class="bg-gray-950/60 border-t border-b border-gray-900 py-16 sm:py-20 text-center">
         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <i class="fa-solid fa-star text-amber-500 text-3xl sm:text-4xl mb-4 sm:mb-6"></i>
             <h2 class="font-athletic text-2xl sm:text-5xl font-black uppercase text-white mb-4 sm:mb-6 tracking-wide reveal" data-i18n="sec_vision">GRENADIERS À L'ASSAUT</h2>
@@ -1019,7 +1082,7 @@
             { id: "johny_placide", name: "Johny Placide", role: "Gardiens", club: "SC Bastia (Ligue 2)", birth: "29 janvier 1988 (38 ans)", nat: "Haïtienne & Française", strengths: "Gardien de but charismatique et leader vocal incontournable. Doté de réflexes exceptionnels sur sa ligne, d'une immense expérience internationale et d'un jeu au pied précis.", journey: "Formé au Havre AC, il s'illustre en Ligue 1 au Stade de Reims. Voyageur d'expérience passant par Guingamp, l'Angleterre (Oldham) et la Bulgarie (Tsarsko Selo), il s'impose ensuite comme le rempart historique du SC Bastia.", icon: "fa-shield-halved", badge: "Capitaine" },
             { id: "alexandre_pierre", name: "Alexandre Pierre", role: "Gardiens", club: "FC Sochaux-Montbéliard", birth: "25 février 2001 (25 ans)", nat: "Haïtienne", strengths: "Grande envergure (1m90), très explosif sur sa ligne, relances précises et impérial dans les duels aériens.", journey: "Formé au Stade Lavallois, il passe par la réserve du Angers SCO avant de signer pro au RC Strasbourg. Il est ensuite prêté au FC Annecy pour gagner du temps de jeu.", icon: "fa-handcuffs" },
             { id: "josue_duverger", name: "Josué Duverger", role: "Gardiens", club: "FC Cosmos Koblenz", birth: "27 avril 2000 (26 ans)", nat: "Haïtienne & Canadienne", strengths: "Gardien de but à l'envergure impressionnante (1,87 m), excellents réflexes sur sa ligne de but, habile sur les sorties aériennes and doté d'une forte présence athlétique.", journey: "Formé au Portugal au sein des prestigieuses académies du Sporting CP et de Belenenses, il commence sa carrière professionnelle au Vitória Setúbal avant de rejoindre l'União Santarém. Il poursuit sa progression en Allemagne.", icon: "fa-hands" },
-            { id: "ricardo_ade", name: "Ricardo Adé ", role: "Défenseurs", club: "LDU Quito (LigaPro)", birth: "21 mai 1990 (35 ans)", nat: "Haïtienne", strengths: "Défenseur central d'un leadership exceptionnel. Véritable 'ministre de la défense', il excelle dans le duel aérien, le tacle glissé salvateur, la couverture défensive et l'autorité naturelle sur le terrain.", journey: "Après des débuts en Haïti (Don Bosco), il s'impose au Chili (Santiago Morning) avant de conquérir l'Équateur. Champion historique avec Aucas, il rejoint ensuite le géant LDU Quito avec qui il remporte la Copa Sudamericana.", icon: "fa-gavel", badge: "Ministre" },
+            { id: "ricardo_ade", name: "Ricardo Adé Kat", role: "Défenseurs", club: "LDU Quito (LigaPro)", birth: "21 mai 1990 (35 ans)", nat: "Haïtienne", strengths: "Défenseur central d'un leadership exceptionnel. Véritable 'ministre de la défense', il excelle dans le duel aérien, le tacle glissé salvateur, la couverture défensive et l'autorité naturelle sur le terrain.", journey: "Après des débuts en Haïti (Don Bosco), il s'impose au Chili (Santiago Morning) avant de conquérir l'Équateur. Champion historique avec Aucas, il rejoint ensuite le géant LDU Quito avec qui il remporte la Copa Sudamericana.", icon: "fa-gavel", badge: "Ministre" },
             { id: "hannes_delcroix", name: "Hannes Piterson Delcroix", role: "Défenseurs", club: "FC Lugano (Super League)", birth: "28 février 1999 (27 ans)", nat: "Haïtienne & Belge", strengths: "Défenseur central moderne (gaucher), solide dans l'impact physique, lecture du jeu remarquable, relance précise et capable d'évoluer également comme arrière gauche.", journey: "Formé au RSC Anderlecht où il s'impose chez les pros, il connaît un prêt au RKC Waalwijk avant de s'enforcer en Angleterre à Burnley. Il prend ensuite un nouveau virage en rejoignant l'élite suisse à Lugano.", icon: "fa-shield" },
             { id: "carlens_arcus", name: "Carlens Arcus", role: "Défenseurs", club: "Angers SCO (Ligue 1)", birth: "28 juin 1996 (29 ans)", nat: "Haïtienne", strengths: "Vitesse explosive dans son couloir, gros volume de jeu (box-to-box), rigueur défensive dans les duels et qualité de centre en pleine course.", journey: "Révélé en France au Troyes AC puis à l'AJ Auxerre où il devient un cadre indiscutable. Il découvre ensuite l'Eredivisie avec le Vitesse Arnhem avant de s'mposer en Ligue 1.", icon: "fa-bolt" },
             { id: "jean_kevin_duverne", name: "Jean-Kévin Duverne", role: "Défenseurs", club: "KAA Gent (Jupiler League)", birth: "12 juillet 1997 (28 ans)", nat: "Française & Haïtienne", strengths: "Grande polyvalence défensive (axe et côtés), vitesse de pointe impressionnante, impact physique dans les duels et relance propre.", journey: "Formé au RC Lens, il explose en Ligue 1 avec le Stade Brestois avant de s'engager au FC Nantes. Solide sur ses appuis, il poursuit son aventure en première division belge.", icon: "fa-arrows-up-down-left-right" },
@@ -2329,6 +2392,7 @@
         initStandings();
         initPlayerStats();
         initNews();
+        initPredictions();
         initI18n();
         initScrollAnimations();
         initAdminMode();
@@ -3541,6 +3605,399 @@
     }
     </script>
 
+
+
+
+    <!-- ============================================================
+         PRÉDICTIONS — Vote + Leaderboard + Storage persistant
+    ============================================================ -->
+    <script>
+    /* ── MATCHES ── */
+    var MATCHES = [
+        { id:'m1', home:'Haïti', away:'Écosse',  homeFlag:'ht', awayFlag:'gb-sct', date:'13 Juin 2026', venue:'Boston',       group:'C' },
+        { id:'m2', home:'Brésil', away:'Haïti',  homeFlag:'br', awayFlag:'ht',     date:'19 Juin 2026', venue:'Philadelphia', group:'C' },
+        { id:'m3', home:'Maroc', away:'Haïti',   homeFlag:'ma', awayFlag:'ht',     date:'24 Juin 2026', venue:'Atlanta',      group:'C' }
+    ];
+
+    /* ── SCORES POSSIBLES ── */
+    var SCORES = ['0-0','1-0','2-0','3-0','1-1','2-1','3-1','2-2','0-1','0-2','0-3','1-2','1-3'];
+
+    /* ── STATE ── */
+    var predState = {
+        userVotes: {},      // { m1: { result:'home', score:'2-1' }, ... }
+        community: {},      // { m1: { home:0, draw:0, away:0, scores:{} }, ... }
+        userName: ''
+    };
+
+    /* ── LOAD FROM STORAGE ── */
+    async function loadPredStorage() {
+        try {
+            // Load user votes
+            var uv = await window.storage.get('pred_uservotes');
+            if (uv) predState.userVotes = JSON.parse(uv.value);
+        } catch(e) {}
+        try {
+            // Load community votes
+            var cv = await window.storage.get('pred_community', true);
+            if (cv) predState.community = JSON.parse(cv.value);
+        } catch(e) {}
+        try {
+            var un = await window.storage.get('pred_username');
+            if (un) predState.userName = un.value;
+        } catch(e) {}
+    }
+
+    /* ── SAVE ── */
+    async function savePredStorage() {
+        try {
+            await window.storage.set('pred_uservotes', JSON.stringify(predState.userVotes));
+            await window.storage.set('pred_community', JSON.stringify(predState.community), true);
+            if (predState.userName) await window.storage.set('pred_username', predState.userName);
+        } catch(e) {}
+    }
+
+    /* ── RENDER CARDS ── */
+    function renderPredictionCards() {
+        var container = document.getElementById('prediction-cards');
+        if (!container) return;
+        container.innerHTML = '';
+
+        MATCHES.forEach(function(match) {
+            var uv  = predState.userVotes[match.id] || null;
+            var com = predState.community[match.id] || { home:0, draw:0, away:0, scores:{} };
+            var total = (com.home||0) + (com.draw||0) + (com.away||0);
+
+            var homePct = total > 0 ? Math.round((com.home/total)*100) : 33;
+            var drawPct = total > 0 ? Math.round((com.draw/total)*100) : 34;
+            var awayPct = total > 0 ? Math.round((com.away/total)*100) : 33;
+
+            // Haiti side
+            var isHomeHaiti = match.home === 'Haïti';
+            var isAwayHaiti = match.away === 'Haïti';
+
+            var card = document.createElement('div');
+            card.className = 'bg-[#0e1322] border border-gray-900 rounded-2xl overflow-hidden reveal';
+            card.id = 'pred-card-' + match.id;
+
+            /* Top bar couleur si voté */
+            var barColor = uv ? (uv.result==='home'?'#3b82f6':uv.result==='draw'?'#f59e0b':'#ef4444') : '#1f2937';
+
+            card.innerHTML = [
+                '<div style="height:3px;background:'+barColor+';transition:background 0.3s;"></div>',
+                '<div class="p-5 sm:p-6">',
+
+                  /* Header match */
+                  '<div class="flex items-center justify-between mb-1">',
+                    '<span class="text-[10px] font-bold text-gray-500 uppercase">Groupe C · '+match.date+' · '+match.venue+'</span>',
+                    uv ? '<span class="text-[10px] font-bold text-emerald-400"><i class="fa-solid fa-check mr-1"></i>Voté</span>' : '',
+                  '</div>',
+
+                  /* Teams */
+                  '<div class="flex items-center justify-between gap-4 my-4">',
+                    /* Home */
+                    '<div class="flex-1 text-center">',
+                      '<img src="https://flagcdn.com/w40/'+match.homeFlag+'.png" class="w-10 h-auto mx-auto mb-2 rounded shadow">',
+                      '<div class="font-athletic text-base sm:text-xl font-black uppercase '+(isHomeHaiti?'text-red-400':'text-white')+'">'+match.home+'</div>',
+                    '</div>',
+                    /* VS + Score prédit */
+                    '<div class="text-center flex-shrink-0">',
+                      '<div class="text-xs font-black text-gray-600 mb-1">VS</div>',
+                      uv ? '<div class="font-athletic text-xl font-black text-white bg-gray-900 px-3 py-1 rounded-xl border border-gray-800">'+uv.score+'</div>' : '<div class="text-xs text-gray-600">?-?</div>',
+                    '</div>',
+                    /* Away */
+                    '<div class="flex-1 text-center">',
+                      '<img src="https://flagcdn.com/w40/'+match.awayFlag+'.png" class="w-10 h-auto mx-auto mb-2 rounded shadow">',
+                      '<div class="font-athletic text-base sm:text-xl font-black uppercase '+(isAwayHaiti?'text-red-400':'text-white')+'">'+match.away+'</div>',
+                    '</div>',
+                  '</div>',
+
+                  /* VOTE BUTTONS */
+                  '<div class="grid grid-cols-3 gap-2 mb-4" id="vote-btns-'+match.id+'">',
+                    makePredBtn(match.id, 'home', match.home, uv, '🏠'),
+                    makePredBtn(match.id, 'draw', 'Nul', uv, '🤝'),
+                    makePredBtn(match.id, 'away', match.away, uv, '✈️'),
+                  '</div>',
+
+                  /* SCORE SELECTOR */
+                  '<div id="score-selector-'+match.id+'" class="'+(uv?'':'hidden')+' mb-4">',
+                    '<p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-2"><i class="fa-solid fa-pen text-[9px] mr-1"></i>Score exact :</p>',
+                    /* Scores rapides */
+                    '<div class="flex flex-wrap gap-1.5 mb-3" id="score-pills-'+match.id+'">',
+                      renderScorePills(match.id, uv ? uv.result : 'home', uv ? uv.score : null),
+                    '</div>',
+                    /* Input manyèl */
+                    '<div class="flex items-center gap-2">',
+                      '<div class="flex items-center gap-1.5 bg-[#0b0f19] border border-gray-800 rounded-xl px-3 py-2 flex-1">',
+                        '<input type="number" min="0" max="20" id="score-home-'+match.id+'" ',
+                          'value="'+(uv ? uv.score.split('-')[0] : '0')+'" ',
+                          'data-match="'+match.id+'" ',
+                          'oninput="updateCustomScore(this.dataset.match)" ',
+                          'class="w-10 bg-transparent text-center font-athletic text-xl font-black text-white focus:outline-none" ',
+                          'placeholder="0">',
+                        '<span class="text-gray-500 font-black text-lg">—</span>',
+                        '<input type="number" min="0" max="20" id="score-away-'+match.id+'" ',
+                          'value="'+(uv ? uv.score.split('-')[1] : '0')+'" ',
+                          'data-match="'+match.id+'" ',
+                          'oninput="updateCustomScore(this.dataset.match)" ',
+                          'class="w-10 bg-transparent text-center font-athletic text-xl font-black text-white focus:outline-none" ',
+                          'placeholder="0">',
+                      '</div>',
+                      '<div id="custom-score-preview-'+match.id+'" class="px-3 py-2 rounded-xl bg-blue-600/10 border border-blue-500/30 text-blue-400 font-athletic font-black text-sm min-w-[52px] text-center">',
+                        (uv ? uv.score : '0-0'),
+                      '</div>',
+                    '</div>',
+                    '<p class="text-[9px] text-gray-600 mt-1.5"><i class="fa-solid fa-circle-info mr-1"></i>Tape le score ou penses — confirme avec le bouton ✓</p>',
+                    '<button data-match="'+match.id+'" onclick="confirmCustomScore(this.dataset.match)" ',
+                      'class="mt-2 w-full py-2 rounded-xl bg-emerald-600/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold uppercase hover:bg-emerald-600/20 transition">',
+                      '<i class="fa-solid fa-check mr-1"></i>Confirmer ce score',
+                    '</button>',
+                  '</div>',
+
+                  /* COMMUNITY BAR */
+                  '<div class="mt-4 pt-4 border-t border-gray-900/60">',
+                    '<p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-2">',
+                      'Communauté · '+total+' vote'+(total>1?'s':''),
+                    '</p>',
+                    '<div class="flex rounded-xl overflow-hidden h-7 mb-1">',
+                      '<div style="width:'+homePct+'%;background:#3b82f6;transition:width 0.8s;" class="flex items-center justify-center text-[9px] font-black text-white">'+homePct+'%</div>',
+                      '<div style="width:'+drawPct+'%;background:#f59e0b;transition:width 0.8s;" class="flex items-center justify-center text-[9px] font-black text-white">'+drawPct+'%</div>',
+                      '<div style="width:'+awayPct+'%;background:#ef4444;transition:width 0.8s;" class="flex items-center justify-center text-[9px] font-black text-white">'+awayPct+'%</div>',
+                    '</div>',
+                    '<div class="flex justify-between text-[9px] text-gray-500 font-bold">',
+                      '<span style="color:#3b82f6">'+match.home+' '+homePct+'%</span>',
+                      '<span style="color:#f59e0b">Nul '+drawPct+'%</span>',
+                      '<span style="color:#ef4444">'+match.away+' '+awayPct+'%</span>',
+                    '</div>',
+                  '</div>',
+
+                  /* SHARE */
+                  uv ? '<button data-matchid="'+match.id+'" onclick="sharePrediction(this.dataset.matchid)" class="mt-4 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gray-800 text-xs font-bold text-gray-400 hover:text-white hover:border-gray-600 transition"><i class="fa-solid fa-share-nodes text-xs"></i>Partager ma prédiction</button>' : '',
+
+                '</div>'
+            ].join('');
+
+            container.appendChild(card);
+        });
+
+        updateGlobalStats();
+        setTimeout(observeNewCards, 50);
+    }
+
+    function makePredBtn(matchId, result, label, uv, emoji) {
+        var isActive = uv && uv.result === result;
+        var colors = { home:'#3b82f6', draw:'#f59e0b', away:'#ef4444' };
+        var col = colors[result];
+        var style = isActive
+            ? 'background:'+col+'22;border-color:'+col+';color:'+col+';'
+            : 'background:#111827;border-color:#1f2937;color:#9ca3af;';
+        return '<button data-match="'+matchId+'" data-result="'+result+'" '
+            + 'onclick="castVote(this.dataset.match, this.dataset.result)" '
+            + 'class="py-2.5 rounded-xl border text-[10px] font-bold uppercase transition hover:-translate-y-0.5 active:scale-95" '
+            + 'style="'+style+'">'
+            + emoji + ' ' + label
+            + '</button>';
+    }
+
+    function renderScorePills(matchId, result, selectedScore) {
+        /* Filtrer scores selon résultat */
+        var filtered = SCORES.filter(function(s) {
+            var parts = s.split('-');
+            var h = parseInt(parts[0]), a = parseInt(parts[1]);
+            if (result === 'draw')  return h === a;
+            if (result === 'home')  return h > a;
+            if (result === 'away')  return a > h;
+            return true;
+        });
+        return filtered.map(function(s) {
+            var isActive = s === selectedScore;
+            return '<button data-match="'+matchId+'" data-score="'+s+'" '
+                + 'onclick="selectScore(this.dataset.match, this.dataset.score)" '
+                + 'class="px-2.5 py-1 rounded-lg text-[10px] font-black transition border '
+                + (isActive ? 'bg-blue-600 border-blue-500 text-white' : 'bg-gray-900 border-gray-800 text-gray-400 hover:border-gray-600 hover:text-white')
+                + '">'+s+'</button>';
+        }).join('');
+    }
+
+    /* ── VOTE ── */
+    async function castVote(matchId, result) {
+        var prev = predState.userVotes[matchId];
+        var isNew = !prev || prev.result !== result;
+
+        /* Update community */
+        if (!predState.community[matchId]) {
+            predState.community[matchId] = { home:0, draw:0, away:0, scores:{} };
+        }
+        var com = predState.community[matchId];
+
+        /* Enlever ancien vote */
+        if (prev) { com[prev.result] = Math.max(0, (com[prev.result]||0) - 1); }
+
+        /* Ajouter nouveau */
+        if (isNew) {
+            com[result] = (com[result]||0) + 1;
+            /* Score par défaut selon résultat */
+            var defaultScores = { home:'1-0', draw:'0-0', away:'0-1' };
+            predState.userVotes[matchId] = { result: result, score: defaultScores[result] };
+        } else {
+            delete predState.userVotes[matchId];
+        }
+
+        await savePredStorage();
+        renderPredictionCards();
+    }
+
+    /* ── SELECT SCORE ── */
+    async function selectScore(matchId, score) {
+        if (!predState.userVotes[matchId]) return;
+        predState.userVotes[matchId].score = score;
+        await savePredStorage();
+        renderPredictionCards();
+    }
+
+    /* ── GLOBAL STATS ── */
+    function updateGlobalStats() {
+        var totalVotes = 0;
+        var haitiWins  = 0;
+        var haitiTotal = 0;
+
+        MATCHES.forEach(function(m) {
+            var com = predState.community[m.id] || { home:0, draw:0, away:0 };
+            var t = (com.home||0) + (com.draw||0) + (com.away||0);
+            totalVotes += t;
+
+            var isHomeHaiti = m.home === 'Haïti';
+            var haitiWin = isHomeHaiti ? (com.home||0) : (com.away||0);
+            haitiWins  += haitiWin;
+            haitiTotal += t;
+        });
+
+        var tvEl = document.getElementById('total-votes-display');
+        var hwEl = document.getElementById('haiti-win-pct');
+        if (tvEl) tvEl.textContent = totalVotes;
+        if (hwEl) hwEl.textContent = haitiTotal > 0 ? Math.round((haitiWins/haitiTotal)*100) + '%' : '—';
+
+        renderLeaderboard();
+    }
+
+    /* ── LEADERBOARD ── */
+    function renderLeaderboard() {
+        var body = document.getElementById('leaderboard-body');
+        if (!body) return;
+
+        /* Simuler top 5 prédicteurs */
+        var mock = [
+            { name:'🥇 Meilleur Prédicteur', pts:'—', status:'En attente des matchs' },
+            { name:'🥈 2ème place',           pts:'—', status:'En attente des matchs' },
+            { name:'🥉 3ème place',           pts:'—', status:'En attente des matchs' }
+        ];
+
+        body.innerHTML = '';
+        mock.forEach(function(p) {
+            var row = document.createElement('div');
+            row.className = 'flex items-center justify-between p-3 rounded-xl bg-gray-950/40 border border-gray-900/60';
+            row.innerHTML = '<div>'
+                + '<span class="text-xs font-bold text-white block">'+p.name+'</span>'
+                + '<span class="text-[10px] text-gray-500">'+p.status+'</span>'
+                + '</div>'
+                + '<span class="font-athletic text-sm font-black text-amber-400">'+p.pts+'</span>';
+            body.appendChild(row);
+        });
+
+        /* Si user a voté ajoute son entrée */
+        var userVoteCount = Object.keys(predState.userVotes).length;
+        if (userVoteCount > 0) {
+            var userRow = document.createElement('div');
+            userRow.className = 'flex items-center justify-between p-3 rounded-xl bg-blue-500/5 border border-blue-500/20 mt-2';
+            userRow.innerHTML = '<div>'
+                + '<span class="text-xs font-bold text-blue-400 block">👤 Toi · '+userVoteCount+'/3 matchs votés</span>'
+                + '<span class="text-[10px] text-gray-500">Résultats après les matchs</span>'
+                + '</div>'
+                + '<span class="font-athletic text-sm font-black text-blue-400">En jeu</span>';
+            body.appendChild(userRow);
+        }
+    }
+
+    /* ── CUSTOM SCORE INPUT ── */
+    function updateCustomScore(matchId) {
+        var homeInput = document.getElementById('score-home-' + matchId);
+        var awayInput = document.getElementById('score-away-' + matchId);
+        var preview   = document.getElementById('custom-score-preview-' + matchId);
+        if (!homeInput || !awayInput || !preview) return;
+
+        var h = Math.max(0, Math.min(20, parseInt(homeInput.value) || 0));
+        var a = Math.max(0, Math.min(20, parseInt(awayInput.value) || 0));
+
+        // Validate vs current result
+        var uv = predState.userVotes[matchId];
+        if (uv) {
+            var col = '#60a5fa'; // blue default
+            if (uv.result === 'home' && h <= a) col = '#f87171';       // rouge si incohérent
+            else if (uv.result === 'draw' && h !== a) col = '#f87171';
+            else if (uv.result === 'away' && a <= h) col = '#f87171';
+            else col = '#34d399'; // vert si ok
+            preview.style.color = col;
+            preview.style.borderColor = col + '55';
+        }
+
+        preview.textContent = h + '-' + a;
+    }
+
+    function confirmCustomScore(matchId) {
+        var homeInput = document.getElementById('score-home-' + matchId);
+        var awayInput = document.getElementById('score-away-' + matchId);
+        if (!homeInput || !awayInput) return;
+
+        var h = Math.max(0, Math.min(20, parseInt(homeInput.value) || 0));
+        var a = Math.max(0, Math.min(20, parseInt(awayInput.value) || 0));
+        var score = h + '-' + a;
+
+        var uv = predState.userVotes[matchId];
+        if (!uv) return;
+
+        // Validate coherence
+        var ok = true;
+        if (uv.result === 'home' && h <= a) ok = false;
+        if (uv.result === 'draw' && h !== a) ok = false;
+        if (uv.result === 'away' && a <= h) ok = false;
+
+        if (!ok) {
+            var resultLabels = { home:'victoire domicile', draw:'match nul', away:'victoire extérieur' };
+            var msg = 'Score incohérent avec ton choix (' + resultLabels[uv.result] + ') !';
+            // Show error briefly
+            var preview = document.getElementById('custom-score-preview-' + matchId);
+            if (preview) { preview.textContent = '❌'; }
+            setTimeout(function() { renderPredictionCards(); }, 800);
+            return;
+        }
+
+        selectScore(matchId, score);
+    }
+
+    /* ── SHARE PREDICTION ── */
+    function sharePrediction(matchId) {
+        var match = MATCHES.find(function(m){ return m.id === matchId; });
+        var uv = predState.userVotes[matchId];
+        if (!match || !uv) return;
+
+        var resultText = uv.result === 'home' ? match.home + ' gagne' : uv.result === 'draw' ? 'Match nul' : match.away + ' gagne';
+        var text = '\uD83C\uDDED\uD83C\uDDF9 Ma prédiction pour ' + match.home + ' vs ' + match.away
+            + ' : ' + resultText + ' (' + uv.score + ')'
+            + ' - Groupe C Mondial 2026'
+            + '\n\nVote ta prédiction sur pwesports.netlify.app';
+
+        if (navigator.share) {
+            navigator.share({ title: 'Ma prédiction PWESPORTS', text: text, url: 'https://pwesports.netlify.app/#predictions' });
+        } else {
+            shareItem('wa', 'Ma prédiction Grenadiers', 'https://pwesports.netlify.app/#predictions', text);
+        }
+    }
+
+    /* ── INIT ── */
+    async function initPredictions() {
+        await loadPredStorage();
+        renderPredictionCards();
+    }
+    </script>
 
 
 </body>
