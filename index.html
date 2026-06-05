@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
@@ -825,6 +824,26 @@
                         <span id="pending-count" class="ml-2 bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">0</span>
                     </p>
                     <div id="pending-list" class="space-y-2"></div>
+                </div>
+
+                <!-- PRÉDICTIONS ADMIN -->
+                <div class="mt-6 pt-5 border-t border-red-500/10">
+                    <div class="flex items-center justify-between mb-3">
+                        <p class="text-[10px] font-bold uppercase text-emerald-400 tracking-wider">
+                            <i class="fa-solid fa-chart-pie mr-1"></i>Prédictions Communauté
+                        </p>
+                        <button onclick="loadAdminPredictions()" class="px-3 py-1.5 rounded-lg bg-emerald-600/10 border border-emerald-500/20 text-[10px] font-bold text-emerald-400 hover:bg-emerald-600/20 transition">
+                            <i class="fa-solid fa-rotate-right mr-1"></i>Rafraîchir
+                        </button>
+                    </div>
+                    <div id="admin-pred-stats" class="space-y-3"></div>
+                    <div class="mt-4">
+                        <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-2">
+                            <i class="fa-solid fa-users mr-1"></i>Votes individuels
+                            <span id="admin-total-voters" class="ml-1 text-white">0</span> votant(s)
+                        </p>
+                        <div id="admin-votes-list" class="space-y-1 max-h-64 overflow-y-auto"></div>
+                    </div>
                 </div>
             </div>
 
@@ -2901,6 +2920,7 @@
         savePending();
         renderPendingList();
         renderNewsGrid();
+        loadAdminPredictions();
     }
     function rejectArticle(idx) {
         if (confirm('Rejeter cet article ?')) {
@@ -3614,46 +3634,137 @@
     <script>
     /* ── MATCHES ── */
     var MATCHES = [
-        { id:'m1', home:'Haïti', away:'Écosse',  homeFlag:'ht', awayFlag:'gb-sct', date:'13 Juin 2026', venue:'Boston',       group:'C' },
-        { id:'m2', home:'Brésil', away:'Haïti',  homeFlag:'br', awayFlag:'ht',     date:'19 Juin 2026', venue:'Philadelphia', group:'C' },
-        { id:'m3', home:'Maroc', away:'Haïti',   homeFlag:'ma', awayFlag:'ht',     date:'24 Juin 2026', venue:'Atlanta',      group:'C' }
+        { id:'m1', home:'Haïti', away:'Écosse',  homeFlag:'ht', awayFlag:'gb-sct', date:'13 Juin 2026', venue:'Boston',       group:'C', kickoff: new Date('2026-06-14T02:00:00Z') },
+        { id:'m2', home:'Brésil', away:'Haïti',  homeFlag:'br', awayFlag:'ht',     date:'19 Juin 2026', venue:'Philadelphia', group:'C', kickoff: new Date('2026-06-20T01:30:00Z') },
+        { id:'m3', home:'Maroc', away:'Haïti',   homeFlag:'ma', awayFlag:'ht',     date:'24 Juin 2026', venue:'Atlanta',      group:'C', kickoff: new Date('2026-06-24T23:00:00Z') }
     ];
+
+    /* ── MATCH LOCKED? ── */
+    function isMatchLocked(match) {
+        return new Date() >= match.kickoff;
+    }
+
+    function getTimeRemaining(match) {
+        var diff = match.kickoff - new Date();
+        if (diff <= 0) return null;
+        var days    = Math.floor(diff / 86400000);
+        var hours   = Math.floor((diff % 86400000) / 3600000);
+        var minutes = Math.floor((diff % 3600000) / 60000);
+        if (days > 0)   return days + 'j ' + hours + 'h restant';
+        if (hours > 0)  return hours + 'h ' + minutes + 'min restant';
+        return minutes + ' min restant';
+    }
 
     /* ── SCORES POSSIBLES ── */
     var SCORES = ['0-0','1-0','2-0','3-0','1-1','2-1','3-1','2-2','0-1','0-2','0-3','1-2','1-3'];
 
     /* ── STATE ── */
     var predState = {
-        userVotes: {},      // { m1: { result:'home', score:'2-1' }, ... }
-        community: {},      // { m1: { home:0, draw:0, away:0, scores:{} }, ... }
+        userVotes: {},      // { m1: { result:'home', score:'2-1', locked:true }, ... }
+        community: {},      // { m1: { home:0, draw:0, away:0 }, ... }
+        allVotes:  {},      // { uid: { votes:{}, ts:'', uid:'' }, ... } — admin sèlman
         userName: ''
     };
 
+    /* ── USER ID UNIQUE (persistant) ── */
+    function getUserId() {
+        var uid = localStorage.getItem('pwe_uid');
+        if (!uid) {
+            uid = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
+            localStorage.setItem('pwe_uid', uid);
+        }
+        return uid;
+    }
+
     /* ── LOAD FROM STORAGE ── */
     async function loadPredStorage() {
+        var uid = getUserId();
         try {
-            // Load user votes
-            var uv = await window.storage.get('pred_uservotes');
+            // Vòt pèsonèl user la (privé)
+            var uv = await window.storage.get('pred_uv_' + uid);
             if (uv) predState.userVotes = JSON.parse(uv.value);
         } catch(e) {}
         try {
-            // Load community votes
+            // Vòt kominote a (shared — tout moun wè)
             var cv = await window.storage.get('pred_community', true);
             if (cv) predState.community = JSON.parse(cv.value);
         } catch(e) {}
         try {
-            var un = await window.storage.get('pred_username');
-            if (un) predState.userName = un.value;
+            // Tout vòt detaye (shared — admin sèlman wè nan panel)
+            var av = await window.storage.get('pred_allvotes', true);
+            if (av) predState.allVotes = JSON.parse(av.value);
         } catch(e) {}
     }
 
     /* ── SAVE ── */
     async function savePredStorage() {
+        var uid = getUserId();
         try {
-            await window.storage.set('pred_uservotes', JSON.stringify(predState.userVotes));
-            await window.storage.set('pred_community', JSON.stringify(predState.community), true);
-            if (predState.userName) await window.storage.set('pred_username', predState.userName);
+            // Sove vòt pèsonèl (privé)
+            await window.storage.set('pred_uv_' + uid, JSON.stringify(predState.userVotes));
         } catch(e) {}
+        try {
+            // Mete ajou kominote (shared)
+            await window.storage.set('pred_community', JSON.stringify(predState.community), true);
+        } catch(e) {}
+        try {
+            // Anrejistre vòt detaye pou admin (shared)
+            if (!predState.allVotes) predState.allVotes = {};
+            predState.allVotes[uid] = {
+                votes: predState.userVotes,
+                ts: new Date().toISOString(),
+                uid: uid
+            };
+            await window.storage.set('pred_allvotes', JSON.stringify(predState.allVotes), true);
+        } catch(e) {}
+    }
+
+    /* ── VOTE BUTTONS HELPER ── */
+    function renderVoteButtons(match, uv) {
+        /* Match commencé → afficher résumé ou message */
+        if (isMatchLocked(match)) {
+            if (uv) {
+                var label = uv.result==='home' ? match.home : uv.result==='draw' ? 'Match Nul' : match.away;
+                return '<div class="flex items-center gap-2 mb-4 p-3 rounded-xl border" style="background:rgba(59,130,246,0.06);border-color:rgba(59,130,246,0.2);">'
+                    + '<i class="fa-solid fa-check-circle text-blue-400 text-sm"></i>'
+                    + '<span class="text-xs font-bold text-blue-300">Ta prediction : ' + label + ' &middot; ' + uv.score + '</span>'
+                    + '</div>';
+            }
+            return '<p class="text-xs text-gray-600 mb-4 italic">Pas de vote pour ce match.</p>';
+        }
+
+        /* Vote déjà confirmé (locked) → read-only */
+        if (uv && uv.locked) {
+            var label2 = uv.result==='home' ? match.home : uv.result==='draw' ? 'Match Nul' : match.away;
+            return '<div class="mb-4">'
+                + '<div class="flex items-center gap-2 p-3 rounded-xl border mb-2" style="background:rgba(34,197,94,0.06);border-color:rgba(34,197,94,0.25);">'
+                + '<i class="fa-solid fa-lock text-emerald-400 text-sm"></i>'
+                + '<div>'
+                + '<span class="text-xs font-bold text-emerald-300 block">Vote verrouillé ✓</span>'
+                + '<span class="text-[10px] text-gray-500">' + label2 + ' · ' + uv.score + '</span>'
+                + '</div>'
+                + '</div>'
+                + '<p class="text-[9px] text-gray-600 text-center"><i class="fa-solid fa-circle-info mr-1"></i>1 vote par match — modification impossible</p>'
+                + '</div>';
+        }
+
+        /* Pas encore voté ou vote non confirmé → boutons actifs */
+        var html = '<div class="grid grid-cols-3 gap-2 mb-3" id="vote-btns-'+match.id+'">'
+            + makePredBtn(match.id, 'home', match.home, uv, '🏠')
+            + makePredBtn(match.id, 'draw', 'Nul', uv, '🤝')
+            + makePredBtn(match.id, 'away', match.away, uv, '✈️')
+            + '</div>';
+
+        /* Bouton confirmer — seulement si un choix est fait */
+        if (uv && !uv.locked) {
+            html += '<button data-match="'+match.id+'" onclick="lockVote(this.dataset.match)" '
+                + 'class="w-full py-2.5 rounded-xl text-xs font-bold uppercase transition mb-3 flex items-center justify-center gap-2" '
+                + 'style="background:linear-gradient(135deg,#059669,#047857);color:#fff;box-shadow:0 4px 15px rgba(5,150,105,0.3);">'
+                + '<i class="fa-solid fa-lock text-xs"></i>Confirmer mon vote (définitif)'
+                + '</button>';
+        }
+
+        return html;
     }
 
     /* ── RENDER CARDS ── */
@@ -3689,7 +3800,12 @@
                   /* Header match */
                   '<div class="flex items-center justify-between mb-1">',
                     '<span class="text-[10px] font-bold text-gray-500 uppercase">Groupe C · '+match.date+' · '+match.venue+'</span>',
-                    uv ? '<span class="text-[10px] font-bold text-emerald-400"><i class="fa-solid fa-check mr-1"></i>Voté</span>' : '',
+                    isMatchLocked(match)
+                      ? '<span class="text-[10px] font-bold text-red-400"><i class="fa-solid fa-lock mr-1"></i>Fermé</span>'
+                      : (uv
+                          ? '<span class="text-[10px] font-bold text-emerald-400"><i class="fa-solid fa-check mr-1"></i>Voté · '+(getTimeRemaining(match)||'')+'</span>'
+                          : '<span class="text-[10px] font-bold text-amber-400"><i class="fa-regular fa-clock mr-1"></i>'+(getTimeRemaining(match)||'')+'</span>'
+                        ),
                   '</div>',
 
                   /* Teams */
@@ -3711,15 +3827,28 @@
                     '</div>',
                   '</div>',
 
-                  /* VOTE BUTTONS */
-                  '<div class="grid grid-cols-3 gap-2 mb-4" id="vote-btns-'+match.id+'">',
-                    makePredBtn(match.id, 'home', match.home, uv, '🏠'),
-                    makePredBtn(match.id, 'draw', 'Nul', uv, '🤝'),
-                    makePredBtn(match.id, 'away', match.away, uv, '✈️'),
-                  '</div>',
+                  /* LOCK BANNER si match commencé */
+                  isMatchLocked(match) ? [
+                    '<div class="flex items-center gap-3 p-3 rounded-xl mb-4 border" style="background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.25);">',
+                      '<i class="fa-solid fa-lock text-red-400 text-sm flex-shrink-0"></i>',
+                      '<div>',
+                        '<p class="text-xs font-bold text-red-400">Prédictions fermées</p>',
+                        '<p class="text-[10px] text-gray-500">Le match a commencé — résultats bientôt</p>',
+                      '</div>',
+                    '</div>'
+                  ].join('') : '',
 
-                  /* SCORE SELECTOR */
-                  '<div id="score-selector-'+match.id+'" class="'+(uv?'':'hidden')+' mb-4">',
+                  /* VOTE BUTTONS — seulement si pas locked */
+                  !isMatchLocked(match) ? [
+                    '<div class="grid grid-cols-3 gap-2 mb-4" id="vote-btns-'+match.id+'">',
+                      makePredBtn(match.id, 'home', match.home, uv, '🏠'),
+                      makePredBtn(match.id, 'draw', 'Nul', uv, '🤝'),
+                      makePredBtn(match.id, 'away', match.away, uv, '✈️'),
+                    '</div>'
+                  ].join('') :
+
+                  /* SCORE SELECTOR — seulement si pas locked */
+                  !isMatchLocked(match) ? '<div id="score-selector-'+match.id+'" class="'+(uv?'':'hidden')+' mb-4">' : '',
                     '<p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-2"><i class="fa-solid fa-pen text-[9px] mr-1"></i>Score exact :</p>',
                     /* Scores rapides */
                     '<div class="flex flex-wrap gap-1.5 mb-3" id="score-pills-'+match.id+'">',
@@ -3751,7 +3880,7 @@
                       'class="mt-2 w-full py-2 rounded-xl bg-emerald-600/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold uppercase hover:bg-emerald-600/20 transition">',
                       '<i class="fa-solid fa-check mr-1"></i>Confirmer ce score',
                     '</button>',
-                  '</div>',
+                  (!isMatchLocked(match) ? '</div>' : ''),
 
                   /* COMMUNITY BAR */
                   '<div class="mt-4 pt-4 border-t border-gray-900/60">',
@@ -3820,6 +3949,8 @@
 
     /* ── VOTE ── */
     async function castVote(matchId, result) {
+        var match = MATCHES.find(function(m){ return m.id === matchId; });
+        if (match && isMatchLocked(match)) return; // LOCKED
         var prev = predState.userVotes[matchId];
         var isNew = !prev || prev.result !== result;
 
@@ -3848,6 +3979,8 @@
 
     /* ── SELECT SCORE ── */
     async function selectScore(matchId, score) {
+        var match = MATCHES.find(function(m){ return m.id === matchId; });
+        if (match && isMatchLocked(match)) return; // LOCKED
         if (!predState.userVotes[matchId]) return;
         predState.userVotes[matchId].score = score;
         await savePredStorage();
@@ -3943,6 +4076,8 @@
     }
 
     function confirmCustomScore(matchId) {
+        var match = MATCHES.find(function(m){ return m.id === matchId; });
+        if (match && isMatchLocked(match)) return; // LOCKED
         var homeInput = document.getElementById('score-home-' + matchId);
         var awayInput = document.getElementById('score-away-' + matchId);
         if (!homeInput || !awayInput) return;
@@ -3992,10 +4127,100 @@
         }
     }
 
+    /* ── ADMIN: VOIR TOUS LES VOTES ── */
+    async function loadAdminPredictions() {
+        var statsDiv = document.getElementById('admin-pred-stats');
+        var listDiv  = document.getElementById('admin-votes-list');
+        var totalEl  = document.getElementById('admin-total-voters');
+        if (!statsDiv || !listDiv) return;
+
+        statsDiv.innerHTML = '<p class="text-[10px] text-gray-600 animate-pulse">Chargement...</p>';
+
+        var allVotes = {};
+        var community = {};
+        try {
+            var av = await window.storage.get('pred_allvotes', true);
+            if (av) allVotes = JSON.parse(av.value);
+        } catch(e) {}
+        try {
+            var cv = await window.storage.get('pred_community', true);
+            if (cv) community = JSON.parse(cv.value);
+        } catch(e) {}
+
+        var voters = Object.keys(allVotes);
+        if (totalEl) totalEl.textContent = voters.length;
+
+        /* ── STATS PAR MATCH ── */
+        statsDiv.innerHTML = '';
+        MATCHES.forEach(function(match) {
+            var com = community[match.id] || { home:0, draw:0, away:0 };
+            var total = (com.home||0) + (com.draw||0) + (com.away||0);
+            var homePct = total > 0 ? Math.round((com.home/total)*100) : 0;
+            var drawPct = total > 0 ? Math.round((com.draw/total)*100) : 0;
+            var awayPct = total > 0 ? Math.round((com.away/total)*100) : 0;
+
+            var div = document.createElement('div');
+            div.className = 'bg-gray-950/40 border border-gray-900 rounded-xl p-3 mb-2';
+            div.innerHTML = [
+                '<p class="text-[10px] font-bold text-white mb-2">',
+                  '<img src="https://flagcdn.com/w20/'+match.homeFlag+'.png" class="inline w-3 mr-1">',
+                  match.home + ' vs ' + match.away,
+                  ' <span class="text-gray-500 font-normal">· ' + total + ' vote(s)</span>',
+                '</p>',
+                '<div class="flex rounded-lg overflow-hidden h-5 mb-1">',
+                  '<div style="width:'+homePct+'%;background:#3b82f6;" class="flex items-center justify-center text-[8px] font-black text-white transition-all">'+homePct+'%</div>',
+                  '<div style="width:'+drawPct+'%;background:#f59e0b;" class="flex items-center justify-center text-[8px] font-black text-white transition-all">'+drawPct+'%</div>',
+                  '<div style="width:'+awayPct+'%;background:#ef4444;" class="flex items-center justify-center text-[8px] font-black text-white transition-all">'+awayPct+'%</div>',
+                '</div>',
+                '<div class="flex justify-between text-[8px] font-bold">',
+                  '<span style="color:#3b82f6">'+match.home+' '+com.home+'</span>',
+                  '<span style="color:#f59e0b">Nul '+com.draw+'</span>',
+                  '<span style="color:#ef4444">'+match.away+' '+com.away+'</span>',
+                '</div>'
+            ].join('');
+            statsDiv.appendChild(div);
+        });
+
+        /* ── VOTES INDIVIDUELS ── */
+        listDiv.innerHTML = '';
+        if (voters.length === 0) {
+            listDiv.innerHTML = '<p class="text-[10px] text-gray-600 italic">Aucun vote enregistré.</p>';
+            return;
+        }
+
+        voters.forEach(function(uid, i) {
+            var entry = allVotes[uid];
+            var votesSummary = [];
+            MATCHES.forEach(function(m) {
+                var v = entry.votes && entry.votes[m.id];
+                if (v) {
+                    var label = v.result==='home'?m.home:v.result==='draw'?'Nul':m.away;
+                    var lockIcon = v.locked ? '🔒' : '⏳';
+                    votesSummary.push(lockIcon + ' ' + m.home.substr(0,3) + '-' + m.away.substr(0,3) + ': ' + label + ' (' + v.score + ')');
+                }
+            });
+
+            var row = document.createElement('div');
+            row.className = 'flex items-start justify-between p-2 rounded-lg bg-gray-950/30 border border-gray-900/40 text-[9px]';
+            var ts = entry.ts ? new Date(entry.ts).toLocaleString('fr-FR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+            row.innerHTML = '<div class="flex-1 min-w-0">'
+                + '<span class="font-bold text-gray-400">#'+(i+1)+' · </span>'
+                + '<span class="text-gray-500 font-mono">'+ uid.substr(0,12)+'...</span>'
+                + (ts ? '<span class="text-gray-600 ml-1">· '+ts+'</span>' : '')
+                + '<div class="text-gray-500 mt-0.5">'+(votesSummary.join(' | ')||'Aucun vote')+'</div>'
+                + '</div>';
+            listDiv.appendChild(row);
+        });
+    }
+
     /* ── INIT ── */
     async function initPredictions() {
         await loadPredStorage();
         renderPredictionCards();
+        // Auto-refresh toutes les 30 secondes pour lock auto
+        setInterval(function() {
+            renderPredictionCards();
+        }, 30000);
     }
     </script>
 
