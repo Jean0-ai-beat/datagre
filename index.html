@@ -3948,164 +3948,117 @@
     }
 
     /* ── VOTE ── */
-    async function castVote(matchId, result) {
+    function castVote(matchId, result) {
         var match = MATCHES.find(function(m){ return m.id === matchId; });
-        if (match && isMatchLocked(match)) return; // LOCKED
+        if (match && isMatchLocked(match)) return;
         var prev = predState.userVotes[matchId];
-        var isNew = !prev || prev.result !== result;
-
-        /* Update community */
+        if (prev && prev.locked) { showVoteLockMsg(matchId); return; }
         if (!predState.community[matchId]) {
-            predState.community[matchId] = { home:0, draw:0, away:0, scores:{} };
+            predState.community[matchId] = { home:0, draw:0, away:0 };
         }
         var com = predState.community[matchId];
-
-        /* Enlever ancien vote */
-        if (prev) { com[prev.result] = Math.max(0, (com[prev.result]||0) - 1); }
-
-        /* Ajouter nouveau */
-        if (isNew) {
-            com[result] = (com[result]||0) + 1;
-            /* Score par défaut selon résultat */
-            var defaultScores = { home:'1-0', draw:'0-0', away:'0-1' };
-            predState.userVotes[matchId] = { result: result, score: defaultScores[result] };
-        } else {
-            delete predState.userVotes[matchId];
+        if (prev && !prev.locked) {
+            com[prev.result] = Math.max(0, (com[prev.result]||0) - 1);
         }
-
-        await savePredStorage();
+        var defaultScores = { home:'1-0', draw:'0-0', away:'0-1' };
+        com[result] = (com[result]||0) + 1;
+        predState.userVotes[matchId] = { result: result, score: defaultScores[result], locked: false };
+        saveLocalVotes();
         renderPredictionCards();
+    }
+
+    /* ── CONFIRMER VOTE FINAL → Netlify Forms ── */
+    function lockVote(matchId) {
+        var uv = predState.userVotes[matchId];
+        if (!uv || uv.locked) return;
+        var match = MATCHES.find(function(m){ return m.id === matchId; });
+        if (match && isMatchLocked(match)) return;
+        uv.locked = true;
+        saveLocalVotes();
+        submitVoteToNetlify(matchId, uv.result, uv.score, getUserId());
+        renderPredictionCards();
+        showVoteConfirmedMsg(matchId);
     }
 
     /* ── SELECT SCORE ── */
     async function selectScore(matchId, score) {
         var match = MATCHES.find(function(m){ return m.id === matchId; });
-        if (match && isMatchLocked(match)) return; // LOCKED
+        if (match && isMatchLocked(match)) return;
         if (!predState.userVotes[matchId]) return;
+        if (predState.userVotes[matchId].locked) return;
         predState.userVotes[matchId].score = score;
-        await savePredStorage();
+        saveLocalVotes();
         renderPredictionCards();
     }
 
-    /* ── GLOBAL STATS ── */
+
+
+
+    /* ── SAVE LOCAL ── */
+    function saveLocalVotes() {
+        try {
+            localStorage.setItem('pwe_uservotes', JSON.stringify(predState.userVotes));
+            localStorage.setItem('pwe_community', JSON.stringify(predState.community));
+        } catch(e) {}
+    }
+
+    /* ── SUBMIT VÒT NAN NETLIFY FORMS ── */
+    function submitVoteToNetlify(matchId, result, score, uid) {
+        var match = MATCHES.find(function(m){ return m.id === matchId; });
+        if (!match) return;
+        var resultLabel = result==='home' ? match.home : result==='draw' ? 'Nul' : match.away;
+        var formData = new URLSearchParams();
+        formData.append('form-name',    'prediction-vote');
+        formData.append('uid',          uid);
+        formData.append('match_id',     matchId);
+        formData.append('match_name',   match.home + ' vs ' + match.away);
+        formData.append('result',       result);
+        formData.append('result_label', resultLabel);
+        formData.append('score',        score);
+        formData.append('voted_at',     new Date().toISOString());
+        formData.append('bot-field',    '');
+        fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formData.toString()
+        }).catch(function(){});
+    }
+
+    /* ── UPDATE GLOBAL STATS ── */
     function updateGlobalStats() {
         var totalVotes = 0;
         var haitiWins  = 0;
         var haitiTotal = 0;
-
         MATCHES.forEach(function(m) {
             var com = predState.community[m.id] || { home:0, draw:0, away:0 };
             var t = (com.home||0) + (com.draw||0) + (com.away||0);
             totalVotes += t;
-
             var isHomeHaiti = m.home === 'Haïti';
             var haitiWin = isHomeHaiti ? (com.home||0) : (com.away||0);
             haitiWins  += haitiWin;
             haitiTotal += t;
         });
-
         var tvEl = document.getElementById('total-votes-display');
         var hwEl = document.getElementById('haiti-win-pct');
         if (tvEl) tvEl.textContent = totalVotes;
         if (hwEl) hwEl.textContent = haitiTotal > 0 ? Math.round((haitiWins/haitiTotal)*100) + '%' : '—';
-
-        renderLeaderboard();
     }
 
-    /* ── LEADERBOARD ── */
-    function renderLeaderboard() {
-        var body = document.getElementById('leaderboard-body');
-        if (!body) return;
-
-        /* Simuler top 5 prédicteurs */
-        var mock = [
-            { name:'🥇 Meilleur Prédicteur', pts:'—', status:'En attente des matchs' },
-            { name:'🥈 2ème place',           pts:'—', status:'En attente des matchs' },
-            { name:'🥉 3ème place',           pts:'—', status:'En attente des matchs' }
-        ];
-
-        body.innerHTML = '';
-        mock.forEach(function(p) {
-            var row = document.createElement('div');
-            row.className = 'flex items-center justify-between p-3 rounded-xl bg-gray-950/40 border border-gray-900/60';
-            row.innerHTML = '<div>'
-                + '<span class="text-xs font-bold text-white block">'+p.name+'</span>'
-                + '<span class="text-[10px] text-gray-500">'+p.status+'</span>'
-                + '</div>'
-                + '<span class="font-athletic text-sm font-black text-amber-400">'+p.pts+'</span>';
-            body.appendChild(row);
-        });
-
-        /* Si user a voté ajoute son entrée */
-        var userVoteCount = Object.keys(predState.userVotes).length;
-        if (userVoteCount > 0) {
-            var userRow = document.createElement('div');
-            userRow.className = 'flex items-center justify-between p-3 rounded-xl bg-blue-500/5 border border-blue-500/20 mt-2';
-            userRow.innerHTML = '<div>'
-                + '<span class="text-xs font-bold text-blue-400 block">👤 Toi · '+userVoteCount+'/3 matchs votés</span>'
-                + '<span class="text-[10px] text-gray-500">Résultats après les matchs</span>'
-                + '</div>'
-                + '<span class="font-athletic text-sm font-black text-blue-400">En jeu</span>';
-            body.appendChild(userRow);
-        }
+    /* ── MESSAGES ── */
+    function showVoteLockMsg(matchId) {
+        var msg = document.createElement('div');
+        msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#0f1524;border:1px solid rgba(239,68,68,0.4);color:#f87171;padding:16px 24px;border-radius:16px;font-size:12px;font-weight:700;text-align:center;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,0.8);';
+        msg.innerHTML = '<i class="fa-solid fa-lock mr-2"></i>Vote déjà confirmé !<br><span style="font-size:10px;color:#6b7280;font-weight:500;">1 seul vote par match autorisé</span>';
+        document.body.appendChild(msg);
+        setTimeout(function(){ msg.remove(); }, 2500);
     }
 
-    /* ── CUSTOM SCORE INPUT ── */
-    function updateCustomScore(matchId) {
-        var homeInput = document.getElementById('score-home-' + matchId);
-        var awayInput = document.getElementById('score-away-' + matchId);
-        var preview   = document.getElementById('custom-score-preview-' + matchId);
-        if (!homeInput || !awayInput || !preview) return;
-
-        var h = Math.max(0, Math.min(20, parseInt(homeInput.value) || 0));
-        var a = Math.max(0, Math.min(20, parseInt(awayInput.value) || 0));
-
-        // Validate vs current result
-        var uv = predState.userVotes[matchId];
-        if (uv) {
-            var col = '#60a5fa'; // blue default
-            if (uv.result === 'home' && h <= a) col = '#f87171';       // rouge si incohérent
-            else if (uv.result === 'draw' && h !== a) col = '#f87171';
-            else if (uv.result === 'away' && a <= h) col = '#f87171';
-            else col = '#34d399'; // vert si ok
-            preview.style.color = col;
-            preview.style.borderColor = col + '55';
-        }
-
-        preview.textContent = h + '-' + a;
-    }
-
-    function confirmCustomScore(matchId) {
-        var match = MATCHES.find(function(m){ return m.id === matchId; });
-        if (match && isMatchLocked(match)) return; // LOCKED
-        var homeInput = document.getElementById('score-home-' + matchId);
-        var awayInput = document.getElementById('score-away-' + matchId);
-        if (!homeInput || !awayInput) return;
-
-        var h = Math.max(0, Math.min(20, parseInt(homeInput.value) || 0));
-        var a = Math.max(0, Math.min(20, parseInt(awayInput.value) || 0));
-        var score = h + '-' + a;
-
-        var uv = predState.userVotes[matchId];
-        if (!uv) return;
-
-        // Validate coherence
-        var ok = true;
-        if (uv.result === 'home' && h <= a) ok = false;
-        if (uv.result === 'draw' && h !== a) ok = false;
-        if (uv.result === 'away' && a <= h) ok = false;
-
-        if (!ok) {
-            var resultLabels = { home:'victoire domicile', draw:'match nul', away:'victoire extérieur' };
-            var msg = 'Score incohérent avec ton choix (' + resultLabels[uv.result] + ') !';
-            // Show error briefly
-            var preview = document.getElementById('custom-score-preview-' + matchId);
-            if (preview) { preview.textContent = '❌'; }
-            setTimeout(function() { renderPredictionCards(); }, 800);
-            return;
-        }
-
-        selectScore(matchId, score);
+    function showVoteConfirmedMsg(matchId) {
+        var msg = document.createElement('div');
+        msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#0f1524;border:1px solid rgba(34,197,94,0.4);color:#4ade80;padding:16px 24px;border-radius:16px;font-size:12px;font-weight:700;text-align:center;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,0.8);';
+        msg.innerHTML = '<i class="fa-solid fa-check-circle mr-2"></i>Vote confirmé et verrouillé !<br><span style="font-size:10px;color:#6b7280;font-weight:500;">Bonne chance — résultats après le match</span>';
+        document.body.appendChild(msg);
+        setTimeout(function(){ msg.remove(); }, 3000);
     }
 
     /* ── SHARE PREDICTION ── */
@@ -4113,117 +4066,120 @@
         var match = MATCHES.find(function(m){ return m.id === matchId; });
         var uv = predState.userVotes[matchId];
         if (!match || !uv) return;
-
-        var resultText = uv.result === 'home' ? match.home + ' gagne' : uv.result === 'draw' ? 'Match nul' : match.away + ' gagne';
-        var text = '\uD83C\uDDED\uD83C\uDDF9 Ma prédiction pour ' + match.home + ' vs ' + match.away
+        var resultText = uv.result==='home' ? match.home+' gagne' : uv.result==='draw' ? 'Match nul' : match.away+' gagne';
+        var text = 'Ma prediction pour ' + match.home + ' vs ' + match.away
             + ' : ' + resultText + ' (' + uv.score + ')'
             + ' - Groupe C Mondial 2026'
-            + '\n\nVote ta prédiction sur pwesports.netlify.app';
-
+            + '\n\nVote sur pwesports.netlify.app';
         if (navigator.share) {
-            navigator.share({ title: 'Ma prédiction PWESPORTS', text: text, url: 'https://pwesports.netlify.app/#predictions' });
+            navigator.share({ title:'Ma prediction PWESPORTS', text:text, url:'https://pwesports.netlify.app/#predictions' });
         } else {
-            shareItem('wa', 'Ma prédiction Grenadiers', 'https://pwesports.netlify.app/#predictions', text);
+            shareItem('wa','Ma prediction Grenadiers','https://pwesports.netlify.app/#predictions',text);
         }
     }
 
-    /* ── ADMIN: VOIR TOUS LES VOTES ── */
-    async function loadAdminPredictions() {
+    /* ── CUSTOM SCORE ── */
+    function updateCustomScore(matchId) {
+        var homeInput = document.getElementById('score-home-' + matchId);
+        var awayInput = document.getElementById('score-away-' + matchId);
+        var preview   = document.getElementById('custom-score-preview-' + matchId);
+        if (!homeInput || !awayInput || !preview) return;
+        var h = Math.max(0, Math.min(20, parseInt(homeInput.value) || 0));
+        var a = Math.max(0, Math.min(20, parseInt(awayInput.value) || 0));
+        var uv = predState.userVotes[matchId];
+        if (uv) {
+            var col = '#60a5fa';
+            if (uv.result==='home' && h<=a) col='#f87171';
+            else if (uv.result==='draw' && h!==a) col='#f87171';
+            else if (uv.result==='away' && a<=h) col='#f87171';
+            else col='#34d399';
+            preview.style.color = col;
+            preview.style.borderColor = col+'55';
+        }
+        preview.textContent = h + '-' + a;
+    }
+
+    function confirmCustomScore(matchId) {
+        var match = MATCHES.find(function(m){ return m.id===matchId; });
+        if (match && isMatchLocked(match)) return;
+        var uv = predState.userVotes[matchId];
+        if (!uv || uv.locked) return;
+        var homeInput = document.getElementById('score-home-' + matchId);
+        var awayInput = document.getElementById('score-away-' + matchId);
+        if (!homeInput || !awayInput) return;
+        var h = Math.max(0, Math.min(20, parseInt(homeInput.value)||0));
+        var a = Math.max(0, Math.min(20, parseInt(awayInput.value)||0));
+        var ok2 = true;
+        if (uv.result==='home' && h<=a) ok2=false;
+        if (uv.result==='draw' && h!==a) ok2=false;
+        if (uv.result==='away' && a<=h) ok2=false;
+        if (!ok2) {
+            var preview2 = document.getElementById('custom-score-preview-'+matchId);
+            if (preview2) preview2.textContent='❌';
+            setTimeout(function(){ renderPredictionCards(); }, 800);
+            return;
+        }
+        selectScore(matchId, h+'-'+a);
+    }
+
+    /* ── ADMIN PREDICTIONS ── */
+    function loadAdminPredictions() {
         var statsDiv = document.getElementById('admin-pred-stats');
         var listDiv  = document.getElementById('admin-votes-list');
         var totalEl  = document.getElementById('admin-total-voters');
-        if (!statsDiv || !listDiv) return;
+        if (!statsDiv) return;
 
-        statsDiv.innerHTML = '<p class="text-[10px] text-gray-600 animate-pulse">Chargement...</p>';
-
-        var allVotes = {};
-        var community = {};
-        try {
-            var av = await window.storage.get('pred_allvotes', true);
-            if (av) allVotes = JSON.parse(av.value);
-        } catch(e) {}
-        try {
-            var cv = await window.storage.get('pred_community', true);
-            if (cv) community = JSON.parse(cv.value);
-        } catch(e) {}
-
-        var voters = Object.keys(allVotes);
-        if (totalEl) totalEl.textContent = voters.length;
-
-        /* ── STATS PAR MATCH ── */
+        var community = predState.community || {};
         statsDiv.innerHTML = '';
+
         MATCHES.forEach(function(match) {
             var com = community[match.id] || { home:0, draw:0, away:0 };
             var total = (com.home||0) + (com.draw||0) + (com.away||0);
-            var homePct = total > 0 ? Math.round((com.home/total)*100) : 0;
-            var drawPct = total > 0 ? Math.round((com.draw/total)*100) : 0;
-            var awayPct = total > 0 ? Math.round((com.away/total)*100) : 0;
-
+            var homePct = total>0 ? Math.round((com.home/total)*100) : 0;
+            var drawPct = total>0 ? Math.round((com.draw/total)*100) : 0;
+            var awayPct = total>0 ? Math.round((com.away/total)*100) : 0;
             var div = document.createElement('div');
             div.className = 'bg-gray-950/40 border border-gray-900 rounded-xl p-3 mb-2';
-            div.innerHTML = [
-                '<p class="text-[10px] font-bold text-white mb-2">',
-                  '<img src="https://flagcdn.com/w20/'+match.homeFlag+'.png" class="inline w-3 mr-1">',
-                  match.home + ' vs ' + match.away,
-                  ' <span class="text-gray-500 font-normal">· ' + total + ' vote(s)</span>',
-                '</p>',
-                '<div class="flex rounded-lg overflow-hidden h-5 mb-1">',
-                  '<div style="width:'+homePct+'%;background:#3b82f6;" class="flex items-center justify-center text-[8px] font-black text-white transition-all">'+homePct+'%</div>',
-                  '<div style="width:'+drawPct+'%;background:#f59e0b;" class="flex items-center justify-center text-[8px] font-black text-white transition-all">'+drawPct+'%</div>',
-                  '<div style="width:'+awayPct+'%;background:#ef4444;" class="flex items-center justify-center text-[8px] font-black text-white transition-all">'+awayPct+'%</div>',
-                '</div>',
-                '<div class="flex justify-between text-[8px] font-bold">',
-                  '<span style="color:#3b82f6">'+match.home+' '+com.home+'</span>',
-                  '<span style="color:#f59e0b">Nul '+com.draw+'</span>',
-                  '<span style="color:#ef4444">'+match.away+' '+com.away+'</span>',
-                '</div>'
-            ].join('');
+            div.innerHTML = '<p class="text-[10px] font-bold text-white mb-2">'
+                + match.home + ' vs ' + match.away
+                + ' <span class="text-gray-500 font-normal">· '+total+' vote(s)</span></p>'
+                + '<div class="flex rounded-lg overflow-hidden h-5 mb-1">'
+                + '<div style="width:'+homePct+'%;background:#3b82f6;" class="flex items-center justify-center text-[8px] font-black text-white">'+homePct+'%</div>'
+                + '<div style="width:'+drawPct+'%;background:#f59e0b;" class="flex items-center justify-center text-[8px] font-black text-white">'+drawPct+'%</div>'
+                + '<div style="width:'+awayPct+'%;background:#ef4444;" class="flex items-center justify-center text-[8px] font-black text-white">'+awayPct+'%</div>'
+                + '</div>'
+                + '<div class="flex justify-between text-[8px] font-bold">'
+                + '<span style="color:#3b82f6">'+match.home+' '+com.home+'</span>'
+                + '<span style="color:#f59e0b">Nul '+com.draw+'</span>'
+                + '<span style="color:#ef4444">'+match.away+' '+com.away+'</span>'
+                + '</div>';
             statsDiv.appendChild(div);
         });
 
-        /* ── VOTES INDIVIDUELS ── */
-        listDiv.innerHTML = '';
-        if (voters.length === 0) {
-            listDiv.innerHTML = '<p class="text-[10px] text-gray-600 italic">Aucun vote enregistré.</p>';
-            return;
-        }
-
-        voters.forEach(function(uid, i) {
-            var entry = allVotes[uid];
-            var votesSummary = [];
-            MATCHES.forEach(function(m) {
-                var v = entry.votes && entry.votes[m.id];
-                if (v) {
-                    var label = v.result==='home'?m.home:v.result==='draw'?'Nul':m.away;
-                    var lockIcon = v.locked ? '🔒' : '⏳';
-                    votesSummary.push(lockIcon + ' ' + m.home.substr(0,3) + '-' + m.away.substr(0,3) + ': ' + label + ' (' + v.score + ')');
-                }
-            });
-
-            var row = document.createElement('div');
-            row.className = 'flex items-start justify-between p-2 rounded-lg bg-gray-950/30 border border-gray-900/40 text-[9px]';
-            var ts = entry.ts ? new Date(entry.ts).toLocaleString('fr-FR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
-            row.innerHTML = '<div class="flex-1 min-w-0">'
-                + '<span class="font-bold text-gray-400">#'+(i+1)+' · </span>'
-                + '<span class="text-gray-500 font-mono">'+ uid.substr(0,12)+'...</span>'
-                + (ts ? '<span class="text-gray-600 ml-1">· '+ts+'</span>' : '')
-                + '<div class="text-gray-500 mt-0.5">'+(votesSummary.join(' | ')||'Aucun vote')+'</div>'
-                + '</div>';
-            listDiv.appendChild(row);
-        });
+        if (listDiv) listDiv.innerHTML = '<p class="text-[10px] text-gray-500">Vòt konfime yo disponib nan <strong class="text-white">app.netlify.com → Forms → prediction-vote</strong></p>';
+        if (totalEl) totalEl.textContent = '—';
     }
 
     /* ── INIT ── */
-    async function initPredictions() {
-        await loadPredStorage();
+    function initPredictions() {
+        loadPredStorage();
         renderPredictionCards();
-        // Auto-refresh toutes les 30 secondes pour lock auto
-        setInterval(function() {
-            renderPredictionCards();
-        }, 30000);
+        setInterval(function() { renderPredictionCards(); }, 30000);
     }
     </script>
 
+    <!-- NETLIFY FORMS: Prediction Vote (invisible) -->
+    <form name="prediction-vote" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+        <input type="hidden" name="form-name" value="prediction-vote">
+        <input type="hidden" name="uid">
+        <input type="hidden" name="match_id">
+        <input type="hidden" name="match_name">
+        <input type="hidden" name="result">
+        <input type="hidden" name="result_label">
+        <input type="hidden" name="score">
+        <input type="hidden" name="voted_at">
+        <input name="bot-field">
+    </form>
 
 </body>
 </html>
