@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
@@ -3758,6 +3757,11 @@
         if (!match || isMatchLocked(match)) return;
         var uv = predState.userVotes[matchId];
         if (!uv || uv.locked) return;
+
+        /* Se ICI sèlman nou konte nan kominote */
+        if (!predState.community[matchId]) predState.community[matchId] = {home:0,draw:0,away:0};
+        predState.community[matchId][uv.result] = (predState.community[matchId][uv.result]||0) + 1;
+
         uv.locked = true;
         saveLocalVotes();
         submitVoteToNetlify(matchId, uv.result, uv.score);
@@ -3771,16 +3775,15 @@
         if (!hEl || !aEl) return;
         var h = Math.min(20, Math.max(0, parseInt(hEl.value)||0));
         var a = Math.min(20, Math.max(0, parseInt(aEl.value)||0));
-        /* Déterminer résultat automatiquement */
         var result = h > a ? 'home' : h < a ? 'away' : 'draw';
-        if (!predState.community[matchId]) predState.community[matchId] = {home:0,draw:0,away:0};
-        var com = predState.community[matchId];
+
+        /* Sove chwa user a sèlman — PA konte nan kominote encore */
         var prev = predState.userVotes[matchId];
-        if (prev && !prev.locked) com[prev.result] = Math.max(0,(com[prev.result]||0)-1);
-        com[result] = (com[result]||0)+1;
+        if (prev && prev.locked) return; // pa chanje si deja konfime
         predState.userVotes[matchId] = {result:result, score:h+'-'+a, locked:false};
         saveLocalVotes();
-        /* Update border color selon résultat */
+
+        /* Update border color pou feedback vizèl */
         var cols = {home:'#3b82f6', draw:'#f59e0b', away:'#ef4444'};
         var col  = cols[result];
         if (hEl) hEl.style.borderColor = col;
@@ -3866,7 +3869,7 @@
             var barCol = uv ? (uv.result==='home'?'#3b82f6':uv.result==='draw'?'#f59e0b':'#ef4444') : '#1f2937';
 
             var card = document.createElement('div');
-            card.className = 'bg-[#0e1322] border border-gray-900 rounded-2xl overflow-hidden';
+            card.className = 'bg-[#0a0f1e] border border-gray-800/60 rounded-3xl overflow-hidden transition-all hover:border-gray-700/60 hover:shadow-xl hover:shadow-black/30';
             card.id = 'pred-card-'+match.id;
 
             /* ── STATUS BADGE ── */
@@ -3901,45 +3904,79 @@
                     + '<p class="text-[9px] text-gray-600 mt-0.5">'+(i18n.pred_impossible&&i18n.pred_impossible[currentLang||'fr']||'1 vote par match')+'</p></div>'
                     + '</div>';
             } else {
-                /* ── LAYOUT: Flag + Nom + Input anba chak ekip ── */
+                /* ── DESIGN PWOFESYONÈL ── */
 
-                /* Drapo + Nom + Input HOME */
-                voteZone += '<div class="flex items-end justify-center gap-8 mb-5">';
+                /* Header ekip yo — Drapo + Non senp */
+                voteZone += '<div class="flex items-center justify-between mb-4">';
 
                 /* HOME */
-                voteZone += '<div class="flex flex-col items-center gap-2">';
-                voteZone += '<img src="https://flagcdn.com/w40/'+match.homeFlag+'.png" class="w-10 h-auto rounded shadow">';
+                voteZone += '<div class="flex items-center gap-2">';
+                voteZone += '<img src="https://flagcdn.com/w40/'+match.homeFlag+'.png" class="w-7 h-auto rounded shadow-sm">';
                 voteZone += '<span class="font-athletic text-sm font-black uppercase '+(isHomeHaiti?'text-red-400':'text-white')+'">'+match.home+'</span>';
+                voteZone += '</div>';
+
+                /* AWAY */
+                voteZone += '<div class="flex items-center gap-2">';
+                voteZone += '<span class="font-athletic text-sm font-black uppercase '+(isAwayHaiti?'text-red-400':'text-white')+'">'+match.away+'</span>';
+                voteZone += '<img src="https://flagcdn.com/w40/'+match.awayFlag+'.png" class="w-7 h-auto rounded shadow-sm">';
+                voteZone += '</div>';
+
+                voteZone += '</div>';
+
+                /* Score inputs — design compact */
+                voteZone += '<div class="flex items-center justify-center gap-4 mb-5">';
+
+                /* Input HOME */
+                voteZone += '<div class="flex flex-col items-center gap-1.5">';
                 voteZone += '<input type="number" min="0" max="20" value="'+(uv?uv.score.split('-')[0]:'0')+'" '
                     + 'id="sc-h-'+match.id+'" data-match="'+match.id+'" '
                     + 'oninput="syncCustomScore(this.dataset.match)" '
                     + 'onfocus="if(this.value===\'0\')this.value=\'\';" '
                     + 'onblur="if(this.value===\'\')this.value=\'0\';" '
-                    + 'class="w-16 h-16 bg-[#0b0f19] border-2 border-gray-700 rounded-2xl text-center font-athletic text-3xl font-black text-white focus:outline-none focus:border-blue-500 transition">';
+                    + 'class="w-20 h-20 bg-[#070c18] border-2 border-gray-800 rounded-2xl text-center font-athletic text-4xl font-black text-white focus:outline-none focus:border-blue-500 focus:shadow-lg transition-all" '
+                    + 'style="box-shadow:inset 0 2px 8px rgba(0,0,0,0.4);">';
                 voteZone += '</div>';
 
-                /* SEPARATEUR */
-                voteZone += '<div class="pb-5 text-2xl font-black text-gray-600">—</div>';
+                /* Séparateur central */
+                voteZone += '<div class="flex flex-col items-center gap-1">';
+                voteZone += '<span class="font-athletic text-3xl font-black text-gray-700">:</span>';
+                voteZone += '</div>';
 
-                /* AWAY */
-                voteZone += '<div class="flex flex-col items-center gap-2">';
-                voteZone += '<img src="https://flagcdn.com/w40/'+match.awayFlag+'.png" class="w-10 h-auto rounded shadow">';
-                voteZone += '<span class="font-athletic text-sm font-black uppercase '+(isAwayHaiti?'text-red-400':'text-white')+'">'+match.away+'</span>';
+                /* Input AWAY */
+                voteZone += '<div class="flex flex-col items-center gap-1.5">';
                 voteZone += '<input type="number" min="0" max="20" value="'+(uv?uv.score.split('-')[1]:'0')+'" '
                     + 'id="sc-a-'+match.id+'" data-match="'+match.id+'" '
                     + 'oninput="syncCustomScore(this.dataset.match)" '
                     + 'onfocus="if(this.value===\'0\')this.value=\'\';" '
                     + 'onblur="if(this.value===\'\')this.value=\'0\';" '
-                    + 'class="w-16 h-16 bg-[#0b0f19] border-2 border-gray-700 rounded-2xl text-center font-athletic text-3xl font-black text-white focus:outline-none focus:border-blue-500 transition">';
+                    + 'class="w-20 h-20 bg-[#070c18] border-2 border-gray-800 rounded-2xl text-center font-athletic text-4xl font-black text-white focus:outline-none focus:border-blue-500 focus:shadow-lg transition-all" '
+                    + 'style="box-shadow:inset 0 2px 8px rgba(0,0,0,0.4);">';
                 voteZone += '</div>';
 
                 voteZone += '</div>';
+
+                /* Label rezilta detekte otomatikman */
+                if (uv) {
+                    var resCol  = uv.result==='home' ? '#3b82f6' : uv.result==='draw' ? '#f59e0b' : '#ef4444';
+                    var resLbl  = uv.result==='home' ? match.home+' gagne' : uv.result==='draw' ? 'Match nul' : match.away+' gagne';
+                    var resEmoji= uv.result==='home' ? '🏠' : uv.result==='draw' ? '🤝' : '✈️';
+                    voteZone += '<div class="flex items-center justify-center mb-4">';
+                    voteZone += '<span class="px-3 py-1 rounded-full text-[10px] font-black uppercase" '
+                        + 'style="background:'+resCol+'18;color:'+resCol+';border:1px solid '+resCol+'44;">'
+                        + resEmoji+' '+resLbl
+                        + '</span>';
+                    voteZone += '</div>';
+                } else {
+                    voteZone += '<div class="flex items-center justify-center mb-4">';
+                    voteZone += '<span class="text-[10px] text-gray-600 font-bold uppercase tracking-wider">Entrez le score ci-dessus</span>';
+                    voteZone += '</div>';
+                }
 
                 /* Bouton ENVOYER */
                 voteZone += '<button data-match="'+match.id+'" '
                     + 'onclick="handleEnvoyerBtn(this)" '
-                    + 'class="w-full py-3 rounded-xl text-sm font-bold uppercase flex items-center justify-center gap-2 mb-2" '
-                    + 'style="background:#1d4ed8;color:#fff;transition:background 0.3s;">'
+                    + 'class="w-full py-3.5 rounded-2xl text-sm font-black uppercase flex items-center justify-center gap-2 transition-all active:scale-95" '
+                    + 'style="background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;box-shadow:0 4px 20px rgba(37,99,235,0.35);letter-spacing:0.05em;">'
                     + '<i class="fa-solid fa-paper-plane text-xs"></i>'
                     + '<span>'+(i18n.pred_envoyer&&i18n.pred_envoyer[currentLang||'fr']||'ENVOYER')+'</span>'
                     + '</button>';
@@ -3960,8 +3997,8 @@
                 + '</div></div>';
 
             card.innerHTML =
-                '<div style="height:3px;background:'+barCol+';transition:background 0.3s;"></div>'
-                + '<div class="p-5 sm:p-6">'
+                '<div style="height:3px;background:'+barCol+';transition:background 0.3s;border-radius:0;"></div>'
+                + '<div class="p-5">'
                 + '<div class="flex items-center justify-between mb-4">'
                 +   '<span class="text-[10px] font-bold text-gray-500 uppercase">Groupe C · '+match.date+' · '+match.venue+'</span>'
                 +   statusBadge
