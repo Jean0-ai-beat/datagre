@@ -836,13 +836,18 @@
                             <i class="fa-solid fa-rotate-right mr-1"></i>Rafraîchir
                         </button>
                     </div>
-                    <div id="admin-pred-stats" class="space-y-3"></div>
-                    <div class="mt-4">
-                        <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-2">
-                            <i class="fa-solid fa-users mr-1"></i>Votes individuels
-                            <span id="admin-total-voters" class="ml-1 text-white">0</span> votant(s)
+                    <div id="admin-pred-stats" class="space-y-2"></div>
+
+                    <!-- REZILTA REYEL MATCH YO -->
+                    <div class="mt-4 pt-4 border-t border-gray-800">
+                        <p class="text-[10px] font-bold uppercase text-amber-400 tracking-wider mb-3">
+                            <i class="fa-solid fa-futbol mr-1"></i>Antre Rezilta Reyèl Match yo
                         </p>
-                        <div id="admin-votes-list" class="space-y-1 max-h-64 overflow-y-auto"></div>
+                        <div id="admin-results-form" class="space-y-2"></div>
+                        <button onclick="saveActualResults()"
+                            class="mt-3 w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-[10px] font-bold uppercase text-white transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-save"></i> Sove Rezilta yo
+                        </button>
                     </div>
                 </div>
             </div>
@@ -905,16 +910,32 @@
             <!-- CARDS MATCH -->
             <div class="space-y-6" id="prediction-cards"></div>
 
-            <!-- LEADERBOARD -->
-            <div class="mt-10 bg-[#0e1322] border border-gray-900 rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-5">
-                    <div>
-                        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-1" data-i18n="pred_top">🏆 Top Prédicteurs</span>
-                        <h3 class="font-athletic text-xl font-black uppercase text-white">Leaderboard</h3>
+            <!-- MON SCORE + LEADERBOARD -->
+            <div class="mt-6 space-y-4">
+
+                <!-- MON SCORE PÈSONÈL -->
+                <div id="my-score-card" class="bg-[#0a0f1e] border border-gray-800/60 rounded-3xl p-6 hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <span class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-1">👤 Mon Score</span>
+                            <h3 class="font-athletic text-xl font-black uppercase text-white">Mes Prédictions</h3>
+                        </div>
+                        <div id="my-total-score" class="font-athletic text-4xl font-black text-amber-400">0 pts</div>
                     </div>
-                    <div class="text-xs text-gray-600" data-i18n="pred_after">Après les matchs</div>
+                    <div id="my-score-details" class="space-y-2"></div>
                 </div>
-                <div id="leaderboard-body" class="space-y-2"></div>
+
+                <!-- LEADERBOARD KOMINOTE -->
+                <div class="bg-[#0a0f1e] border border-gray-800/60 rounded-3xl p-6">
+                    <div class="flex items-center justify-between mb-5">
+                        <div>
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-1" data-i18n="pred_top">🏆 Top Prédicteurs</span>
+                            <h3 class="font-athletic text-xl font-black uppercase text-white">Leaderboard</h3>
+                        </div>
+                        <div class="text-xs text-gray-600" data-i18n="pred_after">Après les matchs</div>
+                    </div>
+                    <div id="leaderboard-body" class="space-y-2"></div>
+                </div>
             </div>
 
         </div>
@@ -3579,6 +3600,7 @@
         var body  = new URLSearchParams();
         body.append('form-name',    'prediction-vote');
         body.append('uid',          getUserId());
+        body.append('pseudo',       getUserPseudo()||'Anonyme');
         body.append('match_id',     matchId);
         body.append('match_name',   match.home+' vs '+match.away);
         body.append('result',       result);
@@ -3595,6 +3617,13 @@
         if (!match || isMatchLocked(match)) return;
         var prev = predState.userVotes[matchId];
         if (prev && prev.locked) { showToast('🔒 Vote déjà envoyé !', 'red'); return; }
+        /* Mande pseudo si premye vòt e pa encore defini */
+        var pseudo = getUserPseudo();
+        var hasAnyVote = Object.keys(predState.userVotes).length > 0;
+        if (pseudo === null && !hasAnyVote) {
+            openPseudoModal(matchId, result);
+            return;
+        }
         if (!predState.community[matchId]) predState.community[matchId] = {home:0,draw:0,away:0};
         var com = predState.community[matchId];
         if (prev) com[prev.result] = Math.max(0,(com[prev.result]||0)-1);
@@ -4134,6 +4163,7 @@
     }
 
     function loadAdminPredictions() {
+        renderAdminResultsForm();
         var statsDiv = document.getElementById('admin-pred-stats');
         if (!statsDiv) return;
         statsDiv.innerHTML = '';
@@ -4204,10 +4234,319 @@
         });
     }
 
+
+    /* ══════════════════════════════════════════
+       SISTÈM REZILTA + SKOR PÈSONÈL
+    ══════════════════════════════════════════ */
+
+    /* ── SCORING RULES ── */
+    // Skor egzak:     +5 pts
+    // Bon rezilta:    +3 pts  (genyen/nul/pèdi kòrèk)
+    // Pa bon:          0 pts
+
+    /* ── LOAD/SAVE ACTUAL RESULTS ── */
+    function loadActualResults() {
+        try {
+            var r = localStorage.getItem('pwe_actual_results');
+            return r ? JSON.parse(r) : {};
+        } catch(e) { return {}; }
+    }
+
+    function saveActualResults() {
+        var results = {};
+        var allOk = true;
+        MATCHES.forEach(function(match) {
+            var hEl = document.getElementById('res-h-'+match.id);
+            var aEl = document.getElementById('res-a-'+match.id);
+            if (!hEl || !aEl) return;
+            var h = parseInt(hEl.value);
+            var a = parseInt(aEl.value);
+            if (isNaN(h) || isNaN(a)) { allOk = false; return; }
+            h = Math.max(0, Math.min(20, h));
+            a = Math.max(0, Math.min(20, a));
+            results[match.id] = {
+                scoreH: h,
+                scoreA: a,
+                score:  h+'-'+a,
+                result: h>a ? 'home' : h<a ? 'away' : 'draw'
+            };
+            /* Update bouton vizèl */
+            var btn = document.getElementById('res-status-'+match.id);
+            if (btn) btn.textContent = h+'-'+a+' ✓';
+        });
+        if (!allOk) { showToast('❌ Antre tout skor yo!', 'red'); return; }
+        try { localStorage.setItem('pwe_actual_results', JSON.stringify(results)); } catch(e){}
+        showToast('✅ Rezilta yo sove!', 'green');
+        renderMyScore();
+        renderLeaderboard();
+    }
+
+    /* ── RENDER ADMIN RESULTS FORM ── */
+    function renderAdminResultsForm() {
+        var form = document.getElementById('admin-results-form');
+        if (!form) return;
+        var actual = loadActualResults();
+        form.innerHTML = '';
+        MATCHES.forEach(function(match) {
+            var res = actual[match.id] || null;
+            var row = document.createElement('div');
+            row.className = 'flex items-center gap-3 p-3 rounded-xl bg-[#0b0f1e] border border-gray-800';
+
+            /* Match name */
+            var nameEl = document.createElement('div');
+            nameEl.className = 'flex items-center gap-2 flex-1';
+            nameEl.innerHTML =
+                '<img src="https://flagcdn.com/w20/'+match.homeFlag+'.png" class="w-4 h-auto rounded">'
+                +'<span class="text-[10px] font-bold text-white">'+match.home+' vs '+match.away+'</span>';
+
+            /* Inputs */
+            var inputsEl = document.createElement('div');
+            inputsEl.className = 'flex items-center gap-2';
+            inputsEl.innerHTML =
+                '<input type="number" id="res-h-'+match.id+'" min="0" max="20" '
+                +'value="'+(res?res.scoreH:'')+'" placeholder="0" '
+                +'class="w-10 h-8 bg-[#070c18] border border-gray-700 rounded-lg text-center text-sm font-black text-white focus:outline-none focus:border-amber-500 transition">'
+                +'<span class="text-gray-600 font-black">:</span>'
+                +'<input type="number" id="res-a-'+match.id+'" min="0" max="20" '
+                +'value="'+(res?res.scoreA:'')+'" placeholder="0" '
+                +'class="w-10 h-8 bg-[#070c18] border border-gray-700 rounded-lg text-center text-sm font-black text-white focus:outline-none focus:border-amber-500 transition">';
+
+            /* Status badge */
+            var statusEl = document.createElement('span');
+            statusEl.id = 'res-status-'+match.id;
+            statusEl.className = 'text-[10px] font-bold '+(res?'text-emerald-400':'text-gray-600');
+            statusEl.textContent = res ? res.score+' ✓' : 'Pas encore';
+
+            row.appendChild(nameEl);
+            row.appendChild(inputsEl);
+            row.appendChild(statusEl);
+            form.appendChild(row);
+        });
+    }
+
+    /* ── CALCULE SKOR PÈSONÈL ── */
+    function calculateMyScore() {
+        var actual  = loadActualResults();
+        var myVotes = predState.userVotes;
+        var total   = 0;
+        var details = [];
+
+        MATCHES.forEach(function(match) {
+            var uv  = myVotes[match.id];
+            var res = actual[match.id];
+
+            if (!uv || !uv.locked) {
+                details.push({ match:match, status:'no_vote', pts:0 });
+                return;
+            }
+            if (!res) {
+                details.push({ match:match, status:'pending', pts:0, uv:uv });
+                return;
+            }
+
+            var pts = 0;
+            var status = 'wrong';
+
+            /* Bon rezilta? */
+            if (uv.result === res.result) {
+                pts = 3;
+                status = 'result_ok';
+                /* Skor egzak? */
+                if (uv.score === res.score) {
+                    pts = 5;
+                    status = 'exact';
+                }
+            }
+            total += pts;
+            details.push({ match:match, status:status, pts:pts, uv:uv, res:res });
+        });
+
+        return { total:total, details:details };
+    }
+
+    /* ── RENDER MON SCORE ── */
+    function renderMyScore() {
+        var actual = loadActualResults();
+        if (Object.keys(actual).length === 0) return; // Pa gen rezilta encore
+
+        var myVotes = predState.userVotes;
+        var hasVoted = Object.keys(myVotes).some(function(k){ return myVotes[k] && myVotes[k].locked; });
+        if (!hasVoted) return;
+
+        var scoreCard = document.getElementById('my-score-card');
+        var totalEl   = document.getElementById('my-total-score');
+        var detailsEl = document.getElementById('my-score-details');
+        if (!scoreCard || !totalEl || !detailsEl) return;
+
+        scoreCard.classList.remove('hidden');
+        var nameEl = document.getElementById('my-score-name');
+        if (nameEl) {
+            var p = getUserPseudo();
+            nameEl.textContent = p ? p.toUpperCase() : 'Mes Prédictions';
+        }
+        var score = calculateMyScore();
+        totalEl.textContent = score.total + ' pts';
+
+        detailsEl.innerHTML = '';
+        score.details.forEach(function(d) {
+            var row = document.createElement('div');
+            row.className = 'flex items-center justify-between p-3 rounded-xl border';
+
+            var statusInfo = {
+                'exact'    : { col:'#10b981', bg:'rgba(16,185,129,0.08)', border:'rgba(16,185,129,0.2)', icon:'fa-star',       lbl:'Skor egzak!'  },
+                'result_ok': { col:'#3b82f6', bg:'rgba(59,130,246,0.08)', border:'rgba(59,130,246,0.2)', icon:'fa-check',      lbl:'Bon rezilta'  },
+                'wrong'    : { col:'#ef4444', bg:'rgba(239,68,68,0.08)',  border:'rgba(239,68,68,0.2)',  icon:'fa-xmark',      lbl:'Mauvaise prédiction' },
+                'pending'  : { col:'#f59e0b', bg:'rgba(245,158,11,0.08)', border:'rgba(245,158,11,0.2)', icon:'fa-clock',      lbl:'Match pas joué' },
+                'no_vote'  : { col:'#6b7280', bg:'rgba(107,114,128,0.08)',border:'rgba(107,114,128,0.2)',icon:'fa-minus',      lbl:'Pas voté'     }
+            };
+            var si = statusInfo[d.status] || statusInfo['no_vote'];
+            row.style.cssText = 'background:'+si.bg+';border-color:'+si.border+';';
+
+            var matchName = d.match.home+' vs '+d.match.away;
+            var predTxt = d.uv ? d.uv.score : '—';
+            var resTxt  = d.res ? d.res.score : '?-?';
+
+            row.innerHTML =
+                '<div class="flex items-center gap-2">'
+                +  '<i class="fa-solid '+si.icon+' text-xs" style="color:'+si.col+';"></i>'
+                +  '<div>'
+                +    '<p class="text-[10px] font-bold text-white">'+matchName+'</p>'
+                +    '<p class="text-[9px] text-gray-500">Ou: <span class="font-bold" style="color:'+si.col+';">'+predTxt+'</span>'
+                +    (d.res ? ' · Reyèl: <span class="text-white font-bold">'+resTxt+'</span>' : '')+'</p>'
+                +  '</div>'
+                +'</div>'
+                +'<div class="text-right">'
+                +  '<span class="font-athletic text-lg font-black" style="color:'+si.col+';">+'+d.pts+'</span>'
+                +  '<span class="text-[9px] text-gray-600 block">pts</span>'
+                +'</div>';
+
+            detailsEl.appendChild(row);
+        });
+    }
+
+    /* ── LEADERBOARD (baze sou vòt lokal kominote) ── */
+    function renderLeaderboard() {
+        var body   = document.getElementById('leaderboard-body');
+        if (!body) return;
+        var actual = loadActualResults();
+
+        if (Object.keys(actual).length === 0) {
+            body.innerHTML = '<div class="text-center py-8">'
+                +'<i class="fa-solid fa-trophy text-3xl text-gray-700 block mb-2"></i>'
+                +'<p class="text-xs text-gray-500 font-bold">Leaderboard disponib apre match yo</p>'
+                +'<p class="text-[10px] text-gray-600 mt-1">Admin antre rezilta reyèl yo pou aktive l</p>'
+                +'</div>';
+            return;
+        }
+
+        /* Kalkile skor pou chak predisyon lokal */
+        var com = predState.community || {};
+        var rows = [];
+
+        /* Montre skor pèsonèl si user a te vote */
+        var myVotes = predState.userVotes;
+        var hasVoted = Object.keys(myVotes).some(function(k){ return myVotes[k]&&myVotes[k].locked; });
+        if (hasVoted) {
+            var myScore = calculateMyScore();
+            rows.push({ name:'👤 Ou', pts: myScore.total, isMe: true });
+        }
+
+        /* Stats kominote pa match */
+        var totalCorrect = 0, totalVoters = 0;
+        MATCHES.forEach(function(m) {
+            var res = actual[m.id];
+            if (!res) return;
+            var c = com[m.id] || {home:0,draw:0,away:0};
+            var correctVotes = c[res.result] || 0;
+            var total = (c.home||0)+(c.draw||0)+(c.away||0);
+            totalCorrect += correctVotes;
+            totalVoters = Math.max(totalVoters, total);
+        });
+
+        body.innerHTML = '';
+
+        /* Mon score */
+        if (hasVoted) {
+            var myScore2 = calculateMyScore();
+            var myRow = document.createElement('div');
+            myRow.className = 'flex items-center gap-3 p-3 rounded-xl border';
+            myRow.style.cssText = 'background:rgba(59,130,246,0.08);border-color:rgba(59,130,246,0.25);';
+            var myPseudo = getUserPseudo() || 'Anonyme';
+            myRow.innerHTML =
+                '<div class="w-8 h-8 rounded-xl flex items-center justify-center font-athletic font-black text-sm" style="background:rgba(59,130,246,0.2);color:#60a5fa;">★</div>'
+                +'<div class="flex-1"><p class="text-xs font-bold text-blue-300">👤 '+(myPseudo||'Moi')+'</p>'
+                +'<p class="text-[9px] text-gray-500">'+Object.keys(myVotes).filter(function(k){return myVotes[k]&&myVotes[k].locked;}).length+'/'+MATCHES.length+' matchs votés</p></div>'
+                +'<div class="text-right"><span class="font-athletic text-xl font-black text-amber-400">'+myScore2.total+'</span>'
+                +'<span class="text-[9px] text-gray-600 block">pts</span></div>';
+            body.appendChild(myRow);
+        }
+
+        /* Stats communauté */
+        var statsRow = document.createElement('div');
+        statsRow.className = 'flex items-center gap-3 p-3 rounded-xl border border-gray-800/40 bg-gray-950/30 mt-2';
+        statsRow.innerHTML =
+            '<i class="fa-solid fa-users text-gray-600 text-sm"></i>'
+            +'<div class="flex-1"><p class="text-[10px] font-bold text-gray-400">Kominote</p>'
+            +'<p class="text-[9px] text-gray-600">'+totalVoters+' votant(s) · '+totalCorrect+' bon rezilta</p></div>'
+            +'<a href="https://app.netlify.com/sites/pwesports/forms" target="_blank" '
+            +'class="text-[9px] text-blue-400 hover:text-blue-300 transition">CSV ↗</a>';
+        body.appendChild(statsRow);
+    }
+
+
+
+    /* ── PSEUDO / NOM AVANT VOTE ── */
+    var pendingVoteMatch  = null;
+    var pendingVoteResult = null;
+
+    function getUserPseudo() {
+        return localStorage.getItem('pwe_pseudo') || null;
+    }
+
+    function openPseudoModal(matchId, result) {
+        pendingVoteMatch  = matchId;
+        pendingVoteResult = result;
+        var modal = document.getElementById('pseudo-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            setTimeout(function(){ document.getElementById('pseudo-input').focus(); }, 100);
+        }
+    }
+
+    function confirmPseudo() {
+        var input  = document.getElementById('pseudo-input');
+        var pseudo = input ? input.value.trim() : '';
+        if (!pseudo) { showToast('❌ Antre yon non!', 'red'); return; }
+        pseudo = pseudo.slice(0, 20); // max 20 chars
+        localStorage.setItem('pwe_pseudo', pseudo);
+        closePseudoModal();
+        /* Kontinye vote */
+        if (pendingVoteMatch) {
+            castVote(pendingVoteMatch, pendingVoteResult);
+        }
+    }
+
+    function skipPseudo() {
+        localStorage.setItem('pwe_pseudo', '');  // vid = anonim
+        closePseudoModal();
+        if (pendingVoteMatch) {
+            castVote(pendingVoteMatch, pendingVoteResult);
+        }
+    }
+
+    function closePseudoModal() {
+        var modal = document.getElementById('pseudo-modal');
+        if (modal) modal.classList.add('hidden');
+        pendingVoteMatch  = null;
+        pendingVoteResult = null;
+    }
+
     /* ── INIT ── */
     function initPredictions() {
         loadPredStorage();
         renderPredictionCards();
+        renderMyScore();
+        renderLeaderboard();
         setInterval(renderPredictionCards, 30000);
     }
 
@@ -4226,6 +4565,38 @@
         <input type="hidden" name="voted_at">
         <input name="bot-field">
     </form>
+
+
+    <!-- MODAL NOM/PSEUDO AVANT VOTE -->
+    <div id="pseudo-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#0f1524] border border-gray-800 rounded-3xl w-full max-w-sm shadow-2xl p-6">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-user text-blue-400 text-2xl"></i>
+                </div>
+                <h3 class="font-athletic text-xl font-black uppercase text-white mb-1">Anvan ou vote...</h3>
+                <p class="text-xs text-gray-500">Antre yon non pou parèt nan Leaderboard la 🏆</p>
+            </div>
+            <div class="space-y-3">
+                <input id="pseudo-input" type="text" maxlength="20"
+                    placeholder="Ton nom ou pseudo... (ex: TiJan, Grann500)"
+                    class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-bold text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition"
+                    onkeydown="if(event.key==='Enter') confirmPseudo()">
+                <p class="text-[10px] text-gray-600 text-center">
+                    <i class="fa-solid fa-shield-halved mr-1"></i>
+                    Non ou ap parèt sèlman nan Leaderboard sit la
+                </p>
+                <button onclick="confirmPseudo()"
+                    class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-black uppercase text-white transition active:scale-95">
+                    <i class="fa-solid fa-check mr-2"></i>Kontinye vote
+                </button>
+                <button onclick="skipPseudo()"
+                    class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition">
+                    Kontinye anonim (pa parèt nan leaderboard)
+                </button>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html
