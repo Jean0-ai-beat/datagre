@@ -194,8 +194,8 @@
                     <a href="#tactique" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_tactique">TACTIQUE</a>
                     <a href="#calendrier" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_calendrier">CALENDRIER</a>
                     <a href="#classement" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_live">STATS & LIVE</a>
-                    <a href="#predictions" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition">PRÉDICTIONS</a>
                     <a href="#actualites" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_actualites">ACTUALITÉS</a>
+                    <a href="#predictions" class="text-sm font-semibold tracking-wide text-gray-300 hover:text-red-500 transition" data-i18n="nav_predictions">PRÉDICTIONS</a>
                 </div>
                 <div class="flex items-center space-x-3">
                     <!-- Language switcher -->
@@ -220,8 +220,8 @@
             <a href="#tactique" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_tactique">TACTIQUE</a>
             <a href="#calendrier" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_calendrier">CALENDRIER</a>
             <a href="#classement" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_live">STATS & LIVE</a>
-            <a href="#predictions" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2">PRÉDICTIONS</a>
             <a href="#actualites" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_actualites">ACTUALITÉS</a>
+            <a href="#predictions" onclick="toggleMobileMenu()" class="block text-sm font-semibold tracking-wide text-gray-300 py-2" data-i18n="nav_predictions">PRÉDICTIONS</a>
         </div>
     </nav>
 
@@ -807,13 +807,13 @@
             <!-- Panneau admin (caché par défaut, révélé après login) -->
             <div id="admin-panel" class="hidden mb-8 bg-red-500/5 border border-red-500/20 rounded-2xl p-5">
                 <div class="flex items-center justify-between mb-4">
-                    <p class="text-xs font-bold uppercase text-red-400 tracking-wider"><i class="fa-solid fa-shield-halved mr-2"></i>Mode Administrateur PWESPORTS</p>
+                    <p class="text-xs font-bold uppercase text-red-400 tracking-wider"><i class="fa-solid fa-shield-halved mr-2"></i><span data-i18n="admin_mode_lbl">Mode Administrateur PWESPORTS</span></p>
                     <div class="flex gap-2">
                         <button onclick="openNewsModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold uppercase text-white transition">
-                            <i class="fa-solid fa-plus text-[9px]"></i> Nouvel article
+                            <i class="fa-solid fa-plus text-[9px]"></i> <span data-i18n="admin_new_art">Nouvel article</span>
                         </button>
                         <button onclick="logoutAdmin()" class="px-3 py-2 rounded-xl border border-red-500/30 text-xs font-bold text-red-400 hover:text-white transition">
-                            <i class="fa-solid fa-right-from-bracket mr-1"></i>Déconnexion
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i><span data-i18n="admin_logout">Déconnexion</span>
                         </button>
                     </div>
                 </div>
@@ -830,7 +830,7 @@
                 <div class="mt-6 pt-5 border-t border-red-500/10">
                     <div class="flex items-center justify-between mb-3">
                         <p class="text-[10px] font-bold uppercase text-emerald-400 tracking-wider">
-                            <i class="fa-solid fa-chart-pie mr-1"></i>Prédictions Communauté
+                            <i class="fa-solid fa-chart-pie mr-1"></i><span data-i18n="admin_pred_tab">Prédictions Communauté</span>
                         </p>
                         <button onclick="loadAdminPredictions()" class="px-3 py-1.5 rounded-lg bg-emerald-600/10 border border-emerald-500/20 text-[10px] font-bold text-emerald-400 hover:bg-emerald-600/20 transition">
                             <i class="fa-solid fa-rotate-right mr-1"></i>Rafraîchir
@@ -870,153 +870,6 @@
     </section>
     <!-- =================== FIN SECTION ACTUALITÉS =================== -->
 
-    <!-- MODAL LOGIN ADMIN -->
-    <div id="admin-login-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-[#0f1524] border border-gray-800 rounded-2xl w-full max-w-sm shadow-2xl p-6">
-            <div class="text-center mb-6">
-                <div class="w-14 h-14 rounded-full bg-red-600/10 border border-red-600/30 flex items-center justify-center mx-auto mb-3">
-                    <i class="fa-solid fa-lock text-red-500 text-xl"></i>
-                </div>
-                <h3 class="font-athletic text-xl font-black uppercase text-white" data-i18n="admin_space">Espace Admin</h3>
-                <p class="text-xs text-gray-500 mt-1" data-i18n="admin_restricted">PWESPORTS — Accès restreint</p>
-            </div>
-            <div class="space-y-3">
-                <input id="admin-password" type="password" placeholder="Mot de passe admin..."
-                    class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-red-500/50 transition"
-                    onkeydown="if(event.key==='Enter') verifyAdmin()">
-                <p id="admin-error" class="hidden text-xs text-red-400 font-semibold text-center" data-i18n="admin_error">Mot de passe incorrect</p>
-                <button onclick="verifyAdmin()" class="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
-                    <i class="fa-solid fa-right-to-bracket mr-2"></i><span data-i18n="btn_login">Connexion</span>
-                </button>
-                <button onclick="closeAdminLogin()" class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition" data-i18n="btn_cancel">Annuler</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL AJOUT/ÉDITION ARTICLE (admin) -->
-    <div id="news-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
-                <h3 class="font-athletic text-lg font-black uppercase text-white" id="news-modal-title">Nouvel Article</h3>
-                <button onclick="closeNewsModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="p-6 space-y-4">
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
-                    <select id="news-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
-                        <option value="Officiel">🔴 Officiel</option>
-                        <option value="Transfert">🔵 Transfert</option>
-                        <option value="Performance">⚡ Performance</option>
-                        <option value="Coupe du Monde">🏆 Coupe du Monde</option>
-                        <option value="Interview">🎙️ Interview</option>
-                        <option value="Blessure">🏥 Blessure</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
-                    <input id="news-title" type="text" placeholder="Ex: Bellegarde prolonge avec Wolverhampton..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
-                    <textarea id="news-excerpt" rows="3" placeholder="2-3 phrases..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
-                    <input id="news-link" type="url" placeholder="https://..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_emoji">Emoji couverture</label>
-                    <div class="grid grid-cols-6 gap-2" id="emoji-picker"></div>
-                </div>
-                <input type="hidden" id="news-edit-index" value="-1">
-                <div class="flex gap-3 pt-2">
-                    <button onclick="saveNewsArticle()" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
-                        <i class="fa-solid fa-save mr-2"></i><span data-i18n="btn_publish">Publier</span>
-                    </button>
-                    <button onclick="closeNewsModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL SOUMISSION (users) — Netlify Forms -->
-    <div id="submit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
-                <div>
-                    <h3 class="font-athletic text-lg font-black uppercase text-white">Soumettre un article</h3>
-                    <p class="text-[10px] text-amber-400/80 mt-0.5"><i class="fa-solid fa-clock mr-1"></i>En attente d'approbation par l'admin PWESPORTS</p>
-                </div>
-                <button onclick="closeSubmitModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <!-- Netlify Forms : data-netlify="true" capture automatiquement -->
-                <form id="submit-form" name="article-submission" method="POST"
-                      data-netlify="true" data-netlify-honeypot="bot-field"
-                      onsubmit="handleNetlifySubmit(event)" class="space-y-4">
-
-                    <!-- Champ honeypot anti-spam caché -->
-                    <input type="hidden" name="form-name" value="article-submission">
-                    <p class="hidden"><input name="bot-field"></p>
-
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_author">Votre nom / Pseudo *</label>
-                        <input name="author" id="submit-author" type="text" placeholder="Ex: Jean Paul..." required
-                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
-                        <select name="category" id="submit-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
-                            <option value="Officiel">🔴 Officiel</option>
-                            <option value="Transfert">🔵 Transfert</option>
-                            <option value="Performance">⚡ Performance</option>
-                            <option value="Coupe du Monde">🏆 Coupe du Monde</option>
-                            <option value="Interview">🎙️ Interview</option>
-                            <option value="Blessure">🏥 Blessure</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
-                        <input name="title" id="submit-title" type="text" placeholder="Titre de votre article..." required
-                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
-                        <textarea name="excerpt" id="submit-excerpt" rows="4" placeholder="Décrivez l'actualité en 2-4 phrases..." required
-                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
-                        <input name="link" id="submit-link" type="url" placeholder="https://..."
-                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                    </div>
-
-                    <!-- Message succès -->
-                    <p id="submit-success" class="hidden text-xs text-emerald-400 font-semibold text-center py-2">
-                        <i class="fa-solid fa-circle-check mr-1"></i>
-                        <span data-i18n="msg_submitted">Article soumis ! L'équipe PWESPORTS va l'examiner.</span>
-                    </p>
-
-                    <div class="flex gap-3 pt-2">
-                        <button type="submit" id="submit-btn" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-bold uppercase text-white transition">
-                            <i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="btn_send">Envoyer</span>
-                        </button>
-                        <button type="button" onclick="closeSubmitModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-    
     <!-- ===================== SECTION PRÉDICTIONS ===================== -->
     <section id="predictions" class="border-t border-gray-900 py-16 sm:py-20 bg-gray-950/30">
         <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -3425,6 +3278,16 @@
                               en:'Tactical analysis and official technical profiles of the 26 Grenadiers.' },
 
         /* ── PRÉDICTIONS ── */
+        /* ── NOUVÈL KLE ── */
+        nav_predictions:   { fr:'PRÉDICTIONS',      ht:'PREDIKSYON',    en:'PREDICTIONS'     },
+        admin_mode_lbl:    { fr:'Mode Administrateur PWESPORTS', ht:'Mod Admin PWESPORTS', en:'PWESPORTS Admin Mode' },
+        admin_new_art:     { fr:'Nouvel article',   ht:'Nouvo atik',    en:'New article'     },
+        admin_logout:      { fr:'Déconnexion',      ht:'Dekonekte',     en:'Log out'         },
+        admin_pred_tab:    { fr:'Prédictions Communauté', ht:'Prediksyon Kominote', en:'Community Predictions' },
+        share_floating:    { fr:'Partager',         ht:'Pataje',        en:'Share'           },
+        copy_toast:        { fr:'✅ Lien copié !',  ht:'✅ Lyen kopye !', en:'✅ Link copied!' },
+        modal_new_art:     { fr:'Nouvel Article',   ht:'Nouvo Atik',    en:'New Article'     },
+
         pred_title_tes:    { fr:'Tes',           ht:'Prediksyon',   en:'Your'         },
         pred_title_pred:   { fr:'Prédictions',   ht:'ou yo',        en:'Predictions'  },
         pred_community:    { fr:'Communauté PWESPORTS',       ht:'Kominote PWESPORTS',          en:'PWESPORTS Community'     },
@@ -3833,6 +3696,208 @@
         lockVote(matchId);
     }
 
+    /* ── PARTAGER PRÉDICTION — Génère une belle image ── */
+    function sharePrediction(matchId) {
+        var match = MATCHES.find(function(m){ return m.id===matchId; });
+        var uv    = predState.userVotes[matchId];
+        if (!match || !uv) return;
+
+        var cv  = document.createElement('canvas');
+        cv.width = 1080; cv.height = 1920;
+        var ctx = cv.getContext('2d');
+        var W   = 1080, H = 1920;
+
+        var accentCol  = uv.result==='home' ? '#3b82f6' : uv.result==='draw' ? '#f59e0b' : '#ef4444';
+        var accentDark = uv.result==='home' ? '#1e3a8a' : uv.result==='draw' ? '#78350f' : '#7f1d1d';
+        var scoreH     = uv.score.split('-')[0];
+        var scoreA     = uv.score.split('-')[1];
+        var isHomeHaiti= match.home==='Haïti';
+        var isAwayHaiti= match.away==='Haïti';
+        var homeWin    = uv.result==='home';
+        var awayWin    = uv.result==='away';
+        var isDraw     = uv.result==='draw';
+        var resultText = homeWin ? match.home+' GAGNE' : isDraw ? 'MATCH NUL' : match.away+' GAGNE';
+        var resultEmoji= homeWin ? '🏆' : isDraw ? '🤝' : '⚡';
+
+        /* ── FOND ── */
+        var bgG=ctx.createLinearGradient(0,0,0,H);
+        bgG.addColorStop(0,'#06070d'); bgG.addColorStop(0.4,'#0c0d14'); bgG.addColorStop(1,'#08090f');
+        ctx.fillStyle=bgG; ctx.fillRect(0,0,W,H);
+
+        /* Grain */
+        for(var i=0;i<2000;i++){
+            ctx.fillStyle='rgba(255,255,255,'+(Math.random()*0.015)+')';
+            ctx.fillRect(Math.random()*W, Math.random()*H, 1, 1);
+        }
+
+        /* Glow */
+        var gr=ctx.createRadialGradient(W/2,H*0.5,0,W/2,H*0.5,700);
+        gr.addColorStop(0,accentCol+'28'); gr.addColorStop(1,'transparent');
+        ctx.fillStyle=gr; ctx.fillRect(0,0,W,H);
+
+        /* Lignes diagonales */
+        ctx.save(); ctx.strokeStyle='rgba(255,255,255,0.018)'; ctx.lineWidth=1;
+        for(var d=-H;d<W+H;d+=55){ ctx.beginPath(); ctx.moveTo(d,0); ctx.lineTo(d+H,H); ctx.stroke(); }
+        ctx.restore();
+
+        /* ── HEADER ── */
+        var hbW=400,hbH=70,hbX=W/2-200,hbY=80;
+        var hbG=ctx.createLinearGradient(hbX,hbY,hbX+hbW,hbY);
+        hbG.addColorStop(0,'rgba(255,255,255,0)'); hbG.addColorStop(0.5,'rgba(255,255,255,0.07)'); hbG.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=hbG; ctx.beginPath(); ctx.roundRect(hbX,hbY,hbW,hbH,14); ctx.fill();
+        ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1; ctx.stroke();
+        ctx.font='bold 40px Arial'; ctx.fillStyle='rgba(255,255,255,0.9)';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('PWESPORTS', W/2, hbY+hbH/2); ctx.textBaseline='alphabetic';
+        ctx.font='22px Arial'; ctx.fillStyle='rgba(255,255,255,0.28)';
+        ctx.fillText('Groupe C  ·  Coupe du Monde 2026', W/2, 185);
+        var lacG=ctx.createLinearGradient(W/2-300,0,W/2+300,0);
+        lacG.addColorStop(0,'transparent'); lacG.addColorStop(0.5,accentCol+'88'); lacG.addColorStop(1,'transparent');
+        ctx.fillStyle=lacG; ctx.fillRect(W/2-300,200,600,2);
+
+        /* ── CARD ── */
+        var cX=50,cY=240,cW=W-100,cH=1380;
+        ctx.shadowColor='rgba(0,0,0,0.9)'; ctx.shadowBlur=80; ctx.shadowOffsetY=20;
+        var cardG=ctx.createLinearGradient(cX,cY,cX,cY+cH);
+        cardG.addColorStop(0,'#1a1a26'); cardG.addColorStop(0.5,'#141420'); cardG.addColorStop(1,'#0f0f1a');
+        ctx.fillStyle=cardG; ctx.beginPath(); ctx.roundRect(cX,cY,cW,cH,40); ctx.fill();
+        ctx.shadowBlur=0; ctx.shadowOffsetY=0;
+        var cardBG=ctx.createLinearGradient(cX,cY,cX+cW,cY+cH);
+        cardBG.addColorStop(0,accentCol+'55'); cardBG.addColorStop(0.5,'rgba(255,255,255,0.05)'); cardBG.addColorStop(1,accentCol+'33');
+        ctx.strokeStyle=cardBG; ctx.lineWidth=2; ctx.stroke();
+        var topG=ctx.createLinearGradient(cX,cY,cX+cW,cY);
+        topG.addColorStop(0,'transparent'); topG.addColorStop(0.5,accentCol); topG.addColorStop(1,'transparent');
+        ctx.fillStyle=topG; ctx.beginPath(); ctx.roundRect(cX,cY,cW,4,[40,40,0,0]); ctx.fill();
+
+        /* Date pill */
+        var dpW=480,dpH=52,dpX=W/2-240,dpY=cY+90;
+        ctx.fillStyle='rgba(255,255,255,0.05)'; ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.roundRect(dpX,dpY,dpW,dpH,26); ctx.fill(); ctx.stroke();
+        ctx.font='bold 26px Arial'; ctx.fillStyle='rgba(255,255,255,0.55)';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(match.date+'   ·   '+match.venue, W/2, dpY+dpH/2); ctx.textBaseline='alphabetic';
+        ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(cX+80,cY+165); ctx.lineTo(cX+cW-80,cY+165); ctx.stroke();
+
+        /* ── DRAPEAUX + NOMS + SCORE — async après chargement flags ── */
+        var teamY=cY+200, radius=90;
+        var scoreY=teamY+radius*2+110;
+        var badgeY=scoreY+260;
+
+        function drawTeamSide(cx, flagImg, name, isHaiti, isWinner) {
+            if(isWinner){
+                ctx.shadowColor=accentCol; ctx.shadowBlur=40;
+                var gc=ctx.createRadialGradient(cx,teamY+radius,0,cx,teamY+radius,radius*1.8);
+                gc.addColorStop(0,accentCol+'22'); gc.addColorStop(1,'transparent');
+                ctx.fillStyle=gc; ctx.beginPath(); ctx.arc(cx,teamY+radius,radius*1.8,0,Math.PI*2); ctx.fill();
+            }
+            ctx.fillStyle=isWinner?accentDark+'aa':'rgba(255,255,255,0.04)';
+            ctx.strokeStyle=isWinner?accentCol:'rgba(255,255,255,0.10)';
+            ctx.lineWidth=isWinner?3:1.5;
+            ctx.beginPath(); ctx.arc(cx,teamY+radius,radius,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            ctx.shadowBlur=0;
+            if(flagImg&&flagImg.naturalWidth>0){
+                ctx.save(); ctx.beginPath(); ctx.arc(cx,teamY+radius,radius-6,0,Math.PI*2); ctx.clip();
+                ctx.drawImage(flagImg,cx-radius+6,teamY+6,(radius-6)*2,(radius-6)*2); ctx.restore();
+            }
+            ctx.font='bold 58px Arial';
+            ctx.fillStyle=isHaiti?'#f87171':isWinner?'#ffffff':'#cbd5e1';
+            ctx.textAlign='center';
+            if(isHaiti||isWinner){ctx.shadowColor=isHaiti?'rgba(239,68,68,0.5)':accentCol+'88'; ctx.shadowBlur=20;}
+            ctx.fillText(name.toUpperCase(), cx, teamY+radius*2+70); ctx.shadowBlur=0;
+        }
+
+        function drawScoreBox2(cx, score, isWinner) {
+            var bw=220,bh=220,bx=cx-110,by=scoreY;
+            if(isWinner){ctx.shadowColor=accentCol; ctx.shadowBlur=60;}
+            var sg=ctx.createLinearGradient(bx,by,bx,by+bh);
+            sg.addColorStop(0,isWinner?accentDark+'cc':'#1e1e2e'); sg.addColorStop(1,isWinner?accentDark+'88':'#141420');
+            ctx.fillStyle=sg; ctx.beginPath(); ctx.roundRect(bx,by,bw,bh,28); ctx.fill(); ctx.shadowBlur=0;
+            ctx.strokeStyle=isWinner?accentCol:'rgba(255,255,255,0.07)'; ctx.lineWidth=isWinner?3:1.5; ctx.stroke();
+            ctx.font='bold 140px Arial'; ctx.fillStyle='#ffffff';
+            ctx.textAlign='center'; ctx.textBaseline='middle';
+            if(isWinner){ctx.shadowColor=accentCol; ctx.shadowBlur=30;}
+            ctx.fillText(score, cx, scoreY+bh/2); ctx.shadowBlur=0; ctx.textBaseline='alphabetic';
+        }
+
+        function drawBadge() {
+            var bw=680,bh=90,bx=W/2-340,by=badgeY;
+            ctx.shadowColor=accentCol; ctx.shadowBlur=50;
+            var bg2=ctx.createLinearGradient(bx,by,bx+bw,by);
+            bg2.addColorStop(0,accentCol+'cc'); bg2.addColorStop(0.5,accentCol); bg2.addColorStop(1,accentCol+'cc');
+            ctx.fillStyle=bg2; ctx.beginPath(); ctx.roundRect(bx,by,bw,bh,45); ctx.fill(); ctx.shadowBlur=0;
+            ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.lineWidth=1.5; ctx.stroke();
+            ctx.font='bold 40px Arial'; ctx.fillStyle='#fff';
+            ctx.textAlign='center'; ctx.textBaseline='middle';
+            ctx.fillText(resultEmoji+'  '+resultText, W/2, by+bh/2); ctx.textBaseline='alphabetic';
+        }
+
+        function drawFooter() {
+            var fy=badgeY+140;
+            ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+            ctx.beginPath(); ctx.moveTo(cX+80,fy); ctx.lineTo(cX+cW-80,fy); ctx.stroke();
+            ctx.font='bold 36px Arial'; ctx.fillStyle='rgba(255,255,255,0.4)';
+            ctx.textAlign='center'; ctx.fillText('pwesports.netlify.app', W/2, fy+52);
+            ctx.font='22px Arial'; ctx.fillStyle='rgba(255,255,255,0.15)';
+            ctx.fillText('Ma prédiction pour la Coupe du Monde 2026  🇭🇹', W/2, fy+88);
+        }
+
+        /* ── LOAD FLAGS THEN DRAW ── */
+        var hImg=new Image(), aImg=new Image(), ld=0;
+        hImg.crossOrigin='anonymous'; aImg.crossOrigin='anonymous';
+
+        function onFlagLoad() {
+            ld++;
+            if (ld < 2) return;
+            drawTeamSide(W*0.27, hImg, match.home, isHomeHaiti, homeWin||isDraw);
+            drawTeamSide(W*0.73, aImg, match.away, isAwayHaiti, awayWin||isDraw);
+            drawScoreBox2(W*0.27, scoreH, homeWin||isDraw);
+            drawScoreBox2(W*0.73, scoreA, awayWin||isDraw);
+            ctx.font='bold 52px Arial'; ctx.fillStyle='rgba(255,255,255,0.15)';
+            ctx.textAlign='center'; ctx.textBaseline='middle';
+            ctx.fillText(':', W/2, scoreY+110); ctx.textBaseline='alphabetic';
+            drawBadge();
+            drawFooter();
+
+            /* ── EXPORT ── */
+            cv.toBlob(function(blob) {
+                var blobUrl = URL.createObjectURL(blob);
+                var txt = resultEmoji+' Ma prédiction : '+match.home+' vs '+match.away
+                    +' → '+resultText+' ('+uv.score+') — Mondial 2026 🏆'
+                    +'\n\npwesports.netlify.app';
+                if (navigator.share&&navigator.canShare&&navigator.canShare({files:[new File([blob],'p.png',{type:'image/png'})]})) {
+                    navigator.share({title:'Ma prédiction PWESPORTS 🇭🇹',text:txt,
+                        files:[new File([blob],'prediction-pwesports.png',{type:'image/png'})]
+                    }).catch(function(){ downloadPredImg(blobUrl, txt); });
+                } else if (navigator.share) {
+                    navigator.share({title:'Ma prédiction PWESPORTS 🇭🇹',text:txt,
+                        url:'https://pwesports.netlify.app/#predictions'}).catch(function(){});
+                } else {
+                    downloadPredImg(blobUrl, txt);
+                }
+            }, 'image/png');
+        }
+
+        hImg.onload=hImg.onerror=aImg.onload=aImg.onerror=onFlagLoad;
+        hImg.src='https://flagcdn.com/w160/'+match.homeFlag+'.png';
+        aImg.src='https://flagcdn.com/w160/'+match.awayFlag+'.png';
+    }
+    function downloadPredImg(blobUrl, text) {
+        /* Telechaje imaj + Kopye tèks */
+        var a = document.createElement('a');
+        a.download = 'prediction-pwesports.png';
+        a.href = blobUrl;
+        a.click();
+        /* Kopye tèks nan clipboard */
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(function(){
+                showToast('📥 Image téléchargée + texte copié !', 'green');
+            });
+        } else {
+            showToast('📥 Image téléchargée !', 'green');
+        }
+    }
+
     /* ── TOAST ── */
     function showToast(msg, color) {
         var el = document.createElement('div');
@@ -3896,13 +3961,31 @@
                     + '</div>';
             } else if (voted) {
                 /* Déjà voté et confirmé */
-                var vLabel = uv.result==='home' ? match.home : uv.result==='draw' ? 'Match Nul' : match.away;
-                voteZone = '<div class="flex items-center gap-3 p-3 rounded-xl border mb-4" style="background:rgba(34,197,94,0.06);border-color:rgba(34,197,94,0.2);">'
-                    + '<i class="fa-solid fa-check-circle text-emerald-400"></i>'
-                    + '<div><p class="text-xs font-bold text-emerald-300">'+(i18n.pred_sent&&i18n.pred_sent[currentLang||'fr']||'Vote envoyé ✓')+'</p>'
-                    + '<p class="text-[10px] text-gray-400">'+vLabel+' · '+uv.score+'</p>'
-                    + '<p class="text-[9px] text-gray-600 mt-0.5">'+(i18n.pred_impossible&&i18n.pred_impossible[currentLang||'fr']||'1 vote par match')+'</p></div>'
+                var lang3  = currentLang||'fr';
+                var vLabel = uv.result==='home' ? match.home : uv.result==='draw' ? 'Nul' : match.away;
+                var vEmoji = uv.result==='home' ? '🏠' : uv.result==='draw' ? '🤝' : '✈️';
+                var vCol   = uv.result==='home' ? '#3b82f6' : uv.result==='draw' ? '#f59e0b' : '#ef4444';
+
+                /* Badge vòt konfime */
+                voteZone = '<div class="flex items-center gap-3 p-4 rounded-2xl border mb-3" style="background:rgba(34,197,94,0.05);border-color:rgba(34,197,94,0.2);">'
+                    + '<div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(34,197,94,0.12);">'
+                    +   '<i class="fa-solid fa-check text-emerald-400 text-sm"></i>'
+                    + '</div>'
+                    + '<div class="flex-1 min-w-0">'
+                    +   '<p class="text-xs font-black text-emerald-300">'+(i18n.pred_sent&&i18n.pred_sent[lang3]||'Vote envoyé ✓')+'</p>'
+                    +   '<p class="text-[11px] font-bold mt-0.5" style="color:'+vCol+';">'+vEmoji+' '+vLabel+' · '+uv.score+'</p>'
+                    +   '<p class="text-[9px] text-gray-600 mt-0.5">'+(i18n.pred_impossible&&i18n.pred_impossible[lang3]||'1 vote par match')+'</p>'
+                    + '</div>'
                     + '</div>';
+
+                /* Bouton Partager */
+                voteZone += '<button data-matchid="'+match.id+'" onclick="sharePrediction(this.dataset.matchid)" '
+                    + 'class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border text-xs font-bold uppercase transition hover:-translate-y-0.5 active:scale-95 mb-1" '
+                    + 'style="background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.1);color:#9ca3af;">'
+                    + '<i class="fa-solid fa-share-nodes text-xs"></i>'
+                    + '<span>Partager ma prédiction</span>'
+                    + '</button>';
+
             } else {
                 /* ── DESIGN PWOFESYONÈL ── */
 
@@ -3933,7 +4016,7 @@
                     + 'oninput="syncCustomScore(this.dataset.match)" '
                     + 'onfocus="if(this.value===\'0\')this.value=\'\';" '
                     + 'onblur="if(this.value===\'\')this.value=\'0\';" '
-                    + 'class="w-20 h-20 bg-[#070c18] border-2 border-gray-800 rounded-2xl text-center font-athletic text-4xl font-black text-white focus:outline-none focus:border-blue-500 focus:shadow-lg transition-all" '
+                    + 'class="w-14 h-14 bg-[#070c18] border-2 border-gray-800 rounded-xl text-center font-athletic text-2xl font-black text-white focus:outline-none focus:border-blue-500 transition-all" '
                     + 'style="box-shadow:inset 0 2px 8px rgba(0,0,0,0.4);">';
                 voteZone += '</div>';
 
@@ -3949,7 +4032,7 @@
                     + 'oninput="syncCustomScore(this.dataset.match)" '
                     + 'onfocus="if(this.value===\'0\')this.value=\'\';" '
                     + 'onblur="if(this.value===\'\')this.value=\'0\';" '
-                    + 'class="w-20 h-20 bg-[#070c18] border-2 border-gray-800 rounded-2xl text-center font-athletic text-4xl font-black text-white focus:outline-none focus:border-blue-500 focus:shadow-lg transition-all" '
+                    + 'class="w-14 h-14 bg-[#070c18] border-2 border-gray-800 rounded-xl text-center font-athletic text-2xl font-black text-white focus:outline-none focus:border-blue-500 transition-all" '
                     + 'style="box-shadow:inset 0 2px 8px rgba(0,0,0,0.4);">';
                 voteZone += '</div>';
 
@@ -4145,4 +4228,153 @@
     </form>
 
 </body>
-</html>
+</html
+
+    <!-- MODAL LOGIN ADMIN -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#0f1524] border border-gray-800 rounded-2xl w-full max-w-sm shadow-2xl p-6">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 rounded-full bg-red-600/10 border border-red-600/30 flex items-center justify-center mx-auto mb-3">
+                    <i class="fa-solid fa-lock text-red-500 text-xl"></i>
+                </div>
+                <h3 class="font-athletic text-xl font-black uppercase text-white" data-i18n="admin_space">Espace Admin</h3>
+                <p class="text-xs text-gray-500 mt-1" data-i18n="admin_restricted">PWESPORTS — Accès restreint</p>
+            </div>
+            <div class="space-y-3">
+                <input id="admin-password" type="password" placeholder="Mot de passe admin..."
+                    class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-red-500/50 transition"
+                    onkeydown="if(event.key==='Enter') verifyAdmin()">
+                <p id="admin-error" class="hidden text-xs text-red-400 font-semibold text-center" data-i18n="admin_error">Mot de passe incorrect</p>
+                <button onclick="verifyAdmin()" class="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i><span data-i18n="btn_login">Connexion</span>
+                </button>
+                <button onclick="closeAdminLogin()" class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition" data-i18n="btn_cancel">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AJOUT/ÉDITION ARTICLE (admin) -->
+    <div id="news-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
+                <h3 class="font-athletic text-lg font-black uppercase text-white" id="news-modal-title" data-i18n="modal_new_art">Nouvel Article</h3>
+                <button onclick="closeNewsModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
+                    <select id="news-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
+                        <option value="Officiel">🔴 Officiel</option>
+                        <option value="Transfert">🔵 Transfert</option>
+                        <option value="Performance">⚡ Performance</option>
+                        <option value="Coupe du Monde">🏆 Coupe du Monde</option>
+                        <option value="Interview">🎙️ Interview</option>
+                        <option value="Blessure">🏥 Blessure</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
+                    <input id="news-title" type="text" placeholder="Ex: Bellegarde prolonge avec Wolverhampton..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
+                    <textarea id="news-excerpt" rows="3" placeholder="2-3 phrases..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
+                    <input id="news-link" type="url" placeholder="https://..."
+                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_emoji">Emoji couverture</label>
+                    <div class="grid grid-cols-6 gap-2" id="emoji-picker"></div>
+                </div>
+                <input type="hidden" id="news-edit-index" value="-1">
+                <div class="flex gap-3 pt-2">
+                    <button onclick="saveNewsArticle()" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
+                        <i class="fa-solid fa-save mr-2"></i><span data-i18n="btn_publish">Publier</span>
+                    </button>
+                    <button onclick="closeNewsModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SOUMISSION (users) — Netlify Forms -->
+    <div id="submit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
+                <div>
+                    <h3 class="font-athletic text-lg font-black uppercase text-white">Soumettre un article</h3>
+                    <p class="text-[10px] text-amber-400/80 mt-0.5"><i class="fa-solid fa-clock mr-1"></i>En attente d'approbation par l'admin PWESPORTS</p>
+                </div>
+                <button onclick="closeSubmitModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <!-- Netlify Forms : data-netlify="true" capture automatiquement -->
+                <form id="submit-form" name="article-submission" method="POST"
+                      data-netlify="true" data-netlify-honeypot="bot-field"
+                      onsubmit="handleNetlifySubmit(event)" class="space-y-4">
+
+                    <!-- Champ honeypot anti-spam caché -->
+                    <input type="hidden" name="form-name" value="article-submission">
+                    <p class="hidden"><input name="bot-field"></p>
+
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_author">Votre nom / Pseudo *</label>
+                        <input name="author" id="submit-author" type="text" placeholder="Ex: Jean Paul..." required
+                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
+                        <select name="category" id="submit-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
+                            <option value="Officiel">🔴 Officiel</option>
+                            <option value="Transfert">🔵 Transfert</option>
+                            <option value="Performance">⚡ Performance</option>
+                            <option value="Coupe du Monde">🏆 Coupe du Monde</option>
+                            <option value="Interview">🎙️ Interview</option>
+                            <option value="Blessure">🏥 Blessure</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
+                        <input name="title" id="submit-title" type="text" placeholder="Titre de votre article..." required
+                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
+                        <textarea name="excerpt" id="submit-excerpt" rows="4" placeholder="Décrivez l'actualité en 2-4 phrases..." required
+                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
+                        <input name="link" id="submit-link" type="url" placeholder="https://..."
+                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
+                    </div>
+
+                    <!-- Message succès -->
+                    <p id="submit-success" class="hidden text-xs text-emerald-400 font-semibold text-center py-2">
+                        <i class="fa-solid fa-circle-check mr-1"></i>
+                        <span data-i18n="msg_submitted">Article soumis ! L'équipe PWESPORTS va l'examiner.</span>
+                    </p>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="submit" id="submit-btn" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-bold uppercase text-white transition">
+                            <i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="btn_send">Envoyer</span>
+                        </button>
+                        <button type="button" onclick="closeSubmitModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    
+>
