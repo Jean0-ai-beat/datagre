@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
@@ -3912,6 +3913,8 @@
                 voteZone += '<input type="number" min="0" max="20" value="'+(uv?uv.score.split('-')[0]:'0')+'" '
                     + 'id="sc-h-'+match.id+'" data-match="'+match.id+'" '
                     + 'oninput="syncCustomScore(this.dataset.match)" '
+                    + 'onfocus="if(this.value===\'0\')this.value=\'\';" '
+                    + 'onblur="if(this.value===\'\')this.value=\'0\';" '
                     + 'class="w-16 h-16 bg-[#0b0f19] border-2 border-gray-700 rounded-2xl text-center font-athletic text-3xl font-black text-white focus:outline-none focus:border-blue-500 transition">';
                 voteZone += '</div>';
 
@@ -3925,6 +3928,8 @@
                 voteZone += '<input type="number" min="0" max="20" value="'+(uv?uv.score.split('-')[1]:'0')+'" '
                     + 'id="sc-a-'+match.id+'" data-match="'+match.id+'" '
                     + 'oninput="syncCustomScore(this.dataset.match)" '
+                    + 'onfocus="if(this.value===\'0\')this.value=\'\';" '
+                    + 'onblur="if(this.value===\'\')this.value=\'0\';" '
                     + 'class="w-16 h-16 bg-[#0b0f19] border-2 border-gray-700 rounded-2xl text-center font-athletic text-3xl font-black text-white focus:outline-none focus:border-blue-500 transition">';
                 voteZone += '</div>';
 
@@ -3961,21 +3966,7 @@
                 +   '<span class="text-[10px] font-bold text-gray-500 uppercase">Groupe C · '+match.date+' · '+match.venue+'</span>'
                 +   statusBadge
                 + '</div>'
-                + '<div class="flex items-center justify-between gap-4 mb-5">'
-                +   '<div class="flex-1 text-center">'
-                +     '<img src="https://flagcdn.com/w40/'+match.homeFlag+'.png" class="w-10 h-auto mx-auto mb-2 rounded shadow">'
-                +     '<div class="font-athletic text-base sm:text-xl font-black uppercase '+(isHomeHaiti?'text-red-400':'text-white')+'">'+match.home+'</div>'
-                +   '</div>'
-                +   '<div class="text-center flex-shrink-0">'
-                +     '<div class="text-xs font-black text-gray-600 mb-1">VS</div>'
-                +     scoreDisplay
-                +   '</div>'
-                +   '<div class="flex-1 text-center">'
-                +     '<img src="https://flagcdn.com/w40/'+match.awayFlag+'.png" class="w-10 h-auto mx-auto mb-2 rounded shadow">'
-                +     '<div class="font-athletic text-base sm:text-xl font-black uppercase '+(isAwayHaiti?'text-red-400':'text-white')+'">'+match.away+'</div>'
-                +   '</div>'
-                + '</div>'
-                + voteZone
+                                + voteZone
                 + commBar
                 + '</div>';
 
