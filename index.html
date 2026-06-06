@@ -3617,13 +3617,6 @@
         if (!match || isMatchLocked(match)) return;
         var prev = predState.userVotes[matchId];
         if (prev && prev.locked) { showToast('🔒 Vote déjà envoyé !', 'red'); return; }
-        /* Mande pseudo si premye vòt e pa encore defini */
-        var pseudo = getUserPseudo();
-        var hasAnyVote = Object.keys(predState.userVotes).length > 0;
-        if (pseudo === null && !hasAnyVote) {
-            openPseudoModal(matchId, result);
-            return;
-        }
         if (!predState.community[matchId]) predState.community[matchId] = {home:0,draw:0,away:0};
         var com = predState.community[matchId];
         if (prev) com[prev.result] = Math.max(0,(com[prev.result]||0)-1);
@@ -3769,7 +3762,7 @@
         for(var d=-H;d<W+H;d+=55){ ctx.beginPath(); ctx.moveTo(d,0); ctx.lineTo(d+H,H); ctx.stroke(); }
         ctx.restore();
 
-        /* ── HEADER ── */
+        /* ── HEADER PWESPORTS ── */
         var hbW=400,hbH=70,hbX=W/2-200,hbY=80;
         var hbG=ctx.createLinearGradient(hbX,hbY,hbX+hbW,hbY);
         hbG.addColorStop(0,'rgba(255,255,255,0)'); hbG.addColorStop(0.5,'rgba(255,255,255,0.07)'); hbG.addColorStop(1,'rgba(255,255,255,0)');
@@ -3808,7 +3801,7 @@
         ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
         ctx.beginPath(); ctx.moveTo(cX+80,cY+165); ctx.lineTo(cX+cW-80,cY+165); ctx.stroke();
 
-        /* ── DRAPEAUX + NOMS + SCORE — async après chargement flags ── */
+        /* ── VARIABLES PARTAGÉES ── */
         var teamY=cY+200, radius=90;
         var scoreY=teamY+radius*2+110;
         var badgeY=scoreY+260;
@@ -3888,7 +3881,6 @@
             drawBadge();
             drawFooter();
 
-            /* ── EXPORT ── */
             cv.toBlob(function(blob) {
                 var blobUrl = URL.createObjectURL(blob);
                 var txt = resultEmoji+' Ma prédiction : '+match.home+' vs '+match.away
@@ -3911,6 +3903,8 @@
         hImg.src='https://flagcdn.com/w160/'+match.homeFlag+'.png';
         aImg.src='https://flagcdn.com/w160/'+match.awayFlag+'.png';
     }
+
+
     function downloadPredImg(blobUrl, text) {
         /* Telechaje imaj + Kopye tèks */
         var a = document.createElement('a');
@@ -4498,6 +4492,7 @@
     /* ── PSEUDO / NOM AVANT VOTE ── */
     var pendingVoteMatch  = null;
     var pendingVoteResult = null;
+    var pendingEnvoyerBtn = null;
 
     function getUserPseudo() {
         return localStorage.getItem('pwe_pseudo') || null;
@@ -4517,18 +4512,26 @@
         var input  = document.getElementById('pseudo-input');
         var pseudo = input ? input.value.trim() : '';
         if (!pseudo) { showToast('❌ Antre yon non!', 'red'); return; }
-        pseudo = pseudo.slice(0, 20); // max 20 chars
+        pseudo = pseudo.slice(0, 20);
         localStorage.setItem('pwe_pseudo', pseudo);
-        closePseudoModal();
-        /* Kontinye vote */
-        if (pendingVoteMatch) {
-            castVote(pendingVoteMatch, pendingVoteResult);
-        }
+        afterPseudo();
     }
 
     function skipPseudo() {
-        localStorage.setItem('pwe_pseudo', '');  // vid = anonim
+        localStorage.setItem('pwe_pseudo', '');
+        afterPseudo();
+    }
+
+    function afterPseudo() {
         closePseudoModal();
+        /* Si se yon klik ENVOYER ki te deklanché modal la */
+        if (pendingEnvoyerBtn) {
+            var btn = pendingEnvoyerBtn;
+            pendingEnvoyerBtn = null;
+            handleEnvoyerBtn(btn);
+            return;
+        }
+        /* Si se yon klik vote ki te deklanché l */
         if (pendingVoteMatch) {
             castVote(pendingVoteMatch, pendingVoteResult);
         }
@@ -4595,6 +4598,78 @@
                     Kontinye anonim (pa parèt nan leaderboard)
                 </button>
             </div>
+        </div>
+    </div>
+
+
+
+    <!-- MODAL NOM/PSEUDO AVANT VOTE -->
+    <div id="pseudo-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#0f1524] border border-gray-800 rounded-3xl w-full max-w-sm shadow-2xl p-6">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-user text-blue-400 text-2xl"></i>
+                </div>
+                <h3 class="font-athletic text-xl font-black uppercase text-white mb-1">Anvan ou vote...</h3>
+                <p class="text-xs text-gray-500">Antre yon non pou parèt nan Leaderboard la 🏆</p>
+            </div>
+            <div class="space-y-3">
+                <input id="pseudo-input" type="text" maxlength="20"
+                    placeholder="Ton nom ou pseudo... (ex: TiJan, Grann500)"
+                    class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-bold text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition"
+                    onkeydown="if(event.key==='Enter') confirmPseudo()">
+                <p class="text-[10px] text-gray-600 text-center">
+                    <i class="fa-solid fa-shield-halved mr-1"></i>
+                    Non ou ap parèt sèlman nan Leaderboard sit la
+                </p>
+                <button onclick="confirmPseudo()"
+                    class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-black uppercase text-white transition active:scale-95">
+                    <i class="fa-solid fa-check mr-2"></i>Kontinye vote
+                </button>
+                <button onclick="skipPseudo()"
+                    class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition">
+                    Kontinye anonim (pa parèt nan leaderboard)
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- CARTE PRÉDICTION HIDDEN (pou imaj partage) -->
+    <div id="pred-share-card" style="position:fixed;left:-9999px;top:-9999px;z-index:-1;width:350px;height:622px;background:linear-gradient(145deg,#1a1a1a,#333);border:4px solid #d4af37;border-radius:20px;box-shadow:0 0 30px rgba(212,175,55,0.3);display:flex;flex-direction:column;align-items:center;padding:20px;color:white;text-align:center;font-family:Arial,sans-serif;overflow:hidden;box-sizing:border-box;">
+        
+        <!-- Diamond décoratif -->
+        <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.15);transform:rotate(45deg);border-radius:8px;"></div>
+        <div style="position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.15);transform:rotate(45deg);border-radius:8px;"></div>
+
+        <!-- Header -->
+        <div id="psc-header" style="font-size:13px;color:#aaa;margin-top:8px;line-height:1.5;"></div>
+
+        <!-- Teams -->
+        <div style="display:flex;justify-content:space-around;align-items:center;width:100%;margin-top:40px;">
+            <!-- Home -->
+            <div style="width:40%;display:flex;flex-direction:column;align-items:center;">
+                <img id="psc-flag-h" src="" style="width:54px;height:auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.5);" crossorigin="anonymous">
+                <div id="psc-name-h" style="font-size:16px;font-weight:900;margin:8px 0 4px;letter-spacing:1px;"></div>
+                <div id="psc-score-h" style="font-size:64px;font-weight:900;background:linear-gradient(#fff,#999);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;"></div>
+            </div>
+            <!-- VS -->
+            <div style="font-size:36px;color:rgba(255,255,255,0.3);font-weight:900;margin-top:20px;">:</div>
+            <!-- Away -->
+            <div style="width:40%;display:flex;flex-direction:column;align-items:center;">
+                <img id="psc-flag-a" src="" style="width:54px;height:auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.5);" crossorigin="anonymous">
+                <div id="psc-name-a" style="font-size:16px;font-weight:900;margin:8px 0 4px;letter-spacing:1px;"></div>
+                <div id="psc-score-a" style="font-size:64px;font-weight:900;background:linear-gradient(#fff,#999);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;"></div>
+            </div>
+        </div>
+
+        <!-- Winner badge -->
+        <div id="psc-winner" style="margin-top:36px;padding:12px 32px;border-radius:50px;font-weight:900;font-size:15px;text-transform:uppercase;letter-spacing:1px;box-shadow:0 0 20px rgba(255,0,0,0.4);"></div>
+
+        <!-- Footer -->
+        <div style="position:absolute;bottom:18px;font-size:11px;color:#666;line-height:1.6;">
+            pwesports.netlify.app<br>
+            <span style="font-size:10px;">Ma prédiction pour la Coupe du Monde 2026 🇭🇹</span>
         </div>
     </div>
 
