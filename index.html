@@ -4514,11 +4514,13 @@
         if (!pseudo) { showToast('❌ Antre yon non!', 'red'); return; }
         pseudo = pseudo.slice(0, 20);
         localStorage.setItem('pwe_pseudo', pseudo);
+        localStorage.setItem('pwe_pseudo_asked', '1');
         afterPseudo();
     }
 
     function skipPseudo() {
         localStorage.setItem('pwe_pseudo', '');
+        localStorage.setItem('pwe_pseudo_asked', '1');
         afterPseudo();
     }
 
