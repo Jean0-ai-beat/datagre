@@ -3728,17 +3728,18 @@
 
     function handleEnvoyerBtn(btn) {
         var matchId = btn.dataset.match;
-        var hEl = document.getElementById('sc-h-'+matchId);
-        var aEl = document.getElementById('sc-a-'+matchId);
-        var h = parseInt((hEl&&hEl.value)||0);
-        var a = parseInt((aEl&&aEl.value)||0);
-        /* Sync une derniere fois avant envoyer */
-        if (hEl || aEl) syncCustomScore(matchId);
-        btn.innerHTML = '<i class="fa-solid fa-check text-xs"></i><span>'+(i18n.pred_envoyee&&i18n.pred_envoyee[currentLang||'fr']||'ENVOYÉE')+'</span>';
-        btn.style.background = '#059669';
-        btn.style.cursor     = 'default';
-        btn.onclick          = null;
-        lockVote(matchId);
+        /* Sync score */
+        syncCustomScore(matchId);
+        var uv = predState.userVotes[matchId];
+        if (!uv) { showToast('❌ Antre yon skor anvan!', 'red'); return; }
+        /* Pseudo pa encore mande? */
+        var alreadyAsked = localStorage.getItem('pwe_pseudo_asked');
+        if (!alreadyAsked) {
+            pendingEnvoyerMatchId = matchId;
+            openPseudoModal(matchId, null);
+            return;
+        }
+        confirmEnvoyer(matchId);
     }
 
     /* ── PARTAGER PRÉDICTION — Génère une belle image ── */
@@ -4629,36 +4630,7 @@
 
 
 
-    <!-- MODAL NOM/PSEUDO AVANT VOTE -->
-    <div id="pseudo-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-[#0f1524] border border-gray-800 rounded-3xl w-full max-w-sm shadow-2xl p-6">
-            <div class="text-center mb-6">
-                <div class="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
-                    <i class="fa-solid fa-user text-blue-400 text-2xl"></i>
-                </div>
-                <h3 class="font-athletic text-xl font-black uppercase text-white mb-1">Anvan ou vote...</h3>
-                <p class="text-xs text-gray-500">Antre yon non pou parèt nan Leaderboard la 🏆</p>
-            </div>
-            <div class="space-y-3">
-                <input id="pseudo-input" type="text" maxlength="20"
-                    placeholder="Ton nom ou pseudo... (ex: TiJan, Grann500)"
-                    class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-bold text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition"
-                    onkeydown="if(event.key==='Enter') confirmPseudo()">
-                <p class="text-[10px] text-gray-600 text-center">
-                    <i class="fa-solid fa-shield-halved mr-1"></i>
-                    Non ou ap parèt sèlman nan Leaderboard sit la
-                </p>
-                <button onclick="confirmPseudo()"
-                    class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-black uppercase text-white transition active:scale-95">
-                    <i class="fa-solid fa-check mr-2"></i>Kontinye vote
-                </button>
-                <button onclick="skipPseudo()"
-                    class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition">
-                    Kontinye anonim (pa parèt nan leaderboard)
-                </button>
-            </div>
-        </div>
-    </div>
+    
 
 
     <!-- CARTE PRÉDICTION HIDDEN (pou imaj partage) -->
