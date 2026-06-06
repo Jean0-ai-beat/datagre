@@ -3662,17 +3662,27 @@
         var a = Math.min(20, Math.max(0, parseInt(aEl.value)||0));
         var result = h > a ? 'home' : h < a ? 'away' : 'draw';
 
-        /* Sove chwa user a sèlman — PA konte nan kominote encore */
+        /* Sove chwa user a — PA konte nan kominote, PA re-render */
         var prev = predState.userVotes[matchId];
-        if (prev && prev.locked) return; // pa chanje si deja konfime
+        if (prev && prev.locked) return;
         predState.userVotes[matchId] = {result:result, score:h+'-'+a, locked:false};
         saveLocalVotes();
 
-        /* Update border color pou feedback vizèl */
+        /* Update border color sèlman — pa re-render tout cards */
         var cols = {home:'#3b82f6', draw:'#f59e0b', away:'#ef4444'};
         var col  = cols[result];
         if (hEl) hEl.style.borderColor = col;
         if (aEl) aEl.style.borderColor = col;
+
+        /* Update label rezilta si li ekziste */
+        var labelEl = document.getElementById('res-label-'+matchId);
+        if (labelEl) {
+            var emoji = result==='home' ? '🏠' : result==='draw' ? '🤝' : '✈️';
+            var match = MATCHES.find(function(m){ return m.id===matchId; });
+            var lbl   = result==='home' ? (match?match.home:'') : result==='draw' ? 'Match nul' : (match?match.away:'');
+            labelEl.textContent = emoji+' '+lbl+' · '+h+'-'+a;
+            labelEl.style.color = col;
+        }
     }
 
     /* ── SCORE MANYÈL ── */
@@ -3703,6 +3713,19 @@
     }
 
     /* ── BOUTON ENVOYER ── */
+    function confirmEnvoyer(matchId) {
+        /* Mete ajou bouton ENVOYER → ENVOYÉE */
+        var b = document.querySelector('[data-match="'+matchId+'"]');
+        if (b && b.tagName==='BUTTON') {
+            b.innerHTML = '<i class="fa-solid fa-check text-xs"></i><span>'
+                +(i18n.pred_envoyee&&i18n.pred_envoyee[currentLang||'fr']||'ENVOYÉE')+'</span>';
+            b.style.background = '#059669';
+            b.style.cursor     = 'default';
+            b.onclick          = null;
+        }
+        lockVote(matchId);
+    }
+
     function handleEnvoyerBtn(btn) {
         var matchId = btn.dataset.match;
         var hEl = document.getElementById('sc-h-'+matchId);
@@ -4067,7 +4090,7 @@
                     var resLbl  = uv.result==='home' ? match.home+' gagne' : uv.result==='draw' ? 'Match nul' : match.away+' gagne';
                     var resEmoji= uv.result==='home' ? '🏠' : uv.result==='draw' ? '🤝' : '✈️';
                     voteZone += '<div class="flex items-center justify-center mb-4">';
-                    voteZone += '<span class="px-3 py-1 rounded-full text-[10px] font-black uppercase" '
+                    voteZone += '<span id="res-label-'+match.id+'" class="px-3 py-1 rounded-full text-[10px] font-black uppercase" '
                         + 'style="background:'+resCol+'18;color:'+resCol+';border:1px solid '+resCol+'44;">'
                         + resEmoji+' '+resLbl
                         + '</span>';
@@ -4490,9 +4513,10 @@
 
 
     /* ── PSEUDO / NOM AVANT VOTE ── */
-    var pendingVoteMatch  = null;
-    var pendingVoteResult = null;
-    var pendingEnvoyerBtn = null;
+    var pendingVoteMatch     = null;
+    var pendingVoteResult    = null;
+    var pendingEnvoyerBtn    = null;
+    var pendingEnvoyerMatchId = null;
 
     function getUserPseudo() {
         return localStorage.getItem('pwe_pseudo') || null;
@@ -4527,10 +4551,10 @@
     function afterPseudo() {
         closePseudoModal();
         /* Si se yon klik ENVOYER ki te deklanché modal la */
-        if (pendingEnvoyerBtn) {
-            var btn = pendingEnvoyerBtn;
-            pendingEnvoyerBtn = null;
-            handleEnvoyerBtn(btn);
+        if (pendingEnvoyerMatchId) {
+            var mid = pendingEnvoyerMatchId;
+            pendingEnvoyerMatchId = null;
+            confirmEnvoyer(mid, null);
             return;
         }
         /* Si se yon klik vote ki te deklanché l */
