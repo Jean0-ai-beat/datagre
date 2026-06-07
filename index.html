@@ -4628,28 +4628,50 @@
         if (icon) icon.style.animation = 'spin 1s linear infinite';
         if (status) status.innerHTML = '⏳ Chajman done... <span style="color:#6b7280;font-size:9px;">'+url.slice(0,50)+'...</span>';
 
-        /* Fetch CSV */
-        fetch(url)
-            .then(function(r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.text();
-            })
-            .then(function(csv) {
-                var rows = parseCSV(csv);
-                if (rows.length < 2) throw new Error('CSV vid oswa fòma mal');
-                var leaderboard = buildLeaderboard(rows);
-                saveLeaderboard(leaderboard);
-                renderPublicLeaderboard(leaderboard);
-                if (icon) icon.style.animation = '';
-                if (status) {
-                    status.innerHTML = '<span style="color:#10b981;">✅ '+leaderboard.length+' user chaje — '+new Date().toLocaleTimeString()+'</span>';
-                }
-                showToast('✅ Leaderboard mete ajou!', 'green');
-            })
-            .catch(function(err) {
-                if (icon) icon.style.animation = '';
-                if (status) status.innerHTML = '<span style="color:#ef4444;">❌ Erè: '+err.message+'</span>';
-                showToast('❌ Sync echwe — verifye URL la', 'red');
+        /* Fetch CSV — eseye dirèk, si echwe itilize proxy */
+        function doFetch(fetchUrl) {
+            return fetch(fetchUrl)
+                .then(function(r) {
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.text();
+                });
+        }
+
+        function handleCSV(csv) {
+            var rows = parseCSV(csv);
+            if (rows.length < 2) throw new Error('CSV vid oswa fòma mal');
+            var leaderboard = buildLeaderboard(rows);
+            saveLeaderboard(leaderboard);
+            renderPublicLeaderboard(leaderboard);
+            if (icon) icon.style.animation = '';
+            if (status) {
+                status.innerHTML = '<span style="color:#10b981;">✅ '+leaderboard.length+' user chaje — '+new Date().toLocaleTimeString()+'</span>';
+            }
+            showToast('✅ Leaderboard mete ajou!', 'green');
+        }
+
+        function handleError(err) {
+            if (icon) icon.style.animation = '';
+            if (status) status.innerHTML = '<span style="color:#ef4444;">❌ '+err.message+'</span>';
+            showToast('❌ Sync echwe', 'red');
+        }
+
+        /* Tès 1: fetch dirèk */
+        doFetch(url)
+            .then(handleCSV)
+            .catch(function() {
+                /* Tès 2: proxy CORS */
+                if (status) status.textContent = '⏳ Proxy CORS...';
+                var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+                doFetch(proxyUrl)
+                    .then(handleCSV)
+                    .catch(function() {
+                        /* Tès 3: dezyèm proxy */
+                        var proxy2 = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                        doFetch(proxy2)
+                            .then(handleCSV)
+                            .catch(handleError);
+                    });
             });
     }
 
