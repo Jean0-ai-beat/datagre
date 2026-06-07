@@ -4604,16 +4604,29 @@
         var url      = urlInput ? urlInput.value.trim() : '';
 
         if (!url) {
-            if (status) status.textContent = '❌ Antre URL CSV la anvan!';
+            if (status) status.textContent = '❌ Antre URL la anvan!';
             return;
         }
 
-        /* Sove URL pou pwochen fwa */
+        /* ── AUTO-KORIJE URL la ── */
+        /* Format 1: pubhtml?gid=XXX  → pub?output=csv&gid=XXX */
+        url = url.replace('pubhtml', 'pub');
+        /* Ajoute output=csv si pa la */
+        if (url.indexOf('output=csv') === -1) {
+            url += (url.indexOf('?') !== -1 ? '&' : '?') + 'output=csv';
+        }
+        /* Retire &single=true si la */
+        url = url.replace('&single=true','').replace('single=true&','');
+
+        /* Mete ajou input ak URL korije */
+        if (urlInput) urlInput.value = url;
+
+        /* Sove URL korije */
         try { localStorage.setItem('pwe_sheets_url', url); } catch(e){}
 
         /* Animate icon */
         if (icon) icon.style.animation = 'spin 1s linear infinite';
-        if (status) status.textContent = '⏳ Chajman done...';
+        if (status) status.innerHTML = '⏳ Chajman done... <span style="color:#6b7280;font-size:9px;">'+url.slice(0,50)+'...</span>';
 
         /* Fetch CSV */
         fetch(url)
