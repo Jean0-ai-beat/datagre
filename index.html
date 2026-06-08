@@ -860,11 +860,17 @@
                             <textarea id="lb-paste-area" rows="6"
                                 placeholder="Kole done yo isit (PSEUDO,PTS pa liy)&#10;Eks:&#10;Lik,8&#10;Martin,6&#10;Peter,3"
                                 class="w-full bg-[#070c18] border border-gray-800 rounded-xl px-3 py-2 text-[10px] text-white placeholder-gray-700 focus:outline-none focus:border-blue-500 transition mb-2 font-mono resize-none"></textarea>
-                            <button onclick="pasteLeaderboard()"
-                                class="w-full py-2.5 rounded-xl bg-blue-700 hover:bg-blue-600 text-[10px] font-bold uppercase text-white transition flex items-center justify-center gap-2 active:scale-95">
-                                <i class="fa-solid fa-upload"></i>
-                                <span>Aktive Leaderboard</span>
-                            </button>
+                            <div class="flex gap-2">
+                                <button onclick="pasteLeaderboard()"
+                                    class="flex-1 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-600 text-[10px] font-bold uppercase text-white transition flex items-center justify-center gap-2 active:scale-95">
+                                    <i class="fa-solid fa-upload"></i>
+                                    <span>Aktive</span>
+                                </button>
+                                <button onclick="clearLeaderboard()"
+                                    class="px-4 py-2.5 rounded-xl bg-red-900/40 hover:bg-red-900/60 border border-red-800/40 text-[10px] font-bold uppercase text-red-400 transition active:scale-95">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
                             <div id="sync-status" class="text-[9px] text-center mt-1.5 text-gray-600"></div>
                         </div>
                     </div>
@@ -4594,6 +4600,30 @@
     /* ══════════════════════════════════════════
        SYNC LEADERBOARD — Google Sheets CSV
     ══════════════════════════════════════════ */
+
+    function clearLeaderboard() {
+        if (!confirm('Ou sèten ou vle dezaktive Leaderboard la?')) return;
+        try {
+            localStorage.removeItem('pwe_global_lb');
+            localStorage.removeItem('pwe_lb_updated');
+        } catch(e){}
+        /* Reset leaderboard display */
+        var body = document.getElementById('leaderboard-body');
+        if (body) {
+            body.innerHTML =
+                '<div class="text-center py-8">'
+                + '<i class="fa-solid fa-trophy text-3xl text-gray-700 block mb-2"></i>'
+                + '<p class="text-xs text-gray-500 font-bold">Leaderboard disponib apre match yo</p>'
+                + '<p class="text-[10px] text-gray-600 mt-1">Admin antre rezilta reyèl yo pou aktive l</p>'
+                + '</div>';
+        }
+        /* Reset textarea */
+        var area = document.getElementById('lb-paste-area');
+        if (area) area.value = '';
+        var status = document.getElementById('sync-status');
+        if (status) status.innerHTML = '<span style="color:#6b7280;">🗑 Leaderboard efase</span>';
+        showToast('🗑 Leaderboard dezaktive', 'red');
+    }
 
     function pasteLeaderboard() {
         var area   = document.getElementById('lb-paste-area');
