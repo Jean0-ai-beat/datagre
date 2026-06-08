@@ -849,23 +849,21 @@
                             <i class="fa-solid fa-save"></i> Sove Rezilta yo
                         </button>
 
-                        <!-- SYNC LEADERBOARD GOOGLE SHEETS -->
+                        <!-- PASTE LEADERBOARD CSV -->
                         <div class="mt-4 pt-4 border-t border-gray-800">
                             <p class="text-[10px] font-bold uppercase text-blue-400 tracking-wider mb-2">
-                                <i class="fa-brands fa-google mr-1"></i>Sync Leaderboard — Google Sheets
+                                <i class="fa-solid fa-trophy mr-1"></i>Mete Ajou Leaderboard
                             </p>
                             <p class="text-[9px] text-gray-600 mb-2 leading-relaxed">
-                                Google Sheets → Fichier → Partager → Publier sur le web<br>
-                                → Fèytay <strong class="text-gray-500">"Leaderboard"</strong> → Format CSV → Kopye lyen an
+                                Google Sheets → Fèytay <strong class="text-gray-500">"Leaderboard"</strong> → Seleksyone kolòn PSEUDO + PTS → Kopye → Kole anba a
                             </p>
-                            <input id="sheets-csv-url" type="url"
-                                placeholder="https://docs.google.com/spreadsheets/d/.../export?format=csv..."
-                                class="w-full bg-[#070c18] border border-gray-800 rounded-xl px-3 py-2 text-[10px] text-white placeholder-gray-700 focus:outline-none focus:border-blue-500 transition mb-2">
-                            <button onclick="syncLeaderboardFromSheets()"
-                                id="sync-lb-btn"
+                            <textarea id="lb-paste-area" rows="6"
+                                placeholder="Kole done yo isit (PSEUDO,PTS pa liy)&#10;Eks:&#10;Lik,8&#10;Martin,6&#10;Peter,3"
+                                class="w-full bg-[#070c18] border border-gray-800 rounded-xl px-3 py-2 text-[10px] text-white placeholder-gray-700 focus:outline-none focus:border-blue-500 transition mb-2 font-mono resize-none"></textarea>
+                            <button onclick="pasteLeaderboard()"
                                 class="w-full py-2.5 rounded-xl bg-blue-700 hover:bg-blue-600 text-[10px] font-bold uppercase text-white transition flex items-center justify-center gap-2 active:scale-95">
-                                <i class="fa-solid fa-rotate" id="sync-icon"></i>
-                                <span>Sync Leaderboard</span>
+                                <i class="fa-solid fa-upload"></i>
+                                <span>Aktive Leaderboard</span>
                             </button>
                             <div id="sync-status" class="text-[9px] text-center mt-1.5 text-gray-600"></div>
                         </div>
@@ -4597,83 +4595,50 @@
        SYNC LEADERBOARD — Google Sheets CSV
     ══════════════════════════════════════════ */
 
-    function syncLeaderboardFromSheets() {
-        var urlInput = document.getElementById('sheets-csv-url');
-        var status   = document.getElementById('sync-status');
-        var icon     = document.getElementById('sync-icon');
-        var url      = urlInput ? urlInput.value.trim() : '';
-
-        if (!url) {
-            if (status) status.textContent = '❌ Antre URL la anvan!';
+    function pasteLeaderboard() {
+        var area   = document.getElementById('lb-paste-area');
+        var status = document.getElementById('sync-status');
+        var raw    = area ? area.value.trim() : '';
+        if (!raw) {
+            if (status) status.innerHTML = '<span style="color:#ef4444;">❌ Kole done yo anvan!</span>';
             return;
         }
-
-        /* ── AUTO-KORIJE URL la ── */
-        /* Format 1: pubhtml?gid=XXX  → pub?output=csv&gid=XXX */
-        url = url.replace('pubhtml', 'pub');
-        /* Ajoute output=csv si pa la */
-        if (url.indexOf('output=csv') === -1) {
-            url += (url.indexOf('?') !== -1 ? '&' : '?') + 'output=csv';
-        }
-        /* Retire &single=true si la */
-        url = url.replace('&single=true','').replace('single=true&','');
-
-        /* Mete ajou input ak URL korije */
-        if (urlInput) urlInput.value = url;
-
-        /* Sove URL korije */
-        try { localStorage.setItem('pwe_sheets_url', url); } catch(e){}
-
-        /* Animate icon */
-        if (icon) icon.style.animation = 'spin 1s linear infinite';
-        if (status) status.innerHTML = '⏳ Chajman done... <span style="color:#6b7280;font-size:9px;">'+url.slice(0,50)+'...</span>';
-
-        /* Fetch CSV — eseye dirèk, si echwe itilize proxy */
-        function doFetch(fetchUrl) {
-            return fetch(fetchUrl)
-                .then(function(r) {
-                    if (!r.ok) throw new Error('HTTP ' + r.status);
-                    return r.text();
-                });
-        }
-
-        function handleCSV(csv) {
-            var rows = parseCSV(csv);
-            if (rows.length < 2) throw new Error('CSV vid oswa fòma mal');
-            var leaderboard = buildLeaderboard(rows);
-            saveLeaderboard(leaderboard);
-            renderPublicLeaderboard(leaderboard);
-            if (icon) icon.style.animation = '';
-            if (status) {
-                status.innerHTML = '<span style="color:#10b981;">✅ '+leaderboard.length+' user chaje — '+new Date().toLocaleTimeString()+'</span>';
-            }
-            showToast('✅ Leaderboard mete ajou!', 'green');
-        }
-
-        function handleError(err) {
-            if (icon) icon.style.animation = '';
-            if (status) status.innerHTML = '<span style="color:#ef4444;">❌ '+err.message+'</span>';
-            showToast('❌ Sync echwe', 'red');
-        }
-
-        /* Tès 1: fetch dirèk */
-        doFetch(url)
-            .then(handleCSV)
-            .catch(function() {
-                /* Tès 2: proxy CORS */
-                if (status) status.textContent = '⏳ Proxy CORS...';
-                var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-                doFetch(proxyUrl)
-                    .then(handleCSV)
-                    .catch(function() {
-                        /* Tès 3: dezyèm proxy */
-                        var proxy2 = 'https://corsproxy.io/?' + encodeURIComponent(url);
-                        doFetch(proxy2)
-                            .then(handleCSV)
-                            .catch(handleError);
-                    });
+        try {
+            var lines = raw.split('\n').filter(function(l){ return l.trim(); });
+            var lb = [];
+            lines.forEach(function(line) {
+                line = line.trim();
+                if (!line) return;
+                /* Sipòte: "Lik,8" oswa "Lik	8" oswa "1	Lik	8" */
+                var parts = line.split(/[,	]+/);
+                /* Si premye kolòn se yon nimewo (rang), retire l */
+                var pseudo, pts, badge;
+                if (!isNaN(parts[0]) && parts.length >= 3) {
+                    pseudo = parts[1].trim();
+                    pts    = parseInt(parts[parts.length-2]) || 0;
+                    badge  = parts[parts.length-1].trim();
+                } else if (!isNaN(parts[0]) && parts.length === 2) {
+                    pseudo = parts[1].trim();
+                    pts    = 0;
+                } else {
+                    pseudo = parts[0].trim();
+                    pts    = parseInt(parts[1]) || 0;
+                    badge  = parts[2] ? parts[2].trim() : '';
+                }
+                if (!pseudo || pseudo==='PSEUDO' || pseudo==='#') return;
+                lb.push({ pseudo:pseudo, pts:pts, badge:badge||'' });
             });
+            if (lb.length === 0) throw new Error('Pa gen done valid');
+            lb.sort(function(a,b){ return b.pts - a.pts; });
+            saveLeaderboard(lb);
+            renderPublicLeaderboard(lb);
+            if (status) status.innerHTML = '<span style="color:#10b981;">✅ '+lb.length+' user chaje!</span>';
+            showToast('✅ Leaderboard aktive!', 'green');
+        } catch(e) {
+            if (status) status.innerHTML = '<span style="color:#ef4444;">❌ Erè: '+e.message+'</span>';
+        }
     }
+
 
     function parseCSV(csv) {
         var lines  = csv.trim().split('\n');
