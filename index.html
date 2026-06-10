@@ -3360,8 +3360,8 @@
         pred_sent:         { fr:'Vote envoyé ✓',              ht:'Vòt voye ✓',                  en:'Vote sent ✓'             },
         pred_impossible:   { fr:'1 vote par match — modification impossible', ht:'1 vòt pa match — pa ka chanje', en:'1 vote per match — cannot change' },
         pred_community_lbl:{ fr:'Communauté',                 ht:'Kominote',                    en:'Community'               },
-        pred_envoyer:      { fr:'ENVOYER',                    ht:'VOYE',                        en:'SEND'                    },
-        pred_envoyee:      { fr:'ENVOYÉE',                    ht:'VOYE ✓',                      en:'SENT ✓'                  },
+        pred_envoyer:      { fr:'ENVOYER MON SCORE',           ht:'VOYE SKOR MWEN',              en:'SEND MY SCORE'           },
+        pred_envoyee:      { fr:'SCORE ENVOYÉ ✓',             ht:'SKOR VOYE ✓',                 en:'SCORE SENT ✓'            },
     };
 
     var currentLang = 'fr';
@@ -4835,11 +4835,11 @@
                     <i class="fa-solid fa-user text-blue-400 text-2xl"></i>
                 </div>
                 <h3 class="font-athletic text-xl font-black uppercase text-white mb-1">Anvan ou vote...</h3>
-                <p class="text-xs text-gray-500">Antre yon non pou parèt nan Leaderboard la 🏆</p>
+                <p class="text-xs text-gray-500">Antre yon <strong>non</strong> pou parèt nan Leaderboard la 🏆</p>
             </div>
             <div class="space-y-3">
                 <input id="pseudo-input" type="text" maxlength="20"
-                    placeholder="Ton nom ou pseudo... (ex: TiJan, Grann500)"
+                    placeholder="Ton non... (ex: TiJan, Grann500)"
                     class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-bold text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition"
                     onkeydown="if(event.key==='Enter') confirmPseudo()">
                 <p class="text-[10px] text-gray-600 text-center">
