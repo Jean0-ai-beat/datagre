@@ -499,22 +499,18 @@
 
             <!-- ══ FEATURED VIDEO ══ -->
             <div id="hero-video" class="hero-anim mx-auto mt-12 max-w-3xl px-2" style="opacity:0;">
-                <p class="text-xs font-bold uppercase text-gray-500 tracking-wider mb-3 text-center">
-                    <i class="fa-brands fa-youtube text-red-500 mr-1.5"></i>
-                    <span>Haïti · Grenadye Ayiti</span>
-                </p>
-                <div class="relative w-full rounded-2xl overflow-hidden border border-gray-800 shadow-2xl"
-                     style="padding-top:56.25%;background:#0a0e1a;">
-                    <iframe
-                        id="hero-yt"
-                        src="https://www.youtube.com/embed/VYPuJc693eg?rel=0&modestbranding=1&color=white"
-                        title="Grenadye Ayiti"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                        loading="lazy"
-                        style="position:absolute;top:0;left:0;width:100%;height:100%;">
-                    </iframe>
+                <div class="relative w-full rounded-2xl overflow-hidden border border-gray-800 shadow-2xl">
+                    <video
+                        id="hero-vid"
+                        src="videos/hero_video.mp4"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        controls
+                        style="width:100%;display:block;border-radius:16px;max-height:480px;object-fit:cover;">
+                        <p class="text-gray-500 text-sm p-4">Navigatè ou pa sipòte video HTML5.</p>
+                    </video>
                 </div>
             </div>
 
