@@ -3360,6 +3360,8 @@
         pred_sent:         { fr:'Vote envoyé ✓',              ht:'Vòt voye ✓',                  en:'Vote sent ✓'             },
         pred_impossible:   { fr:'1 vote par match — modification impossible', ht:'1 vòt pa match — pa ka chanje', en:'1 vote per match — cannot change' },
         pred_community_lbl:{ fr:'Communauté',                 ht:'Kominote',                    en:'Community'               },
+        pred_before_vote:  { fr:'Anvan ou vote...',            ht:'Anvan ou vote...',            en:'Before you vote...'      },
+        pred_skip_anon:    { fr:'Kontinye anonim',             ht:'Kontinye anonim',             en:'Continue anonymous'      },
         pred_nom:          { fr:'Non',                         ht:'Non',                         en:'Name'                    },
         pred_envoyer:      { fr:'SOUMETTRE',                   ht:'SOUMET',                      en:'SUBMIT'                  },
         pred_envoyee:      { fr:'SOUMIS ✓',                   ht:'SOUMET ✓',                    en:'SUBMITTED ✓'             },
@@ -4835,7 +4837,7 @@
                 <div class="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
                     <i class="fa-solid fa-user text-blue-400 text-2xl"></i>
                 </div>
-                <h3 class="font-athletic text-xl font-black uppercase text-white mb-1">Anvan ou vote...</h3>
+                <h3 class="font-athletic text-xl font-black uppercase text-white mb-1" data-i18n="pred_before_vote">Anvan ou vote...</h3>
                 <p class="text-xs text-gray-500">Antre yon <strong data-i18n="pred_nom">Non</strong> pou parèt nan Leaderboard la 🏆</p>
             </div>
             <div class="space-y-3">
@@ -4849,11 +4851,11 @@
                 </p>
                 <button onclick="confirmPseudo()"
                     class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-black uppercase text-white transition active:scale-95">
-                    <i class="fa-solid fa-check mr-2"></i>Kontinye vote
+                    <i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="pred_envoyer">SOUMETTRE</span>
                 </button>
                 <button onclick="skipPseudo()"
                     class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition">
-                    Kontinye anonim (pa parèt nan leaderboard)
+                    <span data-i18n="pred_skip_anon">Kontinye anonim</span>
                 </button>
             </div>
         </div>
