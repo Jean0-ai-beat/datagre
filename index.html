@@ -226,7 +226,18 @@
     </style>
 </head>
 
-    <!-- ══ LOADING SCREEN ══ -->
+    
+    <!-- ══ SCROLL PROGRESS BAR ══ -->
+    <div id="scroll-progress" style="
+        position:fixed;top:0;left:0;z-index:9998;
+        height:3px;width:0%;
+        background:linear-gradient(90deg,#3b82f6 0%,#60a5fa 50%,#a78bfa 100%);
+        transition:width 0.1s linear;
+        box-shadow:0 0 8px rgba(59,130,246,0.6);
+        pointer-events:none;">
+    </div>
+
+<!-- ══ LOADING SCREEN ══ -->
     <div id="loading-screen" style="
         position:fixed;inset:0;z-index:9999;
         background:linear-gradient(135deg,#06070d 0%,#0c0f1a 50%,#06070d 100%);
@@ -2549,6 +2560,23 @@
         } else {
             initScrollReveal();
         }
+    })();
+
+
+    /* ══ SCROLL PROGRESS BAR ══ */
+    (function() {
+        var bar = document.getElementById('scroll-progress');
+        if (!bar) return;
+
+        function updateProgress() {
+            var scrollTop  = window.scrollY || document.documentElement.scrollTop;
+            var docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+            var pct        = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            bar.style.width = Math.min(pct, 100) + '%';
+        }
+
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        updateProgress();
     })();
 
 window.onload = function() {
