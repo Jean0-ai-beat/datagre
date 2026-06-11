@@ -1171,7 +1171,11 @@
             const player = playersDataset.find(function(p) { return p.id === playerId; });
             if (!player) return;
 
+            /* Kanpe audio si li t ap jwe */
+            if (typeof stopPlayerAudio === 'function') stopPlayerAudio();
+
             const modal = document.getElementById("player-modal");
+            modal.dataset.playerId = playerId;
             const modalBody = document.getElementById("modal-body");
             modalBody.innerHTML = "";
 
@@ -4821,7 +4825,7 @@
     }
 
     function stopPlayerAudio() {
-        window.speechSynthesis.cancel();
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
         isAudioPlaying = false;
         updateAudioBtn(false);
     }
@@ -4852,7 +4856,8 @@
         }
 
         /* Jwenn jwè ki ouvri kounye a */
-        var pid = document.getElementById('player-modal').dataset.playerId;
+        var modalEl = document.getElementById('player-modal');
+        var pid = modalEl ? modalEl.dataset.playerId : null;
         if (!pid) return;
         var player = playersDataset.find(function(p){ return p.id===pid; });
         if (!player) return;
