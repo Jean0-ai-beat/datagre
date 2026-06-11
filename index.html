@@ -224,6 +224,72 @@
         .delay-4 { transition-delay: 0.4s !important; }
         .delay-5 { transition-delay: 0.5s !important; }
     </style>
+
+    <style>
+        /* ══ LIGHT MODE ══ */
+        :root {
+            --bg-primary:   #0b0f19;
+            --bg-secondary: #0f1524;
+            --bg-card:      #111827;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --border-color: rgba(255,255,255,0.08);
+        }
+
+        body.light-mode {
+            --bg-primary:   #f1f5f9;
+            --bg-secondary: #ffffff;
+            --bg-card:      #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0,0,0,0.1);
+        }
+
+        /* Light mode overrides */
+        body.light-mode {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        body.light-mode nav {
+            background: rgba(255,255,255,0.95) !important;
+            border-color: rgba(0,0,0,0.1) !important;
+        }
+        body.light-mode nav a,
+        body.light-mode nav span,
+        body.light-mode nav p {
+            color: #0f172a !important;
+        }
+        body.light-mode .bg-\[\#0b0f19\],
+        body.light-mode .bg-\[\#0f1524\],
+        body.light-mode .bg-\[\#111827\],
+        body.light-mode .bg-\[\#070c18\] {
+            background-color: #ffffff !important;
+        }
+        body.light-mode section {
+            background-color: #f8fafc !important;
+        }
+        body.light-mode .text-white {
+            color: #0f172a !important;
+        }
+        body.light-mode .text-gray-400,
+        body.light-mode .text-gray-500,
+        body.light-mode .text-gray-600 {
+            color: #64748b !important;
+        }
+        body.light-mode .border-gray-800,
+        body.light-mode .border-gray-900 {
+            border-color: rgba(0,0,0,0.1) !important;
+        }
+        body.light-mode .bg-gray-900,
+        body.light-mode .bg-gray-950 {
+            background-color: #f1f5f9 !important;
+        }
+
+        /* Smooth transition pou tout eleman */
+        body, nav, section, div, p, h1, h2, h3, h4, span, a, button {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+        }
+    </style>
 </head>
 
     
@@ -327,6 +393,14 @@
                         <span id="lang-flag">🇫🇷</span>
                         <span id="lang-label" class="hidden sm:inline">FR</span>
                     </button>
+
+                    <!-- Theme toggle -->
+                    <button onclick="toggleTheme()" id="theme-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-full border border-gray-700 bg-gray-900/60 hover:border-gray-600 hover:bg-gray-800 transition"
+                        title="Dark / Light mode">
+                        <span id="theme-icon">🌙</span>
+                    </button>
+
                     <a href="https://www.tiktok.com/@playwinenjoy" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 rounded-full bg-red-600 px-4 py-2 text-xs font-bold uppercase text-white shadow-lg shadow-red-600/20 hover:bg-red-700 transition">
                         <i class="fab fa-tiktok"></i> <span class="hidden sm:inline" data-i18n="nav_follow">Suivre</span>
                     </a>
@@ -420,6 +494,27 @@
                 <span class="text-[10px] uppercase font-bold tracking-widest" data-i18n="scroll_label">Défiler</span>
                 <div class="w-5 h-8 rounded-full border border-gray-700 flex items-start justify-center p-1">
                     <div id="scroll-dot" class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                </div>
+            </div>
+
+            <!-- ══ FEATURED VIDEO ══ -->
+            <div id="hero-video" class="hero-anim mx-auto mt-12 max-w-3xl px-2" style="opacity:0;">
+                <p class="text-xs font-bold uppercase text-gray-500 tracking-wider mb-3 text-center">
+                    <i class="fa-brands fa-youtube text-red-500 mr-1.5"></i>
+                    <span>Haïti · Grenadye Ayiti</span>
+                </p>
+                <div class="relative w-full rounded-2xl overflow-hidden border border-gray-800 shadow-2xl"
+                     style="padding-top:56.25%;background:#0a0e1a;">
+                    <iframe
+                        id="hero-yt"
+                        src="https://www.youtube.com/embed/VYPuJc693eg?rel=0&modestbranding=1&color=white"
+                        title="Grenadye Ayiti"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        loading="lazy"
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;">
+                    </iframe>
                 </div>
             </div>
 
@@ -2577,6 +2672,40 @@
 
         window.addEventListener('scroll', updateProgress, { passive: true });
         updateProgress();
+    })();
+
+
+    /* ══ DARK / LIGHT MODE ══ */
+    var isDarkMode = true;
+
+    function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        var body = document.body;
+        var icon = document.getElementById('theme-icon');
+
+        if (isDarkMode) {
+            body.classList.remove('light-mode');
+            if (icon) icon.textContent = '🌙';
+        } else {
+            body.classList.add('light-mode');
+            if (icon) icon.textContent = '☀️';
+        }
+
+        /* Sove preferans */
+        try { localStorage.setItem('pwe_theme', isDarkMode ? 'dark' : 'light'); } catch(e) {}
+    }
+
+    /* Chaje preferans sove */
+    (function() {
+        try {
+            var saved = localStorage.getItem('pwe_theme');
+            if (saved === 'light') {
+                isDarkMode = false;
+                document.body.classList.add('light-mode');
+                var icon = document.getElementById('theme-icon');
+                if (icon) icon.textContent = '☀️';
+            }
+        } catch(e) {}
     })();
 
 window.onload = function() {
