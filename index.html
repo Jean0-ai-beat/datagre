@@ -3425,6 +3425,11 @@
         // Section titles with data-i18n already handled above
         // Update document lang attribute
         document.documentElement.lang = lang === 'ht' ? 'ht' : lang === 'en' ? 'en' : 'fr';
+
+        /* Re-render prediction cards — mete ajou bouton + tèks dinamik */
+        if (typeof renderPredictionCards === 'function') {
+            renderPredictionCards();
+        }
     }
 
     function initI18n() {
