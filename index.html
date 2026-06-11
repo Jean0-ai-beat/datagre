@@ -988,9 +988,17 @@
             <div class="sticky top-0 z-10 bg-[#0f1524] px-4 pt-3 pb-2 flex items-center justify-between border-b border-gray-900/60">
                 <div class="w-10 h-1 bg-gray-700 rounded-full sm:hidden"></div>
                 <div class="hidden sm:block text-xs font-bold uppercase text-gray-500 tracking-wider">Fiche Joueur</div>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white transition ml-auto">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
+                <div class="flex items-center gap-2 ml-auto">
+                    <button id="audio-btn" onclick="togglePlayerAudio()"
+                        class="w-8 h-8 rounded-full flex items-center justify-center transition active:scale-95"
+                        style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.2);color:#60a5fa;"
+                        title="Koute fiche a">
+                        <i id="audio-icon" class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+                    <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white transition">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
             </div>
             <div id="modal-body" class="p-4 sm:p-8"></div>
         </div>
@@ -4794,6 +4802,115 @@
 
             body.appendChild(row);
         });
+    }
+
+
+    /* ══════════════════════════════════════════
+       AUDIO — Web Speech API (TTS)
+    ══════════════════════════════════════════ */
+
+    var currentAudio  = null;
+    var isAudioPlaying = false;
+
+    function togglePlayerAudio() {
+        if (isAudioPlaying) {
+            stopPlayerAudio();
+        } else {
+            readPlayerFiche();
+        }
+    }
+
+    function stopPlayerAudio() {
+        window.speechSynthesis.cancel();
+        isAudioPlaying = false;
+        updateAudioBtn(false);
+    }
+
+    function updateAudioBtn(playing) {
+        var btn  = document.getElementById('audio-btn');
+        var icon = document.getElementById('audio-icon');
+        if (!btn || !icon) return;
+        if (playing) {
+            btn.style.background  = 'rgba(239,68,68,0.15)';
+            btn.style.borderColor = 'rgba(239,68,68,0.3)';
+            btn.style.color       = '#f87171';
+            icon.className        = 'fa-solid fa-stop text-xs';
+            btn.title             = 'Kanpe';
+        } else {
+            btn.style.background  = 'rgba(59,130,246,0.12)';
+            btn.style.borderColor = 'rgba(59,130,246,0.2)';
+            btn.style.color       = '#60a5fa';
+            icon.className        = 'fa-solid fa-volume-high text-xs';
+            btn.title             = 'Koute fiche a';
+        }
+    }
+
+    function readPlayerFiche() {
+        if (!window.speechSynthesis) {
+            showToast('❌ Navigatè ou pa sipòte audio', 'red');
+            return;
+        }
+
+        /* Jwenn jwè ki ouvri kounye a */
+        var pid = document.getElementById('player-modal').dataset.playerId;
+        if (!pid) return;
+        var player = playersDataset.find(function(p){ return p.id===pid; });
+        if (!player) return;
+
+        var lang = currentLang || 'fr';
+
+        /* Konstui tèks pou li */
+        var text = '';
+        if (lang === 'ht') {
+            text = player.name + '. '
+                + (player.pos || '') + ', '
+                + (player.club ? 'Klib: ' + player.club + '. ' : '')
+                + (player.age  ? 'Laj: ' + player.age + ' an. ' : '')
+                + (player.caps ? 'Seleksyon: ' + player.caps + '. ' : '')
+                + (player.goals != null ? 'Gòl: ' + player.goals + '. ' : '')
+                + (player.bio  ? player.bio : '');
+        } else if (lang === 'en') {
+            text = player.name + '. '
+                + (player.pos || '') + '. '
+                + (player.club  ? 'Club: ' + player.club + '. ' : '')
+                + (player.age   ? 'Age: ' + player.age + ' years old. ' : '')
+                + (player.caps  ? 'Caps: ' + player.caps + '. ' : '')
+                + (player.goals != null ? 'Goals: ' + player.goals + '. ' : '')
+                + (player.bio_en ? player.bio_en : player.bio || '');
+        } else {
+            /* FR default */
+            text = player.name + '. '
+                + (player.pos || '') + '. '
+                + (player.club  ? 'Club: ' + player.club + '. ' : '')
+                + (player.age   ? 'Âge: ' + player.age + ' ans. ' : '')
+                + (player.caps  ? 'Sélections: ' + player.caps + '. ' : '')
+                + (player.goals != null ? 'Buts: ' + player.goals + '. ' : '')
+                + (player.bio   ? player.bio : '');
+        }
+
+        /* Speech synthesis */
+        window.speechSynthesis.cancel();
+        var utt  = new SpeechSynthesisUtterance(text);
+        utt.lang = lang === 'ht' ? 'fr-HT' : lang === 'en' ? 'en-US' : 'fr-FR';
+        utt.rate = 0.95;
+        utt.pitch = 1.0;
+        utt.volume = 1.0;
+
+        /* Chèche vwa Français si disponib */
+        var voices = window.speechSynthesis.getVoices();
+        var targetLang = utt.lang.split('-')[0];
+        var voice = voices.find(function(v) {
+            return v.lang.startsWith(targetLang);
+        });
+        if (voice) utt.voice = voice;
+
+        utt.onstart   = function() { isAudioPlaying = true;  updateAudioBtn(true);  };
+        utt.onend     = function() { isAudioPlaying = false; updateAudioBtn(false); };
+        utt.onerror   = function() { isAudioPlaying = false; updateAudioBtn(false); };
+
+        window.speechSynthesis.speak(utt);
+        isAudioPlaying = true;
+        updateAudioBtn(true);
     }
 
     /* ── INIT ── */
