@@ -3360,6 +3360,7 @@
         pred_sent:         { fr:'Soumis ✓',                   ht:'Soumet ✓',                    en:'Submitted ✓'             },
         pred_impossible:   { fr:'1 soumission par match — modification impossible', ht:'1 soumisyon pa match — pa ka chanje', en:'1 submission per match — cannot change' },
         pred_community_lbl:{ fr:'Communauté',                 ht:'Kominote',                    en:'Community'               },
+        pred_share:        { fr:'Partager ma prédiction', ht:'Pataje prediksyon mwen', en:'Share my prediction' },
         pred_before_vote:  { fr:'Anvan ou vote...',            ht:'Anvan ou vote...',            en:'Before you vote...'      },
         pred_skip_anon:    { fr:'Kontinye anonim',             ht:'Kontinye anonim',             en:'Continue anonymous'      },
         pred_nom:          { fr:'Non',                         ht:'Non',                         en:'Name'                    },
@@ -4084,7 +4085,7 @@
                     + 'class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border text-xs font-bold uppercase transition hover:-translate-y-0.5 active:scale-95 mb-1" '
                     + 'style="background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.1);color:#9ca3af;">'
                     + '<i class="fa-solid fa-share-nodes text-xs"></i>'
-                    + '<span>Partager ma prédiction</span>'
+                    + '<span>'+(i18n.pred_share&&i18n.pred_share[currentLang||"fr"]||"Partager ma prédiction")+"</span>"
                     + '</button>';
 
             } else {
