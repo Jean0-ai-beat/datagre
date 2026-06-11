@@ -178,7 +178,119 @@
         gtag('js', new Date());
         gtag('config', 'G-54TL1DDLFG');
     </script>
+
+    <style>
+        /* ══ SCROLL REVEAL ══ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal-left.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal-right.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .reveal-scale.revealed {
+            opacity: 1;
+            transform: scale(1);
+        }
+        /* Delay classes */
+        .delay-1 { transition-delay: 0.1s !important; }
+        .delay-2 { transition-delay: 0.2s !important; }
+        .delay-3 { transition-delay: 0.3s !important; }
+        .delay-4 { transition-delay: 0.4s !important; }
+        .delay-5 { transition-delay: 0.5s !important; }
+    </style>
 </head>
+
+    <!-- ══ LOADING SCREEN ══ -->
+    <div id="loading-screen" style="
+        position:fixed;inset:0;z-index:9999;
+        background:linear-gradient(135deg,#06070d 0%,#0c0f1a 50%,#06070d 100%);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        transition:opacity 0.6s ease,visibility 0.6s ease;">
+
+        <!-- Particles bg -->
+        <div id="ls-particles" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;"></div>
+
+        <!-- Logo container -->
+        <div id="ls-logo" style="position:relative;z-index:1;text-align:center;">
+            <img src="data:image/webp;base64,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" alt="PWESPORTS"
+                style="width:100px;height:100px;object-fit:contain;
+                       animation:lsPulse 1.5s ease-in-out infinite;
+                       filter:drop-shadow(0 0 20px rgba(59,130,246,0.5));">
+
+            <!-- Cercle animé -->
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                        width:130px;height:130px;border-radius:50%;
+                        border:2px solid transparent;
+                        border-top-color:#3b82f6;border-right-color:#3b82f6;
+                        animation:lsSpin 1s linear infinite;"></div>
+        </div>
+
+        <!-- Texte -->
+        <div style="position:relative;z-index:1;margin-top:32px;text-align:center;">
+            <p style="font-family:Oswald,sans-serif;font-size:22px;font-weight:900;
+                      color:white;letter-spacing:0.15em;margin:0 0 8px;">
+                PWESPORTS
+            </p>
+            <p id="ls-tagline" style="font-size:12px;color:rgba(255,255,255,0.4);
+                             letter-spacing:0.1em;margin:0;">
+                GRENADYE · MONDIAL 2026
+            </p>
+        </div>
+
+        <!-- Barre pwogresyon -->
+        <div style="position:relative;z-index:1;margin-top:40px;width:180px;
+                    height:2px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;">
+            <div id="ls-progress" style="height:100%;width:0%;border-radius:2px;
+                background:linear-gradient(90deg,#3b82f6,#60a5fa);
+                transition:width 0.3s ease;"></div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes lsPulse {
+            0%,100% { transform:scale(1);   opacity:1;   }
+            50%      { transform:scale(1.08);opacity:0.85; }
+        }
+        @keyframes lsSpin {
+            to { transform:translate(-50%,-50%) rotate(360deg); }
+        }
+        @keyframes lsFadeIn {
+            from { opacity:0; transform:translateY(10px); }
+            to   { opacity:1; transform:translateY(0);    }
+        }
+        #loading-screen.hidden-screen {
+            opacity:0 !important;
+            visibility:hidden !important;
+            pointer-events:none;
+        }
+    </style>
+
 <body class="text-gray-200 antialiased bg-[#0b0f19]">
 
     <nav class="sticky top-0 z-40 border-b border-gray-800 bg-[#0b0f19]/90 backdrop-blur-md">
@@ -643,7 +755,7 @@
             </div>
 
             <div class="space-y-4">
-                <div class="match-card bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 reveal reveal-delay-1">
+                <div class="match-card reveal bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 reveal reveal-delay-1">
                     <div class="text-center sm:text-left">
                         <span class="text-xs font-bold text-red-500 block mb-1">MATCH 1</span>
                         <span class="text-xs text-gray-400 font-medium block"><i class="fa-regular fa-calendar-days mr-1.5"></i>Samedi 13 Juin 2026</span>
@@ -666,7 +778,7 @@
                     </div>
                 </div>
 
-                <div class="match-card bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 reveal reveal-delay-2">
+                <div class="match-card reveal bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 reveal reveal-delay-2">
                     <div class="text-center sm:text-left">
                         <span class="text-xs font-bold text-red-500 block mb-1">MATCH 2</span>
                         <span class="text-xs text-gray-400 font-medium block"><i class="fa-regular fa-calendar-days mr-1.5"></i>Vendredi 19 Juin 2026</span>
@@ -689,7 +801,7 @@
                     </div>
                 </div>
 
-                <div class="match-card bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 reveal reveal-delay-3">
+                <div class="match-card reveal bg-[#0e1322] border border-gray-900 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 reveal reveal-delay-3">
                     <div class="text-center sm:text-left">
                         <span class="text-xs font-bold text-red-500 block mb-1">MATCH 3</span>
                         <span class="text-xs text-gray-400 font-medium block"><i class="fa-regular fa-calendar-days mr-1.5"></i>Mercredi 24 Juin 2026</span>
@@ -2314,7 +2426,132 @@
     }
 
     /* ── INIT GLOBAL ── */
-    window.onload = function() {
+    
+    /* ══ LOADING SCREEN ══ */
+    (function() {
+        /* Particles */
+        var canvas = document.createElement('canvas');
+        var ctx    = canvas.getContext('2d');
+        var cont   = document.getElementById('ls-particles');
+        if (!cont) return;
+        canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
+        cont.appendChild(canvas);
+
+        var W, H, particles = [];
+
+        function resize() {
+            W = canvas.width  = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        for (var i=0; i<60; i++) {
+            particles.push({
+                x: Math.random()*1000, y: Math.random()*1000,
+                vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4,
+                r: Math.random()*1.5+0.5,
+                a: Math.random()
+            });
+        }
+
+        var animFrame;
+        function drawParticles() {
+            ctx.clearRect(0,0,W,H);
+            particles.forEach(function(p) {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x<0) p.x=W; if (p.x>W) p.x=0;
+                if (p.y<0) p.y=H; if (p.y>H) p.y=0;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                ctx.fillStyle = 'rgba(59,130,246,'+p.a*0.4+')';
+                ctx.fill();
+            });
+            animFrame = requestAnimationFrame(drawParticles);
+        }
+        drawParticles();
+
+        /* Barre pwogresyon */
+        var prog  = document.getElementById('ls-progress');
+        var pct   = 0;
+        var timer = setInterval(function() {
+            pct += Math.random()*15 + 5;
+            if (pct > 90) pct = 90;
+            if (prog) prog.style.width = pct + '%';
+        }, 200);
+
+        /* Kache loading screen apre paj la chaje */
+        function hideLoader() {
+            clearInterval(timer);
+            cancelAnimationFrame(animFrame);
+            if (prog) prog.style.width = '100%';
+            setTimeout(function() {
+                var screen = document.getElementById('loading-screen');
+                if (screen) screen.classList.add('hidden-screen');
+                /* Retire nèt apre transition */
+                setTimeout(function() {
+                    if (screen) screen.style.display = 'none';
+                }, 700);
+            }, 300);
+        }
+
+        if (document.readyState === 'complete') {
+            hideLoader();
+        } else {
+            window.addEventListener('load', hideLoader);
+            /* Fallback — kache apre 3 segonn maksimòm */
+            setTimeout(hideLoader, 3000);
+        }
+    })();
+
+
+    /* ══ SCROLL REVEAL — Intersection Observer ══ */
+    (function() {
+        function initScrollReveal() {
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+            /* Observe all reveal elements */
+            document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(function(el, i) {
+                /* Ajoute ti delay pa eleman */
+                if (!el.classList.contains('delay-1') &&
+                    !el.classList.contains('delay-2') &&
+                    !el.classList.contains('delay-3')) {
+                    var delay = (i % 5) * 0.08;
+                    el.style.transitionDelay = delay + 's';
+                }
+                observer.observe(el);
+            });
+        }
+
+        /* Re-observe apre chak render dinamik */
+        window.refreshScrollReveal = function() {
+            document.querySelectorAll('.reveal:not(.revealed), .reveal-left:not(.revealed), .reveal-right:not(.revealed), .reveal-scale:not(.revealed)').forEach(function(el) {
+                var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('revealed');
+                        }
+                    });
+                }, { threshold: 0.1 });
+                observer.observe(el);
+            });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initScrollReveal);
+        } else {
+            initScrollReveal();
+        }
+    })();
+
+window.onload = function() {
         renderRoster(playersDataset);
         initHeroAnimations();
         initParticles();
