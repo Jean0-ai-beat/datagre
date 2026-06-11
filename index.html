@@ -4855,7 +4855,6 @@
             return;
         }
 
-        /* Jwenn jwè ki ouvri kounye a */
         var modalEl = document.getElementById('player-modal');
         var pid = modalEl ? modalEl.dataset.playerId : null;
         if (!pid) return;
@@ -4864,33 +4863,20 @@
 
         var lang = currentLang || 'fr';
 
-        /* Konstui tèks pou li */
+        /* Sèlman: Non, Pozisyon, Club */
         var text = '';
         if (lang === 'ht') {
             text = player.name + '. '
-                + (player.pos || '') + ', '
-                + (player.club ? 'Klib: ' + player.club + '. ' : '')
-                + (player.age  ? 'Laj: ' + player.age + ' an. ' : '')
-                + (player.caps ? 'Seleksyon: ' + player.caps + '. ' : '')
-                + (player.goals != null ? 'Gòl: ' + player.goals + '. ' : '')
-                + (player.bio  ? player.bio : '');
+                + (player.pos  ? player.pos + '. ' : '')
+                + (player.club ? 'Klib: ' + player.club + '.' : '');
         } else if (lang === 'en') {
             text = player.name + '. '
-                + (player.pos || '') + '. '
-                + (player.club  ? 'Club: ' + player.club + '. ' : '')
-                + (player.age   ? 'Age: ' + player.age + ' years old. ' : '')
-                + (player.caps  ? 'Caps: ' + player.caps + '. ' : '')
-                + (player.goals != null ? 'Goals: ' + player.goals + '. ' : '')
-                + (player.bio_en ? player.bio_en : player.bio || '');
+                + (player.pos  ? player.pos + '. ' : '')
+                + (player.club ? 'Club: ' + player.club + '.' : '');
         } else {
-            /* FR default */
             text = player.name + '. '
-                + (player.pos || '') + '. '
-                + (player.club  ? 'Club: ' + player.club + '. ' : '')
-                + (player.age   ? 'Âge: ' + player.age + ' ans. ' : '')
-                + (player.caps  ? 'Sélections: ' + player.caps + '. ' : '')
-                + (player.goals != null ? 'Buts: ' + player.goals + '. ' : '')
-                + (player.bio   ? player.bio : '');
+                + (player.pos  ? player.pos + '. ' : '')
+                + (player.club ? 'Club: ' + player.club + '.' : '');
         }
 
         /* Speech synthesis */
