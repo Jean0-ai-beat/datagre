@@ -4864,18 +4864,26 @@
         var lang = currentLang || 'fr';
 
         /* Sèlman: Non, Pozisyon, Club */
+        /* Normalize role pou son natirèl */
+        var roleMap = {
+            fr: { 'Gardiens':'Gardien de but', 'Défenseurs':'Défenseur', 'Milieux':'Milieu de terrain', 'Attaquants':'Attaquant' },
+            ht: { 'Gardiens':'Gadyen pòt', 'Défenseurs':'Defansè', 'Milieux':'Mitan teren', 'Attaquants':'Atakan' },
+            en: { 'Gardiens':'Goalkeeper', 'Défenseurs':'Defender', 'Milieux':'Midfielder', 'Attaquants':'Forward' }
+        };
+        var roleText = (roleMap[lang] && roleMap[lang][player.role]) ? roleMap[lang][player.role] : (player.role || '');
+
         var text = '';
         if (lang === 'ht') {
             text = player.name + '. '
-                + (player.pos  ? player.pos + '. ' : '')
+                + (roleText ? roleText + '. ' : '')
                 + (player.club ? 'Klib: ' + player.club + '.' : '');
         } else if (lang === 'en') {
             text = player.name + '. '
-                + (player.pos  ? player.pos + '. ' : '')
+                + (roleText ? roleText + '. ' : '')
                 + (player.club ? 'Club: ' + player.club + '.' : '');
         } else {
             text = player.name + '. '
-                + (player.pos  ? player.pos + '. ' : '')
+                + (roleText ? roleText + '. ' : '')
                 + (player.club ? 'Club: ' + player.club + '.' : '');
         }
 
