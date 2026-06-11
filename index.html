@@ -3357,8 +3357,8 @@
         pred_after:        { fr:'Après les matchs',           ht:'Apre match yo',               en:'After the matches'       },
         pred_locked:       { fr:'Prédictions fermées',        ht:'Prediksyon fèmen',            en:'Predictions closed'      },
         pred_started:      { fr:'Le match a commencé',        ht:'Match la kòmanse',            en:'Match started'           },
-        pred_sent:         { fr:'Vote envoyé ✓',              ht:'Vòt voye ✓',                  en:'Vote sent ✓'             },
-        pred_impossible:   { fr:'1 vote par match — modification impossible', ht:'1 vòt pa match — pa ka chanje', en:'1 vote per match — cannot change' },
+        pred_sent:         { fr:'Soumis ✓',                   ht:'Soumet ✓',                    en:'Submitted ✓'             },
+        pred_impossible:   { fr:'1 soumission par match — modification impossible', ht:'1 soumisyon pa match — pa ka chanje', en:'1 submission per match — cannot change' },
         pred_community_lbl:{ fr:'Communauté',                 ht:'Kominote',                    en:'Community'               },
         pred_before_vote:  { fr:'Anvan ou vote...',            ht:'Anvan ou vote...',            en:'Before you vote...'      },
         pred_skip_anon:    { fr:'Kontinye anonim',             ht:'Kontinye anonim',             en:'Continue anonymous'      },
@@ -4042,7 +4042,7 @@
             var statusBadge = locked
                 ? '<span class="text-[10px] font-bold text-red-400"><i class="fa-solid fa-lock mr-1"></i>Fermé</span>'
                 : voted
-                    ? '<span class="text-[10px] font-bold text-emerald-400"><i class="fa-solid fa-check mr-1"></i>Envoyé</span>'
+                    ? '<span class="text-[10px] font-bold text-emerald-400"><i class="fa-solid fa-check mr-1"></i>'+(i18n.pred_sent&&i18n.pred_sent[currentLang||"fr"]||"Soumis")+'</span>'
                     : '<span class="text-[10px] font-bold text-amber-400"><i class="fa-regular fa-clock mr-1"></i>'+(getTimeRemaining(match)||'')+'</span>';
 
             /* ── SCORE AFFICHÉ ── */
@@ -4161,7 +4161,6 @@
                     + 'onclick="handleEnvoyerBtn(this)" '
                     + 'class="w-full py-3.5 rounded-2xl text-sm font-black uppercase flex items-center justify-center gap-2 transition-all active:scale-95" '
                     + 'style="background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;box-shadow:0 4px 20px rgba(37,99,235,0.35);letter-spacing:0.05em;">'
-                    + '<i class="fa-solid fa-paper-plane text-xs"></i>'
                     + '<span>'+(i18n.pred_envoyer&&i18n.pred_envoyer[currentLang||'fr']||'ENVOYER')+'</span>'
                     + '</button>';
             }
@@ -4856,7 +4855,7 @@
                 </p>
                 <button onclick="confirmPseudo()"
                     class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-black uppercase text-white transition active:scale-95">
-                    <i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="pred_envoyer">SOUMETTRE</span>
+                    <span data-i18n="pred_envoyer">SOUMETTRE</span>
                 </button>
                 <button onclick="skipPseudo()"
                     class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition">
