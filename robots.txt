@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://grenadyehub.vercel.app/sitemap.xml
