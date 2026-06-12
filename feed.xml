@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>GrenadyeHub — Actualités Haïti FIFA World Cup 2026</title>
+  <link>https://grenadyehub.com/</link>
+  <atom:link href="https://grenadyehub.com/feed.xml" rel="self" type="application/rss+xml" />
+  <description>Toutes les actualités des Grenadiers d'Haïti pour la Coupe du Monde FIFA 2026</description>
+  <language>fr</language>
+  <lastBuildDate>Fri, 12 Jun 2026 06:31:35 GMT</lastBuildDate>
+  <image>
+    <url>https://grenadyehub.com/og-preview.jpg</url>
+    <title>GrenadyeHub</title>
+    <link>https://grenadyehub.com/</link>
+  </image>
+
+  <item>
+    <title>⚡ Jean-Ricner Bellegarde impressionne en Premier League</title>
+    <link>https://grenadyehub.com/#actualites</link>
+    <guid isPermaLink="false">grenadyehub-2026-03-10-jean-ricner-bellegarde-impressionne-en-p</guid>
+    <pubDate>Tue, 10 Mar 2026 00:00:00 GMT</pubDate>
+    <category>Performance</category>
+    <author>GrenadyeHub</author>
+    <description>Le milieu des Grenadiers continue de s'affirmer sous les couleurs de Wolverhampton. Ses performances régulières en Premier League font de lui l'un des joueurs les plus attendus du Mondial 2026.</description>
+  </item>
+  <item>
+    <title>🔵 Wilson Isidor rejoint Sunderland et vise le Mondial</title>
+    <link>https://grenadyehub.com/#actualites</link>
+    <guid isPermaLink="false">grenadyehub-2026-01-22-wilson-isidor-rejoint-sunderland-et-vise</guid>
+    <pubDate>Thu, 22 Jan 2026 00:00:00 GMT</pubDate>
+    <category>Officiel</category>
+    <author>GrenadyeHub</author>
+    <description>L'attaquant de pointe des Grenadiers a signé avec Sunderland en Championship anglaise. Avec sa vitesse explosive, Isidor sera l'une des armes offensives majeures d'Haïti au Mondial 2026.</description>
+  </item>
+  <item>
+    <title>🏆 Haïti dans le Groupe C : Brésil, Maroc et Écosse au programme</title>
+    <link>https://grenadyehub.com/#actualites</link>
+    <guid isPermaLink="false">grenadyehub-2025-12-15-ha-ti-dans-le-groupe-c-br-sil-maroc-et-c</guid>
+    <pubDate>Mon, 15 Dec 2025 00:00:00 GMT</pubDate>
+    <category>Coupe du Monde</category>
+    <author>GrenadyeHub</author>
+    <description>Le tirage au sort de la FIFA a placé les Grenadiers dans un groupe relevé. Haïti affrontera le Brésil le 19 juin, l'Écosse le 13 juin et le Maroc le 24 juin 2026 dans les stades américains.</description>
+  </item>
+
+</channel>
+</rss>
