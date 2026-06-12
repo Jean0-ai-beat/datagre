@@ -2280,6 +2280,8 @@
             var cy=ev.type==='touchmove'?ev.touches[0].clientY:ev.clientY;
             if (Math.abs(cx-sx)>5||Math.abs(cy-sy)>5) dragState.moved=true;
             if (!dragState.moved) return;
+            /* Anpeche scroll paj la pandan vrè drag */
+            if (ev.type==='touchmove' && ev.cancelable) ev.preventDefault();
             var nx=Math.max(10,Math.min(rect.width-10,cx-rect.left));
             var ny=Math.max(10,Math.min(rect.height-10,cy-rect.top));
             token.style.left=nx+'px'; token.style.top=ny+'px';
@@ -2289,9 +2291,27 @@
             token.style.zIndex=10;
             document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onEnd);
             document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);
+            /* Sove pozisyon yo si gen chanjman */
+            if (dragState.moved) saveTokenPositions();
         }
         document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onEnd);
-        document.addEventListener('touchmove',onMove,{passive:true});document.addEventListener('touchend',onEnd);
+        document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onEnd);
+    }
+
+    /* ── PÈSISTANS POZISYON JWÈ ── */
+    function saveTokenPositions() {
+        try {
+            localStorage.setItem('pwe_token_pos_'+currentFormation, JSON.stringify(tokenPositions));
+        } catch(e){}
+    }
+    function loadTokenPositions() {
+        try {
+            var raw = localStorage.getItem('pwe_token_pos_'+currentFormation);
+            if (raw) {
+                var saved = JSON.parse(raw);
+                for (var k in saved) tokenPositions[k] = saved[k];
+            }
+        } catch(e){}
     }
 
     /* ---- APPLIQUER FORMATION ---- */
@@ -2299,6 +2319,7 @@
         currentFormation  = formation;
         tokenPositions    = {};
         selectedStarterId = null;
+        loadTokenPositions(); /* Chaje pozisyon sove pou fòmasyon sa */
 
         // Reconstruire lineup : garder positions personnalisées, utiliser défaut sinon
         var ids    = formationLineups[formation];
@@ -2600,7 +2621,7 @@
         var rt;
         window.addEventListener('resize', function(){
             clearTimeout(rt);
-            rt=setTimeout(function(){ tokenPositions={}; renderPitchPlayers(); }, 200);
+            rt=setTimeout(function(){ renderPitchPlayers(); }, 200); /* gade pozisyon kustom yo */
         });
     }
     </script>
