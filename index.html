@@ -1245,8 +1245,8 @@
         <p>&copy; 2026 <span class="text-white font-bold font-athletic tracking-wide">GrenadyeHub</span>. <span data-i18n="footer_rights">Tous droits réservés.</span></p>
     </footer>
 
-    <div id="player-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="relative bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl transition-all duration-300 transform translate-y-full sm:translate-y-0">
+    <div id="player-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+        <div class="relative bg-[#0f1524] border border-gray-800 rounded-3xl w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl transition-all duration-300 transform scale-95 opacity-0">
             <!-- Poignée mobile -->
             <div class="sticky top-0 z-10 bg-[#0f1524] px-4 pt-3 pb-2 flex items-center justify-between border-b border-gray-900/60">
                 <div class="w-10 h-1 bg-gray-700 rounded-full sm:hidden"></div>
@@ -1591,7 +1591,10 @@
             modal.classList.remove("hidden");
             setTimeout(function() {
                 const inner = modal.querySelector('.relative');
-                if (inner) inner.classList.remove("translate-y-full");
+                if (inner) {
+                    inner.classList.remove("scale-95", "opacity-0");
+                    inner.classList.add("scale-100", "opacity-100");
+                }
             }, 10);
         }
 
@@ -1599,7 +1602,10 @@
         function closeModal() {
             const modal = document.getElementById("player-modal");
             const inner = modal.querySelector('.relative');
-            if (inner) inner.classList.add("translate-y-full");
+            if (inner) {
+                inner.classList.remove("scale-100", "opacity-100");
+                inner.classList.add("scale-95", "opacity-0");
+            }
             setTimeout(function() { modal.classList.add("hidden"); }, 250);
         }
 
