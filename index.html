@@ -5808,11 +5808,11 @@ window.onload = function() {
 
         /* 2. Tèks "HÉRO" k ap vole anlè */
         var labels = ['🇭🇹 HÉRO', '🏆 GRENADYE ALASO', '👑 CHAMPION'];
-        /* Pozisyon fiks pou chak label — yon liy separe, pa kole */
+        /* Pozisyon fiks — 3 zòn distenkt (gòch/santral/dwat), espasman vètikal klè */
         var startPositions = [
-            { left: 12, top: 70 },
-            { left: 28, top: 50 },
-            { left: 14, top: 32 }
+            { left: 8,  top: 75 },
+            { left: 8,  top: 48 },
+            { left: 8,  top: 21 }
         ];
 
         for (var i = 0; i < labels.length; i++) {
@@ -5821,17 +5821,19 @@ window.onload = function() {
                     var pos = startPositions[idx];
                     var el = document.createElement('div');
                     el.textContent = label;
+                    var fsize = window.innerWidth < 400 ? 15 : 20;
                     el.style.cssText = [
                         'position:fixed;z-index:9996;pointer-events:none;',
                         'left:' + pos.left + 'vw;',
                         'top:' + pos.top + 'vh;',
-                        'font-family:Oswald,sans-serif;font-weight:900;font-size:20px;',
+                        'font-family:Oswald,sans-serif;font-weight:900;font-size:' + fsize + 'px;',
                         'color:#fbbf24;text-shadow:0 2px 8px rgba(0,0,0,0.6);',
                         'letter-spacing:0.04em;',
                         'opacity:0;',
                         'transform:translateY(0) scale(0.6);',
                         'transition:transform 1.8s cubic-bezier(0.2,0.8,0.3,1), opacity 1.8s ease-out;',
-                        'white-space:nowrap;'
+                        'white-space:nowrap;',
+                        'max-width:90vw;'
                     ].join('');
                     document.body.appendChild(el);
 
