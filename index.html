@@ -810,6 +810,10 @@
                             </div>
                             <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 320 480" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                                 <rect x="8" y="8" width="304" height="464" rx="7" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                                <path d="M 8 18 A 10 10 0 0 1 18 8"   fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                                <path d="M 302 8 A 10 10 0 0 1 312 18" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                                <path d="M 8 462 A 10 10 0 0 0 18 472" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                                <path d="M 312 462 A 10 10 0 0 1 302 472" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
                                 <line x1="8" y1="240" x2="312" y2="240" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
                                 <circle cx="160" cy="240" r="38" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
                                 <circle cx="160" cy="240" r="3" fill="rgba(255,255,255,0.3)"/>
@@ -2422,10 +2426,35 @@
         ctx.strokeRect(PX+W*0.015, PY+H*0.008, PW-W*0.03, PH-H*0.016);
         ctx.beginPath(); ctx.moveTo(PX+W*0.015,PY+PH/2); ctx.lineTo(PX+PW-W*0.015,PY+PH/2); ctx.stroke();
         ctx.beginPath(); ctx.arc(PX+PW/2,PY+PH/2,PW*0.13,0,Math.PI*2); ctx.stroke();
+        /* Gwo surface (18-yard box) */
         ctx.strokeStyle='rgba(255,255,255,0.12)';
         var bw2=PW*0.58, bx4=PX+(PW-bw2)/2;
         ctx.strokeRect(bx4,PY+H*0.008,bw2,PH*0.15);
         ctx.strokeRect(bx4,PY+PH-PH*0.15-H*0.008,bw2,PH*0.15);
+
+        /* Ti surface (6-yard box) — anndan gwo surface a */
+        ctx.strokeStyle='rgba(255,255,255,0.10)';
+        var bw3=PW*0.325, bx5=PX+(PW-bw3)/2;
+        var smallH = PH*0.06;
+        ctx.strokeRect(bx5,PY+H*0.008,bw3,smallH);
+        ctx.strokeRect(bx5,PY+PH-smallH-H*0.008,bw3,smallH);
+
+        /* Pwen penalty */
+        ctx.fillStyle='rgba(255,255,255,0.3)';
+        var penDot = Math.max(2, W*0.0025);
+        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH*0.12, penDot, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(PX+PW/2, PY+PH*0.88, penDot, 0, Math.PI*2); ctx.fill();
+
+        /* Ti won corner (4 kwen) */
+        ctx.strokeStyle='rgba(255,255,255,0.15)';
+        var cR = PW*0.03;
+        var x0=PX+W*0.015, y0=PY+H*0.008, x1=PX+PW-W*0.015, y1=PY+PH-H*0.008;
+        ctx.beginPath(); ctx.arc(x0, y0, cR, 0, Math.PI/2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(x1, y0, cR, Math.PI/2, Math.PI); ctx.stroke();
+        ctx.beginPath(); ctx.arc(x0, y1, cR, -Math.PI/2, 0); ctx.stroke();
+        ctx.beginPath(); ctx.arc(x1, y1, cR, Math.PI, Math.PI*1.5); ctx.stroke();
+
+        /* Gòl (anlè/anba) */
         ctx.strokeStyle='rgba(255,255,255,0.22)'; ctx.lineWidth=W*0.004;
         var gw2=PW*0.2, gx3=PX+(PW-gw2)/2;
         ctx.strokeRect(gx3,PY,gw2,H*0.01); ctx.strokeRect(gx3,PY+PH-H*0.01,gw2,H*0.01);
