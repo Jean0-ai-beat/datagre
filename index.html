@@ -1596,6 +1596,11 @@
                     inner.classList.add("scale-100", "opacity-100");
                 }
             }, 10);
+
+            /* 🎉 Efè Héro — konfeti + tèks vole */
+            if (typeof launchHeroEffect === 'function') {
+                launchHeroEffect(player.name);
+            }
         }
 
         
@@ -5793,6 +5798,46 @@ window.onload = function() {
         var div = document.createElement('div');
         div.textContent = String(str);
         return div.innerHTML;
+    }
+
+
+    /* ══ HERO EFFECT — konfeti + tèks "HÉRO!" pou jwè ══ */
+    function launchHeroEffect(playerName) {
+        /* 1. Konfeti (reyitilize sistèm egziste) */
+        launchConfetti();
+
+        /* 2. Tèks "HÉRO" k ap vole anlè */
+        var labels = ['🇭🇹 HÉRO', '⭐ LEGEND', '🔥 GRENADYE'];
+        for (var i = 0; i < labels.length; i++) {
+            (function(label, idx) {
+                setTimeout(function() {
+                    var el = document.createElement('div');
+                    el.textContent = label;
+                    el.style.cssText = [
+                        'position:fixed;z-index:9996;pointer-events:none;',
+                        'left:' + (30 + Math.random()*40) + 'vw;',
+                        'top:55vh;',
+                        'font-family:Oswald,sans-serif;font-weight:900;font-size:' + (22 + Math.random()*10) + 'px;',
+                        'color:#fbbf24;text-shadow:0 2px 8px rgba(0,0,0,0.5);',
+                        'opacity:0;',
+                        'transform:translateY(0) scale(0.5);',
+                        'transition:transform 1.8s cubic-bezier(0.2,0.8,0.3,1), opacity 1.8s ease-out;',
+                        'white-space:nowrap;'
+                    ].join('');
+                    document.body.appendChild(el);
+
+                    requestAnimationFrame(function() {
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(-50vh) scale(1.2) rotate(' + (Math.random()*20-10) + 'deg)';
+                    });
+
+                    setTimeout(function() {
+                        el.style.opacity = '0';
+                        setTimeout(function() { el.remove(); }, 400);
+                    }, 1500);
+                }, idx * 150);
+            })(labels[i], i);
+        }
     }
 
     /* ── INIT ── */
