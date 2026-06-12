@@ -5807,20 +5807,29 @@ window.onload = function() {
         launchConfetti();
 
         /* 2. Tèks "HÉRO" k ap vole anlè */
-        var labels = ['🇭🇹 HÉRO', '⭐ LEGEND', '🔥 GRENADYE'];
+        var labels = ['🇭🇹 HÉRO', '🏆 GRENADYE ALASO', '👑 CHAMPION'];
+        /* Pozisyon fiks pou chak label — yon liy separe, pa kole */
+        var startPositions = [
+            { left: 12, top: 70 },
+            { left: 28, top: 50 },
+            { left: 14, top: 32 }
+        ];
+
         for (var i = 0; i < labels.length; i++) {
             (function(label, idx) {
                 setTimeout(function() {
+                    var pos = startPositions[idx];
                     var el = document.createElement('div');
                     el.textContent = label;
                     el.style.cssText = [
                         'position:fixed;z-index:9996;pointer-events:none;',
-                        'left:' + (30 + Math.random()*40) + 'vw;',
-                        'top:55vh;',
-                        'font-family:Oswald,sans-serif;font-weight:900;font-size:' + (22 + Math.random()*10) + 'px;',
-                        'color:#fbbf24;text-shadow:0 2px 8px rgba(0,0,0,0.5);',
+                        'left:' + pos.left + 'vw;',
+                        'top:' + pos.top + 'vh;',
+                        'font-family:Oswald,sans-serif;font-weight:900;font-size:20px;',
+                        'color:#fbbf24;text-shadow:0 2px 8px rgba(0,0,0,0.6);',
+                        'letter-spacing:0.04em;',
                         'opacity:0;',
-                        'transform:translateY(0) scale(0.5);',
+                        'transform:translateY(0) scale(0.6);',
                         'transition:transform 1.8s cubic-bezier(0.2,0.8,0.3,1), opacity 1.8s ease-out;',
                         'white-space:nowrap;'
                     ].join('');
@@ -5828,14 +5837,14 @@ window.onload = function() {
 
                     requestAnimationFrame(function() {
                         el.style.opacity = '1';
-                        el.style.transform = 'translateY(-50vh) scale(1.2) rotate(' + (Math.random()*20-10) + 'deg)';
+                        el.style.transform = 'translateY(-35vh) scale(1.1) rotate(' + (Math.random()*10-5) + 'deg)';
                     });
 
                     setTimeout(function() {
                         el.style.opacity = '0';
                         setTimeout(function() { el.remove(); }, 400);
                     }, 1500);
-                }, idx * 150);
+                }, idx * 250);
             })(labels[i], i);
         }
     }
