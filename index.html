@@ -311,6 +311,7 @@
             });
         });
     </script>
+    <link rel="alternate" type="application/rss+xml" title="GrenadyeHub — Actualités" href="/feed.xml">
 </head>
 
     
@@ -1201,6 +1202,13 @@
                         <div id="my-total-score" class="font-athletic text-4xl font-black text-amber-400">0 pts</div>
                     </div>
                     <div id="my-score-details" class="space-y-2"></div>
+
+                    <!-- Bouton pataje rezilta -->
+                    <button onclick="shareMyResults()"
+                        class="w-full mt-4 py-3 rounded-xl border border-gray-800 bg-gray-950/60 text-gray-300 text-xs font-bold uppercase tracking-wider hover:border-blue-500/40 hover:text-blue-400 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-share-nodes text-xs"></i>
+                        <span id="share-score-label" data-i18n="pred_share_score">Partager mes résultats</span>
+                    </button>
                 </div>
 
                 <!-- LEADERBOARD KOMINOTE -->
@@ -1623,7 +1631,13 @@
             if (date) date.textContent = match.emoji + ' · ' + match.city;
 
             if (diff <= 0) {
-                /* Match fini oswa kounye a */
+                /* Match fini — pase otomatikman sou pwochen match si li egziste */
+                if (currentMatch < CD_MATCHES.length - 1) {
+                    currentMatch++;
+                    switchCountdown(currentMatch);
+                    return;
+                }
+                /* Dènye match — montre "fini" */
                 document.getElementById('countdown-days').innerText    = '00';
                 document.getElementById('countdown-hours').innerText   = '00';
                 document.getElementById('countdown-minutes').innerText = '00';
@@ -2041,7 +2055,7 @@
             if (isGK) {
                 circle.innerHTML = gkSvg + numBadge;
             } else {
-                circle.innerHTML = '<img src="'+jerseyImg+'" style="width:100%;height:100%;object-fit:contain;'+(isSelected?'filter:drop-shadow(0 0 10px #fbbf24);':'')+'">'
+                circle.innerHTML = '<img src="'+jerseyImg+'" alt="" style="width:100%;height:100%;object-fit:contain;'+(isSelected?'filter:drop-shadow(0 0 10px #fbbf24);':'')+'">'
                     + numBadge;
             }
 
@@ -2846,12 +2860,8 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('/sw.js')
-                    .then(function(reg) {
-                        console.log('SW registered:', reg.scope);
-                    })
-                    .catch(function(err) {
-                        console.log('SW registration failed:', err);
-                    });
+                    .then(function(reg) {})
+                    .catch(function(err) {});
             });
         }
 
@@ -3513,6 +3523,29 @@ window.onload = function() {
         // Update tab badge
         var tabCount = document.getElementById('tab-sub-count');
         if (tabCount) tabCount.textContent = (pendingArticles||[]).length;
+
+        /* Pwopoze notifye fanatik yo */
+        notifyNewArticle(a);
+    }
+
+    /* ══ NOTIFYE NOUVO ATIK — Ouvri OneSignal ak mesaj pre-ranpli ══ */
+    function notifyNewArticle(article) {
+        var title = (article.emoji||'📰') + ' ' + article.title;
+        var msg   = article.excerpt ? article.excerpt.substring(0, 120) : 'Nouvo atik sou GrenadyeHub!';
+
+        var confirmMsg = 'Atik aprouve! Voye notifikasyon push bay fanatik yo?\n\n'
+            + '« ' + title + ' »\n\n'
+            + 'Klike OK pou louvri OneSignal dashboard.';
+
+        if (confirm(confirmMsg)) {
+            /* Kopye mesaj nan clipboard pou fasilite */
+            var fullMsg = 'TITLE: ' + title + '\n\nMESSAGE: ' + msg;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(fullMsg).catch(function(){});
+            }
+            showToast('📋 Mesaj kopye! Kole l nan OneSignal', 'blue');
+            window.open('https://app.onesignal.com/apps', '_blank');
+        }
     }
     function rejectArticle(idx) {
         if (confirm('Rejeter cet article ?')) {
@@ -3728,7 +3761,7 @@ window.onload = function() {
             row.className='flex gap-4 p-4 rounded-2xl bg-[#0e1322] border border-gray-900 hover:border-gray-700 hover:bg-gray-900/40 transition-all group items-start';
             var pub=item.pubDate?new Date(item.pubDate).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):'';
             var img=item.thumbnail||(item.enclosure&&item.enclosure.link)||'';
-            var imgHtml = img ? '<img src="' + img + '" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 border border-gray-800" onerror="this.style.display=\'none\'">' : '<div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 text-xl">⚽</div>';
+            var imgHtml = img ? '<img src="' + img + '" alt="" class="w-14 h-14 rounded-xl object-cover flex-shrink-0 border border-gray-800" onerror="this.style.display=\'none\'">' : '<div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0 text-xl">⚽</div>';
             row.innerHTML = imgHtml
                 +'<div class="flex-1 min-w-0"><p class="text-xs font-bold text-white group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">'+(item.title||'')+'</p><div class="flex items-center gap-2 text-[10px] text-gray-600"><span>'+(item.author||'Source externe')+'</span>'+(pub?'<span>·</span><span>'+pub+'</span>':'')+'</div></div>'
                 +'<i class="fa-solid fa-chevron-right text-[10px] text-gray-700 group-hover:text-blue-400 transition-colors flex-shrink-0 mt-1"></i>';
@@ -4049,6 +4082,7 @@ window.onload = function() {
         pred_impossible:   { fr:'1 soumission par match — modification impossible', ht:'1 soumisyon pa match — pa ka chanje', en:'1 submission per match — cannot change' },
         pred_community_lbl:{ fr:'Communauté',                 ht:'Kominote',                    en:'Community'               },
         pred_share:        { fr:'Partager ma prédiction', ht:'Pataje prediksyon mwen', en:'Share my prediction' },
+        pred_share_score:  { fr:'Partager mes résultats', ht:'Pataje rezilta mwen', en:'Share my results' },
         pred_before_vote:  { fr:'Anvan ou vote...',            ht:'Anvan ou vote...',            en:'Before you vote...'      },
         pred_skip_anon:    { fr:'Kontinye anonim',             ht:'Kontinye anonim',             en:'Continue anonymous'      },
         pred_nom:          { fr:'Non',                         ht:'Non',                         en:'Name'                    },
@@ -4099,13 +4133,9 @@ window.onload = function() {
             }
         }
 
-        // Countdown units
-        var units = document.querySelectorAll('.countdown-cell .text-\\[9px\\], .countdown-cell .text-xs');
-        var unitKeys = ['unit_days','unit_hours','unit_minutes','unit_seconds'];
-        var unitEls = document.querySelectorAll('#hero-countdown .text-\\[9px\\], #hero-countdown .sm\\:text-xs');
-        // simpler: get all small texts inside countdown
-        var cdCells = document.querySelectorAll('#hero-countdown .rounded-xl');
+        // Countdown units — sible SÈLMAN .countdown-cell (pa bouton match yo)
         var uLabels = ['unit_days','unit_hours','unit_minutes','unit_seconds'];
+        var cdCells = document.querySelectorAll('#hero-countdown .countdown-cell');
         cdCells.forEach(function(cell, i) {
             var span = cell.querySelector('span:last-child');
             if (span && i18n[uLabels[i]]) span.textContent = i18n[uLabels[i]][lang];
@@ -4467,6 +4497,9 @@ window.onload = function() {
             b.onclick          = null;
         }
         lockVote(matchId);
+
+        /* 🎉 Konfeti! */
+        launchConfetti();
     }
 
     function handleEnvoyerBtn(btn) {
@@ -4784,14 +4817,14 @@ window.onload = function() {
 
                 /* HOME */
                 voteZone += '<div class="flex items-center gap-2">';
-                voteZone += '<img src="https://flagcdn.com/w40/'+match.homeFlag+'.png" class="w-7 h-auto rounded shadow-sm">';
+                voteZone += '<img src="https://flagcdn.com/w40/'+match.homeFlag+'.png" alt="" class="w-7 h-auto rounded shadow-sm">';
                 voteZone += '<span class="font-athletic text-sm font-black uppercase '+(isHomeHaiti?'text-red-400':'text-white')+'">'+match.home+'</span>';
                 voteZone += '</div>';
 
                 /* AWAY */
                 voteZone += '<div class="flex items-center gap-2">';
                 voteZone += '<span class="font-athletic text-sm font-black uppercase '+(isAwayHaiti?'text-red-400':'text-white')+'">'+match.away+'</span>';
-                voteZone += '<img src="https://flagcdn.com/w40/'+match.awayFlag+'.png" class="w-7 h-auto rounded shadow-sm">';
+                voteZone += '<img src="https://flagcdn.com/w40/'+match.awayFlag+'.png" alt="" class="w-7 h-auto rounded shadow-sm">';
                 voteZone += '</div>';
 
                 voteZone += '</div>';
@@ -4938,7 +4971,7 @@ window.onload = function() {
             div.className = 'bg-gray-950/40 border border-gray-900 rounded-xl p-3 mb-2';
             div.innerHTML =
                 '<div class="flex items-center justify-between mb-2">'
-                +'<p class="text-[10px] font-bold text-white"><img src="https://flagcdn.com/w20/'+match.homeFlag+'.png" class="inline w-3 mr-1">'+match.home+' vs '+match.away+'</p>'
+                +'<p class="text-[10px] font-bold text-white"><img src="https://flagcdn.com/w20/'+match.homeFlag+'.png" alt="" class="inline w-3 mr-1">'+match.home+' vs '+match.away+'</p>'
                 +'<div class="flex gap-2">'
                 +'<span class="text-[9px] text-gray-500">'+total+' vòt</span>'
                 +(lk?'<span class="text-[9px] font-bold text-red-400"><i class="fa-solid fa-lock mr-0.5"></i>Fermé</span>':'<span class="text-[9px] font-bold text-emerald-400">Ouvert</span>')
@@ -5056,7 +5089,7 @@ window.onload = function() {
             var nameEl = document.createElement('div');
             nameEl.className = 'flex items-center gap-2 flex-1';
             nameEl.innerHTML =
-                '<img src="https://flagcdn.com/w20/'+match.homeFlag+'.png" class="w-4 h-auto rounded">'
+                '<img src="https://flagcdn.com/w20/'+match.homeFlag+'.png" alt="" class="w-4 h-auto rounded">'
                 +'<span class="text-[10px] font-bold text-white">'+match.home+' vs '+match.away+'</span>';
 
             /* Inputs */
@@ -5472,8 +5505,8 @@ window.onload = function() {
                 +'style="background:rgba(255,255,255,0.05);color:'+rankColor+';">'+medalOrRank+'</div>'
                 +'<div class="flex-1 min-w-0">'
                 +  '<p class="text-xs font-black truncate" style="color:'+(isMe?'#60a5fa':'#e2e8f0')+';">'
-                +  (isMe?'👤 ':'')+user.pseudo+'</p>'
-                +  (user.badge?'<p class="text-[9px] text-gray-600">'+user.badge+'</p>':'')
+                +  (isMe?'👤 ':'')+escapeHtml(user.pseudo)+'</p>'
+                +  (user.badge?'<p class="text-[9px] text-gray-600">'+escapeHtml(user.badge)+'</p>':'')
                 +'</div>'
                 +'<div class="text-right flex-shrink-0">'
                 +  '<span class="font-athletic text-xl font-black" style="color:'+ptsCol+';">'+user.pts+'</span>'
@@ -5588,6 +5621,142 @@ window.onload = function() {
         updateAudioBtn(true);
     }
 
+
+    /* ══ CONFETTI — apre soumisyon prediksyon ══ */
+    function launchConfetti() {
+        var canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:fixed;inset:0;z-index:9995;pointer-events:none;width:100vw;height:100vh;';
+        document.body.appendChild(canvas);
+
+        var ctx = canvas.getContext('2d');
+        var W = canvas.width  = window.innerWidth;
+        var H = canvas.height = window.innerHeight;
+
+        var colors = ['#003F87', '#D21034', '#FFFFFF', '#FFD700', '#3b82f6'];
+        var particles = [];
+
+        for (var i = 0; i < 120; i++) {
+            particles.push({
+                x: Math.random() * W,
+                y: -20 - Math.random() * H * 0.3,
+                size: Math.random() * 8 + 4,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                speedY: Math.random() * 3 + 2,
+                speedX: (Math.random() - 0.5) * 2,
+                rotation: Math.random() * 360,
+                rotSpeed: (Math.random() - 0.5) * 10,
+                shape: Math.random() > 0.5 ? 'rect' : 'circle'
+            });
+        }
+
+        var startTime = Date.now();
+        var duration  = 3000;
+
+        function animate() {
+            var elapsed = Date.now() - startTime;
+            ctx.clearRect(0, 0, W, H);
+
+            particles.forEach(function(p) {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.rotation += p.rotSpeed;
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.fillStyle = p.color;
+
+                if (p.shape === 'rect') {
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.6);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, p.size/2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            });
+
+            if (elapsed < duration) {
+                requestAnimationFrame(animate);
+            } else {
+                /* Fade out */
+                canvas.style.transition = 'opacity 0.5s ease';
+                canvas.style.opacity = '0';
+                setTimeout(function() { canvas.remove(); }, 500);
+            }
+        }
+        animate();
+
+        /* Resize handler */
+        window.addEventListener('resize', function onResize() {
+            W = canvas.width  = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+        }, { once: true });
+    }
+
+
+    /* ══ PATAJE REZILTA PEDIKSYON ══ */
+    function shareMyResults() {
+        var score = calculateMyScore();
+        var lang  = currentLang || 'fr';
+
+        /* Konstwi tèks rezilta */
+        var emojiMap = { exact:'⭐', result_ok:'✅', wrong:'❌', pending:'⏳', no_vote:'➖' };
+        var lines = [];
+
+        score.details.forEach(function(d) {
+            if (d.status === 'no_vote') return;
+            var emoji = emojiMap[d.status] || '➖';
+            var matchName = d.match.home + ' vs ' + d.match.away;
+            var line = emoji + ' ' + matchName;
+            if (d.res) line += ' (' + d.res.score + ')';
+            if (d.status !== 'pending') line += ' +' + d.pts + 'pts';
+            lines.push(line);
+        });
+
+        var titleMap = {
+            fr: '🏆 Mon Score Prédictions GrenadyeHub',
+            ht: '🏆 Skò Prediksyon mwen GrenadyeHub',
+            en: '🏆 My GrenadyeHub Predictions Score'
+        };
+        var totalMap = {
+            fr: 'Total: ',
+            ht: 'Total: ',
+            en: 'Total: '
+        };
+
+        var text = titleMap[lang] + '\n\n'
+            + lines.join('\n')
+            + '\n\n' + totalMap[lang] + score.total + ' pts 🇭🇹'
+            + '\n\ngrenadyehub.com';
+
+        /* Web Share API */
+        if (navigator.share) {
+            navigator.share({
+                title: titleMap[lang],
+                text: text
+            }).catch(function(){});
+        } else {
+            /* Fallback: copy to clipboard */
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showToast('📋 Copié dans le presse-papiers!', 'green');
+                });
+            } else {
+                showToast(text, 'blue');
+            }
+        }
+    }
+
+
+    /* ══ SEKIRITE — Eskap HTML pou anpeche XSS ══ */
+    function escapeHtml(str) {
+        if (str == null) return '';
+        var div = document.createElement('div');
+        div.textContent = String(str);
+        return div.innerHTML;
+    }
+
     /* ── INIT ── */
     function initPredictions() {
         loadPredStorage();
@@ -5677,7 +5846,7 @@ window.onload = function() {
         <div style="display:flex;justify-content:space-around;align-items:center;width:100%;margin-top:40px;">
             <!-- Home -->
             <div style="width:40%;display:flex;flex-direction:column;align-items:center;">
-                <img id="psc-flag-h" src="" style="width:54px;height:auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.5);" crossorigin="anonymous">
+                <img id="psc-flag-h" src="" alt="" style="width:54px;height:auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.5);" crossorigin="anonymous">
                 <div id="psc-name-h" style="font-size:16px;font-weight:900;margin:8px 0 4px;letter-spacing:1px;"></div>
                 <div id="psc-score-h" style="font-size:64px;font-weight:900;background:linear-gradient(#fff,#999);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;"></div>
             </div>
@@ -5685,7 +5854,7 @@ window.onload = function() {
             <div style="font-size:36px;color:rgba(255,255,255,0.3);font-weight:900;margin-top:20px;">:</div>
             <!-- Away -->
             <div style="width:40%;display:flex;flex-direction:column;align-items:center;">
-                <img id="psc-flag-a" src="" style="width:54px;height:auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.5);" crossorigin="anonymous">
+                <img id="psc-flag-a" src="" alt="" style="width:54px;height:auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.5);" crossorigin="anonymous">
                 <div id="psc-name-a" style="font-size:16px;font-weight:900;margin:8px 0 4px;letter-spacing:1px;"></div>
                 <div id="psc-score-a" style="font-size:64px;font-weight:900;background:linear-gradient(#fff,#999);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;"></div>
             </div>
