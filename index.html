@@ -1983,7 +1983,7 @@
         '4-3-3':   ['johny_placide','jean_kevin_duverne','hannes_delcroix','ricardo_ade','carlens_arcus','jean_ricner_bellegarde','danley_jean_jacques','dominique_simon','lenny_joseph','wilson_isidor','josue_casimir'],
         '4-2-3-1': ['johny_placide','jean_kevin_duverne','hannes_delcroix','ricardo_ade','carlens_arcus','jean_ricner_bellegarde','danley_jean_jacques','lenny_joseph','dominique_simon','josue_casimir','wilson_isidor'],
         '4-4-2':   ['johny_placide','martin_experience','hannes_delcroix','ricardo_ade','carlens_arcus','jean_ricner_bellegarde','danley_jean_jacques','rubens_providence','josue_casimir','frantzdy_pierrot','wilson_isidor'],
-        '3-5-2':   ['johny_placide','hannes_delcroix','ricardo_ade','josue_casimir','rubens_providence','jean_ricner_bellegarde','dominique_simon','danley_jean_jacques','carlens_arcus','lenny_joseph','wilson_isidor'],
+        '3-5-2':   ['johny_placide','hannes_delcroix','ricardo_ade','carlens_arcus','rubens_providence','jean_ricner_bellegarde','dominique_simon','danley_jean_jacques','josue_casimir','lenny_joseph','wilson_isidor'],
         '5-3-2':   ['johny_placide','jean_kevin_duverne','hannes_delcroix','ricardo_ade','martin_experience','carlens_arcus','jean_ricner_bellegarde','danley_jean_jacques','dominique_simon','lenny_joseph','wilson_isidor'],
         '4-1-4-1': ['johny_placide','jean_kevin_duverne','hannes_delcroix','ricardo_ade','carlens_arcus','jean_ricner_bellegarde','danley_jean_jacques','dominique_simon','josue_casimir','lenny_joseph','wilson_isidor']
     };
@@ -2637,6 +2637,16 @@
 
     /* ---- INIT ---- */
     function initTactics() {
+        /* Netwaye ansyen done pozisyon korupte (anvan fix) — fè 1 fwa */
+        try {
+            if (!localStorage.getItem('pwe_tactics_v2')) {
+                ['4-3-3','4-2-3-1','4-4-2','3-5-2','5-3-2','4-1-4-1'].forEach(function(f){
+                    localStorage.removeItem('pwe_token_pos_'+f);
+                });
+                localStorage.setItem('pwe_tactics_v2', '1');
+            }
+        } catch(e){}
+
         // Construire lineup par défaut
         currentLineup = defaultLineup.map(function(e){ return { id:e.id, pos:e.pos, label:e.label }; });
         applyFormation('4-3-3');
