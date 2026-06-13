@@ -1773,6 +1773,12 @@
     ];
 
     /* ---- RENDU CLASSEMENT ---- */
+    /* Emoji drapo fallback si flagcdn pa chaje */
+    var FLAG_EMOJI = {
+        'br':'🇧🇷', 'ht':'🇭🇹', 'ma':'🇲🇦', 'gb-sct':'🏴',
+        'bra':'🇧🇷', 'hai':'🇭🇹', 'mar':'🇲🇦', 'sco':'🏴'
+    };
+
     function renderStandings(data) {
         var body = document.getElementById('standings-body');
         if (!body) return;
@@ -1803,7 +1809,7 @@
             tr.innerHTML = [
                 '<td class="p-3 text-center font-black text-xs" style="color:'+posCol+'">'+pos+'</td>',
                 '<td class="p-3"><div class="flex items-center gap-2">',
-                  '<img src="https://flagcdn.com/w20/'+team.code+'.png" class="w-5 h-auto rounded-sm" alt="'+team.name+'">',
+                  '<img src="https://flagcdn.com/w20/'+team.code+'.png" class="w-5 h-auto rounded-sm" alt="'+team.name+'" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{textContent:\''+(FLAG_EMOJI[team.code]||'🏳️')+'\',style:\'font-size:18px;line-height:1\'}))">',
                   '<span class="'+(isHaiti?'font-black text-white':'font-bold text-white')+'">'+team.name+'</span>',
                 '</div></td>',
                 '<td class="p-3 text-center text-gray-400">'+(team.pj||0)+'</td>',
@@ -1892,10 +1898,10 @@
 
                 var teams = groupC.teams || groupC.standings || [];
                 var flagMap = {
-                    'Brazil':'br','Brasil':'br','Brésil':'br',
-                    'Haiti':'ht','Haïti':'ht',
-                    'Morocco':'ma','Maroc':'ma',
-                    'Scotland':'gb-sct','Écosse':'gb-sct','Ecosse':'gb-sct'
+                    'Brazil':'br','Brasil':'br','Brésil':'br','BRA':'br',
+                    'Haiti':'ht','Haïti':'ht','HAI':'ht',
+                    'Morocco':'ma','Maroc':'ma','MAR':'ma',
+                    'Scotland':'gb-sct','Écosse':'gb-sct','Ecosse':'gb-sct','SCO':'gb-sct'
                 };
                 var nameMap = {
                     'Brazil':'Brésil','Brasil':'Brésil',
@@ -1905,10 +1911,11 @@
                 };
 
                 var mapped = teams.map(function(t){
-                    var raw = t.name || t.team || t.country || '';
+                    var raw = t.name || t.name_en || t.team || t.country || '';
+                    var fifaCode = t.fifa_code || t.code || '';
                     return {
                         name:  nameMap[raw] || raw,
-                        code:  flagMap[raw] || 'un',
+                        code:  flagMap[raw] || flagMap[fifaCode] || 'un',
                         pj:    parseInt(t.played||t.mp||t.pj||0),
                         g:     parseInt(t.won||t.w||t.g||0),
                         n:     parseInt(t.drawn||t.d||t.n||0),
