@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">GrenadyeHub | Les Grenadiers d'Haïti — Coupe du Monde 2026</title>
@@ -1912,12 +1912,15 @@
                     'Scotland':'Écosse','Ecosse':'Écosse'
                 };
 
+                var nameToCode = {'Brésil':'br','Haïti':'ht','Maroc':'ma','Écosse':'gb-sct'};
                 var mapped = teams.map(function(t){
                     var raw = t.name || t.name_en || t.team || t.country || '';
                     var fifaCode = t.fifa_code || t.code || '';
+                    var resolvedName = nameMap[raw] || raw;
+                    var resolvedCode = flagMap[raw] || flagMap[fifaCode] || nameToCode[resolvedName] || null;
                     return {
-                        name:  nameMap[raw] || raw,
-                        code:  flagMap[raw] || flagMap[fifaCode] || 'un',
+                        name:  resolvedName,
+                        code:  resolvedCode,
                         pj:    parseInt(t.played||t.mp||t.pj||0),
                         g:     parseInt(t.won||t.w||t.g||0),
                         n:     parseInt(t.drawn||t.d||t.n||0),
@@ -1928,6 +1931,17 @@
                         haiti: (raw.toLowerCase().includes('haiti'))
                     };
                 });
+
+                /* Si nenpòt code pa rezoud, gade tout (4 ekip → match pa pozisyon ak done lokal) */
+                var allCodesValid = mapped.every(function(m){ return m.code; });
+                if (!allCodesValid && mapped.length === standingsData.length) {
+                    mapped.forEach(function(m, i){ if (!m.code) m.code = standingsData[i].code; });
+                    allCodesValid = mapped.every(function(m){ return m.code; });
+                }
+                /* Dènye fallback: si toujou pa rezoud, kenbe ansyen drapo, mete sèlman estatistik */
+                if (!allCodesValid) {
+                    mapped.forEach(function(m){ if (!m.code) m.code='ht'; });
+                }
 
                 if (mapped.length > 0) {
                     standingsData = mapped;
