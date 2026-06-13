@@ -835,33 +835,39 @@
                     </div>
                     <p class="text-center text-[10px] text-gray-600 mt-2">⬆ Attaque — Défense ⬇</p>
 
-                    <!-- BOUTON TELECHAJE ak FORMAT -->
+                    <!-- CHAMP NON KOUTCH -->
                     <div class="mt-4 w-full" style="max-width:320px;">
+                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="tac_coach_name">Votre nom (coach) :</label>
+                        <input type="text" id="coach-name-input" maxlength="20" placeholder="Ex: Ti Jean"
+                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition">
+                    </div>
+
+                    <!-- BOUTON TELECHAJE ak PATAJE -->
+                    <div class="mt-3 w-full" style="max-width:320px;">
                         <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider text-center mb-2">
                             <i class="fa-solid fa-download mr-1 text-blue-400"></i><span data-i18n="tac_download">Telechaje pou :</span>
                         </p>
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-3 gap-2 mb-2">
                             <button onclick="downloadLineup('tiktok')"
-                                class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-white transition hover:-translate-y-0.5"
+                                class="flex flex-col items-center justify-center gap-1 py-2.5 rounded-xl text-[9px] font-bold uppercase text-white transition hover:-translate-y-0.5"
                                 style="background:linear-gradient(135deg,#ff0050,#ff4080);">
-                                <i class="fab fa-tiktok text-xs"></i> TikTok / Reels
+                                <i class="fab fa-tiktok text-sm"></i> TikTok
                             </button>
                             <button onclick="downloadLineup('square')"
-                                class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-white transition hover:-translate-y-0.5"
+                                class="flex flex-col items-center justify-center gap-1 py-2.5 rounded-xl text-[9px] font-bold uppercase text-white transition hover:-translate-y-0.5"
                                 style="background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);">
-                                <i class="fab fa-instagram text-xs"></i> Instagram
+                                <i class="fab fa-instagram text-sm"></i> Instagram
                             </button>
                             <button onclick="downloadLineup('story')"
-                                class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-white transition hover:-translate-y-0.5"
+                                class="flex flex-col items-center justify-center gap-1 py-2.5 rounded-xl text-[9px] font-bold uppercase text-white transition hover:-translate-y-0.5"
                                 style="background:linear-gradient(135deg,#1877f2,#0a4fa8);">
-                                <i class="fab fa-facebook-f text-xs"></i> Facebook Story
-                            </button>
-                            <button onclick="downloadLineup('twitter')"
-                                class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-white transition hover:-translate-y-0.5"
-                                style="background:#000;border:1px solid #333;">
-                                <i class="fab fa-x-twitter text-xs"></i> Twitter / X
+                                <i class="fab fa-facebook-f text-sm"></i> Story
                             </button>
                         </div>
+                        <button onclick="downloadLineup('share')"
+                            class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[10px] font-bold uppercase text-white transition hover:-translate-y-0.5 border border-gray-700 bg-gray-900/60 hover:bg-gray-800">
+                            <i class="fa-solid fa-share-nodes text-xs text-blue-400"></i> <span data-i18n="tac_share">Partager</span>
+                        </button>
                     </div>
                 </div>
 
@@ -2377,13 +2383,14 @@
             tiktok:  { W:1080, H:1920, label:'TikTok_Reels'   },
             story:   { W:1080, H:1920, label:'Facebook_Story'  },
             square:  { W:1080, H:1080, label:'Instagram_Post'  },
-            twitter: { W:1200, H:675,  label:'Twitter_X'       }
+            share:   { W:1080, H:1920, label:'Partage'         }
         };
         var fmt = formats[format] || formats['tiktok'];
         var W = fmt.W, H = fmt.H;
         var isLandscape = W > H;
 
         var cv = document.createElement('canvas');
+        cv._shareMode = (format === 'share');
         cv.width = W; cv.height = H;
         var ctx = cv.getContext('2d');
 
@@ -2403,6 +2410,9 @@
         ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
         ctx.font='bold '+t1s+'px Arial,sans-serif';
         ctx.fillText(currentMatchTitle, W/2, banH*0.32);
+        var coachInput = document.getElementById('coach-name-input');
+        var coachName  = coachInput ? coachInput.value.trim().substring(0,20) : '';
+
         ctx.font='bold '+(t1s*0.75)+'px Arial,sans-serif';
         ctx.fillStyle='rgba(255,255,255,0.85)';
         ctx.fillText('Composition '+currentFormation+' · '+currentMatchDate, W/2, banH*0.62);
@@ -2526,6 +2536,23 @@
             ctx.textAlign='center'; ctx.textBaseline='bottom';
             ctx.fillText('grenadyehub.com', W/2, H-fts);
 
+            /* ── Siyati Kòutch (estil ekriti) ── */
+            var coachInput = document.getElementById('coach-name-input');
+            var coachName  = coachInput ? coachInput.value.trim().substring(0,20) : '';
+            if (coachName) {
+                var sigSize = isLandscape ? Math.round(H*0.05) : Math.round(H*0.026);
+                ctx.save();
+                ctx.font = 'italic '+sigSize+'px "Brush Script MT", "Comic Sans MS", cursive';
+                ctx.fillStyle = 'rgba(251,191,36,0.85)';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'bottom';
+                ctx.shadowColor = 'rgba(0,0,0,0.6)';
+                ctx.shadowBlur = 4;
+                var label = (currentLang==='en' ? 'Coach: ' : currentLang==='ht' ? 'Kòutch: ' : 'Coach : ');
+                ctx.fillText(label + coachName, PAD, H - fts);
+                ctx.restore();
+            }
+
             /* Logo GrenadyeHub kwen anba adwat */
             var logoImg = new Image();
             logoImg.onload = function() {
@@ -2547,11 +2574,30 @@
             };
             logoImg.src = LOGO_GRENADYEHUB;
 
-            /* Download */
-            var a = document.createElement('a');
-            a.download = 'haiti-xi-'+currentFormation+'-'+fmt.label+'.png';
-            a.href = cv.toDataURL('image/png');
-            a.click();
+            /* Download oswa Share selon mod */
+            if (cv._shareMode) {
+                cv.toBlob(function(blob) {
+                    var file = new File([blob], 'haiti-xi-'+currentFormation+'.png', {type:'image/png'});
+                    if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+                        navigator.share({
+                            title: 'Composition '+currentFormation+' - GrenadyeHub',
+                            text: currentMatchTitle+' · Composition '+currentFormation+' 🇭🇹⚽\n\ngrenadyehub.com',
+                            files: [file]
+                        }).catch(function(){});
+                    } else {
+                        /* Fallback: download */
+                        var a2 = document.createElement('a');
+                        a2.download = 'haiti-xi-'+currentFormation+'.png';
+                        a2.href = URL.createObjectURL(blob);
+                        a2.click();
+                    }
+                }, 'image/png');
+            } else {
+                var a = document.createElement('a');
+                a.download = 'haiti-xi-'+currentFormation+'-'+fmt.label+'.png';
+                a.href = cv.toDataURL('image/png');
+                a.click();
+            }
         }
 
         var loaded=0;
@@ -4153,6 +4199,8 @@ window.onload = function() {
         tac_choose_jersey:  { fr:'Choisir le jersey',       ht:'Chwazi jersey a',        en:'Choose the jersey'      },
         tac_xi_title:       { fr:'XI Titulaires',           ht:'11 Titilè',              en:'Starting XI'            },
         tac_download:       { fr:'Télécharger pour :',      ht:'Telechaje pou :',        en:'Download for:'          },
+        tac_share:          { fr:'Partager',                 ht:'Pataje',                 en:'Share'                   },
+        tac_coach_name:     { fr:'Votre nom (coach) :',     ht:'Non ou (kòutch) :',      en:'Your name (coach):'      },
         tac_domisil:        { fr:'Domicile',                ht:'Domisil',                en:'Home'                   },
         tac_deyo:           { fr:'Extérieur',               ht:'Deyo',                   en:'Away'                   },
         tac_twazyem:        { fr:'3ème',                    ht:'3yèm',                   en:'3rd'                    },
