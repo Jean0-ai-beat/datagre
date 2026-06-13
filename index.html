@@ -714,33 +714,39 @@
                 <!-- B1: MATCH -->
                 <div class="relative">
                     <button onclick="toggleTacPanel('match')" id="tac-btn-match"
-                        class="w-full flex flex-col items-center gap-1 py-3 rounded-2xl border text-[10px] font-bold uppercase transition"
-                        style="background:#0e1322;border-color:#1f2937;color:#9ca3af;">
-                        <i class="fa-solid fa-futbol text-sm text-red-400"></i>
-                        <span data-i18n="tac_btn_match">Match</span>
-                        <span id="tac-match-label" class="text-[9px] font-semibold text-red-400 truncate max-w-full px-1">Haïti vs Écosse</span>
+                        class="w-full flex flex-col items-center gap-2 py-4 rounded-2xl border transition"
+                        style="background:#0e1322;border-color:#1f2937;">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(239,68,68,0.12);">
+                            <i class="fa-solid fa-futbol text-sm text-red-400"></i>
+                        </div>
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-gray-500" data-i18n="tac_btn_match">Match</span>
+                        <span id="tac-match-label" class="text-[10px] font-bold text-red-400 truncate max-w-full px-1">Haïti vs Écosse</span>
                     </button>
                 </div>
 
                 <!-- B2: COMPOSITION -->
                 <div class="relative">
                     <button onclick="toggleTacPanel('composition')" id="tac-btn-composition"
-                        class="w-full flex flex-col items-center gap-1 py-3 rounded-2xl border text-[10px] font-bold uppercase transition"
-                        style="background:#0e1322;border-color:#1f2937;color:#9ca3af;">
-                        <i class="fa-solid fa-sliders text-sm text-emerald-400"></i>
-                        <span data-i18n="tac_btn_comp">Composition</span>
-                        <span id="tac-form-label" class="text-[9px] font-semibold text-emerald-400">4-3-3</span>
+                        class="w-full flex flex-col items-center gap-2 py-4 rounded-2xl border transition"
+                        style="background:#0e1322;border-color:#1f2937;">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(16,185,129,0.12);">
+                            <i class="fa-solid fa-sliders text-sm text-emerald-400"></i>
+                        </div>
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-gray-500" data-i18n="tac_btn_comp">Composition</span>
+                        <span id="tac-form-label" class="text-[10px] font-bold text-emerald-400">4-3-3</span>
                     </button>
                 </div>
 
                 <!-- B3: JERSEY -->
                 <div class="relative">
                     <button onclick="toggleTacPanel('jersey')" id="tac-btn-jersey"
-                        class="w-full flex flex-col items-center gap-1 py-3 rounded-2xl border text-[10px] font-bold uppercase transition"
-                        style="background:#0e1322;border-color:#1f2937;color:#9ca3af;">
-                        <i class="fa-solid fa-shirt text-sm text-blue-400"></i>
-                        <span data-i18n="tac_btn_jersey">Jersey</span>
-                        <span id="tac-jersey-label" class="text-[9px] font-semibold text-blue-400">Domisil</span>
+                        class="w-full flex flex-col items-center gap-2 py-4 rounded-2xl border transition"
+                        style="background:#0e1322;border-color:#1f2937;">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(59,130,246,0.15);">
+                            <i class="fa-solid fa-shirt text-sm text-blue-400"></i>
+                        </div>
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-gray-500" data-i18n="tac_btn_jersey">Jersey</span>
+                        <span id="tac-jersey-label" class="text-[10px] font-bold text-blue-400">Domisil</span>
                     </button>
                 </div>
             </div>
@@ -775,24 +781,24 @@
 
             <div id="tac-panel-jersey" class="hidden max-w-lg mx-auto mb-4 bg-[#0e1322] border border-gray-800 rounded-2xl p-4">
                 <p class="text-[10px] font-bold uppercase text-gray-500 tracking-wider mb-3"><i class="fa-solid fa-shirt mr-1 text-blue-400"></i><span data-i18n="tac_choose_jersey">Chwazi jersey a</span></p>
-                <div class="grid grid-cols-3 gap-2">
+                <div class="grid grid-cols-3 gap-3">
                     <button onclick="setJersey('blue')" id="jersey-btn-blue"
-                        class="jersey-btn flex flex-col items-center gap-1.5 py-3 rounded-xl border text-[10px] font-bold uppercase transition"
-                        style="background:#1e3a8a;border-color:#3b82f6;color:#93c5fd;box-shadow:0 0 8px #3b82f666;">
-                        <span style="width:20px;height:24px;background:#1d4ed8;border-radius:3px;border:1.5px solid #93c5fd;display:inline-block;"></span>
-                        <span data-i18n="tac_domisil">Domisil</span>
+                        class="jersey-btn flex flex-col items-center gap-2 py-4 rounded-2xl border transition"
+                        style="background:rgba(59,130,246,0.10);border-color:#3b82f6;box-shadow:0 0 12px rgba(59,130,246,0.25);">
+                        <span style="width:32px;height:38px;background:#1d4ed8;border-radius:6px;border:2px solid #93c5fd;display:inline-block;box-shadow:0 2px 6px rgba(0,0,0,0.4);"></span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-blue-300" data-i18n="tac_domisil">Domisil</span>
                     </button>
                     <button onclick="setJersey('red')" id="jersey-btn-red"
-                        class="jersey-btn flex flex-col items-center gap-1.5 py-3 rounded-xl border text-[10px] font-bold uppercase transition"
-                        style="background:#0e1322;border-color:#374151;color:#9ca3af;">
-                        <span style="width:20px;height:24px;background:#dc2626;border-radius:3px;border:1.5px solid #6b7280;display:inline-block;"></span>
-                        <span data-i18n="tac_deyo">Deyo</span>
+                        class="jersey-btn flex flex-col items-center gap-2 py-4 rounded-2xl border transition"
+                        style="background:#0e1322;border-color:#1f2937;">
+                        <span style="width:32px;height:38px;background:#dc2626;border-radius:6px;border:2px solid #6b7280;display:inline-block;box-shadow:0 2px 6px rgba(0,0,0,0.4);"></span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500" data-i18n="tac_deyo">Deyo</span>
                     </button>
                     <button onclick="setJersey('white')" id="jersey-btn-white"
-                        class="jersey-btn flex flex-col items-center gap-1.5 py-3 rounded-xl border text-[10px] font-bold uppercase transition"
-                        style="background:#0e1322;border-color:#374151;color:#9ca3af;">
-                        <span style="width:20px;height:24px;background:#e5e7eb;border-radius:3px;border:1.5px solid #6b7280;display:inline-block;"></span>
-                        <span data-i18n="tac_twazyem">3yèm</span>
+                        class="jersey-btn flex flex-col items-center gap-2 py-4 rounded-2xl border transition"
+                        style="background:#0e1322;border-color:#1f2937;">
+                        <span style="width:32px;height:38px;background:#e5e7eb;border-radius:6px;border:2px solid #6b7280;display:inline-block;box-shadow:0 2px 6px rgba(0,0,0,0.4);"></span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500" data-i18n="tac_twazyem">3yèm</span>
                     </button>
                 </div>
             </div>
@@ -838,7 +844,7 @@
                     <!-- CHAMP NON KOUTCH -->
                     <div class="mt-4 w-full" style="max-width:320px;">
                         <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="tac_coach_name">Votre nom (coach) :</label>
-                        <input type="text" id="coach-name-input" maxlength="20" placeholder="Ex: Ti Jean"
+                        <input type="text" id="coach-name-input" maxlength="20" placeholder="Ex: Pep Guardola 😂"
                             class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition">
                     </div>
 
@@ -2529,28 +2535,29 @@
                 ctx.shadowBlur=0;
             });
 
-            /* ── Footer ── */
+            /* ── Footer : grenadyehub.com OSWA siyati kòutch ── */
             var fts = isLandscape ? Math.round(H*0.028) : Math.round(H*0.016);
-            ctx.fillStyle='rgba(255,255,255,0.15)';
-            ctx.font=fts+'px Arial,sans-serif';
-            ctx.textAlign='center'; ctx.textBaseline='bottom';
-            ctx.fillText('grenadyehub.com', W/2, H-fts);
-
-            /* ── Siyati Kòutch (estil ekriti) ── */
             var coachInput = document.getElementById('coach-name-input');
             var coachName  = coachInput ? coachInput.value.trim().substring(0,20) : '';
+
             if (coachName) {
+                /* Siyati ranplase lyen sit la nan footer */
                 var sigSize = isLandscape ? Math.round(H*0.05) : Math.round(H*0.026);
                 ctx.save();
                 ctx.font = 'italic '+sigSize+'px "Brush Script MT", "Comic Sans MS", cursive';
                 ctx.fillStyle = 'rgba(251,191,36,0.85)';
-                ctx.textAlign = 'left';
+                ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
                 ctx.shadowColor = 'rgba(0,0,0,0.6)';
                 ctx.shadowBlur = 4;
                 var label = (currentLang==='en' ? 'Coach: ' : currentLang==='ht' ? 'Kòutch: ' : 'Coach : ');
-                ctx.fillText(label + coachName, PAD, H - fts);
+                ctx.fillText(label + coachName, W/2, H-fts);
                 ctx.restore();
+            } else {
+                ctx.fillStyle='rgba(255,255,255,0.15)';
+                ctx.font=fts+'px Arial,sans-serif';
+                ctx.textAlign='center'; ctx.textBaseline='bottom';
+                ctx.fillText('grenadyehub.com', W/2, H-fts);
             }
 
             /* Logo GrenadyeHub kwen anba adwat */
@@ -2661,21 +2668,32 @@
         document.getElementById('tac-btn-jersey').style.borderColor = '#1f2937';
         document.getElementById('tac-btn-jersey').style.background  = '#0e1322';
         // Update button styles
-        var btns = { blue:'#1e3a8a|#3b82f6|#93c5fd', red:'#1a0505|#ef4444|#fca5a5', white:'#1a1a1a|#d1d5db|#f3f4f6' };
+        var btns = {
+            blue:  { bg:'rgba(59,130,246,0.10)',  border:'#3b82f6', txt:'text-blue-300'   },
+            red:   { bg:'rgba(239,68,68,0.10)',   border:'#ef4444', txt:'text-red-300'    },
+            white: { bg:'rgba(229,231,235,0.10)', border:'#d1d5db', txt:'text-gray-100'   }
+        };
+        var inactiveTxt = 'text-gray-500';
         ['blue','red','white'].forEach(function(t) {
             var btn = document.getElementById('jersey-btn-'+t);
             if (!btn) return;
+            var labelSpan = btn.querySelector('span:last-child');
             if (t === type) {
-                var parts = btns[t].split('|');
-                btn.style.background  = parts[0];
-                btn.style.borderColor = parts[1];
-                btn.style.color       = parts[2];
-                btn.style.boxShadow   = '0 0 10px '+parts[1]+'55';
+                btn.style.background  = btns[t].bg;
+                btn.style.borderColor = btns[t].border;
+                btn.style.boxShadow   = '0 0 12px '+btns[t].border+'40';
+                if (labelSpan) {
+                    labelSpan.classList.remove(inactiveTxt, 'text-blue-300','text-red-300','text-gray-100');
+                    labelSpan.classList.add(btns[t].txt);
+                }
             } else {
                 btn.style.background  = '#0e1322';
-                btn.style.borderColor = '#374151';
-                btn.style.color       = '#9ca3af';
+                btn.style.borderColor = '#1f2937';
                 btn.style.boxShadow   = '';
+                if (labelSpan) {
+                    labelSpan.classList.remove('text-blue-300','text-red-300','text-gray-100');
+                    labelSpan.classList.add(inactiveTxt);
+                }
             }
         });
         renderPitchPlayers();
