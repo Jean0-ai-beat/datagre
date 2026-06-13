@@ -1349,20 +1349,19 @@
 
             targetPlayers.forEach(function(player) {
                 const card = document.createElement("div");
-                card.className = "group relative rounded-2xl border border-gray-900 bg-[#0e1322] overflow-hidden hover:border-gray-700 hover:shadow-xl hover:shadow-blue-500/5 active:scale-[0.98] transition-all duration-300 flex cursor-pointer reveal player-card-hover";
-                card.style.minHeight = "140px";
+                card.className = "group relative rounded-2xl border border-gray-900 bg-[#0e1322] overflow-hidden hover:border-gray-700 hover:shadow-xl hover:shadow-blue-500/5 active:scale-[0.98] transition-all duration-300 flex flex-col cursor-pointer reveal player-card-hover";
                 card.addEventListener("click", function() { openPlayerModal(player.id); });
 
-                /* ── BANN FOTO AGOCH (pi laj, pa kole) ── */
-                const photoCol = document.createElement("div");
-                photoCol.className = "w-[64px] sm:w-[100px] flex-shrink-0 relative overflow-hidden self-stretch";
-                photoCol.style.borderRight = "3px solid #D21034";
-                photoCol.style.background = "linear-gradient(180deg, #1e3a5f, #0e1322)";
+                /* ── FOTO HEADER (estil FIFA card) ── */
+                const photoHeader = document.createElement("div");
+                photoHeader.className = "relative w-full overflow-hidden";
+                photoHeader.style.aspectRatio = "4/3";
+                photoHeader.style.background = "linear-gradient(135deg, #1e3a5f, #2a1a3a)";
 
                 const photoSkeleton = document.createElement("div");
                 photoSkeleton.className = "skeleton-loader-bg absolute inset-0 flex items-center justify-center";
                 const photoSkelIcon = document.createElement("i");
-                photoSkelIcon.className = "fa-solid " + (player.icon || "fa-user") + " text-xl text-blue-400/40";
+                photoSkelIcon.className = "fa-solid " + (player.icon || "fa-user") + " text-2xl text-blue-400/40";
                 photoSkeleton.appendChild(photoSkelIcon);
 
                 const photoImg = document.createElement("img");
@@ -1374,48 +1373,54 @@
                     hideImageSkeleton(this);
                     this.style.display = "none";
                 };
-                photoCol.appendChild(photoSkeleton);
-                photoCol.appendChild(photoImg);
+                photoHeader.appendChild(photoSkeleton);
+                photoHeader.appendChild(photoImg);
 
-                /* ── CONTENI ADWAT (plis espas) ── */
-                const contentCol = document.createElement("div");
-                contentCol.className = "flex-1 min-w-0 p-2.5 sm:p-4 flex flex-col justify-between gap-1.5 sm:gap-2";
+                /* Gradient overlay anba foto pou lizibilite */
+                const gradOverlay = document.createElement("div");
+                gradOverlay.className = "absolute inset-0 pointer-events-none";
+                gradOverlay.style.background = "linear-gradient(180deg, transparent 50%, rgba(14,19,34,0.9) 100%)";
+                photoHeader.appendChild(gradOverlay);
 
-                const topRow = document.createElement("div");
-                topRow.className = "flex items-start";
+                /* Nimewo (kwen gòch anlè) */
+                if (player.number) {
+                    const numBadge = document.createElement("span");
+                    numBadge.className = "absolute top-2 left-2 bg-black/40 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-md";
+                    numBadge.textContent = "#" + player.number;
+                    photoHeader.appendChild(numBadge);
+                }
 
+                /* Badge/role (kwen dwat anlè) */
                 const tag = document.createElement("span");
                 if (player.badge) {
-                    tag.className = "px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20 whitespace-nowrap inline-flex items-center";
+                    tag.className = "absolute top-2 right-2 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-amber-500/90 text-[#412402] whitespace-nowrap";
                     tag.textContent = player.badge;
                 } else {
-                    tag.className = "px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-gray-900 text-gray-400 whitespace-nowrap inline-flex items-center";
+                    tag.className = "absolute top-2 right-2 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-black/40 backdrop-blur-sm text-gray-200 whitespace-nowrap";
                     tag.textContent = player.role;
                 }
-                topRow.appendChild(tag);
+                photoHeader.appendChild(tag);
+
+                /* ── KONTENI ANBA ── */
+                const contentCol = document.createElement("div");
+                contentCol.className = "p-3 sm:p-4 flex flex-col gap-1.5";
 
                 const nameEl = document.createElement("h3");
-                nameEl.className = "font-athletic text-[11px] sm:text-base font-bold uppercase text-white tracking-wide leading-tight";
+                nameEl.className = "font-athletic text-sm sm:text-lg font-bold uppercase text-white tracking-wide leading-tight";
                 nameEl.style.wordBreak = "break-word";
                 nameEl.textContent = player.name;
 
                 const clubEl = document.createElement("p");
-                clubEl.className = "text-[9px] sm:text-[10px] text-gray-400 font-semibold leading-tight";
+                clubEl.className = "text-[10px] text-gray-400 font-semibold leading-tight";
                 clubEl.style.wordBreak = "break-word";
                 clubEl.textContent = player.club;
 
-                const textGroup = document.createElement("div");
-                textGroup.className = "flex flex-col gap-1 mt-1.5";
-                textGroup.appendChild(nameEl);
-                textGroup.appendChild(clubEl);
-
-                const topGroup = document.createElement("div");
-                topGroup.appendChild(topRow);
-                topGroup.appendChild(textGroup);
+                contentCol.appendChild(nameEl);
+                contentCol.appendChild(clubEl);
 
                 // Footer
                 const footer = document.createElement("div");
-                footer.className = "pt-2 border-t border-gray-900/60 flex items-center justify-between text-gray-500 group-hover:text-gray-300 transition-colors";
+                footer.className = "mt-2 pt-2 border-t border-gray-900/60 flex items-center justify-between text-gray-500 group-hover:text-gray-300 transition-colors";
                 const footerLabel = document.createElement("span");
                 footerLabel.className = "text-[9px] font-bold tracking-wider uppercase";
                 footerLabel.textContent = "Voir Profil";
@@ -1424,10 +1429,9 @@
                 footer.appendChild(footerLabel);
                 footer.appendChild(footerIcon);
 
-                contentCol.appendChild(topGroup);
                 contentCol.appendChild(footer);
 
-                card.appendChild(photoCol);
+                card.appendChild(photoHeader);
                 card.appendChild(contentCol);
                 grid.appendChild(card);
             });
