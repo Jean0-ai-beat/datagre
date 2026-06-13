@@ -1056,6 +1056,22 @@
                         <span class="text-xs font-bold text-red-500 uppercase tracking-widest block mb-1" data-i18n="lbl_stats_gren">Statistiques Grenadiers</span>
                         <h2 class="font-athletic text-2xl sm:text-3xl font-extrabold uppercase text-white" data-i18n="lbl_scorers">Buteurs</h2>
                     </div>
+
+                    <!-- Admin: ajoute but/asis -->
+                    <div id="scorer-admin-box" class="hidden mb-3 border border-amber-500/20 bg-amber-500/5 rounded-2xl p-3">
+                        <p class="text-[10px] font-bold uppercase text-amber-400 tracking-wider mb-2">
+                            <i class="fa-solid fa-shield-halved mr-1"></i>Admin · Ajoute but/asis
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <select id="scorer-player-select" class="flex-1 bg-[#0e1322] border border-gray-800 rounded-xl px-3 py-2 text-xs text-white"></select>
+                            <div class="flex gap-2">
+                                <button onclick="addScorerStat('goals')" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white whitespace-nowrap">+1 But</button>
+                                <button onclick="addScorerStat('assists')" class="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-xs font-bold text-white whitespace-nowrap">+1 Passe</button>
+                                <button onclick="resetScorers()" class="px-3 py-2 rounded-xl border border-gray-700 text-xs font-bold text-gray-400 hover:text-white whitespace-nowrap">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="border border-gray-900 rounded-2xl bg-[#0e1322] p-4 space-y-2" id="scorers-list">
                         <!-- Injecté par JS -->
                     </div>
@@ -1773,11 +1789,32 @@
 
     /* Buteurs Grenadiers (mis à jour manuellement ou via API) */
     var scorersData = [
-        { name:'Wilson Isidor',         club:'Sunderland',     goals:0, assists:0 },
-        { name:'Duckens Nazon',         club:'Kayserispor',    goals:0, assists:0 },
-        { name:'Frantzdy Pierrot',      club:'Rizespor',       goals:0, assists:0 },
-        { name:'Jean-Ricner Bellegarde',club:'Wolves',         goals:0, assists:0 },
-        { name:'Lenny Joseph',          club:'Ferencváros',    goals:0, assists:0 }
+        { id:'johny_placide', name:'Johny Placide', club:'SC Bastia', goals:0, assists:0 },
+        { id:'alexandre_pierre', name:'Alexandre Pierre', club:'Sochaux', goals:0, assists:0 },
+        { id:'josue_duverger', name:'Josué Duverger', club:'Cosmos Koblenz', goals:0, assists:0 },
+        { id:'ricardo_ade', name:'Ricardo Adé', club:'LDU Quito', goals:0, assists:0 },
+        { id:'hannes_delcroix', name:'Hannes Delcroix', club:'FC Lugano', goals:0, assists:0 },
+        { id:'carlens_arcus', name:'Carlens Arcus', club:'Angers SCO', goals:0, assists:0 },
+        { id:'jean_kevin_duverne', name:'Jean-Kévin Duverne', club:'KAA Gent', goals:0, assists:0 },
+        { id:'duke_lacroix', name:'Duke Lacroix', club:'Colorado Springs', goals:0, assists:0 },
+        { id:'martin_experience', name:'Martin Expérience', club:'AS Nancy', goals:0, assists:0 },
+        { id:'wilguens_paugain', name:'Wilguens Paugain', club:'Zulte Waregem', goals:0, assists:0 },
+        { id:'keeto_thermoncy', name:'Keeto Thermoncy', club:'Young Boys U21', goals:0, assists:0 },
+        { id:'jean_ricner_bellegarde', name:'Jean-Ricner Bellegarde', club:'Wolves', goals:0, assists:0 },
+        { id:'danley_jean_jacques', name:'Danley Jean-Jacques', club:'Philadelphia Union', goals:0, assists:0 },
+        { id:'carl_fred_sainte', name:'Carl Fred Sainté', club:'FC Dallas', goals:0, assists:0 },
+        { id:'woodensky_pierre', name:'Woodensky Pierre', club:'Violette AC', goals:0, assists:0 },
+        { id:'dominique_simon', name:'Dominique Simon', club:'Tatran Prešov', goals:0, assists:0 },
+        { id:'leverton_pierre', name:'Leverton Pierre', club:'FC Vizela', goals:0, assists:0 },
+        { id:'frantzdy_pierrot', name:'Frantzdy Pierrot', club:'Rizespor', goals:0, assists:0 },
+        { id:'duckens_nazon', name:'Duckens Nazon', club:'Estegal F.C', goals:0, assists:0 },
+        { id:'wilson_isidor', name:'Wilson Isidor', club:'Sunderland', goals:0, assists:0 },
+        { id:'deedson_louicius', name:'Don Deedson Louicius', club:'FC Dallas', goals:0, assists:0 },
+        { id:'derrick_etienne', name:'Derrick Etienne Jr.', club:'Toronto FC', goals:0, assists:0 },
+        { id:'lenny_joseph', name:'Lenny Joseph', club:'Ferencváros', goals:0, assists:0 },
+        { id:'josue_casimir', name:'Josué Casimir', club:'AJ Auxerre', goals:0, assists:0 },
+        { id:'rubens_providence', name:'Rubens Providence', club:'Almere City', goals:0, assists:0 },
+        { id:'yassin_fortune', name:'Yassin Fortuné', club:'FC Vizela', goals:0, assists:0 }
     ];
 
     /* ---- RENDU CLASSEMENT ---- */
@@ -1839,8 +1876,22 @@
         if (!list) return;
         list.innerHTML = '';
 
+        // Sèlman jwè ki gen omwen 1 but oswa 1 asis
+        var active = data.filter(function(p){ return (p.goals||0) > 0 || (p.assists||0) > 0; });
+
+        if (active.length === 0) {
+            var empty = document.createElement('div');
+            empty.className = 'text-center py-6 text-gray-500 text-xs';
+            empty.innerHTML = '<i class="fa-solid fa-futbol text-2xl mb-2 block opacity-30"></i>Aucun but pour le moment';
+            list.appendChild(empty);
+            return;
+        }
+
         // Trier buts desc
-        var sorted = data.slice().sort(function(a,b){ return b.goals - a.goals; });
+        var sorted = active.slice().sort(function(a,b){
+            if (b.goals !== a.goals) return b.goals - a.goals;
+            return (b.assists||0) - (a.assists||0);
+        });
 
         sorted.forEach(function(p, i) {
             var isFirst = i === 0 && p.goals > 0;
@@ -2000,13 +2051,168 @@
     }
 
     /* ---- INIT ---- */
+    /* ── PÈSISTANS BUTEURS ── */
+    function loadScorersData() {
+        try {
+            var raw = localStorage.getItem('pwe_scorers');
+            if (raw) {
+                var saved = JSON.parse(raw);
+                saved.forEach(function(s){
+                    var p = scorersData.find(function(x){ return x.id===s.id; });
+                    if (p) { p.goals = s.goals||0; p.assists = s.assists||0; }
+                });
+            }
+        } catch(e){}
+    }
+    function saveScorersData() {
+        try {
+            var slim = scorersData.map(function(p){ return {id:p.id, goals:p.goals, assists:p.assists}; });
+            localStorage.setItem('pwe_scorers', JSON.stringify(slim));
+        } catch(e){}
+    }
+
+    /* ── ADMIN: AJOUTE BUT/ASIS ── */
+    function populateScorerSelect() {
+        var sel = document.getElementById('scorer-player-select');
+        if (!sel) return;
+        sel.innerHTML = '';
+        scorersData.forEach(function(p){
+            var opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.name + ' (' + p.goals + 'B / ' + p.assists + 'A)';
+            sel.appendChild(opt);
+        });
+    }
+    function addScorerStat(type) {
+        var sel = document.getElementById('scorer-player-select');
+        if (!sel || !sel.value) return;
+        var p = scorersData.find(function(x){ return x.id===sel.value; });
+        if (!p) return;
+        if (type==='goals') p.goals = (p.goals||0)+1;
+        else p.assists = (p.assists||0)+1;
+        saveScorersData(); /* localStorage backup */
+
+        /* Mete ajou Supabase */
+        updateScorerInDB(p.id, p.goals, p.assists)
+            .then(function() {
+                if (typeof showToast==='function') showToast('✅ '+p.name+' — Mis à jour!', 'green');
+            })
+            .catch(function() {
+                if (typeof showToast==='function') showToast('⚠️ Erreur DB — sauvé localement', 'red');
+            });
+
+        renderScorers(scorersData);
+        populateScorerSelect();
+        sel.value = p.id;
+    }
+    function resetScorers() {
+        if (!confirm('Remettre tous les buts/passes à 0 ?')) return;
+        scorersData.forEach(function(p){ p.goals=0; p.assists=0; });
+        saveScorersData();
+
+        /* Reset Supabase — tout jwè */
+        var updates = scorersData.map(function(p){
+            return updateScorerInDB(p.id, 0, 0);
+        });
+        Promise.all(updates).then(function(){
+            if (typeof showToast==='function') showToast('✅ Reset konplè', 'green');
+        });
+
+        renderScorers(scorersData);
+        populateScorerSelect();
+    }
+    function refreshScorerAdminVisibility() {
+        var box = document.getElementById('scorer-admin-box');
+        if (!box) return;
+        if (typeof isAdminLogged !== 'undefined' && isAdminLogged) {
+            box.classList.remove('hidden');
+            populateScorerSelect();
+        } else {
+            box.classList.add('hidden');
+        }
+    }
+
+
+    /* ══ SUPABASE — Backend Buteurs ══ */
+    var SUPA_URL = 'https://dlarlirtjfvnhwlyxsin.supabase.co';
+    var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsYXJsaXJ0amZ2bmh3bHl4c2luIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNzA5NDYsImV4cCI6MjA5Njk0Njk0Nn0.CqGu5BLNVoePeCIy-xmBB6UEyL_ppwnrCdRszTR2cUo';
+
+    function supaHeaders() {
+        return {
+            'Content-Type': 'application/json',
+            'apikey': SUPA_KEY,
+            'Authorization': 'Bearer ' + SUPA_KEY
+        };
+    }
+
+    /* Chaje tout buteurs soti Supabase */
+    function fetchScorersFromDB() {
+        fetch(SUPA_URL + '/rest/v1/scorers?select=*', {
+            headers: supaHeaders()
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(rows) {
+            if (!Array.isArray(rows) || rows.length === 0) {
+                /* Tab vid — insere 26 jwè yo */
+                initScorersInDB();
+                return;
+            }
+            /* Mete ajou scorersData ak done DB */
+            rows.forEach(function(row) {
+                var p = scorersData.find(function(x) { return x.id === row.id; });
+                if (p) {
+                    p.goals   = row.goals   || 0;
+                    p.assists = row.assists || 0;
+                }
+            });
+            renderScorers(scorersData);
+            populateScorerSelect();
+        })
+        .catch(function(err) {
+            console.warn('Supabase fetch error:', err);
+            /* Fallback localStorage */
+            loadScorersData();
+            renderScorers(scorersData);
+        });
+    }
+
+    /* Insere 26 jwè nan DB si vid */
+    function initScorersInDB() {
+        var rows = scorersData.map(function(p) {
+            return { id: p.id, name: p.name, club: p.club, goals: 0, assists: 0 };
+        });
+        fetch(SUPA_URL + '/rest/v1/scorers', {
+            method: 'POST',
+            headers: Object.assign(supaHeaders(), { 'Prefer': 'return=minimal' }),
+            body: JSON.stringify(rows)
+        })
+        .then(function() {
+            renderScorers(scorersData);
+        })
+        .catch(function(err) { console.warn('DB init error:', err); });
+    }
+
+    /* Mete ajou 1 jwè nan Supabase */
+    function updateScorerInDB(playerId, goals, assists) {
+        return fetch(SUPA_URL + '/rest/v1/scorers?id=eq.' + encodeURIComponent(playerId), {
+            method: 'PATCH',
+            headers: Object.assign(supaHeaders(), { 'Prefer': 'return=minimal' }),
+            body: JSON.stringify({ goals: goals, assists: assists })
+        });
+    }
+
     function initStandings() {
+        // Chaje done Supabase (si echwe, localStorage fallback)
+        fetchScorersFromDB();
         // Afficher les 4 équipes immédiatement
         renderStandings(standingsData);
         renderScorers(scorersData);
+        refreshScorerAdminVisibility();
         // Essayer de mettre à jour via API en arrière-plan
         setTimeout(fetchStandings, 1500);
         setInterval(fetchStandings, 3 * 60 * 1000);
+        // Rechaje buteurs chak 30 segonn
+        setInterval(fetchScorersFromDB, 30000);
     }
     </script>
     <script>
@@ -3657,6 +3863,7 @@ window.onload = function() {
             adminAttempts = 0;
             adminBlockedUntil = 0;
             isAdminLogged = true;
+            refreshScorerAdminVisibility();
             closeAdminLogin();
             document.getElementById('admin-panel').classList.remove('hidden');
             document.getElementById('admin-icon').className = 'fa-solid fa-unlock';
@@ -3680,6 +3887,7 @@ window.onload = function() {
     }
     function logoutAdmin() {
         isAdminLogged = false;
+        refreshScorerAdminVisibility();
         document.getElementById('admin-panel').classList.add('hidden');
         document.getElementById('admin-icon').className = 'fa-solid fa-lock';
         document.getElementById('admin-btn-label').textContent = 'Admin';
