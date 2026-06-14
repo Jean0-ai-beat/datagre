@@ -1679,101 +1679,7 @@
             if (e.target === this) closeModal();
         });
 
-        // Countdown timer
-        function initMatchCountdown() {
-
-        /* 3 match yo ak dat/è yo (UTC) */
-        var CD_MATCHES = [
-            { label:'Haïti vs Écosse',  date:'2026-06-14T01:05:00Z', emoji:'🇭🇹 vs 🏴󠁧󠁢󠁳󠁣󠁴󠁿', city:'Boston' },
-            { label:'Brésil vs Haïti',  date:'2026-06-20T01:00:00Z', emoji:'🇧🇷 vs 🇭🇹', city:'Philadelphia' },
-            { label:'Maroc vs Haïti',   date:'2026-06-25T01:00:00Z', emoji:'🇲🇦 vs 🇭🇹', city:'Atlanta' }
-        ];
-
-        var currentMatch = 0;
-
-        /* Gad kont entèval doub si fonksyon sa rele plis pase 1 fwa */
-        if (window._pweCountdownInterval) {
-            clearInterval(window._pweCountdownInterval);
-            window._pweCountdownInterval = null;
-        }
-
-        /* Jwenn match pwochen ki poko jwe */
-        var now = Date.now();
-        for (var i=0; i<CD_MATCHES.length; i++) {
-            var t = new Date(CD_MATCHES[i].date).getTime();
-            if (isNaN(t)) continue; /* sote dat envalid */
-            if (t > now) {
-                currentMatch = i;
-                break;
-            }
-            currentMatch = i; /* dènye match si tout pase */
-        }
-
-        window.switchCountdown = function(idx) {
-            currentMatch = idx;
-            /* Update bouton yo */
-            for (var i=0; i<3; i++) {
-                var btn = document.getElementById('cd-btn-'+i);
-                if (!btn) continue;
-                if (i===idx) {
-                    btn.style.background     = 'rgba(59,130,246,0.15)';
-                    btn.style.borderColor    = 'rgba(59,130,246,0.4)';
-                    btn.style.color          = '#60a5fa';
-                } else {
-                    btn.style.background     = 'rgba(255,255,255,0.03)';
-                    btn.style.borderColor    = 'rgba(255,255,255,0.08)';
-                    btn.style.color          = '#6b7280';
-                }
-            }
-            updateTimer();
-        };
-
-        function pad(n) { return n < 10 ? '0'+n : ''+n; }
-
-        function updateTimer() {
-            var match = CD_MATCHES[currentMatch];
-            var target = new Date(match.date).getTime();
-            if (isNaN(target)) return; /* dat envalid — pa fè anyen */
-            var diff   = target - Date.now();
-
-            var lbl  = document.getElementById('cd-label');
-            var date = document.getElementById('cd-date');
-            if (lbl)  lbl.textContent  = match.label + ' dans :';
-            if (date) date.textContent = match.emoji + ' · ' + match.city;
-
-            if (diff <= 0) {
-                /* Match fini — pase otomatikman sou pwochen match si li egziste */
-                if (currentMatch < CD_MATCHES.length - 1) {
-                    currentMatch++;
-                    switchCountdown(currentMatch);
-                    return;
-                }
-                /* Dènye match — montre "fini" */
-                document.getElementById('countdown-days').innerText    = '00';
-                document.getElementById('countdown-hours').innerText   = '00';
-                document.getElementById('countdown-minutes').innerText = '00';
-                document.getElementById('countdown-seconds').innerText = '00';
-                if (lbl) lbl.textContent = match.label + ' · ⚽ En cours / Terminé';
-                return;
-            }
-
-            var days    = Math.floor(diff / 86400000);
-            var hours   = Math.floor((diff % 86400000) / 3600000);
-            var minutes = Math.floor((diff % 3600000)  / 60000);
-            var seconds = Math.floor((diff % 60000)    / 1000);
-
-            document.getElementById('countdown-days').innerText    = pad(days);
-            document.getElementById('countdown-hours').innerText   = pad(hours);
-            document.getElementById('countdown-minutes').innerText = pad(minutes);
-            document.getElementById('countdown-seconds').innerText = pad(seconds);
-        }
-
-        /* Aktive match pwochen otomatikman */
-        switchCountdown(currentMatch);
-        updateTimer();
-        window._pweCountdownInterval = setInterval(updateTimer, 1000);
-    }
-    </script>
+</script>
 
     <!-- ============================================================
          STANDINGS & SCORERS — Live via TheSportsDB (free, CORS-OK)
@@ -3078,26 +2984,95 @@
     }
 
     function initMatchCountdown() {
-        var targetDate = new Date('2026-06-14T02:00:00Z').getTime(); // June 13 21:00 Haiti (UTC-5)
+
+        /* 3 match yo ak dat/è yo (UTC, ISO pou konpatibilite tout navigatè) */
+        var CD_MATCHES = [
+            { label:'Haïti vs Écosse',  date:'2026-06-14T01:05:00Z', emoji:'🇭🇹 vs 🏴󠁧󠁢󠁳󠁣󠁴󠁿', city:'Boston' },
+            { label:'Brésil vs Haïti',  date:'2026-06-20T01:00:00Z', emoji:'🇧🇷 vs 🇭🇹', city:'Philadelphia' },
+            { label:'Maroc vs Haïti',   date:'2026-06-25T01:00:00Z', emoji:'🇲🇦 vs 🇭🇹', city:'Atlanta' }
+        ];
+
+        var currentMatch = 0;
+
+        /* Gad kont entèval doub si fonksyon sa rele plis pase 1 fwa */
+        if (window._pweCountdownInterval) {
+            clearInterval(window._pweCountdownInterval);
+            window._pweCountdownInterval = null;
+        }
+
+        /* Jwenn match pwochen ki poko jwe */
+        var now = Date.now();
+        for (var i=0; i<CD_MATCHES.length; i++) {
+            var t = new Date(CD_MATCHES[i].date).getTime();
+            if (isNaN(t)) continue; /* sote dat envalid */
+            if (t > now) {
+                currentMatch = i;
+                break;
+            }
+            currentMatch = i; /* dènye match si tout pase */
+        }
+
+        window.switchCountdown = function(idx) {
+            currentMatch = idx;
+            /* Update bouton yo */
+            for (var i=0; i<3; i++) {
+                var btn = document.getElementById('cd-btn-'+i);
+                if (!btn) continue;
+                if (i===idx) {
+                    btn.style.background     = 'rgba(59,130,246,0.15)';
+                    btn.style.borderColor    = 'rgba(59,130,246,0.4)';
+                    btn.style.color          = '#60a5fa';
+                } else {
+                    btn.style.background     = 'rgba(255,255,255,0.03)';
+                    btn.style.borderColor    = 'rgba(255,255,255,0.08)';
+                    btn.style.color          = '#6b7280';
+                }
+            }
+            prevMinutes = -1; /* fòse flip lè switch match */
+            updateTimer();
+        };
+
         function updateTimer() {
-            var diff = targetDate - new Date().getTime();
+            var match = CD_MATCHES[currentMatch];
+            var target = new Date(match.date).getTime();
+            if (isNaN(target)) return; /* dat envalid — pa fè anyen */
+            var diff   = target - Date.now();
+
+            var lbl  = document.getElementById('cd-label');
+            var date = document.getElementById('cd-date');
+            if (lbl)  lbl.textContent  = match.label + ' dans :';
+            if (date) date.textContent = match.emoji + ' · ' + match.city;
+
             if (diff <= 0) {
+                /* Match fini — pase otomatikman sou pwochen match si li egziste */
+                if (currentMatch < CD_MATCHES.length - 1) {
+                    currentMatch++;
+                    switchCountdown(currentMatch);
+                    return;
+                }
+                /* Dènye match — montre "fini" */
                 ['countdown-days','countdown-hours','countdown-minutes','countdown-seconds']
                     .forEach(function(id){ var e=document.getElementById(id); if(e) e.textContent='00'; });
+                if (lbl) lbl.textContent = match.label + ' · ⚽ En cours / Terminé';
                 return;
             }
+
             var days    = Math.floor(diff / 86400000);
             var hours   = Math.floor((diff % 86400000) / 3600000);
             var minutes = Math.floor((diff % 3600000)  / 60000);
             var seconds = Math.floor((diff % 60000)    / 1000);
+
             flipUpdate('countdown-days',    days,    false);
             flipUpdate('countdown-hours',   hours,   false);
             flipUpdate('countdown-minutes', minutes, minutes !== prevMinutes);
             flipUpdate('countdown-seconds', seconds, true);
             prevMinutes = minutes;
         }
+
+        /* Aktive match pwochen otomatikman */
+        switchCountdown(currentMatch);
         updateTimer();
-        setInterval(updateTimer, 1000);
+        window._pweCountdownInterval = setInterval(updateTimer, 1000);
     }
 
     /* ── INIT GLOBAL ── */
