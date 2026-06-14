@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
@@ -1715,10 +1716,10 @@
 
     /* Stats initiales (0-0-0 avant le tournoi) */
     var standingsData = [
-        { name:'Brésil',  code:'br',     pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0, haiti:false },
-        { name:'Haïti',   code:'ht',     pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0, haiti:true  },
-        { name:'Maroc',   code:'ma',     pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0, haiti:false },
-        { name:'Écosse',  code:'gb-sct', pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0, haiti:false }
+        { name:'Brésil',  code:'br',     rank:1, pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0, haiti:false },
+        { name:'Haïti',   code:'ht',     rank:2, pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0, haiti:true  },
+        { name:'Maroc',   code:'ma',     rank:3, pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0, haiti:false },
+        { name:'Écosse',  code:'gb-sct', rank:4, pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0, haiti:false }
     ];
 
     /* Buteurs Grenadiers (mis à jour manuellement ou via API) */
@@ -1757,13 +1758,24 @@
         if (!body) return;
 
         // Trier une COPIE (ne pas muter l'original)
-        var sorted = data.slice().sort(function(a,b){
-            if (b.pts !== a.pts) return b.pts - a.pts;
-            var diffA = (a.bp||0) - (a.bc||0);
-            var diffB = (b.bp||0) - (b.bc||0);
-            if (diffB !== diffA) return diffB - diffA;
-            return (b.bp||0) - (a.bp||0);
-        });
+        /* Si chak ekip gen yon 'rank' API valid (1..N, tout diferan), itilize li dirèkteman
+           — sa respekte tiebreakers FIFA (head-to-head, fair-play) API a kalkile deja. */
+        var ranks = data.map(function(t){ return t.rank; });
+        var validRanks = ranks.every(function(r){ return r!=null && r>=1 && r<=data.length; })
+                         && new Set(ranks).size === data.length;
+
+        var sorted;
+        if (validRanks) {
+            sorted = data.slice().sort(function(a,b){ return a.rank - b.rank; });
+        } else {
+            sorted = data.slice().sort(function(a,b){
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                var diffA = (a.bp||0) - (a.bc||0);
+                var diffB = (b.bp||0) - (b.bc||0);
+                if (diffB !== diffA) return diffB - diffA;
+                return (b.bp||0) - (a.bp||0);
+            });
+        }
 
         body.innerHTML = '';
         sorted.forEach(function(team, i) {
@@ -1898,14 +1910,18 @@
                 };
 
                 var nameToCode = {'Brésil':'br','Haïti':'ht','Maroc':'ma','Écosse':'gb-sct'};
-                var mapped = teams.map(function(t){
+                var mapped = teams.map(function(t, idx){
                     var raw = t.name || t.name_en || t.team || t.country || '';
                     var fifaCode = t.fifa_code || t.code || '';
                     var resolvedName = nameMap[raw] || raw;
                     var resolvedCode = flagMap[raw] || flagMap[fifaCode] || nameToCode[resolvedName] || null;
+                    /* Pran rang API a SÈLMAN si eksplisitman bay (rank/position/pos/rang) */
+                    var apiRankRaw = t.rank!=null?t.rank : t.position!=null?t.position : t.pos!=null?t.pos : t.rang!=null?t.rang : null;
+                    var apiRank = apiRankRaw!=null ? parseInt(apiRankRaw) : null;
                     return {
                         name:  resolvedName,
                         code:  resolvedCode,
+                        rank:  (apiRank!=null && !isNaN(apiRank)) ? apiRank : null,
                         pj:    parseInt(t.played||t.mp||t.pj||0),
                         g:     parseInt(t.won||t.w||t.g||0),
                         n:     parseInt(t.drawn||t.d||t.n||0),
