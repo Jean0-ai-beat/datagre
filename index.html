@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
@@ -1942,6 +1941,42 @@
                 /* Dènye fallback: si toujou pa rezoud, kenbe ansyen drapo, mete sèlman estatistik */
                 if (!allCodesValid) {
                     mapped.forEach(function(m){ if (!m.code) m.code='ht'; });
+                }
+
+                /* ── KALKILE STAT HAÏTI LOKALMAN soti nan rezilta admin (API ka gen done fo pou Haïti) ── */
+                if (typeof loadActualResults === 'function' && typeof MATCHES !== 'undefined') {
+                    var actualRes = loadActualResults();
+                    var hStats = { pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0 };
+                    var hasAnyResult = false;
+
+                    MATCHES.forEach(function(match){
+                        var res = actualRes[match.id];
+                        if (!res) return;
+                        hasAnyResult = true;
+                        var isHome = (match.home === 'Haïti');
+                        var hGoals = isHome ? res.scoreH : res.scoreA;
+                        var oGoals = isHome ? res.scoreA : res.scoreH;
+                        hStats.pj++;
+                        hStats.bp += hGoals;
+                        hStats.bc += oGoals;
+                        if (hGoals > oGoals)      { hStats.g++; hStats.pts += 3; }
+                        else if (hGoals === oGoals){ hStats.n++; hStats.pts += 1; }
+                        else                       { hStats.p++; }
+                    });
+
+                    if (hasAnyResult) {
+                        var hRow = mapped.find(function(m){ return m.code==='ht'; });
+                        if (hRow) {
+                            hRow.pj  = hStats.pj;
+                            hRow.g   = hStats.g;
+                            hRow.n   = hStats.n;
+                            hRow.p   = hStats.p;
+                            hRow.bp  = hStats.bp;
+                            hRow.bc  = hStats.bc;
+                            hRow.pts = hStats.pts;
+                            hRow.rank = null; /* fòse re-triye lokal pwiske Haïti chanje */
+                        }
+                    }
                 }
 
                 if (mapped.length > 0) {
