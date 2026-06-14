@@ -4015,6 +4015,7 @@ window.onload = function() {
             isAdminLogged = true;
             refreshScorerAdminVisibility();
             if (typeof loadAdminPredictions === 'function') loadAdminPredictions();
+            if (typeof fetchPendingFromDB === 'function') fetchPendingFromDB();
             closeAdminLogin();
             document.getElementById('admin-panel').classList.remove('hidden');
             document.getElementById('admin-icon').className = 'fa-solid fa-unlock';
@@ -4081,6 +4082,8 @@ window.onload = function() {
 
     function approveArticle(idx) {
         var a = pendingArticles.splice(idx, 1)[0];
+        if (a.id) deletePendingArticleFromDB(a.id);
+        delete a.id;
         a.date = new Date().toISOString().split('T')[0];
         newsArticles.unshift(a);
         pushNewsArticleToDB(a).then(function(saved){ if (saved) { a.id = saved.id; saveNews(); } });
@@ -4119,7 +4122,8 @@ window.onload = function() {
     }
     function rejectArticle(idx) {
         if (confirm('Rejeter cet article ?')) {
-            pendingArticles.splice(idx, 1);
+            var a = pendingArticles.splice(idx, 1)[0];
+            if (a && a.id) deletePendingArticleFromDB(a.id);
             savePending();
             renderPendingList();
         }
@@ -4193,6 +4197,45 @@ window.onload = function() {
         return fetch(SUPA_URL + '/rest/v1/news_articles?id=eq.'+id, {
             method: 'DELETE', headers: supaHeaders()
         }).catch(function(){});
+    }
+
+    /* ══ SUPABASE — Soumisyon itilizatè (pending) cross-device ══ */
+    function pushPendingArticleToDB(article) {
+        return fetch(SUPA_URL + '/rest/v1/pending_articles', {
+            method:  'POST',
+            headers: Object.assign(supaHeaders(), { 'Prefer': 'return=representation' }),
+            body: JSON.stringify(newsRowFromArticle(article))
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(arr){ return (Array.isArray(arr) && arr[0]) ? arr[0] : null; })
+        .catch(function(){ return null; });
+    }
+
+    function deletePendingArticleFromDB(id) {
+        return fetch(SUPA_URL + '/rest/v1/pending_articles?id=eq.'+id, {
+            method: 'DELETE', headers: supaHeaders()
+        }).catch(function(){});
+    }
+
+    function fetchPendingFromDB() {
+        fetch(SUPA_URL + '/rest/v1/pending_articles?select=*&order=created_at.desc', {
+            headers: supaHeaders()
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(rows){
+            if (!Array.isArray(rows)) return;
+            pendingArticles = rows.map(function(r){
+                return {
+                    id: r.id, category: r.category, title: r.title, excerpt: r.excerpt,
+                    link: r.link || '', date: r.date, emoji: r.emoji || '📰',
+                    author: r.author || ''
+                };
+            });
+            savePending();
+            renderPendingList();
+            if (typeof loadAdminSubmissions === 'function') loadAdminSubmissions();
+        })
+        .catch(function(err){ console.warn('pending_articles fetch error:', err); });
     }
 
     function fetchNewsFromDB() {
@@ -4337,7 +4380,35 @@ window.onload = function() {
             encoded.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
         });
 
-        /* Web3Forms pou article submission */
+        /* Atik la kòm objè — itilize pou Web3Forms (email) + Supabase (cross-device) */
+        var sanitize = function(s){ return s.replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,500); };
+        var articleObj = {
+            category: formData.get('category') || 'Officiel',
+            title:    sanitize(formData.get('title')  || ''),
+            excerpt:  sanitize(formData.get('excerpt')|| ''),
+            link:     (formData.get('link') || '').replace(/javascript:/gi,''),
+            emoji:    '📰',
+            author:   sanitize(formData.get('author') || ''),
+            date:     new Date().toISOString().split('T')[0]
+        };
+
+        function finishSubmit() {
+            submitCount++;
+            document.getElementById('submit-success').classList.remove('hidden');
+            form.reset();
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i><span>Envoyer</span>'; }
+            if (isAdminLogged) { renderPendingList(); if (typeof loadAdminSubmissions==='function') loadAdminSubmissions(); }
+            setTimeout(closeSubmitModal, 5000);
+        }
+
+        /* ── Push nan Supabase (tout itilizatè ak admin wè soumisyon, kèlkeswa aparèy) ── */
+        pushPendingArticleToDB(articleObj).then(function(saved){
+            if (saved) articleObj.id = saved.id;
+            pendingArticles.push(articleObj);
+            savePending();
+        });
+
+        /* Web3Forms pou article submission (notifikasyon email, an plis) */
         var artData = {
             access_key: W3F_KEY,
             subject:    'GrenadyeHub — Nouvo Atik Soumèt',
@@ -4351,33 +4422,8 @@ window.onload = function() {
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body:    JSON.stringify(artData)
         })
-        .then(function() {
-            submitCount++;
-            document.getElementById('submit-success').classList.remove('hidden');
-            form.reset();
-            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i><span>Envoyer</span>'; }
-            setTimeout(closeSubmitModal, 5000);
-        })
-        .catch(function() {
-            // Fallback localStorage
-            var sanitize = function(s){ return s.replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,500); };
-            pendingArticles.push({
-                category: formData.get('category') || 'Officiel',
-                title:    sanitize(formData.get('title')  || ''),
-                excerpt:  sanitize(formData.get('excerpt')|| ''),
-                link:     (formData.get('link') || '').replace(/javascript:/gi,''),
-                emoji:    '📰',
-                author:   sanitize(formData.get('author') || ''),
-                date:     new Date().toISOString().split('T')[0]
-            });
-            savePending();
-            submitCount++;
-            document.getElementById('submit-success').classList.remove('hidden');
-            form.reset();
-            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i><span>Envoyer</span>'; }
-            if (isAdminLogged) renderPendingList();
-            setTimeout(closeSubmitModal, 5000);
-        });
+        .then(finishSubmit)
+        .catch(finishSubmit);
     }
 
     /* ──────────────── FEED LIVE ──────────────── */
@@ -5749,7 +5795,7 @@ window.onload = function() {
                 btn.style.background='#0e1322'; btn.style.color='#6b7280'; btn.style.borderColor='#1f2937';
             }
         });
-        if (tab==='submissions') loadAdminSubmissions();
+        if (tab==='submissions') { fetchPendingFromDB(); loadAdminSubmissions(); }
         if (tab==='predictions') loadAdminPredictions();
     }
 
