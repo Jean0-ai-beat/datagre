@@ -1684,18 +1684,25 @@
 
         /* 3 match yo ak dat/è yo (UTC) */
         var CD_MATCHES = [
-            { label:'Haïti vs Écosse',  date:'June 14, 2026 01:05:00 GMT', emoji:'🇭🇹 vs 🏴󠁧󠁢󠁳󠁣󠁴󠁿', city:'Boston' },
-            { label:'Brésil vs Haïti',  date:'June 20, 2026 01:00:00 GMT', emoji:'🇧🇷 vs 🇭🇹', city:'Philadelphia' },
-            { label:'Maroc vs Haïti',   date:'June 25, 2026 01:00:00 GMT', emoji:'🇲🇦 vs 🇭🇹', city:'Atlanta' }
+            { label:'Haïti vs Écosse',  date:'2026-06-14T01:05:00Z', emoji:'🇭🇹 vs 🏴󠁧󠁢󠁳󠁣󠁴󠁿', city:'Boston' },
+            { label:'Brésil vs Haïti',  date:'2026-06-20T01:00:00Z', emoji:'🇧🇷 vs 🇭🇹', city:'Philadelphia' },
+            { label:'Maroc vs Haïti',   date:'2026-06-25T01:00:00Z', emoji:'🇲🇦 vs 🇭🇹', city:'Atlanta' }
         ];
 
         var currentMatch = 0;
-        var timerInterval = null;
+
+        /* Gad kont entèval doub si fonksyon sa rele plis pase 1 fwa */
+        if (window._pweCountdownInterval) {
+            clearInterval(window._pweCountdownInterval);
+            window._pweCountdownInterval = null;
+        }
 
         /* Jwenn match pwochen ki poko jwe */
         var now = Date.now();
         for (var i=0; i<CD_MATCHES.length; i++) {
-            if (new Date(CD_MATCHES[i].date).getTime() > now) {
+            var t = new Date(CD_MATCHES[i].date).getTime();
+            if (isNaN(t)) continue; /* sote dat envalid */
+            if (t > now) {
                 currentMatch = i;
                 break;
             }
@@ -1726,6 +1733,7 @@
         function updateTimer() {
             var match = CD_MATCHES[currentMatch];
             var target = new Date(match.date).getTime();
+            if (isNaN(target)) return; /* dat envalid — pa fè anyen */
             var diff   = target - Date.now();
 
             var lbl  = document.getElementById('cd-label');
@@ -1763,7 +1771,7 @@
         /* Aktive match pwochen otomatikman */
         switchCountdown(currentMatch);
         updateTimer();
-        timerInterval = setInterval(updateTimer, 1000);
+        window._pweCountdownInterval = setInterval(updateTimer, 1000);
     }
     </script>
 
@@ -4802,6 +4810,76 @@ window.onload = function() {
         }).catch(function(){});
     }
 
+    /* ══ SUPABASE — Predictions globales ══ */
+    function upsertPredictionToDB(matchId, result, score) {
+        var row = {
+            uid:      getUserId(),
+            match_id: matchId,
+            pseudo:   getUserPseudo() || 'Anonyme',
+            result:   result,
+            score:    score,
+            voted_at: new Date().toISOString()
+        };
+        fetch(SUPA_URL + '/rest/v1/predictions?on_conflict=uid,match_id', {
+            method:  'POST',
+            headers: Object.assign(supaHeaders(), {
+                'Prefer': 'resolution=merge-duplicates,return=minimal'
+            }),
+            body: JSON.stringify(row)
+        }).catch(function(err){ console.warn('Predictions DB error:', err); });
+    }
+
+    /* Chaje TOUT vòt yo, kalkile pousantaj kominote VRE pou chak match */
+    function fetchCommunityStats() {
+        fetch(SUPA_URL + '/rest/v1/predictions?select=match_id,result', {
+            headers: supaHeaders()
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(rows){
+            if (!Array.isArray(rows)) return;
+            var stats = {};
+            rows.forEach(function(row){
+                if (!stats[row.match_id]) stats[row.match_id] = {home:0,draw:0,away:0};
+                if (stats[row.match_id][row.result] !== undefined) {
+                    stats[row.match_id][row.result]++;
+                }
+            });
+            /* Ranplase community ak vrè done global */
+            predState.community = stats;
+            saveLocalVotes();
+            renderPredictionCards();
+        })
+        .catch(function(err){ console.warn('Community stats error:', err); });
+    }
+
+    /* ══ SUPABASE — Leaderboard global ══ */
+    function fetchLeaderboardFromDB() {
+        fetch(SUPA_URL + '/rest/v1/leaderboard?select=*&order=pts.desc', {
+            headers: supaHeaders()
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(rows){
+            if (!Array.isArray(rows) || rows.length === 0) return;
+            saveLeaderboard(rows);
+            renderPublicLeaderboard(rows);
+        })
+        .catch(function(err){ console.warn('Leaderboard DB error:', err); });
+    }
+
+    /* Admin: pibliye leaderboard sou Supabase (upsert tout ranje yo) */
+    function pushLeaderboardToDB(lb) {
+        var rows = lb.map(function(u){
+            return { pseudo: u.pseudo, pts: u.pts||0, badge: u.badge||'' };
+        });
+        return fetch(SUPA_URL + '/rest/v1/leaderboard?on_conflict=pseudo', {
+            method:  'POST',
+            headers: Object.assign(supaHeaders(), {
+                'Prefer': 'resolution=merge-duplicates,return=minimal'
+            }),
+            body: JSON.stringify(rows)
+        });
+    }
+
     /* ── ACTIONS ── */
     function castVote(matchId, result) {
         var match = MATCHES.find(function(m){ return m.id===matchId; });
@@ -4841,6 +4919,7 @@ window.onload = function() {
         uv.locked = true;
         saveLocalVotes();
         submitVoteToNetlify(matchId, uv.result, uv.score);
+        upsertPredictionToDB(matchId, uv.result, uv.score);
         renderPredictionCards();
     }
 
@@ -5830,8 +5909,10 @@ window.onload = function() {
             lb.sort(function(a,b){ return b.pts - a.pts; });
             saveLeaderboard(lb);
             renderPublicLeaderboard(lb);
+            pushLeaderboardToDB(lb)
+                .then(function(){ showToast('✅ Leaderboard pibliye pou tout moun!', 'green'); })
+                .catch(function(){ showToast('⚠️ Sove lokal, erè sync DB', 'red'); });
             if (status) status.innerHTML = '<span style="color:#10b981;">✅ '+lb.length+' user chaje!</span>';
-            showToast('✅ Leaderboard aktive!', 'green');
         } catch(e) {
             if (status) status.innerHTML = '<span style="color:#ef4444;">❌ Erè: '+e.message+'</span>';
         }
@@ -6231,13 +6312,19 @@ window.onload = function() {
         loadPredStorage();
         renderPredictionCards();
         renderMyScore();
-        /* Chaje leaderboard sove oswa vide */
+        /* Chaje leaderboard sove oswa vide (lokal) anvan Supabase */
         var savedLb = loadLeaderboard();
         if (savedLb && savedLb.length > 0) {
             renderPublicLeaderboard(savedLb);
         } else {
             renderLeaderboard();
         }
+        /* ── SUPABASE: pousantaj kominote VRE + leaderboard global ── */
+        fetchCommunityStats();
+        fetchLeaderboardFromDB();
+        setInterval(fetchCommunityStats, 30000);
+        setInterval(fetchLeaderboardFromDB, 30000);
+
         setInterval(renderPredictionCards, 30000);
         /* Restore URL si deja sove */
         try {
