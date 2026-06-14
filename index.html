@@ -1155,6 +1155,15 @@
                             <i class="fa-solid fa-save"></i> Sove Rezilta yo
                         </button>
 
+                        <!-- AUTO-CALCUL LEADERBOARD (Supabase) -->
+                        <button onclick="autoCalculateLeaderboard()"
+                            class="w-full mt-2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-[10px] font-bold uppercase text-white transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-bolt"></i> Kalkile & Pibliye Leaderboard (Auto)
+                        </button>
+                        <p class="text-[9px] text-gray-600 mt-1 leading-relaxed">
+                            Li tout vòt Supabase, konpare ak rezilta anlè a, kalkile pwen (3/5/0), epi pibliye pou tout moun. Pa bezwen Excel.
+                        </p>
+
                         <!-- PASTE LEADERBOARD CSV -->
                         <div class="mt-4 pt-4 border-t border-gray-800">
                             <p class="text-[10px] font-bold uppercase text-blue-400 tracking-wider mb-2">
@@ -4839,6 +4848,60 @@ window.onload = function() {
             renderPublicLeaderboard(rows);
         })
         .catch(function(err){ console.warn('Leaderboard DB error:', err); });
+    }
+
+    /* ══ ADMIN: KALKILE LEADERBOARD OTOMATIKMAN soti Supabase predictions ══ */
+    function autoCalculateLeaderboard() {
+        var actual = loadActualResults();
+        if (Object.keys(actual).length === 0) {
+            showToast('❌ Antre rezilta match yo anvan!', 'red');
+            return;
+        }
+
+        fetch(SUPA_URL + '/rest/v1/predictions?select=pseudo,match_id,result,score', {
+            headers: supaHeaders()
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(rows){
+            if (!Array.isArray(rows) || rows.length === 0) {
+                showToast('⚠️ Pa gen vòt nan Supabase ankò', 'red');
+                return;
+            }
+
+            /* Agrege pwen pa pseudo */
+            var totals = {};
+            rows.forEach(function(row){
+                var pseudo = row.pseudo || 'Anonyme';
+                var res    = actual[row.match_id];
+                if (!res) return; /* match poko gen rezilta */
+
+                var pts = 0;
+                if (row.score === res.score) pts = 5;
+                else if (row.result === res.result) pts = 3;
+
+                totals[pseudo] = (totals[pseudo]||0) + pts;
+            });
+
+            var lb = Object.keys(totals).map(function(pseudo){
+                return { pseudo: pseudo, pts: totals[pseudo], badge: '' };
+            });
+            lb.sort(function(a,b){ return b.pts - a.pts; });
+
+            /* Badge top 3 */
+            if (lb[0]) lb[0].badge = '🥇';
+            if (lb[1]) lb[1].badge = '🥈';
+            if (lb[2]) lb[2].badge = '🥉';
+
+            saveLeaderboard(lb);
+            renderPublicLeaderboard(lb);
+            pushLeaderboardToDB(lb)
+                .then(function(){ showToast('✅ Leaderboard kalkile epi pibliye! ('+lb.length+' itilizatè)', 'green'); })
+                .catch(function(){ showToast('⚠️ Kalkile men erè pibliye Supabase', 'red'); });
+        })
+        .catch(function(err){
+            console.warn('Auto leaderboard error:', err);
+            showToast('❌ Erè konekte Supabase', 'red');
+        });
     }
 
     /* Admin: pibliye leaderboard sou Supabase (upsert tout ranje yo) */
