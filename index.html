@@ -5586,15 +5586,26 @@ window.onload = function() {
         if (!document.getElementById('res-h-'+MATCHES[0].id)) {
             renderAdminResultsForm();
         }
-        var results = {};
-        var allOk = true;
+        /* Gade rezilta ki deja sove — nou ranplase sèlman match ki ranpli kounye a */
+        var results = loadActualResults();
+        var savedCount = 0;
+        var incompleteCount = 0;
+
         MATCHES.forEach(function(match) {
             var hEl = document.getElementById('res-h-'+match.id);
             var aEl = document.getElementById('res-a-'+match.id);
-            if (!hEl || !aEl) { allOk = false; return; }
-            var h = parseInt(hEl.value);
-            var a = parseInt(aEl.value);
-            if (isNaN(h) || isNaN(a)) { allOk = false; return; }
+            if (!hEl || !aEl) return;
+
+            var hRaw = hEl.value.trim();
+            var aRaw = aEl.value.trim();
+
+            /* Match poko gen rezilta antre — pa touch li, kontinye */
+            if (hRaw === '' && aRaw === '') return;
+
+            var h = parseInt(hRaw);
+            var a = parseInt(aRaw);
+            if (isNaN(h) || isNaN(a)) { incompleteCount++; return; }
+
             h = Math.max(0, Math.min(20, h));
             a = Math.max(0, Math.min(20, a));
             results[match.id] = {
@@ -5603,13 +5614,22 @@ window.onload = function() {
                 score:  h+'-'+a,
                 result: h>a ? 'home' : h<a ? 'away' : 'draw'
             };
+            savedCount++;
             /* Update bouton vizèl */
             var btn = document.getElementById('res-status-'+match.id);
             if (btn) btn.textContent = h+'-'+a+' ✓';
         });
-        if (!allOk) { showToast('❌ Antre tout skor yo!', 'red'); return; }
+
+        if (savedCount === 0 && incompleteCount === 0) {
+            showToast('❌ Antre omwen 1 rezilta!', 'red');
+            return;
+        }
+        if (incompleteCount > 0) {
+            showToast('⚠️ '+incompleteCount+' match enkonplè ignore', 'red');
+        }
+
         try { localStorage.setItem('pwe_actual_results', JSON.stringify(results)); } catch(e){}
-        showToast('✅ Rezilta yo sove!', 'green');
+        showToast('✅ '+savedCount+' rezilta sove!', 'green');
         renderMyScore();
         renderLeaderboard();
     }
