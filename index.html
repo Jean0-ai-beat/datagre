@@ -1048,6 +1048,17 @@
                         </div>
                     </div>
                     <p id="standings-updated" class="text-[10px] text-gray-600 mt-2 font-medium text-right"></p>
+
+                    <!-- RÉSULTATS MATCH HAÏTI — Groupe C -->
+                    <div class="mt-6">
+                        <h3 class="text-xs font-bold uppercase text-gray-400 tracking-widest mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-blue-400"></i>
+                            <span data-i18n="lbl_match_results">Résultats Haïti — Groupe C</span>
+                        </h3>
+                        <div id="match-results-list" class="space-y-2">
+                            <!-- Injecté par JS -->
+                        </div>
+                    </div>
                 </div>
 
                 <!-- BUTEURS & PASSES -->
@@ -4328,6 +4339,9 @@ window.onload = function() {
         lbl_bench:      { fr:'Banc des Remplaçants',    ht:'Ban Ranplasman yo',       en:'Substitutes Bench'      },
         lbl_formation:  { fr:'Changer la Formation',    ht:'Chanje Fòmasyon an',      en:'Change Formation'       },
         lbl_scorers:    { fr:'Buteurs',                 ht:'Bité yo',                 en:'Scorers'                },
+        lbl_match_results: { fr:'Résultats Haïti — Groupe C', ht:'Rezilta Ayiti — Group C', en:'Haiti Results — Group C' },
+        lbl_upcoming:   { fr:'À venir',                ht:'Pwochenn',                en:'Upcoming'               },
+        lbl_finished:   { fr:'Terminé',                ht:'Fini',                    en:'Finished'               },
         lbl_last_update:{ fr:'Dernière mise à jour',    ht:'Dènye mize ajou',         en:'Last updated'           },
         lbl_group_c:    { fr:'Phase de Groupes — Groupe C', ht:'Faz Gwoup — Gwoup C', en:'Group Stage — Group C'  },
         lbl_news_feed:  { fr:'Feed Live',               ht:'Nyouze Live',             en:'Live Feed'              },
@@ -5592,6 +5606,49 @@ window.onload = function() {
     // Bon rezilta:    +3 pts  (genyen/nul/pèdi kòrèk)
     // Pa bon:          0 pts
 
+    /* ── RÉSULTATS MATCH HAÏTI (Groupe C) ── */
+    function renderMatchResults() {
+        var list = document.getElementById('match-results-list');
+        if (!list) return;
+        var actual = loadActualResults();
+        var lang = currentLang || 'fr';
+        list.innerHTML = '';
+
+        MATCHES.forEach(function(match){
+            var res = actual[match.id];
+            var row = document.createElement('div');
+            row.className = 'flex items-center justify-between gap-2 bg-[#0e1322] border border-gray-900 rounded-xl px-3 py-2.5';
+
+            var teams = document.createElement('div');
+            teams.className = 'flex items-center gap-2 text-xs font-bold text-white flex-1 min-w-0';
+            teams.innerHTML =
+                '<img src="'+(GROUP_FLAGS[match.homeFlag]||'')+'" class="w-5 h-4 rounded-sm flex-shrink-0 object-cover" alt="">'
+                +'<span class="truncate">'+match.home+'</span>'
+                +'<span class="text-gray-600 mx-0.5 flex-shrink-0">vs</span>'
+                +'<span class="truncate">'+match.away+'</span>'
+                +'<img src="'+(GROUP_FLAGS[match.awayFlag]||'')+'" class="w-5 h-4 rounded-sm flex-shrink-0 object-cover" alt="">';
+
+            var statusEl = document.createElement('div');
+            statusEl.className = 'flex-shrink-0 text-right ml-2';
+
+            if (res) {
+                statusEl.innerHTML =
+                    '<span class="font-athletic text-base font-black text-white">'+res.scoreH+' - '+res.scoreA+'</span>'
+                    +'<span class="block text-[9px] font-bold uppercase text-emerald-400 tracking-wider">'
+                    +(i18n.lbl_finished && i18n.lbl_finished[lang] || 'Terminé')+'</span>';
+            } else {
+                statusEl.innerHTML =
+                    '<span class="text-[10px] text-gray-500 font-semibold whitespace-nowrap">'+(match.date||'')+'</span>'
+                    +'<span class="block text-[9px] font-bold uppercase text-amber-400 tracking-wider">'
+                    +(i18n.lbl_upcoming && i18n.lbl_upcoming[lang] || 'À venir')+'</span>';
+            }
+
+            row.appendChild(teams);
+            row.appendChild(statusEl);
+            list.appendChild(row);
+        });
+    }
+
     /* ── LOAD/SAVE ACTUAL RESULTS ── */
     function loadActualResults() {
         try {
@@ -5651,6 +5708,7 @@ window.onload = function() {
         showToast('✅ '+savedCount+' rezilta sove!', 'green');
         renderMyScore();
         renderLeaderboard();
+        renderMatchResults();
     }
 
     /* ── RENDER ADMIN RESULTS FORM ── */
@@ -6406,6 +6464,7 @@ window.onload = function() {
         loadPredStorage();
         renderPredictionCards();
         renderMyScore();
+        renderMatchResults();
         /* Chaje leaderboard sove oswa vide (lokal) anvan Supabase */
         var savedLb = loadLeaderboard();
         if (savedLb && savedLb.length > 0) {
