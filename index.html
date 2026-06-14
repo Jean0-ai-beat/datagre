@@ -5804,6 +5804,61 @@ window.onload = function() {
         } catch(e) { return {}; }
     }
 
+    /* ══ SUPABASE — Rezilta match global pou tout moun ══ */
+    function pushMatchResultToDB(matchId, res) {
+        var row = {
+            match_id: matchId,
+            score_h:  res.scoreH,
+            score_a:  res.scoreA,
+            result:   res.result,
+            score:    res.score
+        };
+        return fetch(SUPA_URL + '/rest/v1/match_results?on_conflict=match_id', {
+            method:  'POST',
+            headers: Object.assign(supaHeaders(), {
+                'Prefer': 'resolution=merge-duplicates,return=minimal'
+            }),
+            body: JSON.stringify(row)
+        });
+    }
+
+    function fetchMatchResultsFromDB() {
+        fetch(SUPA_URL + '/rest/v1/match_results?select=*', {
+            headers: supaHeaders()
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(rows){
+            if (!Array.isArray(rows)) return;
+
+            var dbResults = {};
+            rows.forEach(function(row){
+                dbResults[row.match_id] = {
+                    scoreH: row.score_h,
+                    scoreA: row.score_a,
+                    score:  row.score,
+                    result: row.result
+                };
+            });
+
+            /* DB se referans, men kenbe done lokal ki poko nan DB (premye sync) */
+            var local  = loadActualResults();
+            var merged = Object.assign({}, local, dbResults);
+            try { localStorage.setItem('pwe_actual_results', JSON.stringify(merged)); } catch(e){}
+
+            /* Si yon match nan local pa nan DB, push li (sync premye fwa) */
+            Object.keys(local).forEach(function(mid){
+                if (!dbResults[mid]) pushMatchResultToDB(mid, local[mid]);
+            });
+
+            renderMatchResults();
+            if (typeof renderMyScore === 'function') renderMyScore();
+            if (typeof renderLeaderboard === 'function') renderLeaderboard();
+            if (typeof isAdminLogged !== 'undefined' && isAdminLogged
+                && typeof renderAdminResultsForm === 'function') renderAdminResultsForm();
+        })
+        .catch(function(err){ console.warn('match_results fetch error:', err); });
+    }
+
     function saveActualResults() {
         /* Si fòm la pa rann ankò, rann li kounye a */
         if (!document.getElementById('res-h-'+MATCHES[0].id)) {
@@ -5837,6 +5892,7 @@ window.onload = function() {
                 score:  h+'-'+a,
                 result: h>a ? 'home' : h<a ? 'away' : 'draw'
             };
+            pushMatchResultToDB(match.id, results[match.id]).catch(function(){});
             savedCount++;
             /* Update bouton vizèl */
             var btn = document.getElementById('res-status-'+match.id);
@@ -5915,6 +5971,9 @@ window.onload = function() {
         if (!actual[matchId]) return;
         delete actual[matchId];
         try { localStorage.setItem('pwe_actual_results', JSON.stringify(actual)); } catch(e){}
+        fetch(SUPA_URL + '/rest/v1/match_results?match_id=eq.'+encodeURIComponent(matchId), {
+            method: 'DELETE', headers: supaHeaders()
+        }).catch(function(){});
         renderAdminResultsForm();
         renderMatchResults();
         renderMyScore();
@@ -6643,8 +6702,10 @@ window.onload = function() {
         /* ── SUPABASE: pousantaj kominote VRE + leaderboard global ── */
         fetchCommunityStats();
         fetchLeaderboardFromDB();
+        fetchMatchResultsFromDB();
         setInterval(fetchCommunityStats, 30000);
         setInterval(fetchLeaderboardFromDB, 30000);
+        setInterval(fetchMatchResultsFromDB, 30000);
 
         setInterval(renderPredictionCards, 30000);
         /* Restore URL si deja sove */
