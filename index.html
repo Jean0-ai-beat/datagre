@@ -4083,6 +4083,7 @@ window.onload = function() {
         var a = pendingArticles.splice(idx, 1)[0];
         a.date = new Date().toISOString().split('T')[0];
         newsArticles.unshift(a);
+        pushNewsArticleToDB(a).then(function(saved){ if (saved) { a.id = saved.id; saveNews(); } });
         saveNews();
         savePending();
         renderPendingList();
@@ -4156,6 +4157,74 @@ window.onload = function() {
         } catch(e){}
     }
 
+    /* ══ SUPABASE — Atik aktualite global pou tout moun ══ */
+    function newsRowFromArticle(article) {
+        return {
+            category: article.category || 'Officiel',
+            title:    article.title,
+            excerpt:  article.excerpt,
+            link:     article.link || '',
+            date:     article.date,
+            emoji:    article.emoji || '📰',
+            author:   article.author || 'GrenadyeHub'
+        };
+    }
+
+    function pushNewsArticleToDB(article) {
+        return fetch(SUPA_URL + '/rest/v1/news_articles', {
+            method:  'POST',
+            headers: Object.assign(supaHeaders(), { 'Prefer': 'return=representation' }),
+            body: JSON.stringify(newsRowFromArticle(article))
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(arr){ return (Array.isArray(arr) && arr[0]) ? arr[0] : null; })
+        .catch(function(){ return null; });
+    }
+
+    function updateNewsArticleInDB(id, article) {
+        return fetch(SUPA_URL + '/rest/v1/news_articles?id=eq.'+id, {
+            method:  'PATCH',
+            headers: Object.assign(supaHeaders(), { 'Prefer': 'return=minimal' }),
+            body: JSON.stringify(newsRowFromArticle(article))
+        }).catch(function(){});
+    }
+
+    function deleteNewsArticleFromDB(id) {
+        return fetch(SUPA_URL + '/rest/v1/news_articles?id=eq.'+id, {
+            method: 'DELETE', headers: supaHeaders()
+        }).catch(function(){});
+    }
+
+    function fetchNewsFromDB() {
+        fetch(SUPA_URL + '/rest/v1/news_articles?select=*&order=date.desc,id.desc', {
+            headers: supaHeaders()
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(rows){
+            if (!Array.isArray(rows)) return;
+
+            if (rows.length === 0) {
+                /* DB vid — seed li ak atik default/lokal yo (premye fwa) */
+                newsArticles.forEach(function(a){
+                    if (a.id) return;
+                    pushNewsArticleToDB(a).then(function(saved){ if (saved) a.id = saved.id; });
+                });
+                return;
+            }
+
+            /* DB se sous referans — ranplase lis lokal la */
+            newsArticles = rows.map(function(r){
+                return {
+                    id: r.id, category: r.category, title: r.title, excerpt: r.excerpt,
+                    link: r.link || '', date: r.date, emoji: r.emoji || '📰',
+                    author: r.author || 'GrenadyeHub'
+                };
+            });
+            renderNewsGrid();
+        })
+        .catch(function(err){ console.warn('news_articles fetch error:', err); });
+    }
+
     /* ──────────────── MODAL ADMIN (ajout/édition) ──────────────── */
     function buildEmojiPicker(currentEmoji) {
         var picker = document.getElementById('emoji-picker');
@@ -4202,15 +4271,24 @@ window.onload = function() {
         var title   = document.getElementById('news-title').value.trim();
         var excerpt = document.getElementById('news-excerpt').value.trim();
         if (!title||!excerpt) { alert('Titre et résumé obligatoires.'); return; }
+        var idx = parseInt(document.getElementById('news-edit-index').value);
+        var existing = (idx >= 0) ? newsArticles[idx] : null;
         var article = {
             category: document.getElementById('news-category').value,
             title: title, excerpt: excerpt,
             link: document.getElementById('news-link').value.trim(),
-            date: new Date().toISOString().split('T')[0],
-            emoji: selectedEmoji, author: 'GrenadyeHub'
+            date: existing ? existing.date : new Date().toISOString().split('T')[0],
+            emoji: selectedEmoji, author: 'GrenadyeHub',
+            id: existing ? existing.id : undefined
         };
-        var idx = parseInt(document.getElementById('news-edit-index').value);
-        if (idx >= 0) { newsArticles[idx] = article; } else { newsArticles.unshift(article); }
+        if (existing) {
+            newsArticles[idx] = article;
+            if (article.id) updateNewsArticleInDB(article.id, article);
+            else pushNewsArticleToDB(article).then(function(saved){ if (saved) article.id = saved.id; });
+        } else {
+            newsArticles.unshift(article);
+            pushNewsArticleToDB(article).then(function(saved){ if (saved) article.id = saved.id; });
+        }
         saveNews();
         closeNewsModal();
         renderNewsGrid();
@@ -4218,6 +4296,8 @@ window.onload = function() {
     function editNewsArticle(idx)   { openNewsModal(idx); }
     function deleteNewsArticle(idx) {
         if (confirm('Supprimer cet article ?')) {
+            var a = newsArticles[idx];
+            if (a && a.id) deleteNewsArticleFromDB(a.id);
             newsArticles.splice(idx,1);
             saveNews();
             renderNewsGrid();
@@ -4371,6 +4451,8 @@ window.onload = function() {
         loadStored();     // Charger données persistées
         renderNewsGrid();
         fetchLiveFeed();
+        fetchNewsFromDB();
+        setInterval(fetchNewsFromDB, 30000);
     }
     </script>
     <!-- ============================================================
