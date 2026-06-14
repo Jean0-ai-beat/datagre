@@ -1985,7 +1985,7 @@
 
                 mapped = applyHaitiLocalOverride(mapped);
                 standingsData = mapped;
-                showStatus('live', '● Live · ESPN');
+                showStatus('live', '● Live');
                 renderStandings(standingsData);
                 var upd = document.getElementById('standings-updated');
                 if (upd) upd.textContent = new Date().toLocaleTimeString();
@@ -2077,7 +2077,7 @@
 
                 if (mapped.length > 0) {
                     standingsData = mapped;
-                    showStatus('live', '● Live · worldcup26.ir');
+                    showStatus('live', '● Live');
                 } else {
                     showStatus('wait', '○ Ap tann done yo');
                 }
@@ -2107,7 +2107,7 @@
                                         haiti:t.strTeam==='Haiti'
                                     };
                                 });
-                                showStatus('live', '● TheSportsDB');
+                                showStatus('live', '● Live');
                             } else {
                                 showStatus('wait', '○ Ap tann done yo');
                             }
