@@ -5747,11 +5747,32 @@ window.onload = function() {
             statusEl.className = 'text-[10px] font-bold '+(res?'text-emerald-400':'text-gray-600');
             statusEl.textContent = res ? res.score+' ✓' : 'Pas encore';
 
+            /* Bouton efase rezilta sa */
+            var delBtn = document.createElement('button');
+            delBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+            delBtn.title = 'Efase rezilta sa';
+            delBtn.className = 'text-gray-600 hover:text-red-400 transition text-xs px-1';
+            delBtn.onclick = function(){ clearMatchResult(match.id); };
+
             row.appendChild(nameEl);
             row.appendChild(inputsEl);
             row.appendChild(statusEl);
+            row.appendChild(delBtn);
             form.appendChild(row);
         });
+    }
+
+    /* Efase rezilta yon match espesifik */
+    function clearMatchResult(matchId) {
+        var actual = loadActualResults();
+        if (!actual[matchId]) return;
+        delete actual[matchId];
+        try { localStorage.setItem('pwe_actual_results', JSON.stringify(actual)); } catch(e){}
+        renderAdminResultsForm();
+        renderMatchResults();
+        renderMyScore();
+        renderLeaderboard();
+        showToast('🗑 Rezilta efase pou match sa', 'red');
     }
 
     /* ── CALCULE SKOR PÈSONÈL ── */
