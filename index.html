@@ -4844,7 +4844,26 @@ window.onload = function() {
         })
         .then(function(r){ return r.json(); })
         .then(function(rows){
-            if (!Array.isArray(rows) || rows.length === 0) return;
+            if (!Array.isArray(rows)) return;
+
+            if (rows.length === 0) {
+                /* Leaderboard vid sou Supabase — efase vèsyon lokal tou (sync pou tout moun) */
+                try {
+                    localStorage.removeItem('pwe_global_lb');
+                    localStorage.removeItem('pwe_lb_updated');
+                } catch(e){}
+                var body = document.getElementById('leaderboard-body');
+                if (body && body.children.length > 0) {
+                    body.innerHTML =
+                        '<div class="text-center py-8">'
+                        + '<i class="fa-solid fa-trophy text-3xl text-gray-700 block mb-2"></i>'
+                        + '<p class="text-xs text-gray-500 font-bold">Leaderboard disponib apre match yo</p>'
+                        + '<p class="text-[10px] text-gray-600 mt-1">Admin antre rezilta reyèl yo pou aktive l</p>'
+                        + '</div>';
+                }
+                return;
+            }
+
             saveLeaderboard(rows);
             renderPublicLeaderboard(rows);
         })
