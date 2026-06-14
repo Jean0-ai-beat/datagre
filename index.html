@@ -5912,7 +5912,7 @@ window.onload = function() {
     ══════════════════════════════════════════ */
 
     function clearLeaderboard() {
-        if (!confirm('Ou sèten ou vle dezaktive Leaderboard la?')) return;
+        if (!confirm('Ou sèten ou vle EFASE Leaderboard la pou TOUT MOUN? (Supabase + lokal)')) return;
         try {
             localStorage.removeItem('pwe_global_lb');
             localStorage.removeItem('pwe_lb_updated');
@@ -5931,8 +5931,20 @@ window.onload = function() {
         var area = document.getElementById('lb-paste-area');
         if (area) area.value = '';
         var status = document.getElementById('sync-status');
-        if (status) status.innerHTML = '<span style="color:#6b7280;">🗑 Leaderboard efase</span>';
-        showToast('🗑 Leaderboard dezaktive', 'red');
+
+        /* ── Efase TOUT ranje nan Supabase leaderboard tab ── */
+        fetch(SUPA_URL + '/rest/v1/leaderboard?pseudo=neq.__none__', {
+            method: 'DELETE',
+            headers: supaHeaders()
+        })
+        .then(function(){
+            if (status) status.innerHTML = '<span style="color:#6b7280;">🗑 Leaderboard efase (tout moun)</span>';
+            showToast('🗑 Leaderboard efase pou tout moun!', 'red');
+        })
+        .catch(function(){
+            if (status) status.innerHTML = '<span style="color:#ef4444;">⚠️ Efase lokal, erè Supabase</span>';
+            showToast('🗑 Efase lokal — erè Supabase', 'red');
+        });
     }
 
     function pasteLeaderboard() {
