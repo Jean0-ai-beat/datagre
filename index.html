@@ -3856,6 +3856,7 @@ window.onload = function() {
             adminBlockedUntil = 0;
             isAdminLogged = true;
             refreshScorerAdminVisibility();
+            if (typeof loadAdminPredictions === 'function') loadAdminPredictions();
             closeAdminLogin();
             document.getElementById('admin-panel').classList.remove('hidden');
             document.getElementById('admin-icon').className = 'fa-solid fa-unlock';
@@ -5581,12 +5582,16 @@ window.onload = function() {
     }
 
     function saveActualResults() {
+        /* Si fòm la pa rann ankò, rann li kounye a */
+        if (!document.getElementById('res-h-'+MATCHES[0].id)) {
+            renderAdminResultsForm();
+        }
         var results = {};
         var allOk = true;
         MATCHES.forEach(function(match) {
             var hEl = document.getElementById('res-h-'+match.id);
             var aEl = document.getElementById('res-a-'+match.id);
-            if (!hEl || !aEl) return;
+            if (!hEl || !aEl) { allOk = false; return; }
             var h = parseInt(hEl.value);
             var a = parseInt(aEl.value);
             if (isNaN(h) || isNaN(a)) { allOk = false; return; }
