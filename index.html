@@ -1868,7 +1868,136 @@
     }
 
     /* ---- FETCH LIVE via TheSportsDB (gratuit, CORS-OK) ---- */
+    /* Ranplase estatistik Haïti ak kalkil lokal (soti pwe_actual_results) */
+    function applyHaitiLocalOverride(mapped) {
+        if (typeof loadActualResults !== 'function' || typeof MATCHES === 'undefined') return mapped;
+        var actualRes = loadActualResults();
+        var hStats = { pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0 };
+        var hasAnyResult = false;
+
+        MATCHES.forEach(function(match){
+            var res = actualRes[match.id];
+            if (!res) return;
+            hasAnyResult = true;
+            var isHome = (match.home === 'Haïti');
+            var hGoals = isHome ? res.scoreH : res.scoreA;
+            var oGoals = isHome ? res.scoreA : res.scoreH;
+            hStats.pj++;
+            hStats.bp += hGoals;
+            hStats.bc += oGoals;
+            if (hGoals > oGoals)       { hStats.g++; hStats.pts += 3; }
+            else if (hGoals === oGoals){ hStats.n++; hStats.pts += 1; }
+            else                       { hStats.p++; }
+        });
+
+        if (hasAnyResult) {
+            var hRow = mapped.find(function(m){ return m.code==='ht'; });
+            if (hRow) {
+                hRow.pj  = hStats.pj;
+                hRow.g   = hStats.g;
+                hRow.n   = hStats.n;
+                hRow.p   = hStats.p;
+                hRow.bp  = hStats.bp;
+                hRow.bc  = hStats.bc;
+                hRow.pts = hStats.pts;
+                hRow.rank = null;
+            }
+        }
+        return mapped;
+    }
+
+    /* ── SOUS PRENSIPAL: ESPN (sports.core/site.api.espn.com) ──
+       Si li reyisi e bay 4 ekip Groupe C, itilize l. Sinon fallback worldcup26.ir. */
     function fetchStandings() {
+        var icon = document.getElementById('refresh-icon');
+        if (icon) icon.classList.add('fa-spin');
+
+        var flagMap = {
+            'Brazil':'br','Brasil':'br','Brésil':'br','BRA':'br',
+            'Haiti':'ht','Haïti':'ht','HAI':'ht',
+            'Morocco':'ma','Maroc':'ma','MAR':'ma',
+            'Scotland':'gb-sct','Écosse':'gb-sct','Ecosse':'gb-sct','SCO':'gb-sct'
+        };
+        var nameMap = {
+            'Brazil':'Brésil','Brasil':'Brésil',
+            'Haiti':'Haïti',
+            'Morocco':'Maroc',
+            'Scotland':'Écosse','Ecosse':'Écosse'
+        };
+        var groupCTeams = ['br','ht','ma','gb-sct'];
+
+        fetch('https://site.api.espn.com/apis/v2/sports/soccer/fifa.world/standings')
+            .then(function(res){
+                if (!res.ok) throw new Error('HTTP '+res.status);
+                return res.json();
+            })
+            .then(function(data){
+                /* Estrikti ESPN tipik: data.children[] (gwoup) -> standings.entries[] -> team + stats[] */
+                var groups = data.children || data.groups || [];
+                var groupC = null;
+
+                for (var i=0; i<groups.length; i++) {
+                    var g = groups[i];
+                    var entries = (g.standings && g.standings.entries) || g.entries || [];
+                    var codes = entries.map(function(e){
+                        var nm = (e.team && (e.team.displayName||e.team.name||e.team.abbreviation)) || '';
+                        return flagMap[nm] || flagMap[(e.team&&e.team.abbreviation)||''] || null;
+                    });
+                    var hasHaiti = codes.indexOf('ht') !== -1;
+                    var allGroupC = codes.length===4 && groupCTeams.every(function(c){ return codes.indexOf(c)!==-1; });
+                    if (hasHaiti && allGroupC) { groupC = entries; break; }
+                }
+
+                if (!groupC) throw new Error('Groupe C pa jwenn nan ESPN');
+
+                var mapped = groupC.map(function(e, idx){
+                    var rawName = (e.team && (e.team.displayName||e.team.name||e.team.abbreviation)) || '';
+                    var resolvedName = nameMap[rawName] || rawName;
+                    var code = flagMap[rawName] || flagMap[(e.team&&e.team.abbreviation)||''] || null;
+
+                    /* stats[] gen objè {name/type, value} */
+                    var stats = e.stats || [];
+                    function statVal(names) {
+                        for (var s=0; s<stats.length; s++) {
+                            var sn = (stats[s].name || stats[s].type || '').toLowerCase();
+                            if (names.indexOf(sn) !== -1) return parseInt(stats[s].value)||0;
+                        }
+                        return 0;
+                    }
+                    var apiRank = (e.note && e.note.rank) || e.rank || null;
+
+                    return {
+                        name:  resolvedName,
+                        code:  code,
+                        rank:  apiRank,
+                        pj:    statVal(['gamesplayed','played']),
+                        g:     statVal(['wins']),
+                        n:     statVal(['ties','draws']),
+                        p:     statVal(['losses']),
+                        bp:    statVal(['pointsfor','goalsfor']),
+                        bc:    statVal(['pointsagainst','goalsagainst']),
+                        pts:   statVal(['points']),
+                        haiti: code==='ht'
+                    };
+                });
+
+                if (!mapped.every(function(m){ return m.code; })) throw new Error('Code pa rezoud (ESPN)');
+
+                mapped = applyHaitiLocalOverride(mapped);
+                standingsData = mapped;
+                showStatus('live', '● Live · ESPN');
+                renderStandings(standingsData);
+                var upd = document.getElementById('standings-updated');
+                if (upd) upd.textContent = new Date().toLocaleTimeString();
+                if (icon) icon.classList.remove('fa-spin');
+            })
+            .catch(function(err){
+                console.warn('ESPN standings error, fallback worldcup26.ir:', err);
+                fetchFromWorldCup26();
+            });
+    }
+
+    function fetchFromWorldCup26() {
         var icon = document.getElementById('refresh-icon');
         if (icon) icon.classList.add('fa-spin');
 
@@ -1944,40 +2073,7 @@
                 }
 
                 /* ── KALKILE STAT HAÏTI LOKALMAN soti nan rezilta admin (API ka gen done fo pou Haïti) ── */
-                if (typeof loadActualResults === 'function' && typeof MATCHES !== 'undefined') {
-                    var actualRes = loadActualResults();
-                    var hStats = { pj:0, g:0, n:0, p:0, bp:0, bc:0, pts:0 };
-                    var hasAnyResult = false;
-
-                    MATCHES.forEach(function(match){
-                        var res = actualRes[match.id];
-                        if (!res) return;
-                        hasAnyResult = true;
-                        var isHome = (match.home === 'Haïti');
-                        var hGoals = isHome ? res.scoreH : res.scoreA;
-                        var oGoals = isHome ? res.scoreA : res.scoreH;
-                        hStats.pj++;
-                        hStats.bp += hGoals;
-                        hStats.bc += oGoals;
-                        if (hGoals > oGoals)      { hStats.g++; hStats.pts += 3; }
-                        else if (hGoals === oGoals){ hStats.n++; hStats.pts += 1; }
-                        else                       { hStats.p++; }
-                    });
-
-                    if (hasAnyResult) {
-                        var hRow = mapped.find(function(m){ return m.code==='ht'; });
-                        if (hRow) {
-                            hRow.pj  = hStats.pj;
-                            hRow.g   = hStats.g;
-                            hRow.n   = hStats.n;
-                            hRow.p   = hStats.p;
-                            hRow.bp  = hStats.bp;
-                            hRow.bc  = hStats.bc;
-                            hRow.pts = hStats.pts;
-                            hRow.rank = null; /* fòse re-triye lokal pwiske Haïti chanje */
-                        }
-                    }
-                }
+                mapped = applyHaitiLocalOverride(mapped);
 
                 if (mapped.length > 0) {
                     standingsData = mapped;
