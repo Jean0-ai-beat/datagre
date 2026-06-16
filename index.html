@@ -4107,19 +4107,39 @@ window.onload = function() {
         var title = (article.emoji||'📰') + ' ' + article.title;
         var msg   = article.excerpt ? article.excerpt.substring(0, 120) : 'Nouvo atik sou GrenadyeHub!';
 
-        var confirmMsg = 'Atik aprouve! Voye notifikasyon push bay fanatik yo?\n\n'
-            + '« ' + title + ' »\n\n'
-            + 'Klike OK pou louvri OneSignal dashboard.';
+        var OS_APP_ID  = 'a9f70648-314c-4c8e-9e39-7ac36505ce51';
+        var OS_API_KEY = 'os_v2_org_tl2hjf2qdffsfbnaiyiburvn4r7rn7ok24neax5gfmybadjfjkmwaznoddna5b3wpryzpchenqpfh736vjrilzq2d6moyuvn2jvp4ui';
 
-        if (confirm(confirmMsg)) {
-            /* Kopye mesaj nan clipboard pou fasilite */
-            var fullMsg = 'TITLE: ' + title + '\n\nMESSAGE: ' + msg;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(fullMsg).catch(function(){});
+        var payload = {
+            app_id: OS_APP_ID,
+            included_segments: ['All'],
+            headings: { fr: title, en: title, ht: title },
+            contents: { fr: msg,   en: msg,   ht: msg   },
+            url: 'https://grenadyehub.com/#actualites',
+            web_push_topic: 'news-' + Date.now()
+        };
+
+        fetch('https://onesignal.com/api/v1/notifications', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + OS_API_KEY
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            if (data.id) {
+                showToast('🔔 Notifikasyon voye bay tout fanatik yo!', 'green');
+            } else {
+                console.warn('OneSignal response:', data);
+                showToast('⚠️ Notifikasyon pa voye: ' + (data.errors||[]).join(', '), 'red');
             }
-            showToast('📋 Mesaj kopye! Kole l nan OneSignal', 'blue');
-            window.open('https://app.onesignal.com/apps', '_blank');
-        }
+        })
+        .catch(function(err){
+            console.warn('OneSignal error:', err);
+            showToast('⚠️ Erè koneksyon notifikasyon', 'red');
+        });
     }
     function rejectArticle(idx) {
         if (confirm('Rejeter cet article ?')) {
