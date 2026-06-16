@@ -4021,6 +4021,7 @@ window.onload = function() {
             document.getElementById('admin-icon').className = 'fa-solid fa-unlock';
             document.getElementById('admin-btn-label').textContent = 'Mode Admin ✓';
             document.getElementById('btn-admin-news').className = 'flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold uppercase text-white transition shadow-lg flex-shrink-0';
+            fetchPendingFromDB();  /* fetch Supabase apre panel vizib — rele renderPendingList() + loadAdminSubmissions() */
             renderPendingList();
             renderNewsGrid();
         } else {
@@ -5795,7 +5796,7 @@ window.onload = function() {
                 btn.style.background='#0e1322'; btn.style.color='#6b7280'; btn.style.borderColor='#1f2937';
             }
         });
-        if (tab==='submissions') { fetchPendingFromDB(); loadAdminSubmissions(); }
+        if (tab==='submissions') { fetchPendingFromDB(); }
         if (tab==='predictions') loadAdminPredictions();
     }
 
