@@ -319,7 +319,14 @@
                 safari_web_id: "web.onesignal.auto.a9f70648-314c-4c8e-9e39-7ac36505ce51",
                 notifyButton: { enable: false },
                 allowLocalhostAsSecureOrigin: true,
+                autoResubscribe: true,
+                welcomeNotification: {
+                    title: "🇭🇹 GrenadyeHub",
+                    message: "Ou abonnen! Ou ap resevwa nouvo sou Haïti nan World Cup 2026."
+                }
             });
+            /* Mete ajou bouton 🔔 apre init */
+            if (typeof updateNotifBtn === 'function') updateNotifBtn();
         });
     </script>
     <link rel="alternate" type="application/rss+xml" title="GrenadyeHub — Actualités" href="/feed.xml">
