@@ -3521,17 +3521,18 @@
         }
 
         try {
-            var permission = await OneSignal.Notifications.permission;
+            var permission  = await OneSignal.Notifications.permission;
+            var isOptedIn   = await OneSignal.User.PushSubscription.optedIn;
 
-            if (!permission) {
-                /* Mande pèmisyon */
+            if (!permission || !isOptedIn) {
+                /* Mande pèmisyon oswa reaktive apre optOut */
                 await OneSignal.Notifications.requestPermission();
+                await OneSignal.User.PushSubscription.optIn();
                 var granted = await OneSignal.Notifications.permission;
                 if (granted) {
                     if (icon) icon.textContent = '🔔';
                     if (btn)  btn.style.borderColor = 'rgba(59,130,246,0.5)';
                     showToast('✅ Notifikasyon aktive!', 'green');
-                    /* Tag pou Groupe C Haiti */
                     OneSignal.User.addTags({
                         'groupe_c': 'true',
                         'haiti_fan': 'true'
@@ -3547,8 +3548,27 @@
                 showToast('🔕 Notifikasyon dezaktive', 'red');
             }
         } catch(e) {
+            console.warn('Notif toggle error:', e);
             showToast('⚠️ Erè notifikasyon', 'red');
         }
+    }
+
+    /* Mete ajou aparans bouton 🔔 selon eta reyèl subscription */
+    async function updateNotifBtn() {
+        try {
+            var btn  = document.getElementById('notif-btn');
+            var icon = document.getElementById('notif-icon');
+            if (!btn || typeof OneSignal === 'undefined') return;
+            var permission = await OneSignal.Notifications.permission;
+            var isOptedIn  = await OneSignal.User.PushSubscription.optedIn;
+            if (permission && isOptedIn) {
+                if (icon) icon.textContent = '🔔';
+                btn.style.borderColor = 'rgba(59,130,246,0.5)';
+            } else {
+                if (icon) icon.textContent = '🔕';
+                btn.style.borderColor = 'rgba(255,255,255,0.1)';
+            }
+        } catch(e) {}
     }
 
     /* Mete ajou icòn notif selon estati */
