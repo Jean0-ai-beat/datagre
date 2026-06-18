@@ -2225,6 +2225,8 @@
 
     /* ══ SUPABASE — Backend Buteurs ══ */
     var SUPA_URL = 'https://dlarlirtjfvnhwlyxsin.supabase.co';
+    var BDLKEY   = '3c9f7a62-80af-4386-9fa5-8c623b1506a6';
+    var BDL_BASE = 'https://api.balldontlie.io/fifa/worldcup/v1';
     var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsYXJsaXJ0amZ2bmh3bHl4c2luIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNzA5NDYsImV4cCI6MjA5Njk0Njk0Nn0.CqGu5BLNVoePeCIy-xmBB6UEyL_ppwnrCdRszTR2cUo';
 
     function supaHeaders() {
@@ -6951,13 +6953,156 @@ window.onload = function() {
         m3: null
     };
 
+    /* ══ BALLDONTLIE API — Chaje done reyèl match ak estatistik jwè ══ */
+    var bdlMatchCache = {};  /* cache pa match_id pou pa refetch */
+
+    function bdlHeaders() {
+        return { 'Authorization': 'Bearer ' + BDLKEY, 'Accept': 'application/json' };
+    }
+
+    /* Jwenn ID match BALLDONTLIE ki koresponn ak match nou an */
+    function fetchBDLMatchData(matchId, callback) {
+        if (bdlMatchCache[matchId]) { callback(bdlMatchCache[matchId]); return; }
+
+        /* Chèche tout match 2026 epi filtre Haïti */
+        fetch(BDL_BASE + '/matches?seasons[]=2026&per_page=100', {
+            headers: bdlHeaders()
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            var matches = data.data || [];
+            var haitiMatches = matches.filter(function(m){
+                var h = (m.home_team && m.home_team.name) || '';
+                var a = (m.away_team && m.away_team.name) || '';
+                return h.indexOf('Haiti') !== -1 || a.indexOf('Haiti') !== -1 ||
+                       h.indexOf('Haïti') !== -1 || a.indexOf('Haïti') !== -1;
+            });
+
+            /* Triye pa dat pou matche m1/m2/m3 */
+            haitiMatches.sort(function(a,b){ return new Date(a.datetime) - new Date(b.datetime); });
+            var idx = parseInt(matchId.replace('m','')) - 1;
+            var match = haitiMatches[idx];
+
+            if (!match) { callback(null); return; }
+
+            /* Chaje estatistik jwè si match fini */
+            if (match.status === 'completed') {
+                fetch(BDL_BASE + '/matches/' + match.id + '/player_stats', {
+                    headers: bdlHeaders()
+                })
+                .then(function(r){ return r.json(); })
+                .then(function(statsData){
+                    match.player_stats = statsData.data || [];
+                    fetch(BDL_BASE + '/matches/' + match.id + '/lineups', {
+                        headers: bdlHeaders()
+                    })
+                    .then(function(r){ return r.json(); })
+                    .then(function(lineupData){
+                        match.lineups = lineupData.data || [];
+                        bdlMatchCache[matchId] = match;
+                        callback(match);
+                    })
+                    .catch(function(){ bdlMatchCache[matchId] = match; callback(match); });
+                })
+                .catch(function(){ bdlMatchCache[matchId] = match; callback(match); });
+            } else {
+                bdlMatchCache[matchId] = match;
+                callback(match);
+            }
+        })
+        .catch(function(err){
+            console.warn('BDL error:', err);
+            callback(null);
+        });
+    }
+
+    /* Konvèti done BDL an fòma Match Center nou an */
+    function buildMCDataFromBDL(matchId, bdlMatch) {
+        if (!bdlMatch) return null;
+
+        var isHome = bdlMatch.home_team && (
+            bdlMatch.home_team.name.indexOf('Haiti') !== -1 ||
+            bdlMatch.home_team.name.indexOf('Haïti') !== -1
+        );
+        var hScore = bdlMatch.home_score || 0;
+        var aScore = bdlMatch.away_score || 0;
+        var finished = bdlMatch.status === 'completed';
+
+        /* Estatistik match */
+        var stats = [];
+        if (bdlMatch.statistics) {
+            var s = bdlMatch.statistics;
+            var hTeam = isHome ? 'home' : 'away';
+            var aTeam = isHome ? 'away' : 'home';
+            function pct(h, a){ var t=h+a; return t>0 ? Math.round(h/t*100) : 50; }
+
+            var posH = parseFloat((s[hTeam+'_possession']||'50').toString().replace('%',''))||50;
+            var shotsH = parseInt(s[hTeam+'_shots_total'])||0;
+            var shotsA = parseInt(s[aTeam+'_shots_total'])||0;
+            var onH = parseInt(s[hTeam+'_shots_on_target'])||0;
+            var onA = parseInt(s[aTeam+'_shots_on_target'])||0;
+            var cornH = parseInt(s[hTeam+'_corners'])||0;
+            var cornA = parseInt(s[aTeam+'_corners'])||0;
+            var foulH = parseInt(s[hTeam+'_fouls'])||0;
+            var foulA = parseInt(s[aTeam+'_fouls'])||0;
+            var passH = parseInt(s[hTeam+'_passes_accuracy'])||0;
+
+            stats = [
+                { label:'Posesyon', home: posH+'%', away:(100-posH)+'%', homePct: posH },
+                { label:'Tiro Total', home:shotsH, away:shotsA, homePct: pct(shotsH,shotsA) },
+                { label:'Sou Kadre', home:onH, away:onA, homePct: pct(onH,onA) },
+                { label:'Kòn', home:cornH, away:cornA, homePct: pct(cornH,cornA) },
+                { label:'Fòt', home:foulH, away:foulA, homePct: pct(foulH,foulA) },
+            ];
+        }
+
+        /* Jwè Haïti soti player_stats */
+        var haitiPlayers = [];
+        if (bdlMatch.player_stats && bdlMatch.player_stats.length) {
+            var haitiTeamId = isHome ? bdlMatch.home_team.id : bdlMatch.away_team.id;
+            haitiPlayers = bdlMatch.player_stats
+                .filter(function(p){ return p.team_id === haitiTeamId; })
+                .map(function(p){
+                    return {
+                        name:  (p.player && (p.player.first_name + ' ' + p.player.last_name)) || 'Jwè',
+                        pos:   (p.position || 'MF').substring(0,2).toUpperCase(),
+                        note:  p.rating ? parseFloat(p.rating).toFixed(1) : null,
+                        mins:  p.minutes_played || 0,
+                        start: p.starting !== false
+                    };
+                })
+                .sort(function(a,b){ return b.start - a.start || b.mins - a.mins; });
+        }
+
+        return {
+            home: isHome ? 'Haïti' : (bdlMatch.away_team && bdlMatch.away_team.name || ''),
+            away: isHome ? (bdlMatch.away_team && bdlMatch.away_team.name || '') : 'Haïti',
+            homeFlag: 'ht',
+            awayFlag: isHome ? (bdlMatch.away_team && bdlMatch.away_team.country_code||'').toLowerCase() : 'ht',
+            date: bdlMatch.datetime ? new Date(bdlMatch.datetime).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : '',
+            venue: bdlMatch.stadium ? bdlMatch.stadium.name + ', ' + bdlMatch.stadium.city : '',
+            score: hScore + ' - ' + aScore,
+            finished: finished,
+            recap: finished
+                ? 'Done soti BALLDONTLIE — Haïti ' + hScore + '-' + aScore + ' ' + (isHome ? (bdlMatch.away_team&&bdlMatch.away_team.name||'') : (bdlMatch.home_team&&bdlMatch.home_team.name||''))
+                : 'Match poko jwe.',
+            xg: { home: null, away: null },
+            stats: stats,
+            players: { haiti: haitiPlayers },
+            lineup: { formation: '4-3-3', starters: [], subs: [] },
+            _fromBDL: true
+        };
+    }
+
     var currentMCMatch = null;
     var currentMCTab   = 'recap';
 
     function openMatchCenter(matchId) {
-        var data = MATCH_CENTER_DATA[matchId];
         currentMCMatch = matchId;
         currentMCTab   = 'recap';
+
+        /* Montre modal imedyatman ak done lokal (hardcoded) */
+        var data = MATCH_CENTER_DATA[matchId];
 
         /* Header */
         var hdr = document.getElementById('mc-header');
@@ -6982,6 +7127,18 @@ window.onload = function() {
         switchMCTab('recap');
         document.getElementById('match-center-modal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
+
+        /* Chaje done reyèl BDL an background — mete ajou si pi bon */
+        fetchBDLMatchData(matchId, function(bdlMatch){
+            if (!bdlMatch) return;
+            var bdlData = buildMCDataFromBDL(matchId, bdlMatch);
+            if (!bdlData) return;
+            /* Ranplase done kòde a si BDL gen done pi konplè */
+            if (bdlData.finished || !MATCH_CENTER_DATA[matchId] || !MATCH_CENTER_DATA[matchId].finished) {
+                MATCH_CENTER_DATA[matchId] = Object.assign({}, MATCH_CENTER_DATA[matchId] || {}, bdlData);
+                if (currentMCMatch === matchId) renderMCContent();
+            }
+        });
     }
 
     function closeMatchCenter() {
