@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">GrenadyeHub | Les Grenadiers  — Coupe du Monde 2026</title>
+    <title id="page-title">GrenadyeHub | Les Grenadiers d'Haïti — Coupe du Monde 2026</title>
 
     <!-- SEO -->
     <link rel="canonical" href="https://grenadyehub.com">
@@ -5934,7 +5934,8 @@ window.onload = function() {
         MATCHES.forEach(function(match){
             var res = actual[match.id];
             var row = document.createElement('div');
-            row.className = 'flex items-center justify-between gap-2 bg-[#0e1322] border border-gray-900 rounded-xl px-3 py-2.5';
+            row.className = 'flex items-center justify-between gap-2 bg-[#0e1322] border border-gray-900 rounded-xl px-3 py-2.5 cursor-pointer hover:border-blue-700 transition-colors';
+            row.onclick = (function(m){ return function(){ openMatchCenter(m.id); }; })(match);
 
             var teams = document.createElement('div');
             teams.className = 'flex items-center gap-2 text-xs font-bold text-white flex-1 min-w-0';
@@ -6887,6 +6888,254 @@ window.onload = function() {
     }
 
 
+    
+    /* ══════════════════════════════════════════
+       MATCH CENTER — Done estatistik reyèl
+    ══════════════════════════════════════════ */
+    var MATCH_CENTER_DATA = {
+        m1: {
+            home: 'Haïti', away: 'Écosse',
+            homeFlag: 'ht', awayFlag: 'gb-sct',
+            date: '14 Jen 2026', venue: 'Gillette Stadium, Boston',
+            score: '0 - 1', finished: true,
+            scorer: { name: 'John McGinn', team: 'away', minute: 28 },
+            recap: "Yon match difisil pou Grenadye yo. Haïti te jwe pi byen statistikman — 15 tiro kont 9 pou Écosse — men John McGinn te make sèl gòl la nan 28 minit. Frantzdy Pierrot te rate chans pi klè a nan 85 minit.",
+            xg: { home: 1.21, away: 1.05 },
+            stats: [
+                { label: 'Posesyon', home: '51%', away: '40%', homePct: 56 },
+                { label: 'Tiro Total', home: 15, away: 9, homePct: 63 },
+                { label: 'Sou Kadre', home: 2, away: 2, homePct: 50 },
+                { label: 'xG', home: 1.21, away: 1.05, homePct: 54 },
+                { label: 'Kòn', home: 4, away: 6, homePct: 40 },
+                { label: 'Fòt', home: 12, away: 14, homePct: 46 },
+                { label: 'Kat Jòn', home: 1, away: 4, homePct: 20 },
+                { label: 'Pasaj Konplè', home: '78%', away: '84%', homePct: 48 }
+            ],
+            players: {
+                haiti: [
+                    { name: 'Johny Placide',       pos: 'GB', note: 6.7, mins: 90,  start: true  },
+                    { name: 'Carlens Arcus',        pos: 'DD', note: 6.4, mins: 90,  start: true  },
+                    { name: 'Ricardo Adé',          pos: 'DC', note: 6.5, mins: 90,  start: true  },
+                    { name: 'Hannes Delcroix',      pos: 'DC', note: 6.6, mins: 90,  start: true  },
+                    { name: 'Martin Expérience',    pos: 'DG', note: 6.6, mins: 90,  start: true  },
+                    { name: 'Danley Jean Jacques',  pos: 'MF', note: 6.4, mins: 90,  start: true  },
+                    { name: 'Jean-Ricner Bellegarde',pos:'MF', note: 7.3, mins: 90,  start: true  },
+                    { name: 'Louicius Deedson',     pos: 'MF', note: 6.4, mins: 61,  start: true  },
+                    { name: 'Ruben Providence',     pos: 'AT', note: 7.0, mins: 85,  start: true  },
+                    { name: 'Wilson Isidor',        pos: 'AT', note: 6.3, mins: 90,  start: true  },
+                    { name: 'Frantzdy Pierrot',     pos: 'AT', note: 6.9, mins: 90,  start: true  },
+                    { name: 'Josué Casimir',        pos: 'MF', note: 6.4, mins: 29,  start: false },
+                    { name: 'Lenny Joseph',         pos: 'AT', note: 6.1, mins: 15,  start: false },
+                    { name: 'Yassin Fortuné',       pos: 'AT', note: 6.0, mins: 5,   start: false }
+                ]
+            },
+            lineup: {
+                formation: '4-3-3',
+                starters: [
+                    { name: 'Placide',      pos: 'GB',  row: 1 },
+                    { name: 'Arcus',        pos: 'DD',  row: 2 },
+                    { name: 'Adé',          pos: 'DC',  row: 2 },
+                    { name: 'Delcroix',     pos: 'DC',  row: 2 },
+                    { name: 'Expérience',   pos: 'DG',  row: 2 },
+                    { name: 'Jean Jacques', pos: 'MF',  row: 3 },
+                    { name: 'Bellegarde',   pos: 'MF',  row: 3 },
+                    { name: 'Deedson',      pos: 'MF',  row: 3 },
+                    { name: 'Providence',   pos: 'AG',  row: 4 },
+                    { name: 'Isidor',       pos: 'AC',  row: 4 },
+                    { name: 'Pierrot',      pos: 'AG',  row: 4 }
+                ],
+                subs: ["Josué Casimir (61')", "Lenny Joseph (75')", "Yassin Fortuné (85')"]
+            }
+        },
+        m2: null,
+        m3: null
+    };
+
+    var currentMCMatch = null;
+    var currentMCTab   = 'recap';
+
+    function openMatchCenter(matchId) {
+        var data = MATCH_CENTER_DATA[matchId];
+        currentMCMatch = matchId;
+        currentMCTab   = 'recap';
+
+        /* Header */
+        var hdr = document.getElementById('mc-header');
+        if (hdr) {
+            var score = data && data.finished ? data.score : 'vs';
+            hdr.innerHTML =
+                '<img src="'+(GROUP_FLAGS[MATCHES.find(function(m){return m.id===matchId;}).homeFlag]||'')+'" class="w-7 h-5 rounded object-cover">'
+                +'<span class="text-white font-black text-lg tracking-tight font-athletic">'+score+'</span>'
+                +'<img src="'+(GROUP_FLAGS[MATCHES.find(function(m){return m.id===matchId;}).awayFlag]||'')+'" class="w-7 h-5 rounded object-cover">'
+                +'<div class="ml-2">'
+                    +'<div class="text-xs font-bold text-white">'+(data ? data.home+' — '+data.away : '')+'</div>'
+                    +'<div class="text-[10px] text-gray-400">'+(data ? data.date+' · '+data.venue : '')+'</div>'
+                +'</div>';
+        }
+
+        /* Show tabs selectively */
+        ['stats','players','lineup'].forEach(function(t){
+            var tab = document.getElementById('mc-tab-'+t);
+            if (tab) tab.style.display = (data && data.finished) ? '' : 'none';
+        });
+
+        switchMCTab('recap');
+        document.getElementById('match-center-modal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMatchCenter() {
+        document.getElementById('match-center-modal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function switchMCTab(tab) {
+        currentMCTab = tab;
+        /* Style tabs */
+        ['recap','stats','players','lineup'].forEach(function(t){
+            var el = document.getElementById('mc-tab-'+t);
+            if (!el) return;
+            el.className = el.className.replace(' border-b-2 border-blue-500 text-blue-400','').replace(' text-gray-400','');
+            el.className += (t === tab) ? ' border-b-2 border-blue-500 text-blue-400' : ' text-gray-400';
+        });
+        renderMCContent();
+    }
+
+    function noteColor(n) {
+        if (n >= 7.5) return 'text-emerald-400';
+        if (n >= 6.5) return 'text-blue-400';
+        if (n >= 6.0) return 'text-yellow-400';
+        return 'text-red-400';
+    }
+
+    function renderMCContent() {
+        var el   = document.getElementById('mc-content');
+        var data = MATCH_CENTER_DATA[currentMCMatch];
+        if (!el) return;
+
+        if (!data || !data.finished) {
+            el.innerHTML = '<div class="text-center py-12 text-gray-500"><div class="text-4xl mb-3">⏳</div><div class="font-bold">Match poko jwe</div><div class="text-xs mt-1">Estatistik yo ap disponib apre match la.</div></div>';
+            return;
+        }
+
+        if (currentMCTab === 'recap') {
+            var goalHtml = data.scorer
+                ? '<div class="flex items-center gap-2 bg-[#0e1322] rounded-xl px-3 py-2 border border-gray-800 mt-3">'
+                    +'<span class="text-yellow-400 text-lg">⚽</span>'
+                    +'<span class="text-white text-sm font-bold">'+data.scorer.name+'</span>'
+                    +'<span class="text-gray-400 text-xs">'+data.scorer.minute+'min</span>'
+                    +'<span class="ml-auto text-xs text-gray-500">'+(data.scorer.team==='home'?data.home:data.away)+'</span>'
+                  +'</div>' : '';
+
+            el.innerHTML =
+                '<div class="space-y-4">'
+                    +'<div class="bg-[#0e1322] rounded-xl p-4 border border-gray-800">'
+                        +'<div class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">Rezime Match</div>'
+                        +'<p class="text-sm text-gray-300 leading-relaxed">'+data.recap+'</p>'
+                        + goalHtml
+                    +'</div>'
+                    +'<div class="grid grid-cols-3 gap-2 text-center">'
+                        +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
+                            +'<div class="text-2xl font-black text-white font-athletic">'+data.xg.home+'</div>'
+                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">xG Haïti</div>'
+                        +'</div>'
+                        +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
+                            +'<div class="text-2xl font-black text-white font-athletic">'+data.stats[1].home+'</div>'
+                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">Tiro</div>'
+                        +'</div>'
+                        +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
+                            +'<div class="text-2xl font-black text-white font-athletic">'+data.stats[0].home+'</div>'
+                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">Posesyon</div>'
+                        +'</div>'
+                    +'</div>'
+                +'</div>';
+        }
+
+        else if (currentMCTab === 'stats') {
+            var rows = data.stats.map(function(s){
+                return '<div class="space-y-1">'
+                    +'<div class="flex justify-between text-xs">'
+                        +'<span class="font-bold text-white">'+s.home+'</span>'
+                        +'<span class="text-gray-400 text-[10px] uppercase tracking-wider">'+s.label+'</span>'
+                        +'<span class="font-bold text-white">'+s.away+'</span>'
+                    +'</div>'
+                    +'<div class="flex h-1.5 rounded-full overflow-hidden bg-gray-800">'
+                        +'<div class="bg-blue-500 rounded-l-full transition-all" style="width:'+s.homePct+'%"></div>'
+                        +'<div class="bg-gray-600 rounded-r-full flex-1"></div>'
+                    +'</div>'
+                +'</div>';
+            }).join('');
+
+            el.innerHTML =
+                '<div class="space-y-3">'
+                    +'<div class="flex justify-between text-[10px] font-bold uppercase tracking-widest mb-1">'
+                        +'<span class="text-blue-400">🇭🇹 '+data.home+'</span>'
+                        +'<span class="text-gray-400">🏴󠁧󠁢󠁳󠁣󠁴󠁿 '+data.away+'</span>'
+                    +'</div>'
+                    + rows
+                +'</div>';
+        }
+
+        else if (currentMCTab === 'players') {
+            var playerRows = data.players.haiti.map(function(p){
+                var nc = noteColor(p.note);
+                return '<div class="flex items-center gap-3 py-2 border-b border-gray-900/60 last:border-0">'
+                    +'<span class="text-[10px] font-bold text-gray-500 w-7 text-center">'+p.pos+'</span>'
+                    +'<span class="flex-1 text-sm text-white font-semibold">'
+                        +p.name
+                        +(p.start ? '' : ' <span class="text-[9px] text-gray-500">↑ Ranplasman</span>')
+                    +'</span>'
+                    +'<span class="text-[10px] text-gray-500">'+p.mins+'min</span>'
+                    +'<span class="text-base font-black '+nc+'">'+p.note+'</span>'
+                +'</div>';
+            }).join('');
+
+            el.innerHTML =
+                '<div class="space-y-0">'
+                    +'<div class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-3">🇭🇹 Jwè Haïti — Nòt Pèfòmans</div>'
+                    +'<div class="flex gap-3 text-[9px] text-gray-500 mb-2 px-1">'
+                        +'<span class="text-emerald-400">■ ≥7.5 Ekselan</span>'
+                        +'<span class="text-blue-400">■ ≥6.5 Bon</span>'
+                        +'<span class="text-yellow-400">■ ≥6.0 Mwayen</span>'
+                    +'</div>'
+                    + playerRows
+                +'</div>';
+        }
+
+        else if (currentMCTab === 'lineup') {
+            var d = data.lineup;
+            var rows_by_row = {};
+            d.starters.forEach(function(p){
+                if (!rows_by_row[p.row]) rows_by_row[p.row] = [];
+                rows_by_row[p.row].push(p);
+            });
+
+            var fieldHtml = Object.keys(rows_by_row).sort().map(function(r){
+                var players = rows_by_row[r].map(function(p){
+                    return '<div class="text-center">'
+                        +'<div class="w-9 h-9 rounded-full bg-blue-600 border-2 border-white/20 flex items-center justify-center text-[10px] font-bold text-white mx-auto">'+p.pos+'</div>'
+                        +'<div class="text-[9px] text-gray-300 mt-1 max-w-[52px] leading-tight">'+p.name+'</div>'
+                    +'</div>';
+                }).join('');
+                return '<div class="flex justify-center gap-3 py-1">'+players+'</div>';
+            }).join('');
+
+            var subsHtml = d.subs.map(function(s){
+                return '<div class="text-xs text-gray-400">↑ '+s+'</div>';
+            }).join('');
+
+            el.innerHTML =
+                '<div class="space-y-3">'
+                    +'<div class="text-center text-[10px] font-bold text-blue-400 uppercase tracking-widest">Formation: '+d.formation+'</div>'
+                    +'<div class="bg-[#0e1322] rounded-xl p-4 border border-gray-800 space-y-2">'+fieldHtml+'</div>'
+                    +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
+                        +'<div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Ranplasman</div>'
+                        +subsHtml
+                    +'</div>'
+                +'</div>';
+        }
+    }
+
     </script>
 
     <!-- NETLIFY FORMS: Prediction Vote (invisible) -->
@@ -6978,6 +7227,24 @@ window.onload = function() {
         </div>
     </div>
 
+
+<!-- ══ MATCH CENTER MODAL ══ -->
+<div id="match-center-modal" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+  <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeMatchCenter()"></div>
+  <div class="relative w-full sm:max-w-2xl max-h-[92vh] bg-[#0b0f19] border border-gray-800 rounded-t-3xl sm:rounded-2xl flex flex-col overflow-hidden">
+    <div class="flex items-center justify-between px-4 pt-4 pb-3 border-b border-gray-800 flex-shrink-0">
+      <div id="mc-header" class="flex items-center gap-3"></div>
+      <button onclick="closeMatchCenter()" class="text-gray-400 hover:text-white text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10">✕</button>
+    </div>
+    <div class="flex border-b border-gray-800 flex-shrink-0 overflow-x-auto">
+      <button onclick="switchMCTab('recap')"   id="mc-tab-recap"   class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">📋 Rezime</button>
+      <button onclick="switchMCTab('stats')"   id="mc-tab-stats"   class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">📊 Estatistik</button>
+      <button onclick="switchMCTab('players')" id="mc-tab-players" class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">👤 Jwè & Nòt</button>
+      <button onclick="switchMCTab('lineup')"  id="mc-tab-lineup"  class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">🔄 Aliyman</button>
+    </div>
+    <div id="mc-content" class="overflow-y-auto flex-1 p-4"></div>
+  </div>
+</div>
 </body>
 </html
 
