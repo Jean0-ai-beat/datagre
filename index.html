@@ -1213,6 +1213,9 @@
                 </div>
             </div>
 
+            <!-- Filtre Kategori -->
+            <div id="news-filter-bar" class="flex gap-2 flex-wrap mb-8"></div>
+
             <!-- 3 GRANDES CARTES MAGAZINE -->
             <div id="news-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"></div>
 
@@ -1303,6 +1306,7 @@
                         <div class="text-xs text-gray-600" data-i18n="pred_after">Après les matchs</div>
                     </div>
                     <div id="leaderboard-body" class="space-y-2"></div>
+                    <div id="leaderboard-pagination" class="flex justify-center mt-4"></div>
                 </div>
             </div>
 
@@ -1326,7 +1330,8 @@
         </div>
     </section>
 
-    <footer class="bg-[#060911] border-t border-gray-900/60 text-gray-400 text-sm">
+    
+<footer class="bg-[#060911] border-t border-gray-900/60 text-gray-400 text-sm">
 
         <!-- Top footer -->
         <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -1334,13 +1339,12 @@
             <!-- Col 1 — Brand -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 30'%3E%3Crect width='40' height='10' fill='%230032A0'/%3E%3Crect y='10' width='40' height='10' fill='%23D21034'/%3E%3Crect y='20' width='40' height='10' fill='%230032A0'/%3E%3C/svg%3E" class="w-8 h-6 rounded">
-                    <span class="text-white font-black text-lg font-athletic tracking-wide">GrenadyeHub</span>
+                    <img id="footer-logo" src="" class="w-10 h-10 object-contain rounded-full" style="filter:drop-shadow(0 0 6px rgba(59,130,246,0.4));" alt="GrenadyeHub">
+                    <span class="font-black text-lg font-athletic tracking-wide"><span class="text-white">Grenadye</span><span class="text-red-500">Hub</span></span>
                 </div>
                 <p class="text-xs text-gray-500 leading-relaxed" data-i18n="footer_desc">
-                    Sit ofisyèl fanatik Grenadye Ayiti pou Coupe du Monde FIFA 2026 — USA, Canada, Mexique.
+                    Espas fanatik pou swiv Grenadye yo — estatistik, rezilta, aktivite jwè yo ak tout aktyalite World Cup 2026.
                 </p>
-                <!-- Rezo sosyal -->
                 <div class="flex gap-3 pt-1">
                     <a href="https://www.tiktok.com/@grenadyehub" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-colors text-xs">
                         <i class="fa-brands fa-tiktok"></i>
@@ -1350,19 +1354,19 @@
 
             <!-- Col 2 — Navigasyon rapid -->
             <div class="space-y-3">
-                <h4 class="text-white font-bold text-xs uppercase tracking-widest">Navigasyon</h4>
+                <h4 class="text-white font-bold text-xs uppercase tracking-widest" data-i18n="footer_col_nav">Navigasyon</h4>
                 <ul class="space-y-2 text-xs">
-                    <li><a href="#klasman" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-blue-400">▸</span> <span data-i18n="nav_standings">Klasman</span></a></li>
-                    <li><a href="#predictions" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-blue-400">▸</span> <span data-i18n="nav_predictions">Prediksyon</span></a></li>
-                    <li><a href="#scorers" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-blue-400">▸</span> <span data-i18n="nav_scorers">Skòrè</span></a></li>
+                    <li><a href="#klasman" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-blue-400">▸</span> <span data-i18n="footer_nav_standings">Klasman</span></a></li>
+                    <li><a href="#predictions" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-blue-400">▸</span> <span data-i18n="footer_nav_predictions">Prediksyon</span></a></li>
+                    <li><a href="#scorers" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-blue-400">▸</span> <span data-i18n="footer_nav_scorers">Skòrè</span></a></li>
                     <li><a href="#leaderboard" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-blue-400">▸</span> Leaderboard</a></li>
-                    <li><a href="#actualites" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-blue-400">▸</span> <span data-i18n="nav_news">Aktualite</span></a></li>
+                    <li><a href="#actualites" class="hover:text-white transition-colors flex items-center gap-2"><span class="text-blue-400">▸</span> <span data-i18n="footer_nav_news">Aktualite</span></a></li>
                 </ul>
             </div>
 
             <!-- Col 3 — Match Haïti -->
             <div class="space-y-3">
-                <h4 class="text-white font-bold text-xs uppercase tracking-widest">Match Haïti 2026</h4>
+                <h4 class="text-white font-bold text-xs uppercase tracking-widest" data-i18n="footer_col_matches">Match Haïti 2026</h4>
                 <ul class="space-y-2 text-xs" id="footer-matches">
                     <li class="flex items-center gap-2">
                         <span class="text-green-400 font-bold">FIN</span>
@@ -1377,15 +1381,11 @@
                         <span class="text-gray-300">🇲🇦 vs 🇭🇹</span>
                     </li>
                 </ul>
-                <!-- Bouton Soumèt Atik -->
                 <button onclick="openSubmitModal()" class="mt-3 w-full text-xs bg-blue-600/20 border border-blue-600/40 text-blue-400 hover:bg-blue-600/30 transition-colors rounded-lg px-3 py-2 font-bold">
                     ✍️ <span data-i18n="btn_submit_news">Soumèt yon Atik</span>
                 </button>
             </div>
         </div>
-
-        <!-- Divider -->
-        <div class="border-t border-gray-900/60"></div>
 
         <!-- Newsletter / Notifikasyon CTA -->
         <div class="max-w-6xl mx-auto px-4 py-6 border-t border-gray-900/40">
@@ -1407,10 +1407,8 @@
         <!-- Bottom footer -->
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px]">
             <p>&copy; 2026 <span class="text-white font-bold font-athletic">GrenadyeHub</span>. <span data-i18n="footer_rights">Tout dwa rezève.</span></p>
-
-            <!-- Lyen legal -->
             <div class="flex items-center gap-3 text-gray-600">
-                <a href="mailto:contact@grenadyehub.com" class="hover:text-gray-400 transition-colors" data-i18n="footer_contact">Kontakte nou</a>
+                <a href="mailto:info@grenadyehub.com" class="hover:text-gray-400 transition-colors" data-i18n="footer_contact">Kontakte nou</a>
                 <span>·</span>
                 <span data-i18n="footer_disclaimer">Sit fanatik endepandan — pa afilie ak FIFA</span>
                 <span>·</span>
@@ -3696,6 +3694,7 @@ window.onload = function() {
         initStandings();
         initPlayerStats();
         initNews();
+        initFooterLogo();
         initPredictions();
         initI18n();
         initScrollAnimations();
@@ -4059,15 +4058,62 @@ window.onload = function() {
     }
 
     /* ──────────────── GRILLE ARTICLES ──────────────── */
+    var activeNewsFilter = 'all';
+
+    function renderNewsFilterBar() {
+        var bar = document.getElementById('news-filter-bar');
+        if (!bar) return;
+
+        /* Jwenn kategori ki itilize reyèlman pami atik yo */
+        var usedCats = [];
+        newsArticles.forEach(function(a){
+            if (usedCats.indexOf(a.category) === -1) usedCats.push(a.category);
+        });
+
+        function pillHtml(cat, label) {
+            var active = activeNewsFilter === cat;
+            var col = cat === 'all' ? null : (categoryColors[cat] || categoryColors['Officiel']);
+            var bg     = active ? (col ? col.bg     : 'rgba(255,255,255,0.12)') : 'rgba(255,255,255,0.03)';
+            var border = active ? (col ? col.border : 'rgba(255,255,255,0.3)') : 'rgba(255,255,255,0.08)';
+            var text   = active ? (col ? col.text   : '#ffffff') : '#9ca3af';
+            return '<button onclick="setNewsFilter(\''+cat+'\')" '
+                + 'class="px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wide transition-all border" '
+                + 'style="background:'+bg+';border-color:'+border+';color:'+text+';">'
+                + label + '</button>';
+        }
+
+        var html = pillHtml('all', 'Tout');
+        usedCats.forEach(function(cat){
+            html += pillHtml(cat, cat);
+        });
+        bar.innerHTML = html;
+    }
+
+    function setNewsFilter(cat) {
+        activeNewsFilter = cat;
+        renderNewsFilterBar();
+        renderNewsGrid();
+    }
+
     function renderNewsGrid() {
         var grid = document.getElementById('news-grid');
         if (!grid) return;
         grid.innerHTML = '';
-        if (newsArticles.length === 0) {
-            grid.innerHTML = '<div class="col-span-3 text-center py-16 text-gray-600"><i class="fa-solid fa-newspaper text-4xl mb-3 block"></i><p class="text-sm font-semibold">Aucun article publié</p></div>';
+
+        var filtered = activeNewsFilter === 'all'
+            ? newsArticles
+            : newsArticles.filter(function(a){ return a.category === activeNewsFilter; });
+
+        if (filtered.length === 0) {
+            var msg = newsArticles.length === 0
+                ? 'Aucun article publié'
+                : 'Aucun article dans cette catégorie';
+            grid.innerHTML = '<div class="col-span-3 text-center py-16 text-gray-600"><i class="fa-solid fa-newspaper text-4xl mb-3 block"></i><p class="text-sm font-semibold">'+msg+'</p></div>';
+            renderNewsFilterBar();
             return;
         }
-        newsArticles.forEach(function(article, idx) {
+        filtered.forEach(function(article) {
+            var idx = newsArticles.indexOf(article);
             var col = categoryColors[article.category] || categoryColors['Officiel'];
             var card = document.createElement('div');
             card.className = 'group relative bg-[#0e1322] border border-gray-900 rounded-2xl overflow-hidden hover:border-gray-700 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col';
@@ -4103,6 +4149,7 @@ window.onload = function() {
             ].join('');
             grid.appendChild(card);
         });
+        renderNewsFilterBar();
     }
 
     /* ──────────────── ADMIN LOGIN ──────────────── */
@@ -4627,6 +4674,21 @@ window.onload = function() {
     });
 
     /* ──────────────── INIT ──────────────── */
+    /* Set footer logo from variable (evite duplike base64) */
+    function initFooterLogo() {
+        var el = document.getElementById('footer-logo');
+        if (!el) return;
+        /* Itilize menm logo ki nan navbar a (pa kopi base64 ki ka gen erè) */
+        var navLogo = document.querySelector('img[alt="GrenadyeHub"].h-10');
+        if (navLogo && navLogo.src) {
+            el.src = navLogo.src;
+        } else if (typeof LOGO_GRENADYEHUB !== 'undefined') {
+            /* Retire doub prefix si prezan */
+            var src = LOGO_GRENADYEHUB.replace('data:image/webp;base64,data:image/webp;base64,', 'data:image/webp;base64,');
+            el.src = src;
+        }
+    }
+
     function initNews() {
         loadStored();     // Charger données persistées
         renderNewsGrid();
@@ -4922,6 +4984,30 @@ window.onload = function() {
         pred_nom:          { fr:'Non',                         ht:'Non',                         en:'Name'                    },
         pred_envoyer:      { fr:'SOUMETTRE',                   ht:'SOUMET',                      en:'SUBMIT'                  },
         pred_envoyee:      { fr:'SOUMIS ✓',                   ht:'SOUMET ✓',                    en:'SUBMITTED ✓'             },
+
+        /* ── FOOTER ── */
+        footer_desc:        { fr:"Votre espace pour suivre les Grenadiers — stats, résultats, activités des joueurs et toute l'actualité du Mondial 2026.", ht:"Espas fanatik pou swiv Grenadye yo — estatistik, rezilta, aktivite jwè yo ak tout aktyalite World Cup 2026.", en:"Your fan space to follow the Grenadiers — stats, results, player activities and all World Cup 2026 news." },
+        footer_rights:      { fr:'Tous droits réservés.',      ht:'Tout dwa rezève.',             en:'All rights reserved.'      },
+        footer_contact:     { fr:'Nous contacter',             ht:'Kontakte nou',                 en:'Contact us'                },
+        footer_disclaimer:  { fr:'Site de fans indépendant — non affilié à la FIFA', ht:'Sit fanatik endepandan — pa afilie ak FIFA', en:'Independent fan site — not affiliated with FIFA' },
+        footer_notif_title: { fr:'Recevez les alertes match', ht:'Resevwa notifikasyon match yo', en:'Get match notifications'   },
+        footer_notif_desc:  { fr:"Activez les alertes pour ne manquer aucun match d'Haïti au Mondial 2026", ht:"Aktive alèt pou pa manke okenn match Haïti nan World Cup 2026", en:"Enable alerts to never miss a Haiti match at World Cup 2026" },
+        footer_notif_btn:   { fr:'Activer les notifications', ht:'Aktive Notifikasyon',           en:'Enable Notifications'      },
+
+        /* ── FOOTER NAV ── */
+        nav_standings:      { fr:'Classement',                 ht:'Klasman',                      en:'Standings'                 },
+        nav_predictions:    { fr:'Prédictions',                ht:'Prediksyon',                   en:'Predictions'               },
+        nav_scorers:        { fr:'Buteurs',                    ht:'Skòrè',                        en:'Scorers'                   },
+        nav_news:           { fr:'Actualités',                 ht:'Aktualite',                    en:'News'                      },
+        btn_submit_news:    { fr:'Soumettre un article',       ht:'Soumèt yon Atik',              en:'Submit an article'         },
+
+        /* ── FOOTER NAV (version footer, pa kout kòm navi anwo) ── */
+        footer_nav_standings:   { fr:'Classement',    ht:'Klasman',      en:'Standings'    },
+        footer_nav_predictions: { fr:'Prédictions',   ht:'Prediksyon',   en:'Predictions'  },
+        footer_nav_scorers:     { fr:'Buteurs',        ht:'Skòrè',        en:'Scorers'      },
+        footer_nav_news:        { fr:'Actualités',     ht:'Aktualite',    en:'News'         },
+        footer_col_nav:         { fr:'Navigation',     ht:'Navigasyon',   en:'Navigation'   },
+        footer_col_matches:     { fr:'Matchs Haïti 2026', ht:'Match Ayiti 2026', en:'Haiti Matches 2026' },
     };
 
     var currentLang = 'fr';
@@ -4982,6 +5068,15 @@ window.onload = function() {
         /* Re-render prediction cards — mete ajou bouton + tèks dinamik */
         if (typeof renderPredictionCards === 'function') {
             renderPredictionCards();
+        }
+
+        /* Re-render Match Center si li ouvri kounye a */
+        if (typeof updateMCTabLabels === 'function') {
+            updateMCTabLabels();
+        }
+        if (typeof currentMCMatch !== 'undefined' && currentMCMatch &&
+            !document.getElementById('match-center-modal').classList.contains('hidden')) {
+            renderMCContent();
         }
     }
 
@@ -6609,10 +6704,32 @@ window.onload = function() {
         } catch(e){ return null; }
     }
 
+    var LB_PAGE_SIZE = 10;
+    var currentLeaderboardData = [];
+    var currentLBPage = 1;
+
     function renderPublicLeaderboard(lb) {
         var body = document.getElementById('leaderboard-body');
         if (!body) return;
         if (!lb || lb.length === 0) return;
+
+        currentLeaderboardData = lb;
+        currentLBPage = 1;
+        renderLeaderboardPage();
+    }
+
+    function renderLeaderboardPage() {
+        var body = document.getElementById('leaderboard-body');
+        var pagWrap = document.getElementById('leaderboard-pagination');
+        if (!body) return;
+
+        var lb = currentLeaderboardData;
+        var totalPages = Math.max(1, Math.ceil(lb.length / LB_PAGE_SIZE));
+        if (currentLBPage > totalPages) currentLBPage = totalPages;
+        if (currentLBPage < 1) currentLBPage = 1;
+
+        var startIdx = (currentLBPage - 1) * LB_PAGE_SIZE;
+        var pageItems = lb.slice(startIdx, startIdx + LB_PAGE_SIZE);
 
         body.innerHTML = '';
 
@@ -6626,8 +6743,8 @@ window.onload = function() {
         var medals = ['🥇','🥈','🥉'];
         var rankCols = ['#D4AF37','#C0C0C0','#CD7F32'];
 
-        lb.forEach(function(user, idx) {
-            var rank = idx+1;
+        pageItems.forEach(function(user, i) {
+            var rank = startIdx + i + 1;
             var row  = document.createElement('div');
             row.className = 'flex items-center gap-3 p-3 rounded-2xl border transition';
             var isMe = (getUserPseudo() && getUserPseudo().toLowerCase() === user.pseudo.toLowerCase());
@@ -6656,6 +6773,63 @@ window.onload = function() {
 
             body.appendChild(row);
         });
+
+        renderLeaderboardPagination(totalPages);
+    }
+
+    function renderLeaderboardPagination(totalPages) {
+        var pagWrap = document.getElementById('leaderboard-pagination');
+        if (!pagWrap) return;
+
+        if (totalPages <= 1) { pagWrap.innerHTML = ''; return; }
+
+        var html = '<div class="flex items-center gap-2">';
+
+        /* Previous */
+        html += '<button onclick="goToLBPage('+(currentLBPage-1)+')" '
+            + (currentLBPage === 1 ? 'disabled' : '')
+            + ' class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition '
+            + (currentLBPage === 1 ? 'text-gray-700 cursor-not-allowed' : 'text-gray-400 hover:text-white hover:bg-white/5')
+            + '"><i class="fa-solid fa-chevron-left"></i></button>';
+
+        /* Page numbers (max 5 visible) */
+        var startPage = Math.max(1, currentLBPage - 2);
+        var endPage   = Math.min(totalPages, startPage + 4);
+        startPage = Math.max(1, endPage - 4);
+
+        if (startPage > 1) {
+            html += '<button onclick="goToLBPage(1)" class="w-8 h-8 rounded-lg text-xs font-bold text-gray-400 hover:text-white hover:bg-white/5 transition">1</button>';
+            if (startPage > 2) html += '<span class="text-gray-600 text-xs">…</span>';
+        }
+
+        for (var p = startPage; p <= endPage; p++) {
+            var active = p === currentLBPage;
+            html += '<button onclick="goToLBPage('+p+')" class="w-8 h-8 rounded-lg text-xs font-bold transition '
+                + (active ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5')
+                + '">'+p+'</button>';
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) html += '<span class="text-gray-600 text-xs">…</span>';
+            html += '<button onclick="goToLBPage('+totalPages+')" class="w-8 h-8 rounded-lg text-xs font-bold text-gray-400 hover:text-white hover:bg-white/5 transition">'+totalPages+'</button>';
+        }
+
+        /* Next */
+        html += '<button onclick="goToLBPage('+(currentLBPage+1)+')" '
+            + (currentLBPage === totalPages ? 'disabled' : '')
+            + ' class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition '
+            + (currentLBPage === totalPages ? 'text-gray-700 cursor-not-allowed' : 'text-gray-400 hover:text-white hover:bg-white/5')
+            + '"><i class="fa-solid fa-chevron-right"></i></button>';
+
+        html += '</div>';
+        pagWrap.innerHTML = html;
+    }
+
+    function goToLBPage(page) {
+        currentLBPage = page;
+        renderLeaderboardPage();
+        var section = document.getElementById('leaderboard-body');
+        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
 
@@ -6991,17 +7165,21 @@ window.onload = function() {
             date: '14 Jen 2026', venue: 'Gillette Stadium, Boston',
             score: '0 - 1', finished: true,
             scorer: { name: 'John McGinn', team: 'away', minute: 28 },
-            recap: "Yon match difisil pou Grenadye yo. Haïti te jwe pi byen statistikman — 15 tiro kont 9 pou Écosse — men John McGinn te make sèl gòl la nan 28 minit. Frantzdy Pierrot te rate chans pi klè a nan 85 minit.",
+            recap: {
+                fr: "Un match difficile pour les Grenadiers. Haïti a mieux joué statistiquement — 15 tirs contre 9 pour l'Écosse — mais John McGinn a marqué l'unique but à la 28e minute. Frantzdy Pierrot a manqué la plus belle occasion à la 85e minute.",
+                ht: "Yon match difisil pou Grenadye yo. Haïti te jwe pi byen statistikman — 15 tiro kont 9 pou Écosse — men John McGinn te make sèl gòl la nan 28 minit. Frantzdy Pierrot te rate chans pi klè a nan 85 minit.",
+                en: "A tough match for the Grenadiers. Haiti played statistically better — 15 shots to Scotland's 9 — but John McGinn scored the only goal in the 28th minute. Frantzdy Pierrot missed the clearest chance in the 85th minute."
+            },
             xg: { home: 1.21, away: 1.05 },
             stats: [
-                { label: 'Posesyon', home: '51%', away: '40%', homePct: 56 },
-                { label: 'Tiro Total', home: 15, away: 9, homePct: 63 },
-                { label: 'Sou Kadre', home: 2, away: 2, homePct: 50 },
-                { label: 'xG', home: 1.21, away: 1.05, homePct: 54 },
-                { label: 'Kòn', home: 4, away: 6, homePct: 40 },
-                { label: 'Fòt', home: 12, away: 14, homePct: 46 },
-                { label: 'Kat Jòn', home: 1, away: 4, homePct: 20 },
-                { label: 'Pasaj Konplè', home: '78%', away: '84%', homePct: 48 }
+                { labelKey: 'possession',    label: 'Posesyon',     home: '51%', away: '40%', homePct: 56 },
+                { labelKey: 'total_shots',   label: 'Tiro Total',   home: 15,    away: 9,     homePct: 63 },
+                { labelKey: 'on_target',     label: 'Sou Kadre',    home: 2,     away: 2,     homePct: 50 },
+                { labelKey: null,            label: 'xG',           home: 1.21,  away: 1.05,  homePct: 54 },
+                { labelKey: 'corners',       label: 'Kòn',          home: 4,     away: 6,     homePct: 40 },
+                { labelKey: 'fouls',         label: 'Fòt',          home: 12,    away: 14,    homePct: 46 },
+                { labelKey: 'yellow_cards',  label: 'Kat Jòn',      home: 1,     away: 4,     homePct: 20 },
+                { labelKey: 'pass_accuracy', label: 'Pasaj Konplè', home: '78%', away: '84%', homePct: 48 }
             ],
             players: {
                 haiti: [
@@ -7022,19 +7200,19 @@ window.onload = function() {
                 ]
             },
             lineup: {
-                formation: '4-3-3',
+                formation: '4-4-2',
                 starters: [
                     { name: 'Placide',      pos: 'GB',  row: 1 },
                     { name: 'Arcus',        pos: 'DD',  row: 2 },
                     { name: 'Adé',          pos: 'DC',  row: 2 },
                     { name: 'Delcroix',     pos: 'DC',  row: 2 },
                     { name: 'Expérience',   pos: 'DG',  row: 2 },
-                    { name: 'Jean Jacques', pos: 'MF',  row: 3 },
-                    { name: 'Bellegarde',   pos: 'MF',  row: 3 },
-                    { name: 'Deedson',      pos: 'MF',  row: 3 },
-                    { name: 'Providence',   pos: 'AG',  row: 4 },
-                    { name: 'Isidor',       pos: 'AC',  row: 4 },
-                    { name: 'Pierrot',      pos: 'AG',  row: 4 }
+                    { name: 'Deedson',      pos: 'MD',  row: 3 },
+                    { name: 'Bellegarde',   pos: 'MC',  row: 3 },
+                    { name: 'Jean Jacques', pos: 'MC',  row: 3 },
+                    { name: 'Providence',   pos: 'MG',  row: 3 },
+                    { name: 'Isidor',       pos: 'AT',  row: 4 },
+                    { name: 'Pierrot',      pos: 'AT',  row: 4 }
                 ],
                 subs: ["Josué Casimir (61')", "Lenny Joseph (75')", "Yassin Fortuné (85')"]
             }
@@ -7187,6 +7365,45 @@ window.onload = function() {
     var currentMCMatch = null;
     var currentMCTab   = 'recap';
 
+    /* ══ Tradiksyon Match Center (FR/HT/EN) ══ */
+    var MC_I18N = {
+        tab_recap:        { fr:'Résumé',           ht:'Rezime',            en:'Recap'           },
+        tab_stats:        { fr:'Statistiques',     ht:'Estatistik',        en:'Statistics'      },
+        tab_players:      { fr:'Joueurs & Notes',  ht:'Jwè & Nòt',         en:'Players & Ratings'},
+        tab_lineup:       { fr:'Composition',      ht:'Aliyman',           en:'Lineup'          },
+        not_played:       { fr:'Match pas encore joué', ht:'Match poko jwe', en:'Match not played yet' },
+        not_played_desc:  { fr:'Les statistiques seront disponibles après le match.', ht:'Estatistik yo ap disponib apre match la.', en:'Statistics will be available after the match.' },
+        match_recap:      { fr:'Résumé du match',  ht:'Rezime Match',      en:'Match Recap'     },
+        shots:            { fr:'Tirs',             ht:'Tiro',              en:'Shots'           },
+        possession:       { fr:'Possession',       ht:'Posesyon',          en:'Possession'      },
+        total_shots:      { fr:'Tirs Totaux',      ht:'Tiro Total',        en:'Total Shots'     },
+        on_target:        { fr:'Cadrés',           ht:'Sou Kadre',         en:'On Target'       },
+        corners:          { fr:'Corners',          ht:'Kòn',               en:'Corners'         },
+        fouls:            { fr:'Fautes',           ht:'Fòt',               en:'Fouls'           },
+        yellow_cards:     { fr:'Cartons Jaunes',   ht:'Kat Jòn',           en:'Yellow Cards'    },
+        pass_accuracy:    { fr:'Passes Réussies',  ht:'Pasaj Konplè',      en:'Pass Accuracy'   },
+        players_ratings:  { fr:'Joueurs Haïti — Notes de Performance', ht:'Jwè Haïti — Nòt Pèfòmans', en:'Haiti Players — Performance Ratings' },
+        excellent:        { fr:'Excellent',        ht:'Ekselan',           en:'Excellent'       },
+        good:             { fr:'Bon',              ht:'Bon',               en:'Good'            },
+        average:          { fr:'Moyen',            ht:'Mwayen',            en:'Average'         },
+        substitute:       { fr:'Remplaçant',       ht:'Ranplasman',        en:'Substitute'      },
+        formation:        { fr:'Formation',        ht:'Fòmasyon',          en:'Formation'       },
+        substitutes:      { fr:'Remplaçants',      ht:'Ranplasman',        en:'Substitutes'     },
+    };
+
+    function updateMCTabLabels() {
+        var map = { recap:'tab_recap', stats:'tab_stats', players:'tab_players', lineup:'tab_lineup' };
+        Object.keys(map).forEach(function(tab){
+            var el = document.getElementById('mc-tab-'+tab+'-label');
+            if (el) el.textContent = mcT(map[tab]);
+        });
+    }
+
+    function mcT(key) {
+        var lang = (typeof currentLang !== 'undefined') ? currentLang : 'ht';
+        return (MC_I18N[key] && MC_I18N[key][lang]) || (MC_I18N[key] && MC_I18N[key].ht) || key;
+    }
+
     function openMatchCenter(matchId) {
         currentMCMatch = matchId;
         currentMCTab   = 'recap';
@@ -7215,6 +7432,7 @@ window.onload = function() {
         });
 
         switchMCTab('recap');
+        updateMCTabLabels();
         document.getElementById('match-center-modal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
 
@@ -7238,6 +7456,7 @@ window.onload = function() {
 
     function switchMCTab(tab) {
         currentMCTab = tab;
+        updateMCTabLabels();
         /* Style tabs */
         ['recap','stats','players','lineup'].forEach(function(t){
             var el = document.getElementById('mc-tab-'+t);
@@ -7261,7 +7480,7 @@ window.onload = function() {
         if (!el) return;
 
         if (!data || !data.finished) {
-            el.innerHTML = '<div class="text-center py-12 text-gray-500"><div class="text-4xl mb-3">⏳</div><div class="font-bold">Match poko jwe</div><div class="text-xs mt-1">Estatistik yo ap disponib apre match la.</div></div>';
+            el.innerHTML = '<div class="text-center py-12 text-gray-500"><div class="text-4xl mb-3">⏳</div><div class="font-bold">'+mcT('not_played')+'</div><div class="text-xs mt-1">'+mcT('not_played_desc')+'</div></div>';
             return;
         }
 
@@ -7277,8 +7496,8 @@ window.onload = function() {
             el.innerHTML =
                 '<div class="space-y-4">'
                     +'<div class="bg-[#0e1322] rounded-xl p-4 border border-gray-800">'
-                        +'<div class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">Rezime Match</div>'
-                        +'<p class="text-sm text-gray-300 leading-relaxed">'+data.recap+'</p>'
+                        +'<div class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">'+mcT('match_recap')+'</div>'
+                        +'<p class="text-sm text-gray-300 leading-relaxed">'+(typeof data.recap === 'object' ? (data.recap[currentLang] || data.recap.ht) : data.recap)+'</p>'
                         + goalHtml
                     +'</div>'
                     +'<div class="grid grid-cols-3 gap-2 text-center">'
@@ -7288,11 +7507,11 @@ window.onload = function() {
                         +'</div>'
                         +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
                             +'<div class="text-2xl font-black text-white font-athletic">'+data.stats[1].home+'</div>'
-                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">Tiro</div>'
+                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">'+mcT('shots')+'</div>'
                         +'</div>'
                         +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
                             +'<div class="text-2xl font-black text-white font-athletic">'+data.stats[0].home+'</div>'
-                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">Posesyon</div>'
+                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">'+mcT('possession')+'</div>'
                         +'</div>'
                     +'</div>'
                 +'</div>';
@@ -7303,7 +7522,7 @@ window.onload = function() {
                 return '<div class="space-y-1">'
                     +'<div class="flex justify-between text-xs">'
                         +'<span class="font-bold text-white">'+s.home+'</span>'
-                        +'<span class="text-gray-400 text-[10px] uppercase tracking-wider">'+s.label+'</span>'
+                        +'<span class="text-gray-400 text-[10px] uppercase tracking-wider">'+(s.labelKey ? mcT(s.labelKey) : s.label)+'</span>'
                         +'<span class="font-bold text-white">'+s.away+'</span>'
                     +'</div>'
                     +'<div class="flex h-1.5 rounded-full overflow-hidden bg-gray-800">'
@@ -7330,7 +7549,7 @@ window.onload = function() {
                     +'<span class="text-[10px] font-bold text-gray-500 w-7 text-center">'+p.pos+'</span>'
                     +'<span class="flex-1 text-sm text-white font-semibold">'
                         +p.name
-                        +(p.start ? '' : ' <span class="text-[9px] text-gray-500">↑ Ranplasman</span>')
+                        +(p.start ? '' : ' <span class="text-[9px] text-gray-500">↑ '+mcT('substitute')+'</span>')
                     +'</span>'
                     +'<span class="text-[10px] text-gray-500">'+p.mins+'min</span>'
                     +'<span class="text-base font-black '+nc+'">'+p.note+'</span>'
@@ -7339,11 +7558,11 @@ window.onload = function() {
 
             el.innerHTML =
                 '<div class="space-y-0">'
-                    +'<div class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-3">🇭🇹 Jwè Haïti — Nòt Pèfòmans</div>'
+                    +'<div class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-3">🇭🇹 '+mcT('players_ratings')+'</div>'
                     +'<div class="flex gap-3 text-[9px] text-gray-500 mb-2 px-1">'
-                        +'<span class="text-emerald-400">■ ≥7.5 Ekselan</span>'
-                        +'<span class="text-blue-400">■ ≥6.5 Bon</span>'
-                        +'<span class="text-yellow-400">■ ≥6.0 Mwayen</span>'
+                        +'<span class="text-emerald-400">■ ≥7.5 '+mcT('excellent')+'</span>'
+                        +'<span class="text-blue-400">■ ≥6.5 '+mcT('good')+'</span>'
+                        +'<span class="text-yellow-400">■ ≥6.0 '+mcT('average')+'</span>'
                     +'</div>'
                     + playerRows
                 +'</div>';
@@ -7373,10 +7592,10 @@ window.onload = function() {
 
             el.innerHTML =
                 '<div class="space-y-3">'
-                    +'<div class="text-center text-[10px] font-bold text-blue-400 uppercase tracking-widest">Formation: '+d.formation+'</div>'
+                    +'<div class="text-center text-[10px] font-bold text-blue-400 uppercase tracking-widest">'+mcT('formation')+': '+d.formation+'</div>'
                     +'<div class="bg-[#0e1322] rounded-xl p-4 border border-gray-800 space-y-2">'+fieldHtml+'</div>'
                     +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
-                        +'<div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Ranplasman</div>'
+                        +'<div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">'+mcT('substitutes')+'</div>'
                         +subsHtml
                     +'</div>'
                 +'</div>';
@@ -7484,162 +7703,15 @@ window.onload = function() {
       <button onclick="closeMatchCenter()" class="text-gray-400 hover:text-white text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10">✕</button>
     </div>
     <div class="flex border-b border-gray-800 flex-shrink-0 overflow-x-auto">
-      <button onclick="switchMCTab('recap')"   id="mc-tab-recap"   class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">📋 Rezime</button>
-      <button onclick="switchMCTab('stats')"   id="mc-tab-stats"   class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">📊 Estatistik</button>
-      <button onclick="switchMCTab('players')" id="mc-tab-players" class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">👤 Jwè & Nòt</button>
-      <button onclick="switchMCTab('lineup')"  id="mc-tab-lineup"  class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">🔄 Aliyman</button>
+      <button onclick="switchMCTab('recap')"   id="mc-tab-recap"   class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">📋 <span id="mc-tab-recap-label">Rezime</span></button>
+      <button onclick="switchMCTab('stats')"   id="mc-tab-stats"   class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">📊 <span id="mc-tab-stats-label">Estatistik</span></button>
+      <button onclick="switchMCTab('players')" id="mc-tab-players" class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">👤 <span id="mc-tab-players-label">Jwè & Nòt</span></button>
+      <button onclick="switchMCTab('lineup')"  id="mc-tab-lineup"  class="mc-tab px-4 py-2.5 text-xs font-bold uppercase tracking-wider whitespace-nowrap">🔄 <span id="mc-tab-lineup-label">Aliyman</span></button>
     </div>
     <div id="mc-content" class="overflow-y-auto flex-1 p-4"></div>
   </div>
 </div>
+
+
 </body>
-</html
-
-    <!-- MODAL LOGIN ADMIN -->
-    <div id="admin-login-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-[#0f1524] border border-gray-800 rounded-2xl w-full max-w-sm shadow-2xl p-6">
-            <div class="text-center mb-6">
-                <div class="w-14 h-14 rounded-full bg-red-600/10 border border-red-600/30 flex items-center justify-center mx-auto mb-3">
-                    <i class="fa-solid fa-lock text-red-500 text-xl"></i>
-                </div>
-                <h3 class="font-athletic text-xl font-black uppercase text-white" data-i18n="admin_space">Espace Admin</h3>
-                <p class="text-xs text-gray-500 mt-1" data-i18n="admin_restricted">GrenadyeHub — Accès restreint</p>
-            </div>
-            <div class="space-y-3">
-                <input id="admin-password" type="password" placeholder="Mot de passe admin..."
-                    class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-red-500/50 transition"
-                    onkeydown="if(event.key==='Enter') verifyAdmin()">
-                <p id="admin-error" class="hidden text-xs text-red-400 font-semibold text-center" data-i18n="admin_error">Mot de passe incorrect</p>
-                <button onclick="verifyAdmin()" class="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
-                    <i class="fa-solid fa-right-to-bracket mr-2"></i><span data-i18n="btn_login">Connexion</span>
-                </button>
-                <button onclick="closeAdminLogin()" class="w-full py-2 text-xs text-gray-600 hover:text-gray-400 transition" data-i18n="btn_cancel">Annuler</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL AJOUT/ÉDITION ARTICLE (admin) -->
-    <div id="news-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
-                <h3 class="font-athletic text-lg font-black uppercase text-white" id="news-modal-title" data-i18n="modal_new_art">Nouvel Article</h3>
-                <button onclick="closeNewsModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="p-6 space-y-4">
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
-                    <select id="news-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
-                        <option value="Officiel">🔴 Officiel</option>
-                        <option value="Transfert">🔵 Transfert</option>
-                        <option value="Performance">⚡ Performance</option>
-                        <option value="Coupe du Monde">🏆 Coupe du Monde</option>
-                        <option value="Interview">🎙️ Interview</option>
-                        <option value="Blessure">🏥 Blessure</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
-                    <input id="news-title" type="text" placeholder="Ex: Bellegarde prolonge avec Wolverhampton..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
-                    <textarea id="news-excerpt" rows="3" placeholder="2-3 phrases..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
-                    <input id="news-link" type="url" placeholder="https://..."
-                        class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_emoji">Emoji couverture</label>
-                    <div class="grid grid-cols-6 gap-2" id="emoji-picker"></div>
-                </div>
-                <input type="hidden" id="news-edit-index" value="-1">
-                <div class="flex gap-3 pt-2">
-                    <button onclick="saveNewsArticle()" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold uppercase text-white transition">
-                        <i class="fa-solid fa-save mr-2"></i><span data-i18n="btn_publish">Publier</span>
-                    </button>
-                    <button onclick="closeNewsModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL SOUMISSION (users) — Netlify Forms -->
-    <div id="submit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="bg-[#0f1524] border-t sm:border border-gray-800 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-[#0f1524] border-b border-gray-900 px-6 py-4 flex items-center justify-between z-10">
-                <div>
-                    <h3 class="font-athletic text-lg font-black uppercase text-white">Soumettre un article</h3>
-                    <p class="text-[10px] text-amber-400/80 mt-0.5"><i class="fa-solid fa-clock mr-1"></i>En attente d'approbation par l'admin GrenadyeHub</p>
-                </div>
-                <button onclick="closeSubmitModal()" class="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <!-- Netlify Forms : capture automatiquement -->
-                <form id="submit-form" name="article-submission" method="POST"
-                     
-                      onsubmit="handleNetlifySubmit(event)" class="space-y-4">
-
-                    <!-- Champ honeypot anti-spam caché -->
-                    <input type="hidden" name="form-name" value="article-submission">
-                    <p class="hidden"><input name="bot-field"></p>
-
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_author">Votre nom / Pseudo *</label>
-                        <input name="author" id="submit-author" type="text" placeholder="Ex: Jean Paul..." required
-                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_categorie">Catégorie</label>
-                        <select name="category" id="submit-category" class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:border-blue-500/50 transition">
-                            <option value="Officiel">🔴 Officiel</option>
-                            <option value="Transfert">🔵 Transfert</option>
-                            <option value="Performance">⚡ Performance</option>
-                            <option value="Coupe du Monde">🏆 Coupe du Monde</option>
-                            <option value="Interview">🎙️ Interview</option>
-                            <option value="Blessure">🏥 Blessure</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_titre">Titre *</label>
-                        <input name="title" id="submit-title" type="text" placeholder="Titre de votre article..." required
-                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_resume">Résumé *</label>
-                        <textarea name="excerpt" id="submit-excerpt" rows="4" placeholder="Décrivez l'actualité en 2-4 phrases..." required
-                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition resize-none"></textarea>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase text-gray-500 tracking-wider block mb-1.5" data-i18n="lbl_lien">Lien source (optionnel)</label>
-                        <input name="link" id="submit-link" type="url" placeholder="https://..."
-                            class="w-full bg-[#0e1322] border border-gray-800 rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 transition">
-                    </div>
-
-                    <!-- Message succès -->
-                    <p id="submit-success" class="hidden text-xs text-emerald-400 font-semibold text-center py-2">
-                        <i class="fa-solid fa-circle-check mr-1"></i>
-                        <span data-i18n="msg_submitted">Article soumis ! L'équipe GrenadyeHub va l'examiner.</span>
-                    </p>
-
-                    <div class="flex gap-3 pt-2">
-                        <button type="submit" id="submit-btn" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-bold uppercase text-white transition">
-                            <i class="fa-solid fa-paper-plane mr-2"></i><span data-i18n="btn_send">Envoyer</span>
-                        </button>
-                        <button type="button" onclick="closeSubmitModal()" class="px-5 py-3 rounded-xl border border-gray-800 text-sm font-bold text-gray-400 hover:text-white transition" data-i18n="btn_cancel">Annuler</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-    
->
+</html>
