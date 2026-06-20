@@ -7170,37 +7170,35 @@ window.onload = function() {
             score: '0 - 1', finished: true,
             scorer: { name: 'John McGinn', team: 'away', minute: 28 },
             recap: {
-                fr: "Un match difficile pour les Grenadiers. Haïti a mieux joué statistiquement — 15 tirs contre 9 pour l'Écosse — mais John McGinn a marqué l'unique but à la 28e minute. Frantzdy Pierrot a manqué la plus belle occasion à la 85e minute.",
-                ht: "Yon match difisil pou Grenadye yo. Haïti te jwe pi byen statistikman — 15 tiro kont 9 pou Écosse — men John McGinn te make sèl gòl la nan 28 minit. Frantzdy Pierrot te rate chans pi klè a nan 85 minit.",
-                en: "A tough match for the Grenadiers. Haiti played statistically better — 15 shots to Scotland's 9 — but John McGinn scored the only goal in the 28th minute. Frantzdy Pierrot missed the clearest chance in the 85th minute."
+                fr: "John McGinn a marqué l'unique but à la 28e minute pour donner la victoire à l'Écosse. Haïti a mieux fait jeu (54% de possession, 15 tirs), dominant la seconde période avec 64% de possession et un xG de 0.52 contre 0.15, mais n'a pas su convertir avec seulement 22% de précision sur les centres. Grant Hanley a été élu homme du match (note Sofascore 7.6) pour sa performance défensive solide, tandis que Jean-Ricner Bellegarde (7.4) a porté l'attaque haïtienne.",
+                ht: "John McGinn te make sèl gòl la nan 28 minit pou bay Écosse viktwa a. Haïti te jwe pi byen (54% posesyon, 15 tiro), domine dezyèm mitan an ak 64% posesyon ak xG 0.52 kont 0.15, men pa t ka konvèti ak sèlman 22% presizyon nan santraj yo. Grant Hanley te eli Nonm Match la (nòt Sofascore 7.6) pou pèfòmans defansif solid li, pandan Jean-Ricner Bellegarde (7.4) te pote atak Ayisyen an.",
+                en: "John McGinn scored the only goal in the 28th minute to give Scotland the win. Haiti played better overall (54% possession, 15 shots), dominating the second half with 64% possession and a 0.52-0.15 xG edge, but couldn't convert with only 22% crossing accuracy. Grant Hanley was named Player of the Match (Sofascore rating 7.6) for his solid defensive performance, while Jean-Ricner Bellegarde (7.4) carried Haiti's attack."
             },
-            xg: { home: 1.21, away: 1.05 },
+            xg: { home: 1.21, away: 1.07 },
             stats: [
-                { labelKey: 'possession',    label: 'Posesyon',     home: '51%', away: '40%', homePct: 56 },
-                { labelKey: 'total_shots',   label: 'Tiro Total',   home: 15,    away: 9,     homePct: 63 },
-                { labelKey: 'on_target',     label: 'Sou Kadre',    home: 2,     away: 2,     homePct: 50 },
-                { labelKey: null,            label: 'xG',           home: 1.21,  away: 1.05,  homePct: 54 },
-                { labelKey: 'corners',       label: 'Kòn',          home: 4,     away: 6,     homePct: 40 },
-                { labelKey: 'fouls',         label: 'Fòt',          home: 12,    away: 14,    homePct: 46 },
-                { labelKey: 'yellow_cards',  label: 'Kat Jòn',      home: 1,     away: 4,     homePct: 20 },
-                { labelKey: 'pass_accuracy', label: 'Pasaj Konplè', home: '78%', away: '84%', homePct: 48 }
+                { labelKey: 'possession',    label: 'Posesyon',          home: '54%', away: '46%', homePct: 54 },
+                { labelKey: 'total_shots',   label: 'Tiro Total',        home: 15,    away: 9,     homePct: 63 },
+                { labelKey: 'on_target',     label: 'Sou Kadre',         home: 2,     away: 2,     homePct: 50 },
+                { labelKey: null,            label: 'xG',                home: 1.21,  away: 1.07,  homePct: 53 },
+                { labelKey: 'accurate_passes', label: 'Pasaj Egzat',     home: 367,   away: 306,   homePct: 55 },
+                { labelKey: 'final_third',     label: 'Antre Final Third', home: 66,    away: 57,    homePct: 54 },
+                { labelKey: 'fouls',         label: 'Fòt',               home: 13,    away: 9,     homePct: 59 }
             ],
             players: {
                 haiti: [
-                    { name: 'Johny Placide',       pos: 'GB', note: 6.7, mins: 90,  start: true  },
-                    { name: 'Carlens Arcus',        pos: 'DD', note: 6.4, mins: 90,  start: true  },
-                    { name: 'Ricardo Adé',          pos: 'DC', note: 6.5, mins: 90,  start: true  },
-                    { name: 'Hannes Delcroix',      pos: 'DC', note: 6.6, mins: 90,  start: true  },
-                    { name: 'Martin Expérience',    pos: 'DG', note: 6.6, mins: 90,  start: true  },
-                    { name: 'Danley Jean Jacques',  pos: 'MF', note: 6.4, mins: 90,  start: true  },
-                    { name: 'Jean-Ricner Bellegarde',pos:'MF', note: 7.3, mins: 90,  start: true  },
-                    { name: 'Louicius Deedson',     pos: 'MF', note: 6.4, mins: 61,  start: true  },
-                    { name: 'Ruben Providence',     pos: 'AT', note: 7.0, mins: 85,  start: true  },
-                    { name: 'Wilson Isidor',        pos: 'AT', note: 6.3, mins: 90,  start: true  },
-                    { name: 'Frantzdy Pierrot',     pos: 'AT', note: 6.9, mins: 90,  start: true  },
-                    { name: 'Josué Casimir',        pos: 'MF', note: 6.4, mins: 29,  start: false },
-                    { name: 'Lenny Joseph',         pos: 'AT', note: 6.1, mins: 15,  start: false },
-                    { name: 'Yassin Fortuné',       pos: 'AT', note: 6.0, mins: 5,   start: false }
+                    { name: 'Johny Placide',        pos: 'GB', note: null, mins: 90, start: true  },
+                    { name: 'Carlens Arcus',         pos: 'DD', note: null, mins: 90, start: true  },
+                    { name: 'Ricardo Adé',           pos: 'DC', note: 7.0,  mins: 90, start: true  },
+                    { name: 'Hannes Delcroix',       pos: 'DC', note: null, mins: 90, start: true  },
+                    { name: 'Martin Expérience',     pos: 'DG', note: null, mins: 90, start: true  },
+                    { name: 'Danley Jean Jacques',   pos: 'MF', note: 7.0,  mins: 90, start: true  },
+                    { name: 'Jean-Ricner Bellegarde',pos: 'MF', note: 7.4,  mins: 90, start: true  },
+                    { name: 'Louicius Deedson',      pos: 'MF', note: null, mins: 61,  start: true  },
+                    { name: 'Ruben Providence',      pos: 'AT', note: null, mins: 90,  start: true  },
+                    { name: 'Wilson Isidor',         pos: 'AT', note: null, mins: 90, start: true  },
+                    { name: 'Frantzdy Pierrot',      pos: 'AT', note: null, mins: 90, start: true  },
+                    { name: 'Josué Casimir',         pos: 'MF', note: null, mins: 29,  start: false },
+                    { name: 'Lenny Joseph',          pos: 'AT', note: null, mins: 15,  start: false }
                 ]
             },
             lineup: {
@@ -7218,7 +7216,7 @@ window.onload = function() {
                     { name: 'Isidor',       pos: 'AT',  row: 4 },
                     { name: 'Pierrot',      pos: 'AT',  row: 4 }
                 ],
-                subs: ["Josué Casimir (61')", "Lenny Joseph (75')", "Yassin Fortuné (85')"]
+                subs: ["Josué Casimir (61')", "Lenny Joseph (75')"]
             }
         },
         m2: {
@@ -7228,35 +7226,33 @@ window.onload = function() {
             score: '3 - 0', finished: true,
             scorer: { name: 'Matheus Cunha', team: 'home', minute: 23 },
             recap: {
-                fr: "Haïti a été éliminé de sa première Coupe du Monde depuis 1974 après une défaite 3-0 face au Brésil. Matheus Cunha a inscrit un doublé (23e, 36e) et Vinicius Junior a ajouté le troisième but (45e+3) après avoir été impliqué dans les trois buts brésiliens. Haïti n'a jamais vraiment plié malgré la qualité supérieure du Brésil.",
-                ht: "Haïti elimine nan premye patisipasyon yo nan Koup Dimond depi 1974 apre yon defèt 3-0 devan Brésil. Matheus Cunha make 2 gòl (23', 36') epi Vinicius Junior ajoute twazyèm gòl la (45'+3) apre li te enplike nan tout 3 gòl Brezilyen yo. Haïti pa janm vrèman pliye malgre kalite siperyè Brésil.",
-                en: "Haiti were eliminated from their first World Cup since 1974 after a 3-0 defeat to Brazil. Matheus Cunha scored a brace (23', 36') and Vinicius Junior added the third goal (45'+3) after being involved in all three Brazilian goals. Haiti never truly buckled despite Brazil's superior quality."
+                fr: "Haïti a été éliminé de sa première Coupe du Monde depuis 1974 après une défaite 3-0 face au Brésil. Matheus Cunha a inscrit un doublé (23e, 36e) et Vinicius Junior a ajouté le troisième but (45e+3) après avoir été impliqué dans les trois buts brésiliens.",
+                ht: "Haïti elimine nan premye patisipasyon yo nan Koup Dimond depi 1974 apre yon defèt 3-0 devan Brésil. Matheus Cunha make 2 gòl (23', 36') epi Vinicius Junior ajoute twazyèm gòl la (45'+3) apre li te enplike nan tout 3 gòl Brezilyen yo.",
+                en: "Haiti were eliminated from their first World Cup since 1974 after a 3-0 defeat to Brazil. Matheus Cunha scored a brace (23', 36') and Vinicius Junior added the third goal (45'+3) after being involved in all three Brazilian goals."
             },
-            xg: { home: 2.1, away: 0.4 },
+            xg: { home: null, away: null },
             stats: [
-                { labelKey: 'possession',    label: 'Posesyon',     home: '60%', away: '40%', homePct: 60 },
-                { labelKey: 'total_shots',   label: 'Tiro Total',   home: 16,    away: 8,     homePct: 67 },
-                { labelKey: 'on_target',     label: 'Sou Kadre',    home: 8,     away: 2,     homePct: 80 },
-                { labelKey: null,            label: 'xG',           home: 2.1,   away: 0.4,   homePct: 84 },
-                { labelKey: 'corners',       label: 'Kòn',          home: 7,     away: 2,     homePct: 78 },
-                { labelKey: 'fouls',         label: 'Fòt',          home: 10,    away: 13,    homePct: 43 },
-                { labelKey: 'yellow_cards',  label: 'Kat Jòn',      home: 1,     away: 2,     homePct: 33 },
-                { labelKey: 'pass_accuracy', label: 'Pasaj Konplè', home: '87%', away: '75%', homePct: 54 }
+                { labelKey: 'possession',    label: 'Posesyon',     home: '57%', away: '43%', homePct: 57 },
+                { labelKey: 'total_shots',   label: 'Tiro Total',   home: 9,     away: 8,     homePct: 53 },
+                { labelKey: 'on_target',     label: 'Sou Kadre',    home: 5,     away: 4,     homePct: 56 },
+                { labelKey: 'corners',       label: 'Kòn',          home: 4,     away: 4,     homePct: 50 },
+                { labelKey: 'fouls',         label: 'Fòt',          home: 13,    away: 15,    homePct: 46 },
+                { labelKey: 'yellow_cards',  label: 'Kat Jòn',      home: 1,     away: 3,     homePct: 25 }
             ],
             players: {
                 haiti: [
-                    { name: 'Johny Placide',        pos: 'GB', note: 6.3, mins: 90, start: true  },
-                    { name: 'Carlens Arcus',         pos: 'DD', note: 6.3, mins: 90, start: true  },
-                    { name: 'Ricardo Adé',           pos: 'DC', note: 6.4, mins: 90, start: true  },
-                    { name: 'Hannes Delcroix',       pos: 'DC', note: 6.8, mins: 90, start: true  },
-                    { name: 'Martin Expérience',     pos: 'DG', note: 6.0, mins: 90, start: true  },
-                    { name: 'Josué Casimir',         pos: 'MF', note: 6.2, mins: 90, start: true  },
-                    { name: 'Danley Jean Jacques',   pos: 'MF', note: 6.9, mins: 90, start: true  },
-                    { name: 'Jean-Ricner Bellegarde',pos: 'MF', note: 6.6, mins: 90, start: true  },
-                    { name: 'Ruben Providence',      pos: 'MF', note: 6.2, mins: 90, start: true  },
-                    { name: 'Wilson Isidor',         pos: 'AT', note: 6.0, mins: 90, start: true  },
-                    { name: 'Frantzdy Pierrot',      pos: 'AT', note: 6.1, mins: 90, start: true  },
-                    { name: 'Louicius Deedson',      pos: 'MF', note: 6.4, mins: 0,  start: false }
+                    { name: 'Johny Placide',        pos: 'GB', note: 5,    mins: 90, start: true  },
+                    { name: 'Carlens Arcus',         pos: 'DD', note: 4,    mins: 90, start: true  },
+                    { name: 'Ricardo Adé',           pos: 'DC', note: 5,    mins: 90, start: true  },
+                    { name: 'Hannes Delcroix',       pos: 'DC', note: 6,    mins: 90, start: true  },
+                    { name: 'Martin Expérience',     pos: 'DG', note: 6,    mins: 90, start: true  },
+                    { name: 'Josué Casimir',         pos: 'MF', note: null, mins: 90, start: true  },
+                    { name: 'Danley Jean Jacques',   pos: 'MF', note: null, mins: 90, start: true  },
+                    { name: 'Jean-Ricner Bellegarde',pos: 'MF', note: null, mins: 90, start: true  },
+                    { name: 'Ruben Providence',      pos: 'MF', note: 6,    mins: 90, start: true  },
+                    { name: 'Wilson Isidor',         pos: 'AT', note: null, mins: 90, start: true  },
+                    { name: 'Frantzdy Pierrot',      pos: 'AT', note: null, mins: 90, start: true  },
+                    { name: 'Louicius Deedson',      pos: 'MF', note: null, mins: 0,  start: false }
                 ]
             },
             lineup: {
@@ -7448,6 +7444,9 @@ window.onload = function() {
         substitute:       { fr:'Remplaçant',       ht:'Ranplasman',        en:'Substitute'      },
         formation:        { fr:'Formation',        ht:'Fòmasyon',          en:'Formation'       },
         substitutes:      { fr:'Remplaçants',      ht:'Ranplasman',        en:'Substitutes'     },
+        stats_unavailable:{ fr:'Statistiques détaillées non disponibles', ht:'Estatistik detaye pa disponib', en:'Detailed statistics not available' },
+        accurate_passes:  { fr:'Passes Précises',  ht:'Pasaj Egzat',       en:'Accurate Passes' },
+        final_third:      { fr:'Entrées Dernier Tiers', ht:'Antre Final Third', en:'Final Third Entries' },
     };
 
     function updateMCTabLabels() {
@@ -7552,6 +7551,24 @@ window.onload = function() {
                     +'<span class="ml-auto text-xs text-gray-500">'+(data.scorer.team==='home'?data.home:data.away)+'</span>'
                   +'</div>' : '';
 
+            var hasStats = data.stats && data.stats.length >= 2 && data.xg && data.xg.home != null;
+            var statsCardsHtml = hasStats
+                ? '<div class="grid grid-cols-3 gap-2 text-center">'
+                    +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
+                        +'<div class="text-2xl font-black text-white font-athletic">'+data.xg.home+'</div>'
+                        +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">xG Haïti</div>'
+                    +'</div>'
+                    +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
+                        +'<div class="text-2xl font-black text-white font-athletic">'+data.stats[1].home+'</div>'
+                        +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">'+mcT('shots')+'</div>'
+                    +'</div>'
+                    +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
+                        +'<div class="text-2xl font-black text-white font-athletic">'+data.stats[0].home+'</div>'
+                        +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">'+mcT('possession')+'</div>'
+                    +'</div>'
+                  +'</div>'
+                : '';
+
             el.innerHTML =
                 '<div class="space-y-4">'
                     +'<div class="bg-[#0e1322] rounded-xl p-4 border border-gray-800">'
@@ -7559,24 +7576,15 @@ window.onload = function() {
                         +'<p class="text-sm text-gray-300 leading-relaxed">'+(typeof data.recap === 'object' ? (data.recap[currentLang] || data.recap.ht) : data.recap)+'</p>'
                         + goalHtml
                     +'</div>'
-                    +'<div class="grid grid-cols-3 gap-2 text-center">'
-                        +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
-                            +'<div class="text-2xl font-black text-white font-athletic">'+data.xg.home+'</div>'
-                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">xG Haïti</div>'
-                        +'</div>'
-                        +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
-                            +'<div class="text-2xl font-black text-white font-athletic">'+data.stats[1].home+'</div>'
-                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">'+mcT('shots')+'</div>'
-                        +'</div>'
-                        +'<div class="bg-[#0e1322] rounded-xl p-3 border border-gray-800">'
-                            +'<div class="text-2xl font-black text-white font-athletic">'+data.stats[0].home+'</div>'
-                            +'<div class="text-[9px] text-gray-400 uppercase tracking-wider mt-1">'+mcT('possession')+'</div>'
-                        +'</div>'
-                    +'</div>'
+                    + statsCardsHtml
                 +'</div>';
         }
 
         else if (currentMCTab === 'stats') {
+            if (!data.stats || data.stats.length === 0) {
+                el.innerHTML = '<div class="text-center py-12 text-gray-500"><div class="text-4xl mb-3">📊</div><div class="font-bold">'+mcT('stats_unavailable')+'</div></div>';
+                return;
+            }
             var rows = data.stats.map(function(s){
                 return '<div class="space-y-1">'
                     +'<div class="flex justify-between text-xs">'
@@ -7602,8 +7610,10 @@ window.onload = function() {
         }
 
         else if (currentMCTab === 'players') {
+            var hasRatings = data.players.haiti.some(function(p){ return p.note != null; });
             var playerRows = data.players.haiti.map(function(p){
-                var nc = noteColor(p.note);
+                var nc = p.note != null ? noteColor(p.note) : 'text-gray-600';
+                var noteDisplay = p.note != null ? p.note : '—';
                 return '<div class="flex items-center gap-3 py-2 border-b border-gray-900/60 last:border-0">'
                     +'<span class="text-[10px] font-bold text-gray-500 w-7 text-center">'+p.pos+'</span>'
                     +'<span class="flex-1 text-sm text-white font-semibold">'
@@ -7611,18 +7621,18 @@ window.onload = function() {
                         +(p.start ? '' : ' <span class="text-[9px] text-gray-500">↑ '+mcT('substitute')+'</span>')
                     +'</span>'
                     +'<span class="text-[10px] text-gray-500">'+p.mins+'min</span>'
-                    +'<span class="text-base font-black '+nc+'">'+p.note+'</span>'
+                    +'<span class="text-base font-black '+nc+'">'+noteDisplay+'</span>'
                 +'</div>';
             }).join('');
 
             el.innerHTML =
                 '<div class="space-y-0">'
                     +'<div class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-3">🇭🇹 '+mcT('players_ratings')+'</div>'
-                    +'<div class="flex gap-3 text-[9px] text-gray-500 mb-2 px-1">'
+                    +(hasRatings ? '<div class="flex gap-3 text-[9px] text-gray-500 mb-2 px-1">'
                         +'<span class="text-emerald-400">■ ≥7.5 '+mcT('excellent')+'</span>'
                         +'<span class="text-blue-400">■ ≥6.5 '+mcT('good')+'</span>'
                         +'<span class="text-yellow-400">■ ≥6.0 '+mcT('average')+'</span>'
-                    +'</div>'
+                      +'</div>' : '')
                     + playerRows
                 +'</div>';
         }
@@ -7752,6 +7762,112 @@ window.onload = function() {
         </div>
     </div>
 
+
+<!-- ══ MODAL LOGIN ADMIN ══ -->
+<div id="admin-login-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0f1524] border border-gray-800 rounded-2xl w-full max-w-sm p-6 shadow-2xl">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-athletic text-lg font-black text-white uppercase">🔒 Admin GrenadyeHub</h3>
+            <button onclick="closeAdminLogin()" class="text-gray-400 hover:text-white text-xl w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10">✕</button>
+        </div>
+        <input type="password" id="admin-password" placeholder="Modpas admin"
+            class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-4 py-3 text-white text-sm mb-2 focus:outline-none focus:border-blue-500"
+            onkeydown="if(event.key==='Enter') verifyAdmin();">
+        <div id="admin-error" class="hidden text-xs text-red-400 mb-2"></div>
+        <button onclick="verifyAdmin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 rounded-xl transition-colors">
+            Konekte
+        </button>
+    </div>
+</div>
+
+<!-- ══ MODAL EDIT/AJOUTE ATIK NOUVÈL ══ -->
+<div id="news-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0f1524] border border-gray-800 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 shadow-2xl">
+        <div class="flex items-center justify-between mb-4">
+            <h3 id="news-modal-title" class="font-athletic text-lg font-black text-white uppercase">Nouvel Article</h3>
+            <button onclick="closeNewsModal()" class="text-gray-400 hover:text-white text-xl w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10">✕</button>
+        </div>
+        <input type="hidden" id="news-edit-index" value="-1">
+        <div class="space-y-3">
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Catégorie</label>
+                <select id="news-category" class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+                    <option>Officiel</option>
+                    <option>Transfert</option>
+                    <option>Performance</option>
+                    <option>Coupe du Monde</option>
+                    <option>Interview</option>
+                    <option>Blessure</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Titre</label>
+                <input type="text" id="news-title" class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Résumé</label>
+                <textarea id="news-excerpt" rows="3" class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500 resize-none"></textarea>
+            </div>
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Lien (optionnel)</label>
+                <input type="text" id="news-link" placeholder="https://..." class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Emoji</label>
+                <div id="emoji-picker" class="flex flex-wrap gap-1.5"></div>
+            </div>
+        </div>
+        <button onclick="saveNewsArticle()" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 rounded-xl transition-colors">
+            Enregistrer
+        </button>
+    </div>
+</div>
+
+<!-- ══ MODAL SOUMISYON ATIK ITILIZATÈ ══ -->
+<div id="submit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0f1524] border border-gray-800 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 shadow-2xl">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-athletic text-lg font-black text-white uppercase">✍️ Soumèt yon Atik</h3>
+            <button onclick="closeSubmitModal()" class="text-gray-400 hover:text-white text-xl w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10">✕</button>
+        </div>
+        <div id="submit-success" class="hidden bg-emerald-900/30 border border-emerald-700 text-emerald-300 text-sm rounded-xl p-3 mb-4">
+            ✅ Atik ou soumèt avèk siksè! N ap revize l.
+        </div>
+        <form id="submit-form" name="article-submission" method="POST" onsubmit="handleNetlifySubmit(event)" class="space-y-3">
+            <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off">
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Votre nom</label>
+                <input type="text" name="author" required class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Catégorie</label>
+                <select name="category" class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+                    <option>Officiel</option>
+                    <option>Transfert</option>
+                    <option>Performance</option>
+                    <option>Coupe du Monde</option>
+                    <option>Interview</option>
+                    <option>Blessure</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Titre</label>
+                <input type="text" name="title" required class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Résumé</label>
+                <textarea name="excerpt" required rows="4" class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500 resize-none"></textarea>
+            </div>
+            <div>
+                <label class="text-xs text-gray-400 font-bold uppercase block mb-1">Lien source (optionnel)</label>
+                <input type="text" name="link" class="w-full bg-[#0a0e18] border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <button type="submit" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 rounded-xl transition-colors">
+                <i class="fa-solid fa-paper-plane mr-2"></i><span>Envoyer</span>
+            </button>
+        </form>
+    </div>
+</div>
 
 <!-- ══ MATCH CENTER MODAL ══ -->
 <div id="match-center-modal" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
