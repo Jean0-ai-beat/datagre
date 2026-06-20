@@ -1376,8 +1376,8 @@
                             <span class="text-gray-300 text-[11px] sm:text-xs">🇭🇹-🏴󠁧󠁢󠁳󠁣󠁴󠁿 <span class="text-white font-bold">0-1</span></span>
                         </li>
                         <li class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
-                            <span class="text-yellow-400 font-bold text-[10px] sm:text-xs">20 Jen</span>
-                            <span class="text-gray-300 text-[11px] sm:text-xs">🇧🇷-🇭🇹</span>
+                            <span class="text-green-400 font-bold text-[10px] sm:text-xs">FIN</span>
+                            <span class="text-gray-300 text-[11px] sm:text-xs">🇧🇷-🇭🇹 <span class="text-white font-bold">3-0</span></span>
                         </li>
                         <li class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
                             <span class="text-yellow-400 font-bold text-[10px] sm:text-xs">25 Jen</span>
@@ -7221,7 +7221,62 @@ window.onload = function() {
                 subs: ["Josué Casimir (61')", "Lenny Joseph (75')", "Yassin Fortuné (85')"]
             }
         },
-        m2: null,
+        m2: {
+            home: 'Brésil', away: 'Haïti',
+            homeFlag: 'br', awayFlag: 'ht',
+            date: '19 Jen 2026', venue: 'Philadelphia Stadium, Philadelphie',
+            score: '3 - 0', finished: true,
+            scorer: { name: 'Matheus Cunha', team: 'home', minute: 23 },
+            recap: {
+                fr: "Haïti a été éliminé de sa première Coupe du Monde depuis 1974 après une défaite 3-0 face au Brésil. Matheus Cunha a inscrit un doublé (23e, 36e) et Vinicius Junior a ajouté le troisième but (45e+3) après avoir été impliqué dans les trois buts brésiliens. Haïti n'a jamais vraiment plié malgré la qualité supérieure du Brésil.",
+                ht: "Haïti elimine nan premye patisipasyon yo nan Koup Dimond depi 1974 apre yon defèt 3-0 devan Brésil. Matheus Cunha make 2 gòl (23', 36') epi Vinicius Junior ajoute twazyèm gòl la (45'+3) apre li te enplike nan tout 3 gòl Brezilyen yo. Haïti pa janm vrèman pliye malgre kalite siperyè Brésil.",
+                en: "Haiti were eliminated from their first World Cup since 1974 after a 3-0 defeat to Brazil. Matheus Cunha scored a brace (23', 36') and Vinicius Junior added the third goal (45'+3) after being involved in all three Brazilian goals. Haiti never truly buckled despite Brazil's superior quality."
+            },
+            xg: { home: 2.1, away: 0.4 },
+            stats: [
+                { labelKey: 'possession',    label: 'Posesyon',     home: '60%', away: '40%', homePct: 60 },
+                { labelKey: 'total_shots',   label: 'Tiro Total',   home: 16,    away: 8,     homePct: 67 },
+                { labelKey: 'on_target',     label: 'Sou Kadre',    home: 8,     away: 2,     homePct: 80 },
+                { labelKey: null,            label: 'xG',           home: 2.1,   away: 0.4,   homePct: 84 },
+                { labelKey: 'corners',       label: 'Kòn',          home: 7,     away: 2,     homePct: 78 },
+                { labelKey: 'fouls',         label: 'Fòt',          home: 10,    away: 13,    homePct: 43 },
+                { labelKey: 'yellow_cards',  label: 'Kat Jòn',      home: 1,     away: 2,     homePct: 33 },
+                { labelKey: 'pass_accuracy', label: 'Pasaj Konplè', home: '87%', away: '75%', homePct: 54 }
+            ],
+            players: {
+                haiti: [
+                    { name: 'Johny Placide',        pos: 'GB', note: 6.3, mins: 90, start: true  },
+                    { name: 'Carlens Arcus',         pos: 'DD', note: 6.3, mins: 90, start: true  },
+                    { name: 'Ricardo Adé',           pos: 'DC', note: 6.4, mins: 90, start: true  },
+                    { name: 'Hannes Delcroix',       pos: 'DC', note: 6.8, mins: 90, start: true  },
+                    { name: 'Martin Expérience',     pos: 'DG', note: 6.0, mins: 90, start: true  },
+                    { name: 'Josué Casimir',         pos: 'MF', note: 6.2, mins: 90, start: true  },
+                    { name: 'Danley Jean Jacques',   pos: 'MF', note: 6.9, mins: 90, start: true  },
+                    { name: 'Jean-Ricner Bellegarde',pos: 'MF', note: 6.6, mins: 90, start: true  },
+                    { name: 'Ruben Providence',      pos: 'MF', note: 6.2, mins: 90, start: true  },
+                    { name: 'Wilson Isidor',         pos: 'AT', note: 6.0, mins: 90, start: true  },
+                    { name: 'Frantzdy Pierrot',      pos: 'AT', note: 6.1, mins: 90, start: true  },
+                    { name: 'Louicius Deedson',      pos: 'MF', note: 6.4, mins: 0,  start: false }
+                ]
+            },
+            lineup: {
+                formation: '4-4-2',
+                starters: [
+                    { name: 'Placide',      pos: 'GB',  row: 1 },
+                    { name: 'Arcus',        pos: 'DD',  row: 2 },
+                    { name: 'Adé',          pos: 'DC',  row: 2 },
+                    { name: 'Delcroix',     pos: 'DC',  row: 2 },
+                    { name: 'Expérience',   pos: 'DG',  row: 2 },
+                    { name: 'Casimir',      pos: 'MD',  row: 3 },
+                    { name: 'Bellegarde',   pos: 'MC',  row: 3 },
+                    { name: 'Jean Jacques', pos: 'MC',  row: 3 },
+                    { name: 'Providence',   pos: 'MG',  row: 3 },
+                    { name: 'Isidor',       pos: 'AT',  row: 4 },
+                    { name: 'Pierrot',      pos: 'AT',  row: 4 }
+                ],
+                subs: ["Louicius Deedson"]
+            }
+        },
         m3: null
     };
 
