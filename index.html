@@ -5375,11 +5375,16 @@ window.onload = function() {
             if (!Array.isArray(rows)) return;
 
             if (rows.length === 0) {
-                /* Leaderboard vid sou Supabase — efase vèsyon lokal tou (sync pou tout moun) */
-                try {
-                    localStorage.removeItem('pwe_global_lb');
-                    localStorage.removeItem('pwe_lb_updated');
-                } catch(e){}
+                /* Leaderboard vid sou Supabase — verifye si gen done lokal anvan efase */
+                var localLB = [];
+                try { localLB = JSON.parse(localStorage.getItem('pwe_global_lb') || '[]'); } catch(e){}
+
+                /* Si gen done lokal, pa efase — Supabase ka pa fin ekri toujou */
+                if (localLB.length > 0) {
+                    renderPublicLeaderboard(localLB);
+                    return;
+                }
+
                 var body = document.getElementById('leaderboard-body');
                 if (body && body.children.length > 0) {
                     body.innerHTML =
@@ -5443,7 +5448,26 @@ window.onload = function() {
             saveLeaderboard(lb);
             renderPublicLeaderboard(lb);
             pushLeaderboardToDB(lb)
-                .then(function(){ showToast('✅ Leaderboard kalkile epi pibliye! ('+lb.length+' itilizatè)', 'green'); })
+                .then(function(){
+                    showToast('✅ Leaderboard kalkile epi pibliye! ('+lb.length+' itilizatè)', 'green');
+                    /* Verifye apre 3s ke Supabase te resevwa done yo */
+                    setTimeout(function(){
+                        fetch(SUPA_URL + '/rest/v1/leaderboard?select=pseudo,pts&order=pts.desc&limit=3', {
+                            headers: supaHeaders()
+                        })
+                        .then(function(r){ return r.json(); })
+                        .then(function(check){
+                            if (!Array.isArray(check) || check.length === 0) {
+                                /* Supabase toujou vid apre push — retry */
+                                console.warn('Leaderboard push pa konfime — retry...');
+                                pushLeaderboardToDB(lb).catch(function(){});
+                            } else {
+                                console.log('Leaderboard konfime nan Supabase:', check.length, 'moun');
+                            }
+                        })
+                        .catch(function(){});
+                    }, 3000);
+                })
                 .catch(function(){ showToast('⚠️ Kalkile men erè pibliye Supabase', 'red'); });
         })
         .catch(function(err){
